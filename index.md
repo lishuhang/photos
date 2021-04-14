@@ -10,4 +10,8 @@
 
 ## 2021
 
+{% include image-gallery.html folder="/img/2021/02" %}
+
+{% include image-gallery.html folder="/img/2021/03" %}
+
 {% include image-gallery.html folder="/img/2021/04" %}

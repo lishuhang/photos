@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="{{ site.lang | default: "zh-CN" }}">
+  <head>
+    <meta charset="UTF-8">
+
+{% seo %}
+{% feed_meta %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#70685E">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+  </head>
+  <body>
+    <a id="skip-to-content" href="#content">跳转到内容</a>
+
+    <header class="page-header" role="banner">
+     <h1 class="project-name">     </h1>
+     <!---<a href="/" style="color:#FFF;"><img src="/assets/img/logo-horizontal-white.svg" alt="{{ site.title | default: site.github.repository_name }}" /></a>-->
+     <h2 class="project-tagline">{{ site.description | default: site.github.project_tagline }}</h2>
+     <a href="/about/" class="btn">关于</a>
+     <a href="https://lishuhang.me/" class="btn" target="_blank">航通社</a>
+     <a href="]/blog/" class="btn" target="_blank">56K小猫</a>
+     <a href="/gallery/" class="btn" target="_blank">作品集</a>
+    </header>
+
+    <main id="content" class="main-content" role="main">
+      {{ content }}
+
+      <footer class="site-footer">
+              <!--
+        {% if site.github.is_project_page %}
+          <span class="site-footer-owner"><a href="{{ site.github.repository_url }}">{{ site.github.repository_name }}</a> is maintained by <a href="{{ site.github.owner_url }}">{{ site.github.owner_name }}</a>.</span>
+        {% endif %}
+        -->
+        <span class="site-footer-credits">&copy; {{ site.title | default: site.github.repository_name }}保留所有权利。生成并托管于 <a href="https://pages.github.com">GitHub Pages</a> 上。</span> ·
+      <a href="https://weibo.com/lishuhang">微博</a> ·
+      <a href="https://mp.weixin.qq.com/s/tFzBdbA0VtXkyaPIDcHwGg">微信</a> ·
+      <a href="https://zhuanlan.zhihu.com/lishuhang">知乎</a> ·
+      </footer>
+    </main>
+
+    {% if site.google_analytics %}
+      <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', '{{ site.google_analytics }}', 'auto');
+        ga('send', 'pageview');
+      </script>
+    {% endif %}
+    
+<button onclick="topFunction()" id="myBtn" title="回到顶部">▲</button>
+
+<script>
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    document.getElementById("myBtn").style.display = "block";
+  } else {
+    document.getElementById("myBtn").style.display = "none";
+  }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+  document.body.scrollTop = 0; // For Safari
+  document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+}
+</script>
+
+<style type="text/css">
+#myBtn {
+  display: none; /* Hidden by default */
+  width:50px; height:50px; border-radius: 50px;
+  position: fixed; z-index: 99;
+  bottom: 30px; right: 30px;
+  border: none; outline: none;
+  background: #347CF8;
+  color: white;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+#myBtn:hover {
+  background-color: #245fd8; /* Add a dark-grey background on hover */
+}
+</style>
+
+  </body>
+</html>

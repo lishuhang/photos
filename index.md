@@ -6,3 +6,5 @@
 | 2020 | [01](/photos/img/2020/01) | [02](/photos/img/2020/02) | [03](/photos/img/2020/03) | [04](/photos/img/2020/04) | [05](/photos/img/2020/05) | [06](/photos/img/2020/06) | [07](/photos/img/2020/07) | [08](/photos/img/2020/08) | [09](/photos/img/2020/09) | [10](/photos/img/2020/10) | [11](/photos/img/2020/11) | [12](/photos/img/2020/12) |
 | 2021 | [01](/photos/img/2021/01) | [02](/photos/img/2021/02) | [03](/photos/img/2021/03) | [04](/photos/img/2021/04) | [05](/photos/img/2021/05) | [06](/photos/img/2021/06) | [07](/photos/img/2021/07) | [08](/photos/img/2021/08) | [09](/photos/img/2021/09) | [10](/photos/img/2021/10) | [11](/photos/img/2021/11) | [12](/photos/img/2021/12) |
 
+印刷品扫描件：[插画](/photos/img/print/illustration)、[菜单](/photos/img/print/menu)、产品包装、广告、通知、信息引导、健康、疫情
+

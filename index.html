@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Gallery</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <link rel="stylesheet" id="dynamicCSS">
     <style>
         body {
             display: flex;
@@ -106,10 +107,15 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script id="dynamicJS"></script>
     <script>
+        function getBasePath() {
+            return window.location.pathname.includes('/photos') ? '/photos' : '';
+        }
+
         function loadContent(yearMonth) {
             var content = document.getElementById('content');
-            var basePath = window.location.pathname.includes('/photos') ? '/photos' : '';
+            var basePath = getBasePath();
             fetch(`${basePath}/${yearMonth.replace('-', '/')}/index.html`)
                 .then(response => response.text())
                 .then(data => {
@@ -187,6 +193,11 @@
 
             // 调整侧边栏显示
             adjustSidebar();
+
+            // Dynamically set the paths for CSS and JS
+            var basePath = getBasePath();
+            document.getElementById('dynamicCSS').href = `${basePath}/gallery.css`;
+            document.getElementById('dynamicJS').src = `${basePath}/gallery.js`;
         });
 
         window.addEventListener('resize', adjustSidebar);

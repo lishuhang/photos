@@ -15,19 +15,19 @@
         header {
             background-color: #111;
             color: white;
-            padding: 0; /* 移除额外的填充 */
+            padding: 0;
             text-align: center;
             position: sticky;
             top: 0;
-            height: 60px; /* 固定高度 */
+            height: 60px;
             display: flex;
-            align-items: center; /* 垂直居中 */
-            justify-content: center; /* 水平居中 */
+            align-items: center;
+            justify-content: center;
             z-index: 1000;
         }
         header h1 {
-            margin: 0; /* 移除默认的外边距 */
-            line-height: 60px; /* 与header高度一致，确保文本垂直居中 */
+            margin: 0;
+            line-height: 60px;
         }
         #container {
             display: flex;
@@ -40,13 +40,13 @@
             padding: 10px;
             box-sizing: border-box;
             position: fixed;
-            top: 60px; /* Adjust based on header height */
+            top: 60px;
             bottom: 0;
             overflow-y: auto;
         }
         main {
             flex: 1;
-            margin-left: 200px; /* Adjust based on aside width */
+            margin-left: 200px;
             padding: 10px;
             box-sizing: border-box;
             overflow-y: auto;
@@ -66,9 +66,9 @@
         @media (max-width: 768px) {
             aside {
                 width: 100%;
-                height: calc(100vh - 50px); /* Adjust based on header height */
+                height: calc(100vh - 50px);
                 position: absolute;
-                top: 60px; /* Adjust based on header height */
+                top: 60px;
                 left: 0;
                 display: none;
             }
@@ -109,7 +109,8 @@
     <script>
         function loadContent(yearMonth) {
             var content = document.getElementById('content');
-            fetch(`/${yearMonth.replace('-', '/')}/index.html`)
+            var basePath = window.location.pathname.includes('/photos') ? '/photos' : '';
+            fetch(`${basePath}/${yearMonth.replace('-', '/')}/index.html`)
                 .then(response => response.text())
                 .then(data => {
                     content.innerHTML = data;

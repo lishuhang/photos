@@ -12,23 +12,28 @@
             flex-direction: column;
             margin: 0;
             font-family: Arial, sans-serif;
+            background-color: #f4f7fa;
         }
         header {
-            background-color: #111;
-            color: white;
+            background-color: rgba(255, 255, 255, 0.8);
+            color: black;
             padding: 0;
-            text-align: center;
+  /*          text-align: center;
+            align-items: center;
+            justify-content: center; */
             position: sticky;
             top: 0;
+            padding-left: 20px;
             height: 60px;
             display: flex;
-            align-items: center;
-            justify-content: center;
             z-index: 1000;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
         }
         header h1 {
             margin: 0;
             line-height: 60px;
+            font-size: 24px;
         }
         #container {
             display: flex;
@@ -36,42 +41,51 @@
             overflow: hidden;
         }
         aside {
-            width: 200px;
-            background-color: #f4f4f4;
-            padding: 10px;
+            width: 250px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
             box-sizing: border-box;
+            border-right: 1px solid #ddd;
             position: fixed;
             top: 60px;
             bottom: 0;
             overflow-y: auto;
+            backdrop-filter: blur(10px);
+            z-index: 1000;
         }
         main {
             flex: 1;
-            margin-left: 200px;
-            padding: 10px;
+            margin-left: 250px;
+            padding: 20px;
             box-sizing: border-box;
             overflow-y: auto;
         }
         .toggle-btn {
             display: none;
-            background-color: #333;
-            color: white;
-            padding: 10px;
             text-align: center;
-            cursor: pointer;
             position: absolute;
-            top: 10px;
+            top: 0px;
             right: 10px;
+            height: 20px;
             z-index: 1001;
+            cursor: pointer;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         @media (max-width: 768px) {
             aside {
                 width: 100%;
-                height: calc(100vh - 50px);
-                position: absolute;
+                height: 100vh;
+                position: fixed;
                 top: 60px;
                 left: 0;
                 display: none;
+                z-index: 1001;
             }
             main {
                 margin-left: 0;
@@ -80,8 +94,28 @@
                 display: block;
             }
         }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        label {
+            font-weight: bold;
+        }
+        p {
+            margin-top: 20px;
+            color: #555;
+        }
+        h2 {
+            color: #001f3f;
+        }
     </style>
 </head>
+
+
 <body>
     <header>
         <h1>图片库</h1>
@@ -154,6 +188,8 @@
                 toggleBtn.innerHTML = '▼ 日期';
             }
         }
+
+// datepicker begins
 
         document.addEventListener('DOMContentLoaded', function() {
             var datepicker = $("#datepicker");

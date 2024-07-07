@@ -1,7 +1,206 @@
-<html>
+<!DOCTYPE html>
+<html lang="zh">
 <head>
-<meta http-equiv="refresh" content="0;url=https://56k.lishuhang.me/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background-color: #111;
+            color: white;
+            padding: 0; /* 移除额外的填充 */
+            text-align: center;
+            position: sticky;
+            top: 0;
+            height: 60px; /* 固定高度 */
+            display: flex;
+            align-items: center; /* 垂直居中 */
+            justify-content: center; /* 水平居中 */
+            z-index: 1000;
+        }
+        header h1 {
+            margin: 0; /* 移除默认的外边距 */
+            line-height: 60px; /* 与header高度一致，确保文本垂直居中 */
+        }
+        #container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        aside {
+            width: 200px;
+            background-color: #f4f4f4;
+            padding: 10px;
+            box-sizing: border-box;
+            position: fixed;
+            top: 60px; /* Adjust based on header height */
+            bottom: 0;
+            overflow-y: auto;
+        }
+        main {
+            flex: 1;
+            margin-left: 200px; /* Adjust based on aside width */
+            padding: 10px;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
+        .toggle-btn {
+            display: none;
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1001;
+        }
+        @media (max-width: 768px) {
+            aside {
+                width: 100%;
+                height: calc(100vh - 50px); /* Adjust based on header height */
+                position: absolute;
+                top: 60px; /* Adjust based on header height */
+                left: 0;
+                display: none;
+            }
+            main {
+                margin-left: 0;
+            }
+            .toggle-btn {
+                display: block;
+            }
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>图片库</h1>
+        <div class="toggle-btn" id="toggleBtn" onclick="toggleSidebar()">日期</div>
+    </header>
+    <div id="container">
+        <aside id="sidebar">
+            <div>
+                <label for="datepicker">选择日期</label>
+                <input type="text" id="datepicker" placeholder="类似 2024-01">
+            </div>
+            <div>
+                <p>&copy; Li Shuhang</p>
+            </div>
+        </aside>
+        <main id="content">
+            <div id="defaultContent">
+                <h2>正在加载……</h2>
+                <p>正在为您展示最新的照片</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        function loadContent(yearMonth) {
+            var content = document.getElementById('content');
+            fetch(`/${yearMonth.replace('-', '/')}/index.html`)
+                .then(response => response.text())
+                .then(data => {
+                    content.innerHTML = data;
+                    addToggleImagesFunctionality();
+                })
+                .catch(error => {
+                    content.innerHTML = `<p>加载 ${yearMonth} 内容时出错了</p>`;
+                });
+        }
+
+        function addToggleImagesFunctionality() {
+            var script = document.createElement("script");
+            script.innerHTML = `
+                function toggleImages(element) {
+                    var imagesDiv = element.nextElementSibling;
+                    if (imagesDiv.style.display === "none" || imagesDiv.style.display === "") {
+                        imagesDiv.style.display = "block";
+                    } else {
+                        imagesDiv.style.display = "none";
+                    }
+                }
+            `;
+            document.body.appendChild(script);
+        }
+
+        function adjustSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var toggleBtn = document.getElementById('toggleBtn');
+            if (window.innerWidth >= 768) {
+                sidebar.style.display = 'block';
+                toggleBtn.style.display = 'none';
+            } else {
+                sidebar.style.display = 'none';
+                toggleBtn.style.display = 'block';
+                toggleBtn.innerHTML = '▼ 日期';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var datepicker = $("#datepicker");
+            datepicker.datepicker({
+                dateFormat: "yy-mm",
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                onClose: function(dateText, inst) { 
+                    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                    datepicker.datepicker("setDate", new Date(year, month, 1));
+                    loadContent(`${year}-${('0' + (parseInt(month) + 1)).slice(-2)}`);
+                }
+            });
+
+            datepicker.focus(function () {
+                $(".ui-datepicker-calendar").hide();
+                $("#ui-datepicker-div").position({
+                    my: "center top",
+                    at: "center bottom",
+                    of: $(this)
+                });
+            });
+
+            // Set default date to previous month
+            var today = new Date();
+            var year = today.getFullYear();
+            var month = today.getMonth(); // Previous month
+            if (month === 0) { // Handle January case
+                month = 12;
+                year = year - 1;
+            }
+            var defaultDate = new Date(year, month - 1, 1);
+            datepicker.datepicker("setDate", defaultDate);
+            loadContent(`${year}-${('0' + month).slice(-2)}`);
+
+            // 调整侧边栏显示
+            adjustSidebar();
+        });
+
+        window.addEventListener('resize', adjustSidebar);
+
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var toggleBtn = document.getElementById('toggleBtn');
+            if (sidebar.style.display === 'block' || sidebar.style.display === '') {
+                sidebar.style.display = 'none';
+                toggleBtn.innerHTML = '▼ 日期';
+            } else {
+                sidebar.style.display = 'block';
+                toggleBtn.innerHTML = '▲ 日期';
+            }
+        }
+    </script>
 </body>
 </html>

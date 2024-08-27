@@ -65,3 +65,50 @@ body {
                 column-count: 4;
             }
         }
+
+.staticCalendar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    list-style: none; /* 移除默认的列表样式 */
+    margin: 0; /* 清除可能的外边距 */
+    padding-inline-start: 0; /* 清除不必要的内边距 */
+}
+
+
+.year-name {
+display:block;
+width: 100%;
+margin: 10px;
+text-align: center;
+}
+
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.month-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.month-grid a {
+    text-align: center;
+    padding: 5px;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #007BFF;
+}
+
+.month-grid a:hover {
+    background-color: #e0e0e0;
+    text-decoration: underline;
+}

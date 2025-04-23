@@ -272,137 +272,113 @@ text-align: center;
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
     <script id="dynamicJS"></script>
-<script>
-/* 路径处理函数：根据当前路径动态获取基础路径 */
-function getBasePath() {
-    // 判断当前路径是否包含'/photos'，返回对应基础路径
-    return window.location.pathname.includes('/photos') ? '/photos' : '';
-}
-
-/* 内容加载函数：根据年月参数加载对应月份的内容 */
-function loadContent(yearMonth) {
-    var content = document.getElementById('content');
-    var basePath = getBasePath();
-    
-    // 智能拼接路径：处理基础路径为空的情况，避免出现双斜杠
-    var targetPath = [
-        basePath, 
-        yearMonth.replace('-', '/'), 
-        'index.html'
-    ].filter(Boolean).join('/');  // 自动过滤空路径段
-    
-    fetch(targetPath)
-        .then(response => {
-            if (!response.ok) throw new Error('网络响应异常');
-            return response.text();
-        })
-        .then(data => {
-            content.innerHTML = data;
-            addToggleImagesFunctionality();  // 加载完成后添加图片切换功能
-        })
-        .catch(error => {
-            console.error('加载失败:', error);
-            content.innerHTML = `<p>加载 ${yearMonth} 内容时出错了</p>`;
-        });
-}
-
-/* 动态添加图片切换功能脚本 */
-function addToggleImagesFunctionality() {
-    // 创建内联脚本实现图片显示/隐藏切换功能
-    var script = document.createElement("script");
-    script.innerHTML = `
-        function toggleImages(element) {
-            var imagesDiv = element.nextElementSibling;
-            imagesDiv.style.display = 
-                (imagesDiv.style.display === "none" || imagesDiv.style.display === "") 
-                ? "block" 
-                : "none";
+    <script>
+        function getBasePath() {
+            return window.location.pathname.includes('/photos') ? '/photos' : '';
         }
-    `;
-    document.body.appendChild(script);
-}
 
-/* 侧边栏响应式布局调整 */
-function adjustSidebar() {
-    var sidebar = document.getElementById('sidebar');
-    var toggleBtn = document.getElementById('toggleBtn');
-    
-    // 根据窗口宽度切换显示模式
-    if (window.innerWidth >= 768) {
-        sidebar.style.display = 'block';
-        toggleBtn.style.display = 'none';
-    } else {
-        sidebar.style.display = 'none';
-        toggleBtn.style.display = 'block';
-        toggleBtn.innerHTML = '▼ 日期';
-    }
-}
-
-/* 日期选择器初始化及相关逻辑 */
-document.addEventListener('DOMContentLoaded', function() {
-    // 初始化jQuery UI日期选择器（年月选择模式）
-    var datepicker = $("#datepicker");
-    datepicker.datepicker({
-        dateFormat: "yy-mm",
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-        onClose: function(dateText, inst) {
-            // 选择器关闭时更新内容
-            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-            datepicker.datepicker("setDate", new Date(year, month, 1));
-            loadContent(`${year}-${('0' + (parseInt(month) + 1)).slice(-2)}`);
+        function loadContent(yearMonth) {
+            var content = document.getElementById('content');
+            var basePath = getBasePath();
+            fetch(`${basePath}/${yearMonth.replace('-', '/')}/index.html`)
+                .then(response => response.text())
+                .then(data => {
+                    content.innerHTML = data;
+                    addToggleImagesFunctionality();
+                })
+                .catch(error => {
+                    content.innerHTML = `<p>加载 ${yearMonth} 内容时出错了</p>`;
+                });
         }
-    });
 
-    // 定位日期选择器弹出层
-    datepicker.focus(function () {
-        $(".ui-datepicker-calendar").hide();
-        $("#ui-datepicker-div").position({
-            my: "center top",
-            at: "center bottom",
-            of: $(this)
+        function addToggleImagesFunctionality() {
+            var script = document.createElement("script");
+            script.innerHTML = `
+                function toggleImages(element) {
+                    var imagesDiv = element.nextElementSibling;
+                    if (imagesDiv.style.display === "none" || imagesDiv.style.display === "") {
+                        imagesDiv.style.display = "block";
+                    } else {
+                        imagesDiv.style.display = "none";
+                    }
+                }
+            `;
+            document.body.appendChild(script);
+        }
+
+        function adjustSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var toggleBtn = document.getElementById('toggleBtn');
+            if (window.innerWidth >= 768) {
+                sidebar.style.display = 'block';
+                toggleBtn.style.display = 'none';
+            } else {
+                sidebar.style.display = 'none';
+                toggleBtn.style.display = 'block';
+                toggleBtn.innerHTML = '▼ 日期';
+            }
+        }
+
+// datepicker begins
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var datepicker = $("#datepicker");
+            datepicker.datepicker({
+                dateFormat: "yy-mm",
+                changeMonth: true,
+                changeYear: true,
+                showButtonPanel: true,
+                onClose: function(dateText, inst) { 
+                    var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+                    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+                    datepicker.datepicker("setDate", new Date(year, month, 1));
+                    loadContent(`${year}-${('0' + (parseInt(month) + 1)).slice(-2)}`);
+                }
+            });
+
+            datepicker.focus(function () {
+                $(".ui-datepicker-calendar").hide();
+                $("#ui-datepicker-div").position({
+                    my: "center top",
+                    at: "center bottom",
+                    of: $(this)
+                });
+            });
+
+            // Set default date to previous month
+            var today = new Date();
+            var year = today.getFullYear();
+            var month = today.getMonth(); // Previous month
+            if (month === 0) { // Handle January case
+                month = 12;
+                year = year - 1;
+            }
+            var defaultDate = new Date(year, month - 1, 1);
+            datepicker.datepicker("setDate", defaultDate);
+            loadContent(`${year}-${('0' + month).slice(-2)}`);
+
+            // 调整侧边栏显示
+            adjustSidebar();
+
+            // Dynamically set the paths for CSS and JS
+            var basePath = getBasePath();
+            document.getElementById('dynamicCSS').href = `${basePath}/assets/gallery.css`;
+            document.getElementById('dynamicJS').src = `${basePath}/assets/gallery.js`;
         });
-    });
 
-    /* 设置默认显示月份（自动显示上月内容） */
-    var today = new Date();
-    var year = today.getFullYear();
-    var month = today.getMonth();
-    // 处理跨年情况
-    if (month === 0) {
-        month = 12;
-        year--;
-    }
-    var defaultDate = new Date(year, month - 1, 1);
-    datepicker.datepicker("setDate", defaultDate);
-    loadContent(`${year}-${('0' + month).slice(-2)}`);
+        window.addEventListener('resize', adjustSidebar);
 
-    // 初始化侧边栏状态
-    adjustSidebar();
-
-    /* 动态加载资源文件 */
-    var basePath = getBasePath();
-    document.getElementById('dynamicCSS').href = `${basePath}/assets/gallery.css`;
-    document.getElementById('dynamicJS').src = `${basePath}/assets/gallery.js`;
-});
-
-// 窗口大小变化监听
-window.addEventListener('resize', adjustSidebar);
-
-/* 移动端侧边栏切换功能 */
-function toggleSidebar() {
-    var sidebar = document.getElementById('sidebar');
-    var toggleBtn = document.getElementById('toggleBtn');
-    if (window.getComputedStyle(sidebar).display === 'block') {
-        sidebar.style.display = 'none';
-        toggleBtn.innerHTML = '▼ 日期';
-    } else {
-        sidebar.style.display = 'block';
-        toggleBtn.innerHTML = '▲ 日期';
-    }
-}
-</script>
+        function toggleSidebar() {
+            var sidebar = document.getElementById('sidebar');
+            var toggleBtn = document.getElementById('toggleBtn');
+            if (sidebar.style.display === 'block' || sidebar.style.display === '') {
+                sidebar.style.display = 'none';
+                toggleBtn.innerHTML = '▼ 日期';
+            } else {
+                sidebar.style.display = 'block';
+                toggleBtn.innerHTML = '▲ 日期';
+            }
+        }
+    </script>
 </body>
 </html>

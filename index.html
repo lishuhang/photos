@@ -269,10 +269,87 @@ async function initLoading() {
     }
 }
 
-/* 图片切换功能（假设存在） */
+/* 图片切换功能 - 使用事件委托 */
 function addToggleImagesFunctionality() {
-    // 这里应该是您处理图片切换的逻辑
-    // 保持原有实现或添加基本功能
+    const content = document.getElementById('content');
+    let photoData = {}; // 用于存储当前月份的照片数据
+
+    // 提取照片数据
+    function extractPhotoData() {
+        const scriptTag = content.querySelector('#photo-data-script');
+        if (scriptTag) {
+            try {
+                // 从脚本内容中提取JSON字符串
+                const jsonString = scriptTag.textContent.substring(scriptTag.textContent.indexOf('{'));
+                photoData = JSON.parse(jsonString);
+            } catch (e) {
+                console.error('解析photoData失败:', e);
+                photoData = {};
+            }
+        } else {
+            photoData = {};
+        }
+    }
+
+    // 首次加载内容时提取数据
+    extractPhotoData();
+
+    // 监听内容区域的点击事件
+    content.addEventListener('click', function(event) {
+        const header = event.target.closest('.date-header');
+        if (!header) return; // 如果点击的不是日期标题，则忽略
+
+        const datePath = header.dataset.path;
+        const imagesDiv = header.nextElementSibling;
+        const indicator = header.querySelector('.toggle-indicator');
+
+        if (!datePath || !imagesDiv) return;
+
+        // 切换显示状态
+        const isExpanded = imagesDiv.style.display === 'block';
+        imagesDiv.style.display = isExpanded ? 'none' : 'block';
+        indicator.textContent = isExpanded ? '▶' : '▼';
+        header.classList.toggle('expanded', !isExpanded);
+
+        // 如果是首次展开，则加载图片
+        if (!isExpanded && !header.dataset.loaded) {
+            loadImagesForDate(datePath, imagesDiv);
+            header.dataset.loaded = 'true';
+        }
+    });
+
+    function loadImagesForDate(datePath, container) {
+        const photos = photoData[datePath];
+        if (!photos || photos.length === 0) {
+            container.innerHTML = '<p style="color: #666; font-style: italic; padding: 10px;">这一天没有照片</p>';
+            return;
+        }
+
+        let html = '';
+        photos.forEach(photoUrl => {
+            const thumbnailUrl = `https://images.weserv.nl/?url=${encodeURIComponent(photoUrl)}&w=300&h=300&output=jpg&q=50&t=square`;
+            html += `<a href='${photoUrl}' target='_blank'><img src='${thumbnailUrl}' alt='Image'></a>`;
+        });
+        
+        container.innerHTML = html;
+    }
+    
+    // 覆盖loadContent函数，确保每次加载新内容时都重新提取数据
+    const originalLoadContent = window.loadContent;
+    window.loadContent = function(yearMonth) {
+        originalLoadContent(yearMonth);
+        // 使用MutationObserver等待内容加载完成
+        const observer = new MutationObserver((mutationsList, observer) => {
+            for(const mutation of mutationsList) {
+                if (mutation.type === 'childList' && content.querySelector('.gallery')) {
+                    extractPhotoData();
+                    observer.disconnect(); // 提取数据后停止观察
+                    break;
+                }
+            }
+        });
+        observer.observe(content, { childList: true, subtree: true });
+    };
 }
 
 // 文档加载完成后执行

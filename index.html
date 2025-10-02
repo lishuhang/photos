@@ -215,6 +215,12 @@ async function tryLoadContent(yearMonth) {
         const response = await fetch(targetPath);
         if (!response.ok) return false;
         const data = await response.text();
+        
+        // 检查是否是空页面（没有照片的月份）
+        if (data.includes('这个月没有照片')) {
+            return false;
+        }
+        
         document.getElementById('content').innerHTML = data;
         addToggleImagesFunctionality();
         return yearMonth; // 返回成功加载的月份
@@ -279,14 +285,22 @@ function addToggleImagesFunctionality() {
         const scriptTag = content.querySelector('#photo-data-script');
         if (scriptTag) {
             try {
-                // 从脚本内容中提取JSON字符串
-                const jsonString = scriptTag.textContent.substring(scriptTag.textContent.indexOf('{'));
-                photoData = JSON.parse(jsonString);
+                // 从脚本内容中提取photoData对象
+                const scriptContent = scriptTag.textContent || scriptTag.innerHTML;
+                const match = scriptContent.match(/const\s+photoData\s*=\s*({[\s\S]*?});/);
+                if (match) {
+                    photoData = JSON.parse(match[1]);
+                    console.log('照片数据提取成功，包含', Object.keys(photoData).length, '个日期');
+                } else {
+                    console.log('未找到photoData定义');
+                    photoData = {};
+                }
             } catch (e) {
                 console.error('解析photoData失败:', e);
                 photoData = {};
             }
         } else {
+            console.log('未找到photo-data-script标签');
             photoData = {};
         }
     }

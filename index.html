@@ -374,8 +374,14 @@
         async function loadPhotos(year, month) {
             console.log('Loading photos for:', year, month);
             
-            const loadingIndicator = document.getElementById('loadingIndicator');
             const galleryContent = document.getElementById('galleryContent');
+            
+            // 确保加载指示器存在
+            let loadingIndicator = document.getElementById('loadingIndicator');
+            if (!loadingIndicator) {
+                galleryContent.innerHTML = '<div class="loading" id="loadingIndicator">正在加载照片...</div>';
+                loadingIndicator = document.getElementById('loadingIndicator');
+            }
             
             loadingIndicator.style.display = 'flex';
             
@@ -408,7 +414,10 @@
                     </div>
                 `;
             } finally {
-                loadingIndicator.style.display = 'none';
+                const finalLoadingIndicator = document.getElementById('loadingIndicator');
+                if (finalLoadingIndicator) {
+                    finalLoadingIndicator.style.display = 'none';
+                }
             }
         }
 

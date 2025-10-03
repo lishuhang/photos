@@ -392,14 +392,14 @@ body {
 }
 
 .photos-grid.expanded {
-  max-height: 3000px;
+  max-height: 8000px; /* 增加最大高度以容纳更多照片 */
 }
 
 .photos-container {
   padding: var(--space-lg);
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: var(--space-md);
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 缩小缩略图尺寸 */
+  gap: var(--space-sm); /* 减小间距 */
 }
 
 .photo-item {
@@ -417,7 +417,7 @@ body {
 
 .photo-item img {
   width: 100%;
-  height: 200px;
+  height: 150px; /* 缩小照片高度以匹配网格尺寸 */
   object-fit: cover;
   display: block;
 }
@@ -501,12 +501,12 @@ body {
   
   /* 移动端照片网格调整 */
   .photos-container {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: var(--space-sm);
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* 移动端进一步缩小 */
+    gap: var(--space-xs); /* 移动端使用更小的间距 */
   }
   
   .photo-item img {
-    height: 150px;
+    height: 120px; /* 移动端照片高度 */
   }
 }
 

@@ -1,324 +1,370 @@
 <!DOCTYPE html>
-<html lang="zh">
-
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>图片库 - 航通社</title>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css">
-    <link rel="stylesheet" href="assets/gallery.css">
+    <link rel="stylesheet" href="assets/unified-styles.css">
 </head>
-
 <body>
-    <header>
-        <h1>图片库 - <a href="https://lishuhang.me/" target="_blank">航通社</a></h1>
-        <div class="toggle-btn" id="toggleBtn" onclick="toggleSidebar()">日期</div>
-    </header>
-    <div id="container">
-
-<aside id="sidebar">
-    <div>
-        <label>选择年份和月份</label>
-        <div id="yearTree" class="year-tree">
-            <!-- 年份树状菜单将在这里动态生成 -->
-        </div>
+    <!-- 移动端标题栏 -->
+    <div class="mobile-header">
+        <button class="mobile-date-toggle" id="mobileDateToggle">
+            <span>选择年份和月份</span>
+            <svg class="mobile-date-icon collapsed" viewBox="0 0 12 12" fill="currentColor">
+                <path d="M6 8.825c-.2 0-.4-.1-.5-.2l-3.3-3.3c-.3-.3-.3-.8 0-1.1.3-.3.8-.3 1.1 0l2.7 2.7 2.7-2.7c.3-.3.8-.3 1.1 0 .3.3.3.8 0 1.1l-3.2 3.2c-.2.2-.4.3-.6.3Z"/>
+            </svg>
+        </button>
     </div>
-    <p>&copy; Li Shuhang</p>
-</aside>
 
-<main id="content">
-            <div id="defaultContent">
-                <h2>正在加载……</h2>
-                <p>正在为您展示最新的照片</p>
+    <div class="gallery-container">
+        <!-- 侧边栏 -->
+        <aside class="gallery-sidebar" id="gallerySidebar">
+            <div class="gallery-sidebar-header">
+                <a href="/" class="gallery-sidebar-title">航通社</a>
+            </div>
+            
+            <div class="gallery-sidebar-body">
+                <div class="date-selector">
+                    <label class="date-selector-label">选择年份和月份</label>
+                    
+                    <!-- 2025年 -->
+                    <div class="year-section">
+                        <div class="year-header" data-year="2025">
+                            <span class="year-title">2025年</span>
+                            <svg class="year-icon collapsed" viewBox="0 0 12 12" fill="currentColor">
+                                <path d="M6 8.825c-.2 0-.4-.1-.5-.2l-3.3-3.3c-.3-.3-.3-.8 0-1.1.3-.3.8-.3 1.1 0l2.7 2.7 2.7-2.7c.3-.3.8-.3 1.1 0 .3.3.3.8 0 1.1l-3.2 3.2c-.2.2-.4.3-.6.3Z"/>
+                            </svg>
+                        </div>
+                        <div class="month-grid" id="months-2025">
+                            <a href="#" class="month-btn" data-year="2025" data-month="01">1</a>
+                            <a href="#" class="month-btn" data-year="2025" data-month="02">2</a>
+                            <a href="#" class="month-btn" data-year="2025" data-month="03">3</a>
+                            <a href="#" class="month-btn" data-year="2025" data-month="04">4</a>
+                            <a href="#" class="month-btn" data-year="2025" data-month="05">5</a>
+                            <a href="#" class="month-btn" data-year="2025" data-month="06">6</a>
+                            <a href="#" class="month-btn" data-year="2025" data-month="07">7</a>
+                            <a href="#" class="month-btn" data-year="2025" data-month="08">8</a>
+                            <a href="#" class="month-btn active" data-year="2025" data-month="09">9</a>
+                            <a href="#" class="month-btn" data-year="2025" data-month="10">10</a>
+                            <a href="#" class="month-btn" data-year="2025" data-month="11">11</a>
+                            <a href="#" class="month-btn" data-year="2025" data-month="12">12</a>
+                        </div>
+                    </div>
+
+                    <!-- 2024年 -->
+                    <div class="year-section">
+                        <div class="year-header" data-year="2024">
+                            <span class="year-title">2024年</span>
+                            <svg class="year-icon collapsed" viewBox="0 0 12 12" fill="currentColor">
+                                <path d="M6 8.825c-.2 0-.4-.1-.5-.2l-3.3-3.3c-.3-.3-.3-.8 0-1.1.3-.3.8-.3 1.1 0l2.7 2.7 2.7-2.7c.3-.3.8-.3 1.1 0 .3.3.3.8 0 1.1l-3.2 3.2c-.2.2-.4.3-.6.3Z"/>
+                            </svg>
+                        </div>
+                        <div class="month-grid" id="months-2024">
+                            <a href="#" class="month-btn" data-year="2024" data-month="01">1</a>
+                            <a href="#" class="month-btn" data-year="2024" data-month="02">2</a>
+                            <a href="#" class="month-btn" data-year="2024" data-month="03">3</a>
+                            <a href="#" class="month-btn" data-year="2024" data-month="04">4</a>
+                            <a href="#" class="month-btn" data-year="2024" data-month="05">5</a>
+                            <a href="#" class="month-btn" data-year="2024" data-month="06">6</a>
+                            <a href="#" class="month-btn" data-year="2024" data-month="07">7</a>
+                            <a href="#" class="month-btn" data-year="2024" data-month="08">8</a>
+                            <a href="#" class="month-btn" data-year="2024" data-month="09">9</a>
+                            <a href="#" class="month-btn" data-year="2024" data-month="10">10</a>
+                            <a href="#" class="month-btn" data-year="2024" data-month="11">11</a>
+                            <a href="#" class="month-btn" data-year="2024" data-month="12">12</a>
+                        </div>
+                    </div>
+
+                    <!-- 其他年份可以类似添加 -->
+                    <div class="year-section">
+                        <div class="year-header" data-year="2023">
+                            <span class="year-title">2023年</span>
+                            <svg class="year-icon collapsed" viewBox="0 0 12 12" fill="currentColor">
+                                <path d="M6 8.825c-.2 0-.4-.1-.5-.2l-3.3-3.3c-.3-.3-.3-.8 0-1.1.3-.3.8-.3 1.1 0l2.7 2.7 2.7-2.7c.3-.3.8-.3 1.1 0 .3.3.3.8 0 1.1l-3.2 3.2c-.2.2-.4.3-.6.3Z"/>
+                            </svg>
+                        </div>
+                        <div class="month-grid" id="months-2023">
+                            <!-- 月份按钮 -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="copyright">
+                    © Li Shuhang
+                </div>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="gallery-main">
+            <div id="galleryContent">
+                <div class="loading" id="loadingIndicator">
+                    正在加载照片...
+                </div>
             </div>
         </main>
-</div>
+    </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+        class PhotoGallery {
+            constructor() {
+                this.currentYear = '2025';
+                this.currentMonth = '09';
+                this.photosData = null;
+                this.init();
+            }
 
-<script>
-/* 路径处理函数：根据当前路径动态获取基础路径 */
-function getBasePath() {
-    return window.location.pathname.includes('/photos') ? '/photos' : '';
-}
+            init() {
+                this.bindEvents();
+                this.loadPhotos(this.currentYear, this.currentMonth);
+                
+                // 默认展开当前年份
+                this.toggleYear('2025');
+            }
 
-/* 全局变量 */
-let currentMonthData = null;
-let loadedDates = new Set(); // 记录已加载的日期
+            bindEvents() {
+                // 年份展开/折叠
+                document.querySelectorAll('.year-header').forEach(header => {
+                    header.addEventListener('click', (e) => {
+                        const year = e.currentTarget.dataset.year;
+                        this.toggleYear(year);
+                    });
+                });
 
-/* 加载月份数据并显示 */
-async function loadContent(yearMonth) {
-    const basePath = getBasePath();
-    const [year, month] = yearMonth.split('-');
-    const dataPath = [basePath, year, month, 'data.json'].filter(Boolean).join('/');
-    
-    try {
-        const response = await fetch(dataPath);
-        if (!response.ok) throw new Error('数据文件不存在');
-        
-        currentMonthData = await response.json();
-        renderMonthView(currentMonthData);
-        
-    } catch (error) {
-        console.error('加载失败:', error);
-        document.getElementById('content').innerHTML = 
-            `<p>加载 ${yearMonth} 内容时出错了，或许是没有这个月的内容，请重新选择月份</p>`;
-    }
-}
+                // 月份选择
+                document.querySelectorAll('.month-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const year = e.target.dataset.year;
+                        const month = e.target.dataset.month;
+                        this.selectMonth(year, month);
+                    });
+                });
 
-/* 渲染月份视图 */
-function renderMonthView(monthData) {
-    const content = document.getElementById('content');
-    
-    if (!monthData.photos || Object.keys(monthData.photos).length === 0) {
-        content.innerHTML = '<div class="gallery"><p>这个月没有照片</p></div>';
-        return;
-    }
-    
-    let html = '<div class="gallery">';
-    
-    // 按日期排序
-    const sortedDates = Object.keys(monthData.photos).sort((a, b) => parseInt(a) - parseInt(b));
-    
-    for (const day of sortedDates) {
-        const photos = monthData.photos[day];
-        if (photos && photos.length > 0) {
-            html += `
-                <h3 data-date="${day}" class="date-header">
-                    <span class="date-text">${monthData.month}/${day}</span>
-                    <span class="toggle-indicator">▶</span>
-                </h3>
-                <div class="images" data-date="${day}" style="display: none;"></div>
-            `;
+                // 移动端日期选择器切换
+                const mobileDateToggle = document.getElementById('mobileDateToggle');
+                if (mobileDateToggle) {
+                    mobileDateToggle.addEventListener('click', () => {
+                        this.toggleMobileSidebar();
+                    });
+                }
+
+                // 日期条目展开/折叠（事件委托）
+                document.getElementById('galleryContent').addEventListener('click', (e) => {
+                    const dateHeader = e.target.closest('.date-header');
+                    if (dateHeader) {
+                        this.toggleDatePhotos(dateHeader);
+                    }
+                });
+            }
+
+            toggleYear(year) {
+                const header = document.querySelector(`[data-year="${year}"]`);
+                const monthGrid = document.getElementById(`months-${year}`);
+                const icon = header.querySelector('.year-icon');
+
+                if (monthGrid.classList.contains('expanded')) {
+                    monthGrid.classList.remove('expanded');
+                    icon.classList.remove('expanded');
+                    icon.classList.add('collapsed');
+                } else {
+                    // 先关闭其他年份
+                    document.querySelectorAll('.month-grid.expanded').forEach(grid => {
+                        grid.classList.remove('expanded');
+                    });
+                    document.querySelectorAll('.year-icon.expanded').forEach(ic => {
+                        ic.classList.remove('expanded');
+                        ic.classList.add('collapsed');
+                    });
+
+                    // 展开当前年份
+                    monthGrid.classList.add('expanded');
+                    icon.classList.remove('collapsed');
+                    icon.classList.add('expanded');
+                }
+            }
+
+            selectMonth(year, month) {
+                // 更新活动状态
+                document.querySelectorAll('.month-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                document.querySelector(`[data-year="${year}"][data-month="${month}"]`).classList.add('active');
+
+                // 加载照片
+                this.currentYear = year;
+                this.currentMonth = month;
+                this.loadPhotos(year, month);
+
+                // 移动端自动收起侧边栏
+                if (window.innerWidth <= 768) {
+                    this.closeMobileSidebar();
+                }
+            }
+
+            toggleMobileSidebar() {
+                const sidebar = document.getElementById('gallerySidebar');
+                const icon = document.querySelector('.mobile-date-icon');
+                
+                if (sidebar.classList.contains('mobile-open')) {
+                    sidebar.classList.remove('mobile-open');
+                    icon.classList.remove('expanded');
+                    icon.classList.add('collapsed');
+                } else {
+                    sidebar.classList.add('mobile-open');
+                    icon.classList.remove('collapsed');
+                    icon.classList.add('expanded');
+                }
+            }
+
+            closeMobileSidebar() {
+                const sidebar = document.getElementById('gallerySidebar');
+                const icon = document.querySelector('.mobile-date-icon');
+                
+                sidebar.classList.remove('mobile-open');
+                icon.classList.remove('expanded');
+                icon.classList.add('collapsed');
+            }
+
+            async loadPhotos(year, month) {
+                const loadingIndicator = document.getElementById('loadingIndicator');
+                const galleryContent = document.getElementById('galleryContent');
+                
+                loadingIndicator.style.display = 'flex';
+                
+                try {
+                    const response = await fetch(`${year}/${month.padStart(2, '0')}/data.json`);
+                    
+                    if (!response.ok) {
+                        // 如果当前月份没有数据，尝试加载上个月
+                        const prevMonth = this.getPreviousMonth(year, month);
+                        if (prevMonth) {
+                            this.selectMonth(prevMonth.year, prevMonth.month);
+                            return;
+                        }
+                        throw new Error('No data available');
+                    }
+                    
+                    this.photosData = await response.json();
+                    this.renderPhotos();
+                } catch (error) {
+                    console.error('加载照片数据失败:', error);
+                    galleryContent.innerHTML = '<div class="empty-state">暂无照片数据</div>';
+                } finally {
+                    loadingIndicator.style.display = 'none';
+                }
+            }
+
+            getPreviousMonth(year, month) {
+                const y = parseInt(year);
+                const m = parseInt(month);
+                
+                if (m > 1) {
+                    return { year: y.toString(), month: (m - 1).toString().padStart(2, '0') };
+                } else if (y > 2018) {
+                    return { year: (y - 1).toString(), month: '12' };
+                }
+                
+                return null;
+            }
+
+            renderPhotos() {
+                const galleryContent = document.getElementById('galleryContent');
+                
+                if (!this.photosData || !this.photosData.photos) {
+                    galleryContent.innerHTML = '<div class="empty-state">暂无照片</div>';
+                    return;
+                }
+
+                let html = '';
+                const sortedDates = Object.keys(this.photosData.photos).sort();
+
+                sortedDates.forEach(date => {
+                    const photos = this.photosData.photos[date];
+                    const dateDisplay = `${this.photosData.month}/${date}`;
+                    
+                    html += `
+                        <div class="date-item">
+                            <div class="date-header" data-date="${date}">
+                                <span class="date-title">${dateDisplay}</span>
+                                <svg class="date-icon collapsed" viewBox="0 0 12 12" fill="currentColor">
+                                    <path d="M6 8.825c-.2 0-.4-.1-.5-.2l-3.3-3.3c-.3-.3-.3-.8 0-1.1.3-.3.8-.3 1.1 0l2.7 2.7 2.7-2.7c.3-.3.8-.3 1.1 0 .3.3.3.8 0 1.1l-3.2 3.2c-.2.2-.4.3-.6.3Z"/>
+                                </svg>
+                            </div>
+                            <div class="photos-grid" data-date="${date}">
+                                <div class="photos-container" id="photos-${date}">
+                                    <!-- 照片将在点击时动态加载 -->
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                galleryContent.innerHTML = html;
+            }
+
+            toggleDatePhotos(dateHeader) {
+                const date = dateHeader.dataset.date;
+                const photosGrid = document.querySelector(`.photos-grid[data-date="${date}"]`);
+                const photosContainer = document.getElementById(`photos-${date}`);
+                const icon = dateHeader.querySelector('.date-icon');
+
+                if (photosGrid.classList.contains('expanded')) {
+                    // 折叠
+                    photosGrid.classList.remove('expanded');
+                    dateHeader.classList.remove('expanded');
+                    icon.classList.remove('expanded');
+                    icon.classList.add('collapsed');
+                } else {
+                    // 展开并加载照片
+                    photosGrid.classList.add('expanded');
+                    dateHeader.classList.add('expanded');
+                    icon.classList.remove('collapsed');
+                    icon.classList.add('expanded');
+
+                    // 如果照片容器为空，则加载照片
+                    if (photosContainer.children.length === 0) {
+                        this.loadDatePhotos(date, photosContainer);
+                    }
+                }
+            }
+
+            loadDatePhotos(date, container) {
+                if (!this.photosData || !this.photosData.photos[date]) {
+                    container.innerHTML = '<div class="empty-state">这一天没有照片</div>';
+                    return;
+                }
+
+                const photos = this.photosData.photos[date];
+                const baseUrl = this.photosData.base_url
+                    .replace('{user_id}', this.photosData.user_id)
+                    .replace('{year}', this.photosData.year)
+                    .replace('{month}', this.photosData.month)
+                    .replace('{day}', date);
+
+                let html = '';
+                photos.forEach(filename => {
+                    const fullUrl = baseUrl + filename;
+                    const thumbnailUrl = `https://images.weserv.nl/?url=${encodeURIComponent(fullUrl)}&w=300&h=300&output=jpg&q=80&t=square`;
+                    
+                    html += `
+                        <div class="photo-item">
+                            <a href="${fullUrl}" target="_blank">
+                                <img src="${thumbnailUrl}" alt="照片" loading="lazy">
+                            </a>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            }
         }
-    }
-    
-    html += '</div>';
-    content.innerHTML = html;
-    
-    // 重置已加载状态
-    loadedDates.clear();
-    
-    // 添加点击事件监听
-    addClickListeners();
-}
 
-/* 添加点击事件监听 */
-function addClickListeners() {
-    const content = document.getElementById('content');
-    
-    content.addEventListener('click', function(event) {
-        const header = event.target.closest('.date-header');
-        if (!header) return;
-
-        const day = header.dataset.date;
-        const imagesDiv = header.nextElementSibling;
-        const indicator = header.querySelector('.toggle-indicator');
-
-        if (!day || !imagesDiv) return;
-
-        // 切换显示状态
-        const isExpanded = imagesDiv.style.display === 'block';
-        imagesDiv.style.display = isExpanded ? 'none' : 'block';
-        indicator.textContent = isExpanded ? '▶' : '▼';
-        header.classList.toggle('expanded', !isExpanded);
-
-        // 如果是首次展开，则加载图片
-        if (!isExpanded && !loadedDates.has(day)) {
-            loadImagesForDate(day, imagesDiv);
-            loadedDates.add(day);
-        }
-    });
-}
-
-/* 为指定日期加载图片 */
-function loadImagesForDate(day, container) {
-    if (!currentMonthData || !currentMonthData.photos[day]) {
-        container.innerHTML = '<p style="color: #666; font-style: italic; padding: 10px;">这一天没有照片</p>';
-        return;
-    }
-
-    const photos = currentMonthData.photos[day];
-    const baseUrl = currentMonthData.base_url
-        .replace('{user_id}', currentMonthData.user_id)
-        .replace('{year}', currentMonthData.year)
-        .replace('{month}', currentMonthData.month)
-        .replace('{day}', day.padStart(2, '0'));
-
-    let html = '';
-    photos.forEach(filename => {
-        const fullUrl = baseUrl + filename;
-        const thumbnailUrl = `https://images.weserv.nl/?url=${encodeURIComponent(fullUrl)}&w=300&h=300&output=jpg&q=50&t=square`;
-        html += `<a href='${fullUrl}' target='_blank'><img src='${thumbnailUrl}' alt='Image'></a>`;
-    });
-    
-    container.innerHTML = html;
-}
-
-/* 尝试加载内容函数：返回加载成功的月份或false */
-async function tryLoadContent(yearMonth) {
-    const basePath = getBasePath();
-    const [year, month] = yearMonth.split('-');
-    const dataPath = [basePath, year, month, 'data.json'].filter(Boolean).join('/');
-    
-    try {
-        const response = await fetch(dataPath);
-        if (!response.ok) return false;
-        
-        const data = await response.json();
-        if (!data.photos || Object.keys(data.photos).length === 0) {
-            return false; // 没有照片数据
-        }
-        
-        currentMonthData = data;
-        renderMonthView(data);
-        return yearMonth;
-    } catch (error) {
-        return false;
-    }
-}
-
-/* 侧边栏切换功能 */
-function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.style.display = sidebar.style.display === 'none' ? 'block' : 'none';
-}
-
-/* 响应式布局调整 */
-function adjustSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    if (window.innerWidth > 768) {
-        sidebar.style.display = 'block';
-    }
-}
-
-/* 初始化加载逻辑 */
-async function initLoading() {
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    const currentMonth = today.getMonth() + 1;
-    const currentYearMonth = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
-
-    // 计算上个月份
-    const prevMonthDate = new Date(today);
-    prevMonthDate.setMonth(today.getMonth() - 1);
-    const prevYear = prevMonthDate.getFullYear();
-    const prevMonth = prevMonthDate.getMonth() + 1;
-    const prevYearMonth = `${prevYear}-${String(prevMonth).padStart(2, '0')}`;
-
-    // 先尝试加载当前月
-    let loadedMonth = await tryLoadContent(currentYearMonth);
-    
-    if (!loadedMonth) {
-        // 再尝试加载上个月
-        loadedMonth = await tryLoadContent(prevYearMonth);
-    }
-
-    // 只有在成功加载后才设置日期选择器
-    if (loadedMonth) {
-        const [year, month] = loadedMonth.split('-');
-        $("#datepicker").datepicker("setDate", new Date(year, month - 1, 1));
-    } else {
-        document.getElementById('content').innerHTML = 
-            `<p>错误：当前月份（${currentYearMonth}）和上个月（${prevYearMonth}）均无内容</p>`;
-    }
-}
-
-// 文档加载完成后执行
-document.addEventListener('DOMContentLoaded', function() {
-    // 初始化日期选择器
-    $("#datepicker").datepicker({
-        dateFormat: "yy-mm",
-        changeMonth: true,
-        changeYear: true,
-        showButtonPanel: true,
-        defaultDate: null,
-        onClose: function(dateText, inst) {
-            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-            $(this).datepicker("setDate", new Date(year, month, 1));
-            loadContent(`${year}-${('0' + (parseInt(month) + 1)).slice(-2)}`);
-        }
-    });
-
-    // 初始化内容加载
-    initLoading();
-    
-    // 调整侧边栏显示
-    adjustSidebar();
-    
-    // 窗口大小改变时调整布局
-    window.addEventListener('resize', adjustSidebar);
-});
-</script>
-
-<script>
-//侧边栏年月加载
-
-// 动态生成年份树状菜单
-function generateYearTree() {
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    const yearTree = document.getElementById('yearTree');
-    
-    // 生成范围
-    for (let year = 2025; year >= 2018; year--) {
-        const yearItem = document.createElement('div');
-        yearItem.className = 'year-item';
-        
-        const yearHeader = document.createElement('div');
-        yearHeader.className = 'year-header';
-        yearHeader.textContent = `${year}年`;
-        yearHeader.onclick = () => toggleYear(yearItem);
-        
-        const monthGrid = document.createElement('div');
-        monthGrid.className = 'month-grid';
-        
-        // 生成12个月份
-        for (let month = 1; month <= 12; month++) {
-            const monthLink = document.createElement('a');
-            monthLink.href = '#';
-            monthLink.textContent = month;
-            monthLink.onclick = (e) => {
-                e.preventDefault();
-                const yearMonth = `${year}-${String(month).padStart(2, '0')}`;
-                loadContent(yearMonth);
-            };
-            monthGrid.appendChild(monthLink);
-        }
-        
-        yearItem.appendChild(yearHeader);
-        yearItem.appendChild(monthGrid);
-        yearTree.appendChild(yearItem);
-        
-        // 默认展开当前年份
-        if (year === currentYear) {
-            monthGrid.style.display = 'grid';
-            yearItem.classList.add('expanded');
-        } else {
-            monthGrid.style.display = 'none';
-        }
-    }
-}
-
-// 切换年份展开/折叠
-function toggleYear(yearItem) {
-    const monthGrid = yearItem.querySelector('.month-grid');
-    if (monthGrid.style.display === 'none') {
-        monthGrid.style.display = 'grid';
-        yearItem.classList.add('expanded');
-    } else {
-        monthGrid.style.display = 'none';
-        yearItem.classList.remove('expanded');
-    }
-}
-
-// 在DOM加载完成后初始化
-document.addEventListener('DOMContentLoaded', function() {
-    generateYearTree();
-});
-</script>
-
+        // 初始化图片库
+        document.addEventListener('DOMContentLoaded', () => {
+            new PhotoGallery();
+        });
+    </script>
 </body>
 </html>

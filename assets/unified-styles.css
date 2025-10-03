@@ -1,0 +1,561 @@
+/* 
+ * 航通社全站统一样式系统
+ * 基于主站设计，为图片库等子站提供一致的视觉体验
+ */
+
+/* ===== 基础变量定义 ===== */
+:root {
+  /* 主色调 - 基于主站的蓝色系 */
+  --primary-blue: #3b82f6;
+  --primary-blue-light: #60a5fa;
+  --primary-blue-dark: #1d4ed8;
+  
+  /* 背景色系 - 基于主站的浅色背景 */
+  --bg-primary: #f8fafc;
+  --bg-secondary: #f1f5f9;
+  --bg-tertiary: #e2e8f0;
+  --bg-white: #ffffff;
+  
+  /* 文字色系 */
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --text-muted: #94a3b8;
+  --text-white: #ffffff;
+  
+  /* 边框和分割线 */
+  --border-light: #e2e8f0;
+  --border-medium: #cbd5e1;
+  --border-dark: #94a3b8;
+  
+  /* 阴影系统 */
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  
+  /* 圆角系统 */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  
+  /* 间距系统 */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  
+  /* 字体系统 */
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  
+  /* 动画时长 */
+  --duration-fast: 0.15s;
+  --duration-normal: 0.3s;
+  --duration-slow: 0.5s;
+}
+
+/* ===== 基础重置和全局样式 ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== 通用组件样式 ===== */
+
+/* 统一的按钮样式 */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-sm) var(--space-md);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--duration-normal) ease;
+  user-select: none;
+}
+
+.btn-primary {
+  background-color: var(--primary-blue);
+  color: var(--text-white);
+  border-color: var(--primary-blue);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-blue-dark);
+  border-color: var(--primary-blue-dark);
+}
+
+.btn-secondary {
+  background-color: var(--bg-white);
+  color: var(--text-primary);
+  border-color: var(--border-medium);
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-secondary);
+}
+
+/* 统一的卡片样式 */
+.card {
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.card-header {
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--border-light);
+  background-color: var(--bg-secondary);
+}
+
+.card-body {
+  padding: var(--space-lg);
+}
+
+/* ===== 展开/折叠组件统一样式 ===== */
+.collapsible {
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  margin-bottom: var(--space-sm);
+}
+
+.collapsible-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md) var(--space-lg);
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
+  color: var(--text-white);
+  cursor: pointer;
+  transition: all var(--duration-normal) ease;
+  user-select: none;
+}
+
+.collapsible-header:hover {
+  background: linear-gradient(135deg, var(--primary-blue-dark) 0%, var(--primary-blue) 100%);
+}
+
+.collapsible-header.expanded {
+  background: linear-gradient(135deg, var(--primary-blue-dark) 0%, var(--primary-blue) 100%);
+}
+
+.collapsible-title {
+  font-weight: 600;
+  font-size: var(--font-size-lg);
+}
+
+.collapsible-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform var(--duration-normal) ease;
+  flex-shrink: 0;
+}
+
+/* 统一的展开/折叠图标逻辑：折叠时向下，展开时向上 */
+.collapsible-icon.collapsed {
+  transform: rotate(0deg); /* 向下箭头 */
+}
+
+.collapsible-icon.expanded {
+  transform: rotate(180deg); /* 向上箭头 */
+}
+
+.collapsible-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--duration-normal) ease;
+  background-color: var(--bg-white);
+}
+
+.collapsible-content.expanded {
+  max-height: 2000px; /* 足够大的值以容纳内容 */
+}
+
+/* ===== 图片库专用样式 ===== */
+
+/* 主容器 */
+.gallery-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+}
+
+/* 侧边栏 */
+.gallery-sidebar {
+  width: 280px;
+  background-color: var(--bg-white);
+  border-right: 1px solid var(--border-light);
+  box-shadow: var(--shadow-md);
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.gallery-sidebar-header {
+  padding: var(--space-xl);
+  border-bottom: 1px solid var(--border-light);
+  background-color: var(--bg-secondary);
+}
+
+.gallery-sidebar-title {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  color: var(--primary-blue);
+  text-decoration: none;
+}
+
+.gallery-sidebar-body {
+  padding: var(--space-lg);
+}
+
+/* 年份月份选择器 */
+.date-selector {
+  margin-bottom: var(--space-xl);
+}
+
+.date-selector-label {
+  display: block;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-md);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.year-section {
+  margin-bottom: var(--space-lg);
+}
+
+.year-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-md);
+  background-color: var(--bg-tertiary);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--duration-normal) ease;
+  margin-bottom: var(--space-sm);
+}
+
+.year-header:hover {
+  background-color: var(--border-medium);
+}
+
+.year-title {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.year-icon {
+  width: 16px;
+  height: 16px;
+  transition: transform var(--duration-normal) ease;
+}
+
+.year-icon.collapsed {
+  transform: rotate(0deg);
+}
+
+.year-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.month-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-xs);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--duration-normal) ease;
+}
+
+.month-grid.expanded {
+  max-height: 200px;
+}
+
+.month-btn {
+  padding: var(--space-sm);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  background-color: var(--bg-white);
+  color: var(--text-primary);
+  text-decoration: none;
+  text-align: center;
+  font-weight: 500;
+  transition: all var(--duration-fast) ease;
+}
+
+.month-btn:hover {
+  background-color: var(--primary-blue);
+  color: var(--text-white);
+  border-color: var(--primary-blue);
+}
+
+.month-btn.active {
+  background-color: var(--primary-blue);
+  color: var(--text-white);
+  border-color: var(--primary-blue);
+}
+
+/* 主内容区 */
+.gallery-main {
+  flex: 1;
+  padding: var(--space-xl);
+  overflow-y: auto;
+}
+
+/* 日期条目 */
+.date-item {
+  margin-bottom: var(--space-md);
+}
+
+.date-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg);
+  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
+  color: var(--text-white);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--duration-normal) ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.date-header:hover {
+  background: linear-gradient(135deg, var(--primary-blue-dark) 0%, var(--primary-blue) 100%);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.date-header.expanded {
+  background: linear-gradient(135deg, var(--primary-blue-dark) 0%, var(--primary-blue) 100%);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.date-title {
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+}
+
+.date-icon {
+  width: 24px;
+  height: 24px;
+  transition: transform var(--duration-normal) ease;
+}
+
+.date-icon.collapsed {
+  transform: rotate(0deg);
+}
+
+.date-icon.expanded {
+  transform: rotate(180deg);
+}
+
+/* 照片网格 */
+.photos-grid {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--duration-normal) ease;
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-light);
+  border-top: none;
+  border-bottom-left-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+}
+
+.photos-grid.expanded {
+  max-height: 3000px;
+}
+
+.photos-container {
+  padding: var(--space-lg);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-md);
+}
+
+.photo-item {
+  position: relative;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-normal) ease;
+}
+
+.photo-item:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.photo-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.empty-state {
+  padding: var(--space-xl);
+  text-align: center;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* ===== 响应式设计 ===== */
+
+/* 移动端适配 */
+@media (max-width: 768px) {
+  .gallery-container {
+    flex-direction: column;
+  }
+  
+  .gallery-sidebar {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    transform: translateY(-100%);
+    transition: transform var(--duration-normal) ease;
+    max-height: 70vh;
+  }
+  
+  .gallery-sidebar.mobile-open {
+    transform: translateY(0);
+  }
+  
+  .gallery-main {
+    padding: var(--space-md);
+    padding-top: 60px; /* 为移动端标题栏留空间 */
+  }
+  
+  /* 移动端标题栏 */
+  .mobile-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    background-color: var(--bg-white);
+    border-bottom: 1px solid var(--border-light);
+    box-shadow: var(--shadow-sm);
+    padding: var(--space-md);
+  }
+  
+  .mobile-date-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md);
+    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
+    color: var(--text-white);
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    width: 100%;
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+  }
+  
+  .mobile-date-icon {
+    width: 20px;
+    height: 20px;
+    transition: transform var(--duration-normal) ease;
+  }
+  
+  .mobile-date-icon.collapsed {
+    transform: rotate(0deg);
+  }
+  
+  .mobile-date-icon.expanded {
+    transform: rotate(180deg);
+  }
+  
+  /* 移动端照片网格调整 */
+  .photos-container {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--space-sm);
+  }
+  
+  .photo-item img {
+    height: 150px;
+  }
+}
+
+/* 桌面端隐藏移动端元素 */
+@media (min-width: 769px) {
+  .mobile-header {
+    display: none;
+  }
+}
+
+/* ===== 通用图标样式 ===== */
+.icon-chevron-down {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
+
+/* ===== 加载状态 ===== */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  color: var(--text-muted);
+}
+
+.loading::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-light);
+  border-top-color: var(--primary-blue);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-left: var(--space-sm);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ===== 版权信息 ===== */
+.copyright {
+  padding: var(--space-lg);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  border-top: 1px solid var(--border-light);
+  background-color: var(--bg-secondary);
+}

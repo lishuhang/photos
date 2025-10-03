@@ -238,287 +238,309 @@
     </div>
 
     <script>
-        class PhotoGallery {
-            constructor() {
-                this.currentYear = '2025';
-                this.currentMonth = '09';
-                this.photosData = null;
-                this.init();
-            }
+        // 全局变量
+        let currentYear = '2025';
+        let currentMonth = '09';
+        let photosData = null;
 
-            init() {
-                this.bindEvents();
-                this.loadPhotos(this.currentYear, this.currentMonth);
-                
-                // 默认展开当前年份
-                this.toggleYear('2025');
-            }
+        // 初始化函数
+        function initGallery() {
+            console.log('Initializing gallery...');
+            
+            // 绑定事件
+            bindEvents();
+            
+            // 加载默认照片
+            loadPhotos(currentYear, currentMonth);
+            
+            // 默认展开当前年份
+            toggleYear('2025');
+            
+            console.log('Gallery initialized successfully');
+        }
 
-            bindEvents() {
-                // 年份展开/折叠
-                document.querySelectorAll('.year-header').forEach(header => {
-                    header.addEventListener('click', (e) => {
-                        const year = e.currentTarget.dataset.year;
-                        this.toggleYear(year);
-                    });
+        function bindEvents() {
+            // 年份展开/折叠
+            document.querySelectorAll('.year-header').forEach(header => {
+                header.addEventListener('click', (e) => {
+                    const year = e.currentTarget.dataset.year;
+                    toggleYear(year);
                 });
+            });
 
-                // 月份选择
-                document.querySelectorAll('.month-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const year = e.target.dataset.year;
-                        const month = e.target.dataset.month;
-                        this.selectMonth(year, month);
-                    });
+            // 月份选择
+            document.querySelectorAll('.month-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const year = e.target.dataset.year;
+                    const month = e.target.dataset.month;
+                    console.log('Month clicked:', year, month);
+                    selectMonth(year, month);
                 });
+            });
 
-                // 移动端日期选择器切换
-                const mobileDateToggle = document.getElementById('mobileDateToggle');
-                if (mobileDateToggle) {
-                    mobileDateToggle.addEventListener('click', () => {
-                        this.toggleMobileSidebar();
-                    });
-                }
-
-                // 日期条目展开/折叠（事件委托）
-                document.getElementById('galleryContent').addEventListener('click', (e) => {
-                    const dateHeader = e.target.closest('.date-header');
-                    if (dateHeader) {
-                        this.toggleDatePhotos(dateHeader);
-                    }
+            // 移动端日期选择器切换
+            const mobileDateToggle = document.getElementById('mobileDateToggle');
+            if (mobileDateToggle) {
+                mobileDateToggle.addEventListener('click', () => {
+                    toggleMobileSidebar();
                 });
             }
 
-            toggleYear(year) {
-                const header = document.querySelector(`[data-year="${year}"]`);
-                const monthGrid = document.getElementById(`months-${year}`);
-                const icon = header.querySelector('.year-icon');
-
-                if (monthGrid.classList.contains('expanded')) {
-                    monthGrid.classList.remove('expanded');
-                    icon.classList.remove('expanded');
-                    icon.classList.add('collapsed');
-                } else {
-                    // 先关闭其他年份
-                    document.querySelectorAll('.month-grid.expanded').forEach(grid => {
-                        grid.classList.remove('expanded');
-                    });
-                    document.querySelectorAll('.year-icon.expanded').forEach(ic => {
-                        ic.classList.remove('expanded');
-                        ic.classList.add('collapsed');
-                    });
-
-                    // 展开当前年份
-                    monthGrid.classList.add('expanded');
-                    icon.classList.remove('collapsed');
-                    icon.classList.add('expanded');
+            // 日期条目展开/折叠（事件委托）
+            document.getElementById('galleryContent').addEventListener('click', (e) => {
+                const dateHeader = e.target.closest('.date-header');
+                if (dateHeader) {
+                    toggleDatePhotos(dateHeader);
                 }
-            }
+            });
+            
+            console.log('Events bound successfully');
+        }
 
-            selectMonth(year, month) {
-                // 更新活动状态
-                document.querySelectorAll('.month-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                document.querySelector(`[data-year="${year}"][data-month="${month}"]`).classList.add('active');
+        function toggleYear(year) {
+            const header = document.querySelector(`[data-year="${year}"]`);
+            const monthGrid = document.getElementById(`months-${year}`);
+            const icon = header.querySelector('.year-icon');
 
-                // 加载照片
-                this.currentYear = year;
-                this.currentMonth = month;
-                this.loadPhotos(year, month);
-
-                // 移动端自动收起侧边栏
-                if (window.innerWidth <= 768) {
-                    this.closeMobileSidebar();
-                }
-            }
-
-            toggleMobileSidebar() {
-                const sidebar = document.getElementById('gallerySidebar');
-                const icon = document.querySelector('.mobile-date-icon');
-                
-                if (sidebar.classList.contains('mobile-open')) {
-                    sidebar.classList.remove('mobile-open');
-                    icon.classList.remove('expanded');
-                    icon.classList.add('collapsed');
-                } else {
-                    sidebar.classList.add('mobile-open');
-                    icon.classList.remove('collapsed');
-                    icon.classList.add('expanded');
-                }
-            }
-
-            closeMobileSidebar() {
-                const sidebar = document.getElementById('gallerySidebar');
-                const icon = document.querySelector('.mobile-date-icon');
-                
-                sidebar.classList.remove('mobile-open');
+            if (monthGrid.classList.contains('expanded')) {
+                monthGrid.classList.remove('expanded');
                 icon.classList.remove('expanded');
                 icon.classList.add('collapsed');
-            }
-
-            async loadPhotos(year, month) {
-                const loadingIndicator = document.getElementById('loadingIndicator');
-                const galleryContent = document.getElementById('galleryContent');
-                
-                loadingIndicator.style.display = 'flex';
-                
-                try {
-                    // 尝试加载指定月份的数据
-                    const response = await fetch(`${year}/${month.padStart(2, '0')}/data.json`);
-                    
-                    if (!response.ok) {
-                        // 如果当前月份没有数据，尝试寻找最近的有数据的月份
-                        const availableMonth = await this.findAvailableMonth(year, month);
-                        if (availableMonth) {
-                            // 更新UI显示找到的月份
-                            this.selectMonth(availableMonth.year, availableMonth.month);
-                            return;
-                        }
-                        throw new Error('No data available');
-                    }
-                    
-                    this.photosData = await response.json();
-                    this.renderPhotos();
-                } catch (error) {
-                    console.error('加载照片数据失败:', error);
-                    galleryContent.innerHTML = `
-                        <div class="empty-state">
-                            <p>暂无 ${year}年${month}月 的照片数据</p>
-                            <p>请选择其他月份</p>
-                        </div>
-                    `;
-                } finally {
-                    loadingIndicator.style.display = 'none';
-                }
-            }
-
-            async findAvailableMonth(targetYear, targetMonth) {
-                const years = ['2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018'];
-                const months = ['12', '11', '10', '09', '08', '07', '06', '05', '04', '03', '02', '01'];
-                
-                // 从目标年月开始，向前寻找有数据的月份
-                let yearIndex = years.indexOf(targetYear);
-                let monthIndex = months.indexOf(targetMonth.padStart(2, '0'));
-                
-                if (yearIndex === -1) yearIndex = 0;
-                if (monthIndex === -1) monthIndex = 0;
-                
-                // 向前搜索
-                for (let y = yearIndex; y < years.length; y++) {
-                    const startMonth = (y === yearIndex) ? monthIndex : 0;
-                    for (let m = startMonth; m < months.length; m++) {
-                        try {
-                            const response = await fetch(`${years[y]}/${months[m]}/data.json`);
-                            if (response.ok) {
-                                return { year: years[y], month: months[m] };
-                            }
-                        } catch (e) {
-                            // 继续尝试下一个月份
-                        }
-                    }
-                }
-                
-                return null;
-            }
-
-            renderPhotos() {
-                const galleryContent = document.getElementById('galleryContent');
-                
-                if (!this.photosData || !this.photosData.photos) {
-                    galleryContent.innerHTML = '<div class="empty-state">暂无照片</div>';
-                    return;
-                }
-
-                let html = '';
-                const sortedDates = Object.keys(this.photosData.photos).sort();
-
-                sortedDates.forEach(date => {
-                    const photos = this.photosData.photos[date];
-                    const dateDisplay = `${this.photosData.month}/${date}`;
-                    
-                    html += `
-                        <div class="date-item">
-                            <div class="date-header" data-date="${date}">
-                                <span class="date-title">${dateDisplay}</span>
-                                <svg class="date-icon collapsed" viewBox="0 0 12 12" fill="currentColor">
-                                    <path d="M6 8.825c-.2 0-.4-.1-.5-.2l-3.3-3.3c-.3-.3-.3-.8 0-1.1.3-.3.8-.3 1.1 0l2.7 2.7 2.7-2.7c.3-.3.8-.3 1.1 0 .3.3.3.8 0 1.1l-3.2 3.2c-.2.2-.4.3-.6.3Z"/>
-                                </svg>
-                            </div>
-                            <div class="photos-grid" data-date="${date}">
-                                <div class="photos-container" id="photos-${date}">
-                                    <!-- 照片将在点击时动态加载 -->
-                                </div>
-                            </div>
-                        </div>
-                    `;
+            } else {
+                // 先关闭其他年份
+                document.querySelectorAll('.month-grid.expanded').forEach(grid => {
+                    grid.classList.remove('expanded');
+                });
+                document.querySelectorAll('.year-icon.expanded').forEach(ic => {
+                    ic.classList.remove('expanded');
+                    ic.classList.add('collapsed');
                 });
 
-                galleryContent.innerHTML = html;
-            }
-
-            toggleDatePhotos(dateHeader) {
-                const date = dateHeader.dataset.date;
-                const photosGrid = document.querySelector(`.photos-grid[data-date="${date}"]`);
-                const photosContainer = document.getElementById(`photos-${date}`);
-                const icon = dateHeader.querySelector('.date-icon');
-
-                if (photosGrid.classList.contains('expanded')) {
-                    // 折叠
-                    photosGrid.classList.remove('expanded');
-                    dateHeader.classList.remove('expanded');
-                    icon.classList.remove('expanded');
-                    icon.classList.add('collapsed');
-                } else {
-                    // 展开并加载照片
-                    photosGrid.classList.add('expanded');
-                    dateHeader.classList.add('expanded');
-                    icon.classList.remove('collapsed');
-                    icon.classList.add('expanded');
-
-                    // 如果照片容器为空，则加载照片
-                    if (photosContainer.children.length === 0) {
-                        this.loadDatePhotos(date, photosContainer);
-                    }
-                }
-            }
-
-            loadDatePhotos(date, container) {
-                if (!this.photosData || !this.photosData.photos[date]) {
-                    container.innerHTML = '<div class="empty-state">这一天没有照片</div>';
-                    return;
-                }
-
-                const photos = this.photosData.photos[date];
-                const baseUrl = this.photosData.base_url
-                    .replace('{user_id}', this.photosData.user_id)
-                    .replace('{year}', this.photosData.year)
-                    .replace('{month}', this.photosData.month)
-                    .replace('{day}', date);
-
-                let html = '';
-                photos.forEach(filename => {
-                    const fullUrl = baseUrl + filename;
-                    const thumbnailUrl = `https://images.weserv.nl/?url=${encodeURIComponent(fullUrl)}&w=300&h=300&output=jpg&q=80&t=square`;
-                    
-                    html += `
-                        <div class="photo-item">
-                            <a href="${fullUrl}" target="_blank">
-                                <img src="${thumbnailUrl}" alt="照片" loading="lazy">
-                            </a>
-                        </div>
-                    `;
-                });
-
-                container.innerHTML = html;
+                // 展开当前年份
+                monthGrid.classList.add('expanded');
+                icon.classList.remove('collapsed');
+                icon.classList.add('expanded');
             }
         }
 
-        // 初始化图片库
-        document.addEventListener('DOMContentLoaded', () => {
-            new PhotoGallery();
-        });
+        function selectMonth(year, month) {
+            console.log('Selecting month:', year, month);
+            
+            // 更新活动状态
+            document.querySelectorAll('.month-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            const targetBtn = document.querySelector(`[data-year="${year}"][data-month="${month}"]`);
+            if (targetBtn) {
+                targetBtn.classList.add('active');
+            }
+
+            // 加载照片
+            currentYear = year;
+            currentMonth = month;
+            loadPhotos(year, month);
+
+            // 移动端自动收起侧边栏
+            if (window.innerWidth <= 768) {
+                closeMobileSidebar();
+            }
+        }
+
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('gallerySidebar');
+            const icon = document.querySelector('.mobile-date-icon');
+            
+            if (sidebar.classList.contains('mobile-open')) {
+                sidebar.classList.remove('mobile-open');
+                icon.classList.remove('expanded');
+                icon.classList.add('collapsed');
+            } else {
+                sidebar.classList.add('mobile-open');
+                icon.classList.remove('collapsed');
+                icon.classList.add('expanded');
+            }
+        }
+
+        function closeMobileSidebar() {
+            const sidebar = document.getElementById('gallerySidebar');
+            const icon = document.querySelector('.mobile-date-icon');
+            
+            sidebar.classList.remove('mobile-open');
+            icon.classList.remove('expanded');
+            icon.classList.add('collapsed');
+        }
+
+        async function loadPhotos(year, month) {
+            console.log('Loading photos for:', year, month);
+            
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const galleryContent = document.getElementById('galleryContent');
+            
+            loadingIndicator.style.display = 'flex';
+            
+            try {
+                // 尝试加载指定月份的数据
+                const response = await fetch(`${year}/${month.padStart(2, '0')}/data.json`);
+                
+                if (!response.ok) {
+                    console.log('Data not found for', year, month, 'trying to find available month...');
+                    // 如果当前月份没有数据，尝试寻找最近的有数据的月份
+                    const availableMonth = await findAvailableMonth(year, month);
+                    if (availableMonth) {
+                        console.log('Found available month:', availableMonth);
+                        // 更新UI显示找到的月份
+                        selectMonth(availableMonth.year, availableMonth.month);
+                        return;
+                    }
+                    throw new Error('No data available');
+                }
+                
+                photosData = await response.json();
+                console.log('Photos data loaded:', photosData);
+                renderPhotos();
+            } catch (error) {
+                console.error('加载照片数据失败:', error);
+                galleryContent.innerHTML = `
+                    <div class="empty-state">
+                        <p>暂无 ${year}年${month}月 的照片数据</p>
+                        <p>请选择其他月份</p>
+                    </div>
+                `;
+            } finally {
+                loadingIndicator.style.display = 'none';
+            }
+        }
+
+        async function findAvailableMonth(targetYear, targetMonth) {
+            const years = ['2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018'];
+            const months = ['12', '11', '10', '09', '08', '07', '06', '05', '04', '03', '02', '01'];
+            
+            // 从目标年月开始，向前寻找有数据的月份
+            let yearIndex = years.indexOf(targetYear);
+            let monthIndex = months.indexOf(targetMonth.padStart(2, '0'));
+            
+            if (yearIndex === -1) yearIndex = 0;
+            if (monthIndex === -1) monthIndex = 0;
+            
+            // 向前搜索
+            for (let y = yearIndex; y < years.length; y++) {
+                const startMonth = (y === yearIndex) ? monthIndex : 0;
+                for (let m = startMonth; m < months.length; m++) {
+                    try {
+                        const response = await fetch(`${years[y]}/${months[m]}/data.json`);
+                        if (response.ok) {
+                            return { year: years[y], month: months[m] };
+                        }
+                    } catch (e) {
+                        // 继续尝试下一个月份
+                    }
+                }
+            }
+            
+            return null;
+        }
+
+        function renderPhotos() {
+            const galleryContent = document.getElementById('galleryContent');
+            
+            if (!photosData || !photosData.photos) {
+                galleryContent.innerHTML = '<div class="empty-state">暂无照片</div>';
+                return;
+            }
+
+            let html = '';
+            const sortedDates = Object.keys(photosData.photos).sort();
+
+            sortedDates.forEach(date => {
+                const photos = photosData.photos[date];
+                const dateDisplay = `${photosData.month}/${date}`;
+                
+                html += `
+                    <div class="date-item">
+                        <div class="date-header" data-date="${date}">
+                            <span class="date-title">${dateDisplay}</span>
+                            <svg class="date-icon collapsed" viewBox="0 0 12 12" fill="currentColor">
+                                <path d="M6 8.825c-.2 0-.4-.1-.5-.2l-3.3-3.3c-.3-.3-.3-.8 0-1.1.3-.3.8-.3 1.1 0l2.7 2.7 2.7-2.7c.3-.3.8-.3 1.1 0 .3.3.3.8 0 1.1l-3.2 3.2c-.2.2-.4.3-.6.3Z"/>
+                            </svg>
+                        </div>
+                        <div class="photos-grid" data-date="${date}">
+                            <div class="photos-container" id="photos-${date}">
+                                <!-- 照片将在点击时动态加载 -->
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            galleryContent.innerHTML = html;
+        }
+
+        function toggleDatePhotos(dateHeader) {
+            const date = dateHeader.dataset.date;
+            const photosGrid = document.querySelector(`.photos-grid[data-date="${date}"]`);
+            const photosContainer = document.getElementById(`photos-${date}`);
+            const icon = dateHeader.querySelector('.date-icon');
+
+            if (photosGrid.classList.contains('expanded')) {
+                // 折叠
+                photosGrid.classList.remove('expanded');
+                dateHeader.classList.remove('expanded');
+                icon.classList.remove('expanded');
+                icon.classList.add('collapsed');
+            } else {
+                // 展开并加载照片
+                photosGrid.classList.add('expanded');
+                dateHeader.classList.add('expanded');
+                icon.classList.remove('collapsed');
+                icon.classList.add('expanded');
+
+                // 如果照片容器为空，则加载照片
+                if (photosContainer.children.length === 0) {
+                    loadDatePhotos(date, photosContainer);
+                }
+            }
+        }
+
+        function loadDatePhotos(date, container) {
+            if (!photosData || !photosData.photos[date]) {
+                container.innerHTML = '<div class="empty-state">这一天没有照片</div>';
+                return;
+            }
+
+            const photos = photosData.photos[date];
+            const baseUrl = photosData.base_url
+                .replace('{user_id}', photosData.user_id)
+                .replace('{year}', photosData.year)
+                .replace('{month}', photosData.month)
+                .replace('{day}', date);
+
+            let html = '';
+            photos.forEach(filename => {
+                const fullUrl = baseUrl + filename;
+                const thumbnailUrl = `https://images.weserv.nl/?url=${encodeURIComponent(fullUrl)}&w=300&h=300&output=jpg&q=80&t=square`;
+                
+                html += `
+                    <div class="photo-item">
+                        <a href="${fullUrl}" target="_blank">
+                            <img src="${thumbnailUrl}" alt="照片" loading="lazy">
+                        </a>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        // 页面加载完成后初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initGallery);
+        } else {
+            initGallery();
+        }
+        
+        // 调试信息
+        console.log('Gallery script loaded');
     </script>
 </body>
 </html>

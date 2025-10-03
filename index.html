@@ -1,155 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>图片库 - 航通社</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
-    <link rel="stylesheet" id="dynamicCSS">
-
-<style>
-    body {
-        display: flex;
-        flex-direction: column;
-        margin: 0;
-        font-family: Arial, sans-serif;
-        background-color: #f4f7fa;
-    }
-    header {
-        background-color: rgba(255, 255, 255, 0.8);
-        color: black;
-        padding: 0;
-        position: sticky;
-        top: 0;
-        padding-left: 20px;
-        height: 60px;
-        display: flex;
-        z-index: 1000;
-        backdrop-filter: blur(10px);
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    }
-    header h1 {
-        margin: 0;
-        line-height: 60px;
-        font-size: 24px;
-    }
-    #container {
-        display: flex;
-        flex: 1;
-        overflow: hidden;
-    }
-    aside {
-        width: 250px;
-        background-color: rgba(255, 255, 255, 0.8);
-        padding: 20px;
-        box-sizing: border-box;
-        border-right: 1px solid #ddd;
-        position: fixed;
-        top: 60px;
-        bottom: 0;
-        overflow-y: auto;
-        backdrop-filter: blur(10px);
-        z-index: 1000;
-    }
-    main {
-        flex: 1;
-        margin-left: 250px;
-        padding: 20px;
-        box-sizing: border-box;
-        overflow-y: auto;
-    }
-    .toggle-btn {
-        display: none;
-        position: absolute;
-        top: 0px;
-        right: 10px;
-        height: 20px;
-        z-index: 1001;
-        cursor: pointer;
-        padding: 10px;
-        background-color: #fff;
-        border: 1px solid #ddd;
-        margin: 10px 0;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    input[type="text"] {
-        width: 100%;
-        padding: 10px;
-        margin-top: 10px;
-        box-sizing: border-box;
-        border: 1px solid #ddd;
-        border-radius: 4px;
-    }
-    label {
-        font-weight: bold;
-    }
-    p {
-        margin-top: 20px;
-        color: #555;
-    }
-    h2 {
-        color: #001f3f;
-    }
-    .year-tree {
-        margin-top: 10px;
-    }
-    .year-item {
-        margin-bottom: 10px;
-    }
-    .year-header {
-        font-weight: bold;
-        padding: 5px;
-        cursor: pointer;
-        background-color: #f0f0f0;
-        border-radius: 4px;
-    }
-    .year-header:hover {
-        background-color: #e0e0e0;
-    }
-    .expanded .year-header {
-        background-color: #d0d0d0;
-    }
-    .month-grid {
-        display: none;
-        grid-template-columns: repeat(4, 1fr);
-        gap: 5px;
-        margin: 5px 0;
-        padding: 5px;
-    }
-    .month-grid a {
-        text-align: center;
-        padding: 5px;
-        background-color: #f0f0f0;
-        border-radius: 4px;
-        text-decoration: none;
-        color: #007BFF;
-    }
-    .month-grid a:hover {
-        background-color: #e0e0e0;
-    }
-
-    @media (max-width: 768px) {
-        aside {
-            width: 100%;
-            height: 100vh;
-            position: fixed;
-            top: 60px;
-            left: 0;
-            display: none;
-            z-index: 1001;
-        }
-        main {
-            margin-left: 0;
-        }
-        .toggle-btn {
-            display: block;
-        }
-    }
-</style>
-
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css">
+    <link rel="stylesheet" href="assets/gallery.css">
 </head>
-
 
 <body>
     <header>
@@ -178,7 +36,6 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script id="dynamicJS"></script>
 
 <script>
 /* 路径处理函数：根据当前路径动态获取基础路径 */
@@ -186,44 +43,137 @@ function getBasePath() {
     return window.location.pathname.includes('/photos') ? '/photos' : '';
 }
 
-/* 常规内容加载函数：根据年月参数加载对应月份的内容并处理错误显示 */
-function loadContent(yearMonth) {
+/* 全局变量 */
+let currentMonthData = null;
+let loadedDates = new Set(); // 记录已加载的日期
+
+/* 加载月份数据并显示 */
+async function loadContent(yearMonth) {
     const basePath = getBasePath();
-    const targetPath = [basePath, yearMonth.replace('-', '/'), 'index.html'].filter(Boolean).join('/');
+    const [year, month] = yearMonth.split('-');
+    const dataPath = [basePath, year, month, 'data.json'].filter(Boolean).join('/');
     
-    fetch(targetPath)
-        .then(response => {
-            if (!response.ok) throw new Error('网络响应异常');
-            return response.text();
-        })
-        .then(data => {
-            document.getElementById('content').innerHTML = data;
-            addToggleImagesFunctionality();
-        })
-        .catch(error => {
-            console.error('加载失败:', error);
-            document.getElementById('content').innerHTML = `<p>加载 ${yearMonth} 内容时出错了，或许是没有这个月的内容，请重新选择月份</p>`;
-        });
+    try {
+        const response = await fetch(dataPath);
+        if (!response.ok) throw new Error('数据文件不存在');
+        
+        currentMonthData = await response.json();
+        renderMonthView(currentMonthData);
+        
+    } catch (error) {
+        console.error('加载失败:', error);
+        document.getElementById('content').innerHTML = 
+            `<p>加载 ${yearMonth} 内容时出错了，或许是没有这个月的内容，请重新选择月份</p>`;
+    }
+}
+
+/* 渲染月份视图 */
+function renderMonthView(monthData) {
+    const content = document.getElementById('content');
+    
+    if (!monthData.photos || Object.keys(monthData.photos).length === 0) {
+        content.innerHTML = '<div class="gallery"><p>这个月没有照片</p></div>';
+        return;
+    }
+    
+    let html = '<div class="gallery">';
+    
+    // 按日期排序
+    const sortedDates = Object.keys(monthData.photos).sort((a, b) => parseInt(a) - parseInt(b));
+    
+    for (const day of sortedDates) {
+        const photos = monthData.photos[day];
+        if (photos && photos.length > 0) {
+            html += `
+                <h3 data-date="${day}" class="date-header">
+                    <span class="date-text">${monthData.month}/${day}</span>
+                    <span class="toggle-indicator">▶</span>
+                </h3>
+                <div class="images" data-date="${day}" style="display: none;"></div>
+            `;
+        }
+    }
+    
+    html += '</div>';
+    content.innerHTML = html;
+    
+    // 重置已加载状态
+    loadedDates.clear();
+    
+    // 添加点击事件监听
+    addClickListeners();
+}
+
+/* 添加点击事件监听 */
+function addClickListeners() {
+    const content = document.getElementById('content');
+    
+    content.addEventListener('click', function(event) {
+        const header = event.target.closest('.date-header');
+        if (!header) return;
+
+        const day = header.dataset.date;
+        const imagesDiv = header.nextElementSibling;
+        const indicator = header.querySelector('.toggle-indicator');
+
+        if (!day || !imagesDiv) return;
+
+        // 切换显示状态
+        const isExpanded = imagesDiv.style.display === 'block';
+        imagesDiv.style.display = isExpanded ? 'none' : 'block';
+        indicator.textContent = isExpanded ? '▶' : '▼';
+        header.classList.toggle('expanded', !isExpanded);
+
+        // 如果是首次展开，则加载图片
+        if (!isExpanded && !loadedDates.has(day)) {
+            loadImagesForDate(day, imagesDiv);
+            loadedDates.add(day);
+        }
+    });
+}
+
+/* 为指定日期加载图片 */
+function loadImagesForDate(day, container) {
+    if (!currentMonthData || !currentMonthData.photos[day]) {
+        container.innerHTML = '<p style="color: #666; font-style: italic; padding: 10px;">这一天没有照片</p>';
+        return;
+    }
+
+    const photos = currentMonthData.photos[day];
+    const baseUrl = currentMonthData.base_url
+        .replace('{user_id}', currentMonthData.user_id)
+        .replace('{year}', currentMonthData.year)
+        .replace('{month}', currentMonthData.month)
+        .replace('{day}', day.padStart(2, '0'));
+
+    let html = '';
+    photos.forEach(filename => {
+        const fullUrl = baseUrl + filename;
+        const thumbnailUrl = `https://images.weserv.nl/?url=${encodeURIComponent(fullUrl)}&w=300&h=300&output=jpg&q=50&t=square`;
+        html += `<a href='${fullUrl}' target='_blank'><img src='${thumbnailUrl}' alt='Image'></a>`;
+    });
+    
+    container.innerHTML = html;
 }
 
 /* 尝试加载内容函数：返回加载成功的月份或false */
 async function tryLoadContent(yearMonth) {
     const basePath = getBasePath();
-    const targetPath = [basePath, yearMonth.replace('-', '/'), 'index.html'].filter(Boolean).join('/');
+    const [year, month] = yearMonth.split('-');
+    const dataPath = [basePath, year, month, 'data.json'].filter(Boolean).join('/');
     
     try {
-        const response = await fetch(targetPath);
+        const response = await fetch(dataPath);
         if (!response.ok) return false;
-        const data = await response.text();
         
-        // 检查是否是空页面（没有照片的月份）
-        if (data.includes('这个月没有照片')) {
-            return false;
+        const data = await response.json();
+        if (!data.photos || Object.keys(data.photos).length === 0) {
+            return false; // 没有照片数据
         }
         
-        document.getElementById('content').innerHTML = data;
-        addToggleImagesFunctionality();
-        return yearMonth; // 返回成功加载的月份
+        currentMonthData = data;
+        renderMonthView(data);
+        return yearMonth;
     } catch (error) {
         return false;
     }
@@ -275,97 +225,6 @@ async function initLoading() {
     }
 }
 
-/* 图片切换功能 - 使用事件委托 */
-function addToggleImagesFunctionality() {
-    const content = document.getElementById('content');
-    let photoData = {}; // 用于存储当前月份的照片数据
-
-    // 提取照片数据
-    function extractPhotoData() {
-        const scriptTag = content.querySelector('#photo-data-script');
-        if (scriptTag) {
-            try {
-                // 从脚本内容中提取photoData对象
-                const scriptContent = scriptTag.textContent || scriptTag.innerHTML;
-                const match = scriptContent.match(/const\s+photoData\s*=\s*({[\s\S]*?});/);
-                if (match) {
-                    photoData = JSON.parse(match[1]);
-                    console.log('照片数据提取成功，包含', Object.keys(photoData).length, '个日期');
-                } else {
-                    console.log('未找到photoData定义');
-                    photoData = {};
-                }
-            } catch (e) {
-                console.error('解析photoData失败:', e);
-                photoData = {};
-            }
-        } else {
-            console.log('未找到photo-data-script标签');
-            photoData = {};
-        }
-    }
-
-    // 首次加载内容时提取数据
-    extractPhotoData();
-
-    // 监听内容区域的点击事件
-    content.addEventListener('click', function(event) {
-        const header = event.target.closest('.date-header');
-        if (!header) return; // 如果点击的不是日期标题，则忽略
-
-        const datePath = header.dataset.path;
-        const imagesDiv = header.nextElementSibling;
-        const indicator = header.querySelector('.toggle-indicator');
-
-        if (!datePath || !imagesDiv) return;
-
-        // 切换显示状态
-        const isExpanded = imagesDiv.style.display === 'block';
-        imagesDiv.style.display = isExpanded ? 'none' : 'block';
-        indicator.textContent = isExpanded ? '▶' : '▼';
-        header.classList.toggle('expanded', !isExpanded);
-
-        // 如果是首次展开，则加载图片
-        if (!isExpanded && !header.dataset.loaded) {
-            loadImagesForDate(datePath, imagesDiv);
-            header.dataset.loaded = 'true';
-        }
-    });
-
-    function loadImagesForDate(datePath, container) {
-        const photos = photoData[datePath];
-        if (!photos || photos.length === 0) {
-            container.innerHTML = '<p style="color: #666; font-style: italic; padding: 10px;">这一天没有照片</p>';
-            return;
-        }
-
-        let html = '';
-        photos.forEach(photoUrl => {
-            const thumbnailUrl = `https://images.weserv.nl/?url=${encodeURIComponent(photoUrl)}&w=300&h=300&output=jpg&q=50&t=square`;
-            html += `<a href='${photoUrl}' target='_blank'><img src='${thumbnailUrl}' alt='Image'></a>`;
-        });
-        
-        container.innerHTML = html;
-    }
-    
-    // 覆盖loadContent函数，确保每次加载新内容时都重新提取数据
-    const originalLoadContent = window.loadContent;
-    window.loadContent = function(yearMonth) {
-        originalLoadContent(yearMonth);
-        // 使用MutationObserver等待内容加载完成
-        const observer = new MutationObserver((mutationsList, observer) => {
-            for(const mutation of mutationsList) {
-                if (mutation.type === 'childList' && content.querySelector('.gallery')) {
-                    extractPhotoData();
-                    observer.disconnect(); // 提取数据后停止观察
-                    break;
-                }
-            }
-        });
-        observer.observe(content, { childList: true, subtree: true });
-    };
-}
-
 // 文档加载完成后执行
 document.addEventListener('DOMContentLoaded', function() {
     // 初始化日期选择器
@@ -374,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
         changeMonth: true,
         changeYear: true,
         showButtonPanel: true,
-        defaultDate: null, // 防止自动选择日期
+        defaultDate: null,
         onClose: function(dateText, inst) {
             var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
             var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
@@ -458,13 +317,6 @@ function toggleYear(yearItem) {
 // 在DOM加载完成后初始化
 document.addEventListener('DOMContentLoaded', function() {
     generateYearTree();
-    
-    // 加载当前月份内容
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    const currentMonth = today.getMonth() + 1;
-    const currentYearMonth = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
-    loadContent(currentYearMonth);
 });
 </script>
 

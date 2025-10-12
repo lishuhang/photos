@@ -1,63 +1,91 @@
 /* 
  * 航通社全站统一样式系统
- * 基于主站设计，为图片库等子站提供一致的视觉体验
+ * 基于 Chakra UI 设计语言重新设计
  */
 
 /* ===== 基础变量定义 ===== */
 :root {
-  /* 主色调 - 基于主站的蓝色系 */
-  --primary-blue: #3b82f6;
-  --primary-blue-light: #60a5fa;
-  --primary-blue-dark: #1d4ed8;
+  /* 主色调 - Chakra UI 蓝色系 */
+  --primary-blue: #3182CE;
+  --primary-blue-light: #4299E1;
+  --primary-blue-dark: #2C5282;
+  --primary-blue-hover: #2B6CB0;
   
-  /* 背景色系 - 基于主站的浅色背景 */
-  --bg-primary: #f8fafc;
-  --bg-secondary: #f1f5f9;
-  --bg-tertiary: #e2e8f0;
-  --bg-white: #ffffff;
+  /* 背景色系 - Chakra UI 灰色系 */
+  --bg-primary: #F7FAFC;
+  --bg-secondary: #EDF2F7;
+  --bg-tertiary: #E2E8F0;
+  --bg-white: #FFFFFF;
+  --bg-hover: #EDF2F7;
+  --bg-active: #E2E8F0;
   
-  /* 文字色系 */
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --text-muted: #94a3b8;
-  --text-white: #ffffff;
+  /* 文字色系 - Chakra UI 灰色系 */
+  --text-primary: #1A202C;
+  --text-secondary: #718096;
+  --text-muted: #A0AEC0;
+  --text-white: #FFFFFF;
   
-  /* 边框和分割线 */
-  --border-light: #e2e8f0;
-  --border-medium: #cbd5e1;
-  --border-dark: #94a3b8;
+  /* 边框和分割线 - Chakra UI 灰色系 */
+  --border-light: #E2E8F0;
+  --border-medium: #CBD5E0;
+  --border-dark: #A0AEC0;
   
-  /* 阴影系统 */
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  /* 阴影系统 - Chakra UI 标准 */
+  --shadow-xs: 0 0 0 1px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
   
-  /* 圆角系统 */
-  --radius-sm: 0.375rem;
-  --radius-md: 0.5rem;
-  --radius-lg: 0.75rem;
-  --radius-xl: 1rem;
+  /* 圆角系统 - Chakra UI 标准 */
+  --radius-none: 0;
+  --radius-sm: 0.125rem;    /* 2px */
+  --radius-base: 0.25rem;   /* 4px */
+  --radius-md: 0.375rem;    /* 6px */
+  --radius-lg: 0.5rem;      /* 8px */
+  --radius-xl: 0.75rem;     /* 12px */
+  --radius-2xl: 1rem;       /* 16px */
+  --radius-full: 9999px;
   
-  /* 间距系统 */
-  --space-xs: 0.25rem;
-  --space-sm: 0.5rem;
-  --space-md: 1rem;
-  --space-lg: 1.5rem;
-  --space-xl: 2rem;
-  --space-2xl: 3rem;
+  /* 间距系统 - Chakra UI 4px 基础单位 */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
   
-  /* 字体系统 */
-  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
-  --font-size-lg: 1.125rem;
-  --font-size-xl: 1.25rem;
-  --font-size-2xl: 1.5rem;
+  /* 字体系统 - Chakra UI 标准 */
+  --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  --font-size-xs: 0.75rem;      /* 12px */
+  --font-size-sm: 0.875rem;     /* 14px */
+  --font-size-md: 1rem;         /* 16px */
+  --font-size-lg: 1.125rem;     /* 18px */
+  --font-size-xl: 1.25rem;      /* 20px */
+  --font-size-2xl: 1.5rem;      /* 24px */
   
-  /* 动画时长 */
-  --duration-fast: 0.15s;
-  --duration-normal: 0.3s;
-  --duration-slow: 0.5s;
+  /* 行高 - Chakra UI 标准 */
+  --line-height-normal: 1.5;
+  --line-height-short: 1.375;
+  --line-height-tall: 1.625;
+  
+  /* 字重 */
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* 动画时长 - Chakra UI 标准 */
+  --duration-ultra-fast: 50ms;
+  --duration-faster: 100ms;
+  --duration-fast: 150ms;
+  --duration-normal: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 400ms;
+  --duration-ultra-slow: 500ms;
 }
 
 /* ===== 基础重置和全局样式 ===== */
@@ -69,8 +97,8 @@
 
 body {
   font-family: var(--font-family);
-  font-size: var(--font-size-base);
-  line-height: 1.6;
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-normal);
   color: var(--text-primary);
   background-color: var(--bg-primary);
   -webkit-font-smoothing: antialiased;
@@ -79,20 +107,27 @@ body {
 
 /* ===== 通用组件样式 ===== */
 
-/* 统一的按钮样式 */
+/* 统一的按钮样式 - Chakra UI 风格 */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-sm) var(--space-md);
+  padding: var(--space-2) var(--space-4);
   border: 1px solid transparent;
   border-radius: var(--radius-md);
-  font-size: var(--font-size-base);
-  font-weight: 500;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-short);
   text-decoration: none;
   cursor: pointer;
   transition: all var(--duration-normal) ease;
   user-select: none;
+  white-space: nowrap;
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.6);
 }
 
 .btn-primary {
@@ -102,6 +137,11 @@ body {
 }
 
 .btn-primary:hover {
+  background-color: var(--primary-blue-hover);
+  border-color: var(--primary-blue-hover);
+}
+
+.btn-primary:active {
   background-color: var(--primary-blue-dark);
   border-color: var(--primary-blue-dark);
 }
@@ -113,10 +153,10 @@ body {
 }
 
 .btn-secondary:hover {
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-hover);
 }
 
-/* 统一的卡片样式 */
+/* 统一的卡片样式 - Chakra UI 风格 */
 .card {
   background-color: var(--bg-white);
   border: 1px solid var(--border-light);
@@ -126,73 +166,13 @@ body {
 }
 
 .card-header {
-  padding: var(--space-lg);
+  padding: var(--space-4) var(--space-6);
   border-bottom: 1px solid var(--border-light);
   background-color: var(--bg-secondary);
 }
 
 .card-body {
-  padding: var(--space-lg);
-}
-
-/* ===== 展开/折叠组件统一样式 ===== */
-.collapsible {
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  margin-bottom: var(--space-sm);
-}
-
-.collapsible-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: var(--space-md) var(--space-lg);
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
-  color: var(--text-white);
-  cursor: pointer;
-  transition: all var(--duration-normal) ease;
-  user-select: none;
-}
-
-.collapsible-header:hover {
-  background: linear-gradient(135deg, var(--primary-blue-dark) 0%, var(--primary-blue) 100%);
-}
-
-.collapsible-header.expanded {
-  background: linear-gradient(135deg, var(--primary-blue-dark) 0%, var(--primary-blue) 100%);
-}
-
-.collapsible-title {
-  font-weight: 600;
-  font-size: var(--font-size-lg);
-}
-
-.collapsible-icon {
-  width: 20px;
-  height: 20px;
-  transition: transform var(--duration-normal) ease;
-  flex-shrink: 0;
-}
-
-/* 统一的展开/折叠图标逻辑：折叠时向下，展开时向上 */
-.collapsible-icon.collapsed {
-  transform: rotate(0deg); /* 向下箭头 */
-}
-
-.collapsible-icon.expanded {
-  transform: rotate(180deg); /* 向上箭头 */
-}
-
-.collapsible-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height var(--duration-normal) ease;
-  background-color: var(--bg-white);
-}
-
-.collapsible-content.expanded {
-  max-height: 2000px; /* 足够大的值以容纳内容 */
+  padding: var(--space-6);
 }
 
 /* ===== 图片库专用样式 ===== */
@@ -215,81 +195,99 @@ body {
 }
 
 .gallery-sidebar-header {
-  padding: var(--space-xl);
+  padding: var(--space-6);
   border-bottom: 1px solid var(--border-light);
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-white);
 }
 
 .gallery-sidebar-title {
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
   color: var(--primary-blue);
   text-decoration: none;
+  transition: color var(--duration-fast) ease;
+}
+
+.gallery-sidebar-title:hover {
+  color: var(--primary-blue-hover);
 }
 
 .gallery-sidebar-body {
-  padding: var(--space-lg);
+  padding: var(--space-4);
 }
 
-/* 年份月份选择器 */
+/* 年份月份选择器 - Chakra UI Accordion 风格 */
 .date-selector {
-  margin-bottom: var(--space-xl);
+  margin-bottom: var(--space-6);
 }
 
 .date-selector-label {
   display: block;
-  font-size: var(--font-size-sm);
-  font-weight: 600;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-secondary);
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-3);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  padding: 0 var(--space-2);
 }
 
 .year-section {
-  margin-bottom: var(--space-lg);
+  margin-bottom: var(--space-2);
 }
 
+/* 年份标题 - Chakra UI Accordion 样式 */
 .year-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-md);
-  background-color: var(--bg-tertiary);
-  border: 1px solid var(--border-medium);
+  height: 48px;
+  padding: 0 var(--space-4);
+  background-color: transparent;
+  border: none;
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all var(--duration-normal) ease;
-  margin-bottom: var(--space-sm);
+  transition: background-color var(--duration-fast) ease;
+  margin-bottom: var(--space-1);
 }
 
 .year-header:hover {
-  background-color: var(--border-medium);
+  background-color: var(--bg-hover);
+}
+
+.year-header:active {
+  background-color: var(--bg-active);
 }
 
 .year-title {
-  font-weight: 600;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
+  line-height: var(--line-height-short);
 }
 
 .year-icon {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
+  color: var(--text-secondary);
   transition: transform var(--duration-normal) ease;
+  flex-shrink: 0;
 }
 
 .year-icon.collapsed {
-  transform: rotate(0deg);
+  transform: rotate(-90deg);
 }
 
 .year-icon.expanded {
-  transform: rotate(180deg);
+  transform: rotate(0deg);
 }
 
+/* 月份网格 - Chakra UI 风格 */
 .month-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-xs);
+  gap: var(--space-1);
+  padding: 0 var(--space-2) var(--space-3) var(--space-2);
   max-height: 0;
   overflow: hidden;
   transition: max-height var(--duration-normal) ease;
@@ -299,22 +297,34 @@ body {
   max-height: 200px;
 }
 
+/* 月份按钮 - Chakra UI Button 风格 */
 .month-btn {
-  padding: var(--space-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 32px;
+  padding: 0;
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   background-color: var(--bg-white);
   color: var(--text-primary);
   text-decoration: none;
   text-align: center;
-  font-weight: 500;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-short);
   transition: all var(--duration-fast) ease;
+  cursor: pointer;
 }
 
 .month-btn:hover {
-  background-color: var(--primary-blue);
-  color: var(--text-white);
-  border-color: var(--primary-blue);
+  background-color: var(--bg-hover);
+  border-color: var(--border-medium);
+}
+
+.month-btn:active {
+  background-color: var(--bg-active);
 }
 
 .month-btn.active {
@@ -323,109 +333,120 @@ body {
   border-color: var(--primary-blue);
 }
 
+.month-btn.active:hover {
+  background-color: var(--primary-blue-hover);
+  border-color: var(--primary-blue-hover);
+}
+
 /* 主内容区 */
 .gallery-main {
   flex: 1;
-  padding: var(--space-xl);
+  padding: var(--space-8);
   overflow-y: auto;
 }
 
-/* 日期条目 */
+/* 日期条目 - Chakra UI Accordion 风格 */
 .date-item {
-  margin-bottom: var(--space-md);
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-white);
+  overflow: hidden;
 }
 
 .date-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-lg);
-  background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
-  color: var(--text-white);
-  border-radius: var(--radius-lg);
+  height: 56px;
+  padding: 0 var(--space-6);
+  background-color: var(--bg-white);
   cursor: pointer;
-  transition: all var(--duration-normal) ease;
-  box-shadow: var(--shadow-sm);
+  transition: background-color var(--duration-fast) ease;
+  user-select: none;
 }
 
 .date-header:hover {
-  background: linear-gradient(135deg, var(--primary-blue-dark) 0%, var(--primary-blue) 100%);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
+  background-color: var(--bg-hover);
+}
+
+.date-header:active {
+  background-color: var(--bg-active);
 }
 
 .date-header.expanded {
-  background: linear-gradient(135deg, var(--primary-blue-dark) 0%, var(--primary-blue) 100%);
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
+  background-color: var(--bg-hover);
+  border-bottom: 1px solid var(--border-light);
 }
 
 .date-title {
-  font-size: var(--font-size-xl);
-  font-weight: 600;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  line-height: var(--line-height-short);
 }
 
 .date-icon {
   width: 24px;
   height: 24px;
+  color: var(--text-secondary);
   transition: transform var(--duration-normal) ease;
+  flex-shrink: 0;
 }
 
 .date-icon.collapsed {
-  transform: rotate(0deg);
+  transform: rotate(-90deg);
 }
 
 .date-icon.expanded {
-  transform: rotate(180deg);
+  transform: rotate(0deg);
 }
 
 /* 照片网格 */
 .photos-grid {
   max-height: 0;
   overflow: hidden;
-  transition: max-height var(--duration-normal) ease;
+  transition: max-height var(--duration-slow) ease;
   background-color: var(--bg-white);
-  border: 1px solid var(--border-light);
-  border-top: none;
-  border-bottom-left-radius: var(--radius-lg);
-  border-bottom-right-radius: var(--radius-lg);
 }
 
 .photos-grid.expanded {
-  max-height: 8000px; /* 增加最大高度以容纳更多照片 */
+  max-height: 8000px;
 }
 
 .photos-container {
-  padding: var(--space-lg);
+  padding: var(--space-6);
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* 缩小缩略图尺寸 */
-  gap: var(--space-sm); /* 减小间距 */
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-4);
 }
 
 .photo-item {
   position: relative;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
   transition: all var(--duration-normal) ease;
+  cursor: pointer;
 }
 
 .photo-item:hover {
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
 
 .photo-item img {
   width: 100%;
-  height: 150px; /* 缩小照片高度以匹配网格尺寸 */
+  height: 150px;
   object-fit: cover;
   display: block;
 }
 
 .empty-state {
-  padding: var(--space-xl);
+  padding: var(--space-8);
   text-align: center;
   color: var(--text-muted);
+  font-size: var(--font-size-sm);
   font-style: italic;
 }
 
@@ -446,6 +467,7 @@ body {
     transform: translateY(-100%);
     transition: transform var(--duration-normal) ease;
     max-height: 70vh;
+    box-shadow: var(--shadow-xl);
   }
   
   .gallery-sidebar.mobile-open {
@@ -453,11 +475,11 @@ body {
   }
   
   .gallery-main {
-    padding: var(--space-md);
-    padding-top: 60px; /* 为移动端标题栏留空间 */
+    padding: var(--space-4);
+    padding-top: 72px;
   }
   
-  /* 移动端标题栏 */
+  /* 移动端标题栏 - Chakra UI 风格 */
   .mobile-header {
     position: fixed;
     top: 0;
@@ -467,46 +489,72 @@ body {
     background-color: var(--bg-white);
     border-bottom: 1px solid var(--border-light);
     box-shadow: var(--shadow-sm);
-    padding: var(--space-md);
+    padding: var(--space-3);
   }
   
   .mobile-date-toggle {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: var(--space-md);
-    background: linear-gradient(135deg, var(--primary-blue) 0%, var(--primary-blue-light) 100%);
+    height: 48px;
+    padding: 0 var(--space-4);
+    background-color: var(--primary-blue);
     color: var(--text-white);
     border: none;
     border-radius: var(--radius-md);
     cursor: pointer;
     width: 100%;
-    font-size: var(--font-size-lg);
-    font-weight: 600;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-semibold);
+    transition: background-color var(--duration-fast) ease;
+  }
+  
+  .mobile-date-toggle:hover {
+    background-color: var(--primary-blue-hover);
+  }
+  
+  .mobile-date-toggle:active {
+    background-color: var(--primary-blue-dark);
   }
   
   .mobile-date-icon {
     width: 20px;
     height: 20px;
     transition: transform var(--duration-normal) ease;
+    flex-shrink: 0;
   }
   
   .mobile-date-icon.collapsed {
-    transform: rotate(0deg);
+    transform: rotate(-90deg);
   }
   
   .mobile-date-icon.expanded {
-    transform: rotate(180deg);
+    transform: rotate(0deg);
   }
   
   /* 移动端照片网格调整 */
   .photos-container {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); /* 移动端进一步缩小 */
-    gap: var(--space-xs); /* 移动端使用更小的间距 */
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--space-3);
   }
   
   .photo-item img {
-    height: 120px; /* 移动端照片高度 */
+    height: 120px;
+  }
+  
+  /* 移动端日期条目 */
+  .date-header {
+    height: 48px;
+    padding: 0 var(--space-4);
+  }
+  
+  .date-title {
+    font-size: var(--font-size-md);
+  }
+  
+  .date-icon {
+    width: 20px;
+    height: 20px;
   }
 }
 
@@ -517,6 +565,22 @@ body {
   }
 }
 
+/* 大屏幕优化 */
+@media (min-width: 1440px) {
+  .gallery-sidebar {
+    width: 320px;
+  }
+  
+  .photos-container {
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: var(--space-6);
+  }
+  
+  .photo-item img {
+    height: 180px;
+  }
+}
+
 /* ===== 通用图标样式 ===== */
 .icon-chevron-down {
   width: 1em;
@@ -524,24 +588,25 @@ body {
   fill: currentColor;
 }
 
-/* ===== 加载状态 ===== */
+/* ===== 加载状态 - Chakra UI Spinner 风格 ===== */
 .loading {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-xl);
+  padding: var(--space-8);
   color: var(--text-muted);
+  font-size: var(--font-size-sm);
 }
 
 .loading::after {
   content: '';
-  width: 20px;
-  height: 20px;
-  border: 2px solid var(--border-light);
+  width: 24px;
+  height: 24px;
+  border: 3px solid var(--border-light);
   border-top-color: var(--primary-blue);
   border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin-left: var(--space-sm);
+  animation: spin 0.6s linear infinite;
+  margin-left: var(--space-3);
 }
 
 @keyframes spin {
@@ -552,10 +617,47 @@ body {
 
 /* ===== 版权信息 ===== */
 .copyright {
-  padding: var(--space-lg);
+  padding: var(--space-6);
   text-align: center;
   color: var(--text-muted);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   border-top: 1px solid var(--border-light);
-  background-color: var(--bg-secondary);
+  background-color: var(--bg-white);
+  margin-top: auto;
 }
+
+/* ===== 滚动条样式 - Chakra UI 风格 ===== */
+.gallery-sidebar::-webkit-scrollbar,
+.gallery-main::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.gallery-sidebar::-webkit-scrollbar-track,
+.gallery-main::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+.gallery-sidebar::-webkit-scrollbar-thumb,
+.gallery-main::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+  border-radius: var(--radius-full);
+}
+
+.gallery-sidebar::-webkit-scrollbar-thumb:hover,
+.gallery-main::-webkit-scrollbar-thumb:hover {
+  background: var(--border-dark);
+}
+
+/* ===== 焦点可见性 - Chakra UI 可访问性标准 ===== */
+*:focus-visible {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: 2px;
+}
+
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--primary-blue);
+  outline-offset: 2px;
+}
+

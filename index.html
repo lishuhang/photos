@@ -9,13 +9,19 @@
 <body>
     <!-- 移动端标题栏 -->
     <div class="mobile-header">
-        <button class="mobile-date-toggle" id="mobileDateToggle">
-            <span>选择年份和月份</span>
-            <svg class="mobile-date-icon collapsed" viewBox="0 0 12 12" fill="currentColor">
-                <path d="M6 8.825c-.2 0-.4-.1-.5-.2l-3.3-3.3c-.3-.3-.3-.8 0-1.1.3-.3.8-.3 1.1 0l2.7 2.7 2.7-2.7c.3-.3.8-.3 1.1 0 .3.3.3.8 0 1.1l-3.2 3.2c-.2.2-.4.3-.6.3Z"/>
-            </svg>
+        <div class="mobile-header-logo">
+            <img src="assets/logo.png" alt="航通社" class="logo-image">
+            <a href="/index.html" class="logo-text">图片库</a>
+        </div>
+        <button class="hamburger-button" id="hamburgerButton" aria-label="打开菜单">
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
+            <span class="hamburger-line"></span>
         </button>
     </div>
+    
+    <!-- 移动端遮罩层 -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>
 
     <div class="gallery-container">
         <!-- 侧边栏 -->
@@ -290,10 +296,18 @@
                 });
             });
 
-            // 移动端日期选择器切换
-            const mobileDateToggle = document.getElementById('mobileDateToggle');
-            if (mobileDateToggle) {
-                mobileDateToggle.addEventListener('click', () => {
+            // 移动端汉堡按钮切换
+            const hamburgerButton = document.getElementById('hamburgerButton');
+            if (hamburgerButton) {
+                hamburgerButton.addEventListener('click', () => {
+                    toggleMobileSidebar();
+                });
+            }
+
+            // 移动端遮罩层点击关闭
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            if (mobileOverlay) {
+                mobileOverlay.addEventListener('click', () => {
                     toggleMobileSidebar();
                 });
             }
@@ -370,26 +384,31 @@
 
         function toggleMobileSidebar() {
             const sidebar = document.getElementById('gallerySidebar');
-            const icon = document.querySelector('.mobile-date-icon');
+            const overlay = document.getElementById('mobileOverlay');
+            const hamburger = document.getElementById('hamburgerButton');
             
             if (sidebar.classList.contains('mobile-open')) {
                 sidebar.classList.remove('mobile-open');
-                icon.classList.remove('expanded');
-                icon.classList.add('collapsed');
+                overlay.classList.remove('active');
+                hamburger.classList.remove('active');
+                document.body.style.overflow = '';
             } else {
                 sidebar.classList.add('mobile-open');
-                icon.classList.remove('collapsed');
-                icon.classList.add('expanded');
+                overlay.classList.add('active');
+                hamburger.classList.add('active');
+                document.body.style.overflow = 'hidden';
             }
         }
 
         function closeMobileSidebar() {
             const sidebar = document.getElementById('gallerySidebar');
-            const icon = document.querySelector('.mobile-date-icon');
+            const overlay = document.getElementById('mobileOverlay');
+            const hamburger = document.getElementById('hamburgerButton');
             
             sidebar.classList.remove('mobile-open');
-            icon.classList.remove('expanded');
-            icon.classList.add('collapsed');
+            overlay.classList.remove('active');
+            hamburger.classList.remove('active');
+            document.body.style.overflow = '';
         }
 
         async function loadPhotos(year, month) {

@@ -320,23 +320,24 @@ body {
   margin-bottom: var(--space-2);
 }
 
-/* 年份标题 - Chakra UI Accordion 样式 */
+/* 年份标题 - Chakra UI Accordion 样式，与日期条目一致 */
 .year-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 48px;
   padding: 0 var(--space-4);
-  background-color: transparent;
-  border: none;
+  background-color: var(--bg-white);
+  border: 1px solid var(--border-light);
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: background-color var(--duration-fast) ease;
-  margin-bottom: var(--space-1);
+  transition: all var(--duration-fast) ease;
+  margin-bottom: var(--space-2);
 }
 
 .year-header:hover {
   background-color: var(--bg-hover);
+  border-color: var(--border-medium);
 }
 
 .year-header:active {
@@ -371,14 +372,19 @@ body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--space-1);
-  padding: 0 var(--space-2) var(--space-3) var(--space-2);
+  padding: 0;
   max-height: 0;
   overflow: hidden;
-  transition: max-height var(--duration-normal) ease;
+  opacity: 0;
+  transition: all var(--duration-normal) ease;
+  margin: 0;
 }
 
 .month-grid.expanded {
   max-height: 200px;
+  opacity: 1;
+  padding: var(--space-2) var(--space-2) var(--space-3) var(--space-2);
+  margin-top: var(--space-2);
 }
 
 /* 月份按钮 - Chakra UI Button 风格 */
@@ -545,12 +551,13 @@ body {
   .gallery-sidebar {
     width: 100%;
     position: fixed;
-    top: 0;
+    top: 64px;
     left: 0;
     z-index: 1000;
     transform: translateY(-100%);
     transition: transform var(--duration-normal) ease;
-    max-height: 70vh;
+    max-height: calc(100vh - 64px);
+    overflow-y: auto;
     box-shadow: var(--shadow-xl);
   }
   
@@ -565,6 +572,7 @@ body {
   
   /* 移动端标题栏 - Chakra UI 风格 */
   .mobile-header {
+    display: flex;
     position: fixed;
     top: 0;
     left: 0;
@@ -573,47 +581,99 @@ body {
     background-color: var(--bg-white);
     border-bottom: 1px solid var(--border-light);
     box-shadow: var(--shadow-sm);
-    padding: var(--space-3);
-  }
-  
-  .mobile-date-toggle {
-    display: flex;
+    padding: var(--space-3) var(--space-4);
+    height: 64px;
     align-items: center;
     justify-content: space-between;
-    height: 48px;
-    padding: 0 var(--space-4);
-    background-color: var(--primary-blue);
-    color: var(--text-white);
-    border: none;
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    width: 100%;
-    font-size: var(--font-size-md);
+  }
+  
+  .mobile-header-logo {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+  
+  .logo-image {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+  }
+  
+  .logo-text {
+    font-size: var(--font-size-lg);
     font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: color var(--duration-fast) ease;
+  }
+  
+  .logo-text:hover {
+    color: var(--primary-blue);
+  }
+  
+  .hamburger-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: var(--space-2);
+    border-radius: var(--radius-md);
     transition: background-color var(--duration-fast) ease;
   }
   
-  .mobile-date-toggle:hover {
-    background-color: var(--primary-blue-hover);
+  .hamburger-button:hover {
+    background-color: var(--bg-hover);
   }
   
-  .mobile-date-toggle:active {
-    background-color: var(--primary-blue-dark);
+  .hamburger-button:active {
+    background-color: var(--bg-active);
   }
   
-  .mobile-date-icon {
-    width: 20px;
-    height: 20px;
-    transition: transform var(--duration-normal) ease;
-    flex-shrink: 0;
+  .hamburger-line {
+    width: 24px;
+    height: 2px;
+    background-color: var(--text-primary);
+    border-radius: var(--radius-full);
+    transition: all var(--duration-normal) ease;
+    margin: 3px 0;
   }
   
-  .mobile-date-icon.collapsed {
-    transform: rotate(-90deg);
+  .hamburger-button.active .hamburger-line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
   }
   
-  .mobile-date-icon.expanded {
-    transform: rotate(0deg);
+  .hamburger-button.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+  }
+  
+  .hamburger-button.active .hamburger-line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+  }
+  
+  /* 移动端遮罩层 */
+  .mobile-overlay {
+    display: none;
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 998;
+    opacity: 0;
+    transition: opacity var(--duration-normal) ease;
+    pointer-events: none;
+  }
+  
+  .mobile-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
   }
   
   /* 移动端照片网格调整 */
@@ -644,8 +704,9 @@ body {
 
 /* 桌面端隐藏移动端元素 */
 @media (min-width: 769px) {
-  .mobile-header {
-    display: none;
+  .mobile-header,
+  .mobile-overlay {
+    display: none !important;
   }
 }
 

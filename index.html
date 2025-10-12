@@ -26,6 +26,17 @@
             
             <div class="gallery-sidebar-body">
                 <div class="date-selector">
+                    <!-- 原图开关 -->
+                    <div class="original-image-toggle">
+                        <label class="toggle-label">
+                            <span class="toggle-text">原图</span>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="originalImageToggle" checked>
+                                <span class="toggle-slider"></span>
+                            </div>
+                        </label>
+                    </div>
+                    
                     <label class="date-selector-label">选择年份和月份</label>
                     
                     <!-- 2025年 -->
@@ -287,6 +298,16 @@
                 });
             }
 
+            // 原图开关切换
+            const originalImageToggle = document.getElementById('originalImageToggle');
+            if (originalImageToggle) {
+                originalImageToggle.addEventListener('change', () => {
+                    console.log('Original image toggle changed:', originalImageToggle.checked);
+                    // 重新加载已展开的照片以应用新设置
+                    reloadExpandedPhotos();
+                });
+            }
+
             // 日期条目展开/折叠（事件委托）
             document.getElementById('galleryContent').addEventListener('click', (e) => {
                 const dateHeader = e.target.closest('.date-header');
@@ -527,14 +548,27 @@
                 .replace('{month}', photosData.month)
                 .replace('{day}', date);
 
+            // 获取原图开关状态
+            const useOriginal = document.getElementById('originalImageToggle').checked;
+
             let html = '';
             photos.forEach(filename => {
                 const fullUrl = baseUrl + filename;
                 const thumbnailUrl = `https://images.weserv.nl/?url=${encodeURIComponent(fullUrl)}&w=300&h=300&output=jpg&q=80&t=square`;
                 
+                // 根据开关状态决定点击后打开的链接
+                let clickUrl;
+                if (useOriginal) {
+                    // 原图开关打开：直接使用原图链接
+                    clickUrl = fullUrl;
+                } else {
+                    // 原图开关关闭：使用 weserv 处理的链接（保持原图尺寸）
+                    clickUrl = `https://images.weserv.nl/?url=${encodeURIComponent(fullUrl)}&output=jpg&q=80`;
+                }
+                
                 html += `
                     <div class="photo-item">
-                        <a href="${fullUrl}" target="_blank">
+                        <a href="${clickUrl}" target="_blank">
                             <img src="${thumbnailUrl}" alt="照片" loading="lazy">
                         </a>
                     </div>
@@ -542,6 +576,19 @@
             });
 
             container.innerHTML = html;
+        }
+
+        // 重新加载已展开的照片（当原图开关切换时）
+        function reloadExpandedPhotos() {
+            const expandedGrids = document.querySelectorAll('.photos-grid.expanded');
+            expandedGrids.forEach(grid => {
+                const date = grid.dataset.date;
+                const photosContainer = document.getElementById(`photos-${date}`);
+                if (photosContainer && photosContainer.children.length > 0) {
+                    // 重新加载照片以应用新的开关设置
+                    loadDatePhotos(date, photosContainer);
+                }
+            });
         }
 
         // 页面加载完成后初始化

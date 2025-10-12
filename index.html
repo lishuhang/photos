@@ -386,8 +386,9 @@
             loadingIndicator.style.display = 'flex';
             
             try {
-                // 尝试加载指定月份的数据
-                const response = await fetch(`${year}/${month.padStart(2, '0')}/data.json`);
+                // 使用新的 JSON 路径格式: data/yyyymm.json
+                const jsonPath = `data/${year}${month.padStart(2, '0')}.json`;
+                const response = await fetch(jsonPath);
                 
                 if (!response.ok) {
                     console.log('Data not found for', year, month, 'trying to find available month...');
@@ -437,7 +438,9 @@
                 const startMonth = (y === yearIndex) ? monthIndex : 0;
                 for (let m = startMonth; m < months.length; m++) {
                     try {
-                        const response = await fetch(`${years[y]}/${months[m]}/data.json`);
+                        // 使用新的 JSON 路径格式: data/yyyymm.json
+                        const jsonPath = `data/${years[y]}${months[m]}.json`;
+                        const response = await fetch(jsonPath);
                         if (response.ok) {
                             return { year: years[y], month: months[m] };
                         }

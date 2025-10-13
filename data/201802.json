@@ -4,6 +4,9 @@
   "month": "02",
   "base_url": "https://raw.githubusercontent.com/{user_id}/img/main/{year}/{month}/{day}/",
   "photos": {
+    "02": [
+      "20180202 114720.jpg"
+    ],
     "03": [
       "20180203-181345.jpg",
       "20180203-181350.jpg"

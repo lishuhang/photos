@@ -1,0 +1,15 @@
+{
+  "user_id": "modem-56k",
+  "year": "2007",
+  "month": "01",
+  "base_url": "https://raw.githubusercontent.com/{user_id}/img/main/{year}/{month}/{day}/",
+  "photos": {
+    "28": [
+      "20070128-ginseng-tea.jpg",
+      "20070128-gold-necklace.jpg",
+      "20070128-pig-jewelry.jpg",
+      "20070128-snow.jpg",
+      "20070128-wedding.jpg"
+    ]
+  }
+}

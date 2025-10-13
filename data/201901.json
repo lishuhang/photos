@@ -1,0 +1,16 @@
+{
+  "user_id": "modem-56k",
+  "year": "2019",
+  "month": "01",
+  "base_url": "https://raw.githubusercontent.com/{user_id}/img/main/{year}/{month}/{day}/",
+  "photos": {
+    "28": [
+      "20190128_203126.jpg"
+    ],
+    "29": [
+      "20190129_132632.jpg",
+      "20190129_132705.jpg",
+      "20190129_172800.jpg"
+    ]
+  }
+}

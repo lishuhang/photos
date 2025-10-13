@@ -10,7 +10,9 @@
     <!-- 移动端标题栏 -->
     <div class="mobile-header">
         <div class="mobile-header-logo">
-            <img src="assets/logo.png" alt="航通社" class="logo-image">
+            <a href="https://lishuhang.me/" target="_blank" rel="noopener noreferrer">
+                <img src="assets/logo.png" alt="航通社" class="logo-image">
+            </a>
             <a href="/index.html" class="logo-text">图片库</a>
         </div>
         <button class="hamburger-button" id="hamburgerButton" aria-label="打开菜单">
@@ -21,13 +23,22 @@
     </div>
     
     <!-- 移动端遮罩层 -->
-    <div class="mobile-overlay" id="mobileOverlay"></div>
+    <div class="sidebar-overlay" id="sidebarOverlay">
+        <!-- 关闭按钮 -->
+        <button class="close-button" id="closeButton" aria-label="关闭菜单">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+        </button>
+    </div>
 
     <div class="gallery-container">
         <!-- 侧边栏 -->
         <aside class="gallery-sidebar" id="gallerySidebar">
             <div class="gallery-sidebar-header">
-                <img src="assets/logo.png" alt="航通社" class="sidebar-logo-image">
+                <a href="https://lishuhang.me/" target="_blank" rel="noopener noreferrer">
+                    <img src="assets/logo.png" alt="航通社" class="sidebar-logo-image">
+                </a>
                 <a href="/index.html" class="gallery-sidebar-title">图片库</a>
             </div>
             
@@ -306,10 +317,21 @@
             }
 
             // 移动端遮罩层点击关闭
-            const mobileOverlay = document.getElementById('mobileOverlay');
-            if (mobileOverlay) {
-                mobileOverlay.addEventListener('click', () => {
-                    toggleMobileSidebar();
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', (e) => {
+                    // 只有点击遮罩层本身（不是关闭按钮）时才关闭
+                    if (e.target === sidebarOverlay) {
+                        closeMobileSidebar();
+                    }
+                });
+            }
+
+            // 移动端关闭按钮点击关闭
+            const closeButton = document.getElementById('closeButton');
+            if (closeButton) {
+                closeButton.addEventListener('click', () => {
+                    closeMobileSidebar();
                 });
             }
 
@@ -391,16 +413,16 @@
 
         function toggleMobileSidebar() {
             const sidebar = document.getElementById('gallerySidebar');
-            const overlay = document.getElementById('mobileOverlay');
+            const overlay = document.getElementById('sidebarOverlay');
             const hamburger = document.getElementById('hamburgerButton');
             
-            if (sidebar.classList.contains('mobile-open')) {
-                sidebar.classList.remove('mobile-open');
+            if (sidebar.classList.contains('active')) {
+                sidebar.classList.remove('active');
                 overlay.classList.remove('active');
                 hamburger.classList.remove('active');
                 document.body.style.overflow = '';
             } else {
-                sidebar.classList.add('mobile-open');
+                sidebar.classList.add('active');
                 overlay.classList.add('active');
                 hamburger.classList.add('active');
                 document.body.style.overflow = 'hidden';
@@ -409,10 +431,10 @@
 
         function closeMobileSidebar() {
             const sidebar = document.getElementById('gallerySidebar');
-            const overlay = document.getElementById('mobileOverlay');
+            const overlay = document.getElementById('sidebarOverlay');
             const hamburger = document.getElementById('hamburgerButton');
             
-            sidebar.classList.remove('mobile-open');
+            sidebar.classList.remove('active');
             overlay.classList.remove('active');
             hamburger.classList.remove('active');
             document.body.style.overflow = '';

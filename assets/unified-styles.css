@@ -190,8 +190,13 @@ body {
   background-color: var(--bg-white);
   border-right: 1px solid var(--border-light);
   box-shadow: var(--shadow-md);
-  overflow-y: auto;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
 }
 
 .gallery-sidebar-header {
@@ -201,6 +206,10 @@ body {
   padding: var(--space-6);
   border-bottom: 1px solid var(--border-light);
   background-color: var(--bg-white);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .sidebar-logo-image {
@@ -209,6 +218,11 @@ body {
   border-radius: var(--radius-full);
   object-fit: cover;
   flex-shrink: 0;
+  transition: transform var(--duration-fast) ease;
+}
+
+.sidebar-logo-image:hover {
+  transform: scale(1.05);
 }
 
 .gallery-sidebar-title {
@@ -225,6 +239,8 @@ body {
 
 .gallery-sidebar-body {
   padding: var(--space-4);
+  overflow-y: auto;
+  flex: 1;
 }
 
 /* 年份月份选择器 - Chakra UI Accordion 风格 */
@@ -445,8 +461,10 @@ body {
 /* 主内容区 */
 .gallery-main {
   flex: 1;
+  margin-left: 280px;
   padding: var(--space-8);
   overflow-y: auto;
+  height: 100vh;
 }
 
 /* 日期条目 - Chakra UI Accordion 风格 */
@@ -562,26 +580,38 @@ body {
     flex-direction: column;
   }
   
+  /* 隐藏桌面端侧边栏标题 */
+  .gallery-sidebar-header {
+    display: none;
+  }
+  
+  /* 侧边栏从左侧滑入 */
   .gallery-sidebar {
-    width: 100%;
     position: fixed;
-    top: 64px;
-    left: 0;
-    z-index: 1000;
-    transform: translateY(-100%);
-    transition: transform var(--duration-normal) ease;
-    max-height: calc(100vh - 64px);
-    overflow-y: auto;
+    top: 0;
+    left: -100%;
+    width: 280px;
+    height: 100vh;
+    z-index: 1001;
+    transition: left var(--duration-normal) ease;
     box-shadow: var(--shadow-xl);
   }
   
-  .gallery-sidebar.mobile-open {
-    transform: translateY(0);
+  .gallery-sidebar.active {
+    left: 0;
+  }
+  
+  .gallery-sidebar-body {
+    overflow-y: auto;
+    height: calc(100vh - 64px);
   }
   
   .gallery-main {
+    width: 100%;
+    margin-left: 0;
     padding: var(--space-4);
     padding-top: 72px;
+    height: auto;
   }
   
   /* 移动端标题栏 - Chakra UI 风格 */
@@ -671,21 +701,58 @@ body {
   }
   
   /* 移动端遮罩层 */
-  .mobile-overlay {
-    display: none;
+  .sidebar-overlay {
+    display: block;
     position: fixed;
-    top: 64px;
+    top: 0;
     left: 0;
     right: 0;
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 998;
+    z-index: 1000;
     opacity: 0;
     transition: opacity var(--duration-normal) ease;
     pointer-events: none;
   }
   
-  .mobile-overlay.active {
+  .sidebar-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  
+  /* 移动端关闭按钮 */
+  .close-button {
+    position: fixed;
+    top: var(--space-4);
+    right: var(--space-4);
+    width: 48px;
+    height: 48px;
+    background-color: var(--bg-white);
+    border: none;
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-lg);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1002;
+    opacity: 0;
+    pointer-events: none;
+    transition: all var(--duration-normal) ease;
+    color: var(--text-primary);
+  }
+  
+  .close-button:hover {
+    background-color: var(--bg-hover);
+    transform: scale(1.05);
+  }
+  
+  .close-button:active {
+    background-color: var(--bg-active);
+    transform: scale(0.95);
+  }
+  
+  .sidebar-overlay.active .close-button {
     opacity: 1;
     pointer-events: auto;
   }
@@ -719,7 +786,7 @@ body {
 /* 桌面端隐藏移动端元素 */
 @media (min-width: 769px) {
   .mobile-header,
-  .mobile-overlay {
+  .sidebar-overlay {
     display: none !important;
   }
 }

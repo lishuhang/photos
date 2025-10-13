@@ -195,21 +195,32 @@ body {
 }
 
 .gallery-sidebar-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
   padding: var(--space-6);
   border-bottom: 1px solid var(--border-light);
   background-color: var(--bg-white);
 }
 
+.sidebar-logo-image {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
 .gallery-sidebar-title {
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--primary-blue);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
   text-decoration: none;
   transition: color var(--duration-fast) ease;
 }
 
 .gallery-sidebar-title:hover {
-  color: var(--primary-blue-hover);
+  color: var(--primary-blue);
 }
 
 .gallery-sidebar-body {
@@ -316,44 +327,51 @@ body {
   padding: 0 var(--space-2);
 }
 
+/* 年份区域 - 完全复用日期条目样式 */
 .year-section {
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-4);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  background-color: var(--bg-white);
+  overflow: hidden;
 }
 
-/* 年份标题 - Chakra UI Accordion 样式，与日期条目一致 */
+/* 年份标题 - 与日期条目完全一致 */
 .year-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 48px;
-  padding: 0 var(--space-4);
+  height: 56px;
+  padding: 0 var(--space-6);
   background-color: var(--bg-white);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all var(--duration-fast) ease;
-  margin-bottom: var(--space-2);
+  transition: background-color var(--duration-fast) ease;
+  user-select: none;
 }
 
 .year-header:hover {
   background-color: var(--bg-hover);
-  border-color: var(--border-medium);
 }
 
 .year-header:active {
   background-color: var(--bg-active);
 }
 
+.year-header.expanded {
+  background-color: var(--bg-hover);
+  border-bottom: 1px solid var(--border-light);
+}
+
 .year-title {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
   color: var(--text-primary);
   line-height: var(--line-height-short);
 }
 
 .year-icon {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   color: var(--text-secondary);
   transition: transform var(--duration-normal) ease;
   flex-shrink: 0;
@@ -367,24 +385,20 @@ body {
   transform: rotate(0deg);
 }
 
-/* 月份网格 - Chakra UI 风格 */
+/* 月份网格 - 与照片网格一致的展开/折叠效果 */
 .month-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-1);
+  gap: var(--space-2);
   padding: 0;
   max-height: 0;
   overflow: hidden;
-  opacity: 0;
-  transition: all var(--duration-normal) ease;
-  margin: 0;
+  transition: max-height var(--duration-slow) ease;
 }
 
 .month-grid.expanded {
-  max-height: 200px;
-  opacity: 1;
-  padding: var(--space-2) var(--space-2) var(--space-3) var(--space-2);
-  margin-top: var(--space-2);
+  max-height: 300px;
+  padding: var(--space-4);
 }
 
 /* 月份按钮 - Chakra UI Button 风格 */

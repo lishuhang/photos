@@ -27,7 +27,8 @@
         <!-- 侧边栏 -->
         <aside class="gallery-sidebar" id="gallerySidebar">
             <div class="gallery-sidebar-header">
-                <a href="/" class="gallery-sidebar-title">航通社</a>
+                <img src="assets/logo.png" alt="航通社" class="sidebar-logo-image">
+                <a href="/index.html" class="gallery-sidebar-title">图片库</a>
             </div>
             
             <div class="gallery-sidebar-body">
@@ -339,13 +340,18 @@
             const icon = header.querySelector('.year-icon');
 
             if (monthGrid.classList.contains('expanded')) {
+                // 折叠
                 monthGrid.classList.remove('expanded');
+                header.classList.remove('expanded');
                 icon.classList.remove('expanded');
                 icon.classList.add('collapsed');
             } else {
                 // 先关闭其他年份
                 document.querySelectorAll('.month-grid.expanded').forEach(grid => {
                     grid.classList.remove('expanded');
+                });
+                document.querySelectorAll('.year-header.expanded').forEach(h => {
+                    h.classList.remove('expanded');
                 });
                 document.querySelectorAll('.year-icon.expanded').forEach(ic => {
                     ic.classList.remove('expanded');
@@ -354,6 +360,7 @@
 
                 // 展开当前年份
                 monthGrid.classList.add('expanded');
+                header.classList.add('expanded');
                 icon.classList.remove('collapsed');
                 icon.classList.add('expanded');
             }

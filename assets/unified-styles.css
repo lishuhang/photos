@@ -458,6 +458,14 @@ body {
   border-color: var(--primary-blue-hover);
 }
 
+.month-btn.disabled {
+  background-color: var(--bg-secondary);
+  color: var(--text-muted);
+  border-color: var(--border-light);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* 主内容区 */
 .gallery-main {
   flex: 1;

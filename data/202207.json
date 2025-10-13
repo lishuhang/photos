@@ -5,7 +5,11 @@
   "base_url": "https://raw.githubusercontent.com/{user_id}/img/main/{year}/{month}/{day}/",
   "photos": {
     "01": [
-      "20220801_115327.jpg"
+      "20220701_075729.jpg",
+      "20220701_122421.jpg",
+      "20220701_122424.jpg",
+      "20220701_171302.jpg",
+      "20220701_171304.jpg"
     ],
     "02": [
       "20220702_083206.jpg",

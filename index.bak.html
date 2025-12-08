@@ -60,7 +60,7 @@
                     <!-- 年份和月份将动态生成 -->
                     <div id="yearMonthContainer">
                         <div class="loading" style="text-align: center; padding: 20px; color: #999;">
-                            正在检测数据...
+                            正在加载...
                         </div>
                     </div>
                 </div>
@@ -75,7 +75,7 @@
         <main class="gallery-main">
             <div id="galleryContent">
                 <div class="loading" id="loadingIndicator">
-                    正在初始化图库...
+                    正在加载照片...
                 </div>
             </div>
         </main>
@@ -83,67 +83,29 @@
 
     <script>
         // 全局变量
-        // 注意：这里不再硬编码默认值，将在 initGallery 中根据数据动态设置
-        let currentYear = ''; 
-        let currentMonth = '';
+        let currentYear = '2025';
+        let currentMonth = '10';
         let photosData = null;
-        let availableMonths = new Set(); // 存储所有可用的年月 (格式: "YYYYMM")
+        let availableMonths = new Set(); // 存储所有可用的年月
 
         // 初始化函数
         async function initGallery() {
             console.log('Initializing gallery...');
             
-            // 1. 先加载所有可用的月份索引
+            // 先加载可用的月份数据
             await loadAvailableMonths();
             
-            // 2. 核心逻辑修改：决定初始显示的年月
-            const now = new Date();
-            const realCurrentYear = now.getFullYear().toString();
-            const realCurrentMonth = (now.getMonth() + 1).toString().padStart(2, '0');
-            const realCurrentKey = `${realCurrentYear}${realCurrentMonth}`;
-
-            console.log(`Real world date: ${realCurrentYear}-${realCurrentMonth}`);
-
-            if (availableMonths.has(realCurrentKey)) {
-                // 情况A：当前现实月份有数据，直接显示
-                console.log('Current month has data. Loading current.');
-                currentYear = realCurrentYear;
-                currentMonth = realCurrentMonth;
-            } else {
-                // 情况B：当前月没数据，寻找最近的有数据的月份
-                console.log('Current month empty. Searching for latest available...');
-                
-                // 将 Set 转为数组并倒序排列 (大 -> 小)
-                const sortedKeys = Array.from(availableMonths).sort((a, b) => b - a);
-                
-                if (sortedKeys.length > 0) {
-                    // 取最大值（即最近的一个月）
-                    const latestKey = sortedKeys[0];
-                    currentYear = latestKey.substring(0, 4);
-                    currentMonth = latestKey.substring(4, 6);
-                    console.log(`Fallback to latest available: ${currentYear}-${currentMonth}`);
-                } else {
-                    // 情况C：完全没有任何数据（极端情况）
-                    currentYear = realCurrentYear;
-                    currentMonth = realCurrentMonth;
-                    console.warn('No data found at all.');
-                }
-            }
-
-            // 3. UI 渲染
+            // 生成年份和月份选择器
             generateYearMonthSelector();
+            
+            // 绑定事件
             bindEvents();
             
-            // 4. 加载确定的月份数据
-            if (currentYear && currentMonth) {
-                loadPhotos(currentYear, currentMonth);
-                // 自动展开对应的年份栏
-                toggleYear(currentYear);
-                // 高亮对应的月份按钮 (因为 generateYearMonthSelector 已经运行，需要手动触发高亮状态)
-                setTimeout(() => {
-                    updateActiveButtonState(currentYear, currentMonth);
-                }, 0);
-            }
+            // 加载默认照片
+            loadPhotos(currentYear, currentMonth);
+            
+            // 默认展开当前年份
+            toggleYear('2025');
             
             console.log('Gallery initialized successfully');
         }
@@ -154,8 +116,7 @@
             
             // 定义可能的年份和月份范围
             const startYear = 2007;
-            // 修改：结束年份动态获取当前年份，确保跨年可用
-            const endYear = new Date().getFullYear(); 
+            const endYear = 2025;
             
             // 遍历所有可能的年月组合，检查文件是否存在
             const checkPromises = [];
@@ -180,7 +141,7 @@
             }
             
             await Promise.all(checkPromises);
-            console.log('Available months loaded:', availableMonths.size, availableMonths);
+            console.log('Available months loaded:', availableMonths.size);
         }
 
         // 生成年份和月份选择器
@@ -194,11 +155,6 @@
                 years.add(year);
             });
             
-            // 如果 years 为空（可能是首次使用或无数据），至少显示当前年份
-            if (years.size === 0) {
-                years.add(new Date().getFullYear().toString());
-            }
-
             // 按年份倒序排列
             const sortedYears = Array.from(years).sort((a, b) => b - a);
             
@@ -220,11 +176,11 @@
                     const monthStr = month.toString().padStart(2, '0');
                     const yearMonth = `${year}${monthStr}`;
                     const isAvailable = availableMonths.has(yearMonth);
-                    // 注意：这里不再生成 active 类，统一在 init 或点击时处理
+                    const activeClass = (year === currentYear && monthStr === currentMonth) ? ' active' : '';
                     const disabledClass = isAvailable ? '' : ' disabled';
                     
                     if (isAvailable) {
-                        html += `<a href="#" class="month-btn${disabledClass}" data-year="${year}" data-month="${monthStr}">${month}</a>`;
+                        html += `<a href="#" class="month-btn${activeClass}${disabledClass}" data-year="${year}" data-month="${monthStr}">${month}</a>`;
                     } else {
                         html += `<span class="month-btn${disabledClass}">${month}</span>`;
                     }
@@ -271,6 +227,7 @@
             const sidebarOverlay = document.getElementById('sidebarOverlay');
             if (sidebarOverlay) {
                 sidebarOverlay.addEventListener('click', (e) => {
+                    // 只有点击遮罩层本身（不是关闭按钮）时才关闭
                     if (e.target === sidebarOverlay) {
                         closeMobileSidebar();
                     }
@@ -289,6 +246,8 @@
             const originalImageToggle = document.getElementById('originalImageToggle');
             if (originalImageToggle) {
                 originalImageToggle.addEventListener('change', () => {
+                    console.log('Original image toggle changed:', originalImageToggle.checked);
+                    // 重新加载已展开的照片以应用新设置
                     reloadExpandedPhotos();
                 });
             }
@@ -300,13 +259,12 @@
                     toggleDatePhotos(dateHeader);
                 }
             });
+            
+            console.log('Events bound successfully');
         }
 
         function toggleYear(year) {
             const header = document.querySelector(`[data-year="${year}"]`);
-            // 防止 header 不存在报错（例如年份数据为空时）
-            if (!header) return; 
-
             const monthGrid = document.getElementById(`months-${year}`);
             const icon = header.querySelector('.year-icon');
 
@@ -337,8 +295,10 @@
             }
         }
 
-        // 辅助函数：更新选中状态UI
-        function updateActiveButtonState(year, month) {
+        function selectMonth(year, month) {
+            console.log('Selecting month:', year, month);
+            
+            // 更新活动状态
             document.querySelectorAll('.month-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
@@ -346,11 +306,6 @@
             if (targetBtn) {
                 targetBtn.classList.add('active');
             }
-        }
-
-        function selectMonth(year, month) {
-            // 更新活动状态
-            updateActiveButtonState(year, month);
 
             // 加载照片
             currentYear = year;
@@ -397,6 +352,7 @@
             
             const galleryContent = document.getElementById('galleryContent');
             
+            // 确保加载指示器存在
             let loadingIndicator = document.getElementById('loadingIndicator');
             if (!loadingIndicator) {
                 galleryContent.innerHTML = '<div class="loading" id="loadingIndicator">正在加载照片...</div>';
@@ -406,14 +362,25 @@
             loadingIndicator.style.display = 'flex';
             
             try {
+                // 使用新的 JSON 路径格式: data/yyyymm.json
                 const jsonPath = `data/${year}${month.padStart(2, '0')}.json`;
                 const response = await fetch(jsonPath);
                 
                 if (!response.ok) {
+                    console.log('Data not found for', year, month, 'trying to find available month...');
+                    // 如果当前月份没有数据，尝试寻找最近的有数据的月份
+                    const availableMonth = await findAvailableMonth(year, month);
+                    if (availableMonth) {
+                        console.log('Found available month:', availableMonth);
+                        // 更新UI显示找到的月份
+                        selectMonth(availableMonth.year, availableMonth.month);
+                        return;
+                    }
                     throw new Error('No data available');
                 }
                 
                 photosData = await response.json();
+                console.log('Photos data loaded:', photosData);
                 renderPhotos();
             } catch (error) {
                 console.error('加载照片数据失败:', error);
@@ -429,6 +396,32 @@
                     finalLoadingIndicator.style.display = 'none';
                 }
             }
+        }
+
+        async function findAvailableMonth(targetYear, targetMonth) {
+            // 从可用月份中寻找最近的月份
+            const targetYearMonth = parseInt(`${targetYear}${targetMonth.padStart(2, '0')}`);
+            
+            let closestMonth = null;
+            let minDiff = Infinity;
+            
+            availableMonths.forEach(yearMonth => {
+                const ym = parseInt(yearMonth);
+                const diff = Math.abs(ym - targetYearMonth);
+                if (diff < minDiff) {
+                    minDiff = diff;
+                    closestMonth = yearMonth;
+                }
+            });
+            
+            if (closestMonth) {
+                return {
+                    year: closestMonth.substring(0, 4),
+                    month: closestMonth.substring(4, 6)
+                };
+            }
+            
+            return null;
         }
 
         function renderPhotos() {
@@ -456,6 +449,7 @@
                         </div>
                         <div class="photos-grid" data-date="${date}">
                             <div class="photos-container" id="photos-${date}">
+                                <!-- 照片将在点击时动态加载 -->
                             </div>
                         </div>
                     </div>
@@ -478,12 +472,13 @@
                 icon.classList.remove('expanded');
                 icon.classList.add('collapsed');
             } else {
-                // 展开
+                // 展开并加载照片
                 photosGrid.classList.add('expanded');
                 dateHeader.classList.add('expanded');
                 icon.classList.remove('collapsed');
                 icon.classList.add('expanded');
 
+                // 如果照片容器为空，则加载照片
                 if (photosContainer.children.length === 0) {
                     loadDatePhotos(date, photosContainer);
                 }
@@ -503,6 +498,7 @@
                 .replace('{month}', photosData.month)
                 .replace('{day}', date);
 
+            // 获取原图开关状态
             const useOriginal = document.getElementById('originalImageToggle').checked;
 
             let html = '';
@@ -510,10 +506,13 @@
                 const fullUrl = baseUrl + filename;
                 const thumbnailUrl = `https://images.weserv.nl/?url=${encodeURIComponent(fullUrl)}&w=300&h=300&output=jpg&q=80&t=square`;
                 
+                // 根据开关状态决定点击后打开的链接
                 let clickUrl;
                 if (useOriginal) {
+                    // 原图开关打开：直接使用原图链接
                     clickUrl = fullUrl;
                 } else {
+                    // 原图开关关闭：使用 weserv 处理的链接（保持原图尺寸）
                     clickUrl = `https://images.weserv.nl/?url=${encodeURIComponent(fullUrl)}&output=jpg&q=80`;
                 }
                 
@@ -529,24 +528,29 @@
             container.innerHTML = html;
         }
 
+        // 重新加载已展开的照片（当原图开关切换时）
         function reloadExpandedPhotos() {
             const expandedGrids = document.querySelectorAll('.photos-grid.expanded');
             expandedGrids.forEach(grid => {
                 const date = grid.dataset.date;
                 const photosContainer = document.getElementById(`photos-${date}`);
                 if (photosContainer && photosContainer.children.length > 0) {
+                    // 重新加载照片以应用新的开关设置
                     loadDatePhotos(date, photosContainer);
                 }
             });
         }
 
+        // 页面加载完成后初始化
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initGallery);
         } else {
             initGallery();
         }
         
+        // 调试信息
         console.log('Gallery script loaded');
     </script>
 </body>
 </html>
+

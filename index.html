@@ -80,7 +80,6 @@
             --font-weight-semibold: 600;
             --font-weight-bold: 700;
             
-            /* 动画持续时间变量虽保留但不再使用 */
             --duration-ultra-fast: 50ms;
             --duration-faster: 100ms;
             --duration-fast: 150ms;
@@ -139,6 +138,7 @@
             background-color: var(--bg-primary);
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            transition: background-color var(--duration-normal) ease, color var(--duration-normal) ease;
         }
 
         /* ===== 通用组件样式 ===== */
@@ -154,6 +154,7 @@
             line-height: var(--line-height-short);
             text-decoration: none;
             cursor: pointer;
+            transition: all var(--duration-normal) ease;
             user-select: none;
             white-space: nowrap;
         }
@@ -196,6 +197,7 @@
             display: flex;
             min-height: 100vh;
             background-color: var(--bg-primary);
+            transition: background-color var(--duration-normal) ease;
         }
 
         /* 侧边栏 */
@@ -211,6 +213,7 @@
             position: fixed;
             left: 0;
             top: 0;
+            transition: background-color var(--duration-normal) ease, border-color var(--duration-normal) ease;
         }
 
         .gallery-sidebar-header {
@@ -224,6 +227,7 @@
             position: sticky;
             top: 0;
             z-index: 10;
+            transition: background-color var(--duration-normal) ease, border-color var(--duration-normal) ease;
         }
 
         .sidebar-logo-image {
@@ -232,6 +236,7 @@
             border-radius: var(--radius-full);
             object-fit: cover;
             flex-shrink: 0;
+            transition: transform var(--duration-fast) ease;
         }
 
         .sidebar-logo-image:hover {
@@ -243,6 +248,7 @@
             font-weight: var(--font-weight-semibold);
             color: var(--text-primary);
             text-decoration: none;
+            transition: color var(--duration-fast) ease;
         }
 
         .gallery-sidebar-title:hover {
@@ -269,6 +275,7 @@
             margin-bottom: var(--space-4);
             background-color: var(--bg-secondary);
             border-radius: var(--radius-md);
+            transition: background-color var(--duration-normal) ease;
         }
 
         .toggle-label {
@@ -310,6 +317,7 @@
             bottom: 0;
             background-color: var(--border-medium);
             border-radius: var(--radius-full);
+            transition: background-color var(--duration-normal) ease;
         }
 
         .toggle-slider::before {
@@ -321,6 +329,7 @@
             bottom: 2px;
             background-color: white;
             border-radius: 50%;
+            transition: transform var(--duration-normal) ease;
             box-shadow: var(--shadow-sm);
         }
 
@@ -355,6 +364,7 @@
             border-radius: var(--radius-lg);
             background-color: var(--bg-white);
             overflow: hidden;
+            transition: background-color var(--duration-normal) ease, border-color var(--duration-normal) ease;
         }
 
         .year-header {
@@ -365,6 +375,7 @@
             padding: 0 var(--space-6);
             background-color: var(--bg-white);
             cursor: pointer;
+            transition: background-color var(--duration-fast) ease;
             user-select: none;
             color: var(--text-primary);
         }
@@ -393,6 +404,7 @@
             width: 24px;
             height: 24px;
             color: var(--text-secondary);
+            transition: transform var(--duration-normal) ease;
             flex-shrink: 0;
         }
 
@@ -412,6 +424,7 @@
             padding: 0;
             max-height: 0;
             overflow: hidden;
+            transition: max-height var(--duration-slow) ease;
         }
 
         .month-grid.expanded {
@@ -435,6 +448,7 @@
             font-size: var(--font-size-sm);
             font-weight: var(--font-weight-medium);
             line-height: var(--line-height-short);
+            transition: all var(--duration-fast) ease;
             cursor: pointer;
         }
 
@@ -473,6 +487,7 @@
             padding: var(--space-8);
             overflow-y: auto;
             height: 100vh;
+            transition: margin-left var(--duration-normal) ease;
         }
 
         /* 日期条目 */
@@ -482,6 +497,7 @@
             border-radius: var(--radius-lg);
             background-color: var(--bg-white);
             overflow: hidden;
+            transition: background-color var(--duration-normal) ease, border-color var(--duration-normal) ease;
         }
 
         .date-header {
@@ -492,6 +508,7 @@
             padding: 0 var(--space-6);
             background-color: var(--bg-white);
             cursor: pointer;
+            transition: background-color var(--duration-fast) ease;
             user-select: none;
         }
 
@@ -519,6 +536,7 @@
             width: 24px;
             height: 24px;
             color: var(--text-secondary);
+            transition: transform var(--duration-normal) ease;
             flex-shrink: 0;
         }
 
@@ -534,11 +552,12 @@
         .photos-grid {
             max-height: 0;
             overflow: hidden;
+            transition: max-height var(--duration-slow) ease;
             background-color: var(--bg-white);
         }
 
         .photos-grid.expanded {
-            max-height: none;
+            max-height: 8000px;
         }
 
         .photos-container {
@@ -553,6 +572,7 @@
             border-radius: var(--radius-lg);
             overflow: hidden;
             box-shadow: var(--shadow-sm);
+            transition: all var(--duration-normal) ease;
             cursor: pointer;
         }
 
@@ -595,6 +615,7 @@
                 width: 280px;
                 height: 100vh;
                 z-index: 1001;
+                transition: left var(--duration-normal) ease;
                 box-shadow: var(--shadow-xl);
             }
             
@@ -629,6 +650,7 @@
                 height: 64px;
                 align-items: center;
                 justify-content: space-between;
+                transition: background-color var(--duration-normal) ease, border-color var(--duration-normal) ease;
             }
             
             .mobile-header-logo {
@@ -649,6 +671,7 @@
                 font-weight: var(--font-weight-semibold);
                 color: var(--text-primary);
                 text-decoration: none;
+                transition: color var(--duration-fast) ease;
             }
             
             .logo-text:hover {
@@ -667,6 +690,7 @@
                 cursor: pointer;
                 padding: var(--space-2);
                 border-radius: var(--radius-md);
+                transition: background-color var(--duration-fast) ease;
             }
             
             .hamburger-button:hover {
@@ -682,6 +706,7 @@
                 height: 2px;
                 background-color: var(--text-primary);
                 border-radius: var(--radius-full);
+                transition: all var(--duration-normal) ease;
                 margin: 3px 0;
             }
             
@@ -707,6 +732,7 @@
                 background-color: rgba(0, 0, 0, 0.5);
                 z-index: 1000;
                 opacity: 0;
+                transition: opacity var(--duration-normal) ease;
                 pointer-events: none;
             }
             
@@ -732,6 +758,7 @@
                 z-index: 1002;
                 opacity: 0;
                 pointer-events: none;
+                transition: all var(--duration-normal) ease;
                 color: var(--text-primary);
             }
             
@@ -834,6 +861,7 @@
             border-top: 1px solid var(--border-light);
             background-color: var(--bg-white);
             margin-top: auto;
+            transition: background-color var(--duration-normal) ease, border-color var(--duration-normal) ease;
         }
 
         /* ===== 滚动条样式 ===== */

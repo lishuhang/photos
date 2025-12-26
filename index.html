@@ -4,29 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>图片库 - 航通社</title>
-    <!-- 已移除外部 CSS 链接，样式表已内联并优化 -->
     <style>
         /* * 航通社全站统一样式系统
-         * 基于 Chakra UI 设计语言重新设计
          * 包含深色模式变量适配
+         * 已移除所有滑动/折叠动画，仅保留颜色渐变
          */
 
         /* ===== 基础变量定义 ===== */
         :root {
-            /* * 默认浅色模式 (Light Mode) 变量 
-             * 对应 Chakra UI 默认配色
-             */
+            /* 浅色模式变量 */
             --primary-blue: #3182CE;
-            --primary-blue-light: #4299E1;
-            --primary-blue-dark: #2C5282;
             --primary-blue-hover: #2B6CB0;
             
             --bg-primary: #F7FAFC;      /* 页面大背景 */
-            --bg-secondary: #EDF2F7;    /* 次级背景（如表头、开关底色） */
-            --bg-tertiary: #E2E8F0;     /* 三级背景 */
-            --bg-white: #FFFFFF;        /* 卡片、侧边栏背景 */
+            --bg-secondary: #EDF2F7;    /* 次级背景 */
+            --bg-white: #FFFFFF;        /* 卡片背景 */
             --bg-hover: #EDF2F7;        /* 悬停背景 */
-            --bg-active: #E2E8F0;       /* 点击/激活背景 */
+            --bg-active: #E2E8F0;       /* 点击背景 */
             
             --text-primary: #1A202C;
             --text-secondary: #718096;
@@ -35,169 +29,66 @@
             
             --border-light: #E2E8F0;
             --border-medium: #CBD5E0;
-            --border-dark: #A0AEC0;
             
-            --shadow-xs: 0 0 0 1px rgba(0, 0, 0, 0.05);
             --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
-            /* 其他非颜色变量保持不变 */
-            --radius-none: 0;
-            --radius-sm: 0.125rem;
-            --radius-base: 0.25rem;
             --radius-md: 0.375rem;
             --radius-lg: 0.5rem;
-            --radius-xl: 0.75rem;
-            --radius-2xl: 1rem;
             --radius-full: 9999px;
             
-            --space-1: 0.25rem;
             --space-2: 0.5rem;
             --space-3: 0.75rem;
             --space-4: 1rem;
-            --space-5: 1.25rem;
             --space-6: 1.5rem;
             --space-8: 2rem;
-            --space-10: 2.5rem;
-            --space-12: 3rem;
             
-            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-            --font-size-xs: 0.75rem;
-            --font-size-sm: 0.875rem;
-            --font-size-md: 1rem;
-            --font-size-lg: 1.125rem;
-            --font-size-xl: 1.25rem;
-            --font-size-2xl: 1.5rem;
-            
-            --line-height-normal: 1.5;
-            --line-height-short: 1.375;
-            --line-height-tall: 1.625;
-            
-            --font-weight-normal: 400;
-            --font-weight-medium: 500;
-            --font-weight-semibold: 600;
-            --font-weight-bold: 700;
-            
-            --duration-ultra-fast: 50ms;
-            --duration-faster: 100ms;
-            --duration-fast: 150ms;
-            --duration-normal: 200ms;
-            --duration-slow: 300ms;
-            --duration-slower: 400ms;
-            --duration-ultra-slow: 500ms;
+            --font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
         }
 
-        /* * 深色模式 (Dark Mode) 变量覆盖
-         * 只需要重新定义颜色变量，无需编写具体的 CSS 规则
-         * 配色参考 GitHub Dark Dimmed 风格
-         */
+        /* 深色模式变量覆盖 */
         html[data-theme="dark"] {
-            /* 蓝色系调整为更适合深色的高亮蓝 */
             --primary-blue: #347df8;
-            --primary-blue-light: #4d8fff;
-            --primary-blue-dark: #2768d9;
             --primary-blue-hover: #4d8fff;
             
-            /* 背景色系 - 核心改动 */
-            --bg-primary: #0D1117;      /* 最深背景 (Body) */
-            --bg-secondary: #21262d;    /* 次级背景 */
-            --bg-tertiary: #30363d;     /* 三级背景 */
-            --bg-white: #161b22;        /* 卡片/侧边栏背景 (原 White) */
-            --bg-hover: #21262d;        /* 悬停 */
-            --bg-active: #30363d;       /* 激活 */
+            --bg-primary: #0D1117;
+            --bg-secondary: #21262d;
+            --bg-white: #161b22;
+            --bg-hover: #21262d;
+            --bg-active: #30363d;
             
-            /* 文字色系 */
-            --text-primary: #e6edf3;    /* 主文字 (近白) */
-            --text-secondary: #8b949e;  /* 次级文字 (灰) */
-            --text-muted: #6e7681;      /* 弱化文字 (深灰) */
-            --text-white: #0D1117;      /* 反白文字 (用于蓝色按钮上的文字) */
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --text-muted: #6e7681;
+            --text-white: #0D1117;
             
-            /* 边框色系 */
             --border-light: #30363d;
             --border-medium: #30363d;
-            --border-dark: #6e7681;
-
-            /* 阴影调整 (深色模式阴影通常较弱或不明显，这里保持原值或微调) */
-            --shadow-xs: 0 0 0 1px rgba(255, 255, 255, 0.1); /* 微调边框阴影 */
+            
+            --shadow-sm: 0 0 0 1px rgba(255, 255, 255, 0.1);
         }
 
-        /* ===== 基础重置和全局样式 ===== */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        /* ===== 全局重置 ===== */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: var(--font-family);
-            font-size: var(--font-size-md);
-            line-height: var(--line-height-normal);
+            font-size: 1rem;
+            line-height: 1.5;
             color: var(--text-primary);
             background-color: var(--bg-primary);
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            transition: background-color var(--duration-normal) ease, color var(--duration-normal) ease;
+            /* 仅保留颜色过渡，去除布局过渡 */
+            transition: background-color 0.2s ease, color 0.2s ease;
         }
 
-        /* ===== 通用组件样式 ===== */
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: var(--space-2) var(--space-4);
-            border: 1px solid transparent;
-            border-radius: var(--radius-md);
-            font-size: var(--font-size-md);
-            font-weight: var(--font-weight-medium);
-            line-height: var(--line-height-short);
-            text-decoration: none;
-            cursor: pointer;
-            transition: all var(--duration-normal) ease;
-            user-select: none;
-            white-space: nowrap;
-        }
+        a { text-decoration: none; color: inherit; }
+        button { font-family: inherit; }
 
-        .btn:focus {
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.6);
-        }
-
-        .btn-primary {
-            background-color: var(--primary-blue);
-            color: #FFFFFF; /* 强制白色，避免受 text-primary 影响 */
-            border-color: var(--primary-blue);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--primary-blue-hover);
-            border-color: var(--primary-blue-hover);
-        }
-
-        .btn-primary:active {
-            background-color: var(--primary-blue-dark);
-            border-color: var(--primary-blue-dark);
-        }
-
-        .btn-secondary {
-            background-color: var(--bg-white);
-            color: var(--text-primary);
-            border-color: var(--border-medium);
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--bg-hover);
-        }
-
-        /* ===== 图片库专用样式 ===== */
-
-        /* 主容器 */
+        /* ===== 布局结构 ===== */
         .gallery-container {
             display: flex;
             min-height: 100vh;
-            background-color: var(--bg-primary);
-            transition: background-color var(--duration-normal) ease;
         }
 
         /* 侧边栏 */
@@ -213,7 +104,7 @@
             position: fixed;
             left: 0;
             top: 0;
-            transition: background-color var(--duration-normal) ease, border-color var(--duration-normal) ease;
+            z-index: 100;
         }
 
         .gallery-sidebar-header {
@@ -224,10 +115,6 @@
             border-bottom: 1px solid var(--border-light);
             background-color: var(--bg-white);
             flex-shrink: 0;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            transition: background-color var(--duration-normal) ease, border-color var(--duration-normal) ease;
         }
 
         .sidebar-logo-image {
@@ -235,25 +122,15 @@
             height: 40px;
             border-radius: var(--radius-full);
             object-fit: cover;
-            flex-shrink: 0;
-            transition: transform var(--duration-fast) ease;
-        }
-
-        .sidebar-logo-image:hover {
-            transform: scale(1.05);
         }
 
         .gallery-sidebar-title {
-            font-size: var(--font-size-lg);
-            font-weight: var(--font-weight-semibold);
+            font-size: 1.125rem;
+            font-weight: 600;
             color: var(--text-primary);
-            text-decoration: none;
-            transition: color var(--duration-fast) ease;
         }
-
-        .gallery-sidebar-title:hover {
-            color: var(--primary-blue);
-        }
+        
+        .gallery-sidebar-title:hover { color: var(--primary-blue); }
 
         .gallery-sidebar-body {
             padding: var(--space-4);
@@ -261,12 +138,20 @@
             flex: 1;
         }
 
-        /* 年份月份选择器 */
-        .date-selector {
-            margin-bottom: var(--space-6);
+        /* 年份/月份选择器 */
+        .date-selector { margin-bottom: var(--space-6); }
+        
+        .date-selector-label {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-3);
+            text-transform: uppercase;
+            padding: 0 var(--space-2);
         }
 
-        /* 开关样式 */
+        /* 开关组件 */
         .original-image-toggle {
             display: flex;
             align-items: center;
@@ -275,7 +160,6 @@
             margin-bottom: var(--space-4);
             background-color: var(--bg-secondary);
             border-radius: var(--radius-md);
-            transition: background-color var(--duration-normal) ease;
         }
 
         .toggle-label {
@@ -287,11 +171,7 @@
             user-select: none;
         }
 
-        .toggle-text {
-            font-size: var(--font-size-sm);
-            font-weight: var(--font-weight-medium);
-            color: var(--text-primary);
-        }
+        .toggle-text { font-size: 0.875rem; font-weight: 500; }
 
         .toggle-switch {
             position: relative;
@@ -300,7 +180,7 @@
             flex-shrink: 0;
         }
 
-        .toggle-switch input[type="checkbox"] {
+        .toggle-switch input {
             position: absolute;
             opacity: 0;
             width: 100%;
@@ -311,60 +191,33 @@
 
         .toggle-slider {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background-color: var(--border-medium);
             border-radius: var(--radius-full);
-            transition: background-color var(--duration-normal) ease;
+            transition: background-color 0.2s; /* 仅保留开关颜色的过渡 */
         }
 
         .toggle-slider::before {
             content: '';
             position: absolute;
-            height: 20px;
-            width: 20px;
-            left: 2px;
-            bottom: 2px;
+            height: 20px; width: 20px;
+            left: 2px; bottom: 2px;
             background-color: white;
             border-radius: 50%;
-            transition: transform var(--duration-normal) ease;
+            transition: transform 0.2s; /* 滑块位置过渡 */
             box-shadow: var(--shadow-sm);
         }
 
-        .toggle-switch input[type="checkbox"]:checked + .toggle-slider {
-            background-color: var(--primary-blue);
-        }
+        .toggle-switch input:checked + .toggle-slider { background-color: var(--primary-blue); }
+        .toggle-switch input:checked + .toggle-slider::before { transform: translateX(20px); }
 
-        .toggle-switch input[type="checkbox"]:checked + .toggle-slider::before {
-            transform: translateX(20px);
-        }
-
-        .toggle-switch input[type="checkbox"]:disabled + .toggle-slider {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        .date-selector-label {
-            display: block;
-            font-size: var(--font-size-xs);
-            font-weight: var(--font-weight-semibold);
-            color: var(--text-secondary);
-            margin-bottom: var(--space-3);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            padding: 0 var(--space-2);
-        }
-
-        /* 年份区域 */
+        /* 年份折叠面板 */
         .year-section {
             margin-bottom: var(--space-4);
             border: 1px solid var(--border-light);
             border-radius: var(--radius-lg);
             background-color: var(--bg-white);
             overflow: hidden;
-            transition: background-color var(--duration-normal) ease, border-color var(--duration-normal) ease;
         }
 
         .year-header {
@@ -375,105 +228,60 @@
             padding: 0 var(--space-6);
             background-color: var(--bg-white);
             cursor: pointer;
-            transition: background-color var(--duration-fast) ease;
             user-select: none;
-            color: var(--text-primary);
         }
 
-        .year-header:hover {
-            background-color: var(--bg-hover);
-        }
-
-        .year-header:active {
-            background-color: var(--bg-active);
-        }
-
+        .year-header:hover { background-color: var(--bg-hover); }
         .year-header.expanded {
             background-color: var(--bg-hover);
             border-bottom: 1px solid var(--border-light);
         }
 
-        .year-title {
-            font-size: var(--font-size-lg);
-            font-weight: var(--font-weight-semibold);
-            color: var(--text-primary);
-            line-height: var(--line-height-short);
-        }
+        .year-title { font-size: 1.125rem; font-weight: 600; }
 
         .year-icon {
-            width: 24px;
-            height: 24px;
+            width: 24px; height: 24px;
             color: var(--text-secondary);
-            transition: transform var(--duration-normal) ease;
-            flex-shrink: 0;
+            /* 去除旋转动画 */
         }
 
-        .year-icon.collapsed {
-            transform: rotate(-90deg);
-        }
-
-        .year-icon.expanded {
-            transform: rotate(0deg);
-        }
+        .year-icon.collapsed { transform: rotate(-90deg); }
+        .year-icon.expanded { transform: rotate(0deg); }
 
         /* 月份网格 */
         .month-grid {
-            display: grid;
+            display: none; /* 默认隐藏 */
             grid-template-columns: repeat(4, 1fr);
             gap: var(--space-2);
-            padding: 0;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height var(--duration-slow) ease;
-        }
-
-        .month-grid.expanded {
-            max-height: 300px;
             padding: var(--space-4);
         }
+
+        /* 状态类控制显示 */
+        .month-grid.expanded { display: grid; }
 
         .month-btn {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 100%;
             height: 32px;
-            padding: 0;
             border: 1px solid var(--border-light);
             border-radius: var(--radius-md);
             background-color: var(--bg-white);
-            color: var(--text-primary);
-            text-decoration: none;
-            text-align: center;
-            font-size: var(--font-size-sm);
-            font-weight: var(--font-weight-medium);
-            line-height: var(--line-height-short);
-            transition: all var(--duration-fast) ease;
+            font-size: 0.875rem;
             cursor: pointer;
         }
 
-        .month-btn:hover {
-            background-color: var(--bg-hover);
-            border-color: var(--border-medium);
-        }
-
-        .month-btn:active {
-            background-color: var(--bg-active);
-        }
-
+        .month-btn:hover { background-color: var(--bg-hover); border-color: var(--border-medium); }
+        
         .month-btn.active {
             background-color: var(--primary-blue);
             color: #FFFFFF;
             border-color: var(--primary-blue);
         }
-
-        .month-btn.active:hover {
-            background-color: var(--primary-blue-hover);
-            border-color: var(--primary-blue-hover);
-        }
-
+        
+        .month-btn.active:hover { background-color: var(--primary-blue-hover); }
+        
         .month-btn.disabled {
-            background-color: transparent;
             color: var(--text-muted);
             border-color: transparent;
             cursor: not-allowed;
@@ -483,21 +291,19 @@
         /* 主内容区 */
         .gallery-main {
             flex: 1;
-            margin-left: 280px;
+            margin-left: 280px; /* 留出侧边栏宽度 */
             padding: var(--space-8);
             overflow-y: auto;
             height: 100vh;
-            transition: margin-left var(--duration-normal) ease;
         }
 
-        /* 日期条目 */
+        /* 日期条目（每天的照片组） */
         .date-item {
             margin-bottom: var(--space-4);
             border: 1px solid var(--border-light);
             border-radius: var(--radius-lg);
             background-color: var(--bg-white);
             overflow: hidden;
-            transition: background-color var(--duration-normal) ease, border-color var(--duration-normal) ease;
         }
 
         .date-header {
@@ -508,60 +314,36 @@
             padding: 0 var(--space-6);
             background-color: var(--bg-white);
             cursor: pointer;
-            transition: background-color var(--duration-fast) ease;
             user-select: none;
         }
 
-        .date-header:hover {
-            background-color: var(--bg-hover);
-        }
-
-        .date-header:active {
-            background-color: var(--bg-active);
-        }
-
+        .date-header:hover { background-color: var(--bg-hover); }
         .date-header.expanded {
             background-color: var(--bg-hover);
             border-bottom: 1px solid var(--border-light);
         }
 
-        .date-title {
-            font-size: var(--font-size-lg);
-            font-weight: var(--font-weight-semibold);
-            color: var(--text-primary);
-            line-height: var(--line-height-short);
-        }
+        .date-title { font-size: 1.125rem; font-weight: 600; }
 
         .date-icon {
-            width: 24px;
-            height: 24px;
+            width: 24px; height: 24px;
             color: var(--text-secondary);
-            transition: transform var(--duration-normal) ease;
-            flex-shrink: 0;
         }
+        .date-icon.collapsed { transform: rotate(-90deg); }
+        .date-icon.expanded { transform: rotate(0deg); }
 
-        .date-icon.collapsed {
-            transform: rotate(-90deg);
-        }
-
-        .date-icon.expanded {
-            transform: rotate(0deg);
-        }
-
-        /* 照片网格 */
+        /* 照片容器 */
         .photos-grid {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height var(--duration-slow) ease;
+            display: none; /* 默认隐藏，无高度动画 */
             background-color: var(--bg-white);
+            padding: var(--space-6);
         }
 
         .photos-grid.expanded {
-            max-height: 8000px;
+            display: block; /* 直接显示，不限制高度 */
         }
 
         .photos-container {
-            padding: var(--space-6);
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
             gap: var(--space-4);
@@ -572,13 +354,14 @@
             border-radius: var(--radius-lg);
             overflow: hidden;
             box-shadow: var(--shadow-sm);
-            transition: all var(--duration-normal) ease;
             cursor: pointer;
         }
 
         .photo-item:hover {
             box-shadow: var(--shadow-md);
-            transform: translateY(-2px);
+            /* 仅保留微小的悬停位移，如果不想要可以删掉下面这行 */
+            transform: translateY(-2px); 
+            transition: transform 0.2s;
         }
 
         .photo-item img {
@@ -592,350 +375,134 @@
             padding: var(--space-8);
             text-align: center;
             color: var(--text-muted);
-            font-size: var(--font-size-sm);
             font-style: italic;
         }
 
-        /* ===== 响应式设计 ===== */
-
-        /* 移动端适配 */
-        @media (max-width: 768px) {
-            .gallery-container {
-                flex-direction: column;
-            }
-            
-            .gallery-sidebar-header {
-                display: none;
-            }
-            
-            .gallery-sidebar {
-                position: fixed;
-                top: 0;
-                left: -100%;
-                width: 280px;
-                height: 100vh;
-                z-index: 1001;
-                transition: left var(--duration-normal) ease;
-                box-shadow: var(--shadow-xl);
-            }
-            
-            .gallery-sidebar.active {
-                left: 0;
-            }
-            
-            .gallery-sidebar-body {
-                overflow-y: auto;
-                height: calc(100vh - 64px);
-            }
-            
-            .gallery-main {
-                width: 100%;
-                margin-left: 0;
-                padding: var(--space-4);
-                padding-top: 72px;
-                height: auto;
-            }
-            
-            .mobile-header {
-                display: flex;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                z-index: 999;
-                background-color: var(--bg-white);
-                border-bottom: 1px solid var(--border-light);
-                box-shadow: var(--shadow-sm);
-                padding: var(--space-3) var(--space-4);
-                height: 64px;
-                align-items: center;
-                justify-content: space-between;
-                transition: background-color var(--duration-normal) ease, border-color var(--duration-normal) ease;
-            }
-            
-            .mobile-header-logo {
-                display: flex;
-                align-items: center;
-                gap: var(--space-3);
-            }
-            
-            .logo-image {
-                width: 40px;
-                height: 40px;
-                border-radius: var(--radius-full);
-                object-fit: cover;
-            }
-            
-            .logo-text {
-                font-size: var(--font-size-lg);
-                font-weight: var(--font-weight-semibold);
-                color: var(--text-primary);
-                text-decoration: none;
-                transition: color var(--duration-fast) ease;
-            }
-            
-            .logo-text:hover {
-                color: var(--primary-blue);
-            }
-            
-            .hamburger-button {
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                width: 40px;
-                height: 40px;
-                background: none;
-                border: none;
-                cursor: pointer;
-                padding: var(--space-2);
-                border-radius: var(--radius-md);
-                transition: background-color var(--duration-fast) ease;
-            }
-            
-            .hamburger-button:hover {
-                background-color: var(--bg-hover);
-            }
-            
-            .hamburger-button:active {
-                background-color: var(--bg-active);
-            }
-            
-            .hamburger-line {
-                width: 24px;
-                height: 2px;
-                background-color: var(--text-primary);
-                border-radius: var(--radius-full);
-                transition: all var(--duration-normal) ease;
-                margin: 3px 0;
-            }
-            
-            .hamburger-button.active .hamburger-line:nth-child(1) {
-                transform: translateY(8px) rotate(45deg);
-            }
-            
-            .hamburger-button.active .hamburger-line:nth-child(2) {
-                opacity: 0;
-            }
-            
-            .hamburger-button.active .hamburger-line:nth-child(3) {
-                transform: translateY(-8px) rotate(-45deg);
-            }
-            
-            .sidebar-overlay {
-                display: block;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background-color: rgba(0, 0, 0, 0.5);
-                z-index: 1000;
-                opacity: 0;
-                transition: opacity var(--duration-normal) ease;
-                pointer-events: none;
-            }
-            
-            .sidebar-overlay.active {
-                opacity: 1;
-                pointer-events: auto;
-            }
-            
-            .close-button {
-                position: fixed;
-                top: var(--space-4);
-                right: var(--space-4);
-                width: 48px;
-                height: 48px;
-                background-color: var(--bg-white);
-                border: none;
-                border-radius: var(--radius-full);
-                box-shadow: var(--shadow-lg);
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 1002;
-                opacity: 0;
-                pointer-events: none;
-                transition: all var(--duration-normal) ease;
-                color: var(--text-primary);
-            }
-            
-            .close-button:hover {
-                background-color: var(--bg-hover);
-                transform: scale(1.05);
-            }
-            
-            .close-button:active {
-                background-color: var(--bg-active);
-                transform: scale(0.95);
-            }
-            
-            .sidebar-overlay.active .close-button {
-                opacity: 1;
-                pointer-events: auto;
-            }
-            
-            .photos-container {
-                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-                gap: var(--space-3);
-            }
-            
-            .photo-item img {
-                height: 120px;
-            }
-            
-            .date-header {
-                height: 48px;
-                padding: 0 var(--space-4);
-            }
-            
-            .date-title {
-                font-size: var(--font-size-md);
-            }
-            
-            .date-icon {
-                width: 20px;
-                height: 20px;
-            }
+        .copyright {
+            padding: var(--space-6);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            border-top: 1px solid var(--border-light);
+            margin-top: auto;
         }
 
-        /* 桌面端隐藏移动端元素 */
-        @media (min-width: 769px) {
-            .mobile-header,
-            .sidebar-overlay {
-                display: none !important;
-            }
-        }
-
-        /* 大屏幕优化 */
-        @media (min-width: 1440px) {
-            .gallery-sidebar {
-                width: 320px;
-            }
-            
-            .photos-container {
-                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-                gap: var(--space-6);
-            }
-            
-            .photo-item img {
-                height: 180px;
-            }
-        }
-
-        /* ===== 加载状态 ===== */
+        /* 加载动画 */
         .loading {
             display: flex;
             align-items: center;
             justify-content: center;
             padding: var(--space-8);
             color: var(--text-muted);
-            font-size: var(--font-size-sm);
         }
-
         .loading::after {
             content: '';
-            width: 24px;
-            height: 24px;
-            border: 3px solid var(--border-light);
+            width: 20px; height: 20px;
+            border: 2px solid var(--border-light);
             border-top-color: var(--primary-blue);
             border-radius: 50%;
-            animation: spin 0.6s linear infinite;
-            margin-left: var(--space-3);
+            animation: spin 0.8s linear infinite;
+            margin-left: 10px;
         }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
+        /* ===== 响应式适配 ===== */
+        @media (max-width: 768px) {
+            .gallery-container { flex-direction: column; }
+            
+            /* 移动端侧边栏默认隐藏 */
+            .gallery-sidebar {
+                left: -100%;
+                transition: left 0.3s ease; /* 侧边栏滑出动画保留，否则太生硬 */
             }
-        }
+            .gallery-sidebar.active { left: 0; }
+            
+            .gallery-main {
+                width: 100%;
+                margin-left: 0;
+                padding: var(--space-4);
+                padding-top: 72px; /* 给顶部栏留空 */
+            }
 
-        /* ===== 版权信息 ===== */
-        .copyright {
-            padding: var(--space-6);
-            text-align: center;
-            color: var(--text-muted);
-            font-size: var(--font-size-xs);
-            border-top: 1px solid var(--border-light);
-            background-color: var(--bg-white);
-            margin-top: auto;
-            transition: background-color var(--duration-normal) ease, border-color var(--duration-normal) ease;
-        }
+            .mobile-header {
+                display: flex;
+                position: fixed;
+                top: 0; left: 0; right: 0;
+                z-index: 999;
+                background-color: var(--bg-white);
+                border-bottom: 1px solid var(--border-light);
+                height: 64px;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 var(--space-4);
+            }
 
-        /* ===== 滚动条样式 ===== */
-        .gallery-sidebar::-webkit-scrollbar,
-        .gallery-main::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
+            .mobile-header-logo { display: flex; align-items: center; gap: 10px; }
+            .logo-image { width: 40px; height: 40px; border-radius: 50%; }
+            .logo-text { font-weight: 600; font-size: 1.125rem; }
 
-        .gallery-sidebar::-webkit-scrollbar-track,
-        .gallery-main::-webkit-scrollbar-track {
-            background: var(--bg-primary);
-        }
+            .hamburger-button {
+                background: none; border: none;
+                display: flex; flex-direction: column; gap: 4px;
+                cursor: pointer;
+            }
+            .hamburger-line {
+                width: 24px; height: 2px;
+                background-color: var(--text-primary);
+            }
 
-        .gallery-sidebar::-webkit-scrollbar-thumb,
-        .gallery-main::-webkit-scrollbar-thumb {
-            background: var(--border-medium);
-            border-radius: var(--radius-full);
-        }
+            .sidebar-overlay {
+                display: none;
+                position: fixed;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background-color: rgba(0,0,0,0.5);
+                z-index: 99;
+            }
+            .sidebar-overlay.active { display: block; }
 
-        .gallery-sidebar::-webkit-scrollbar-thumb:hover,
-        .gallery-main::-webkit-scrollbar-thumb:hover {
-            background: var(--border-dark);
+            .gallery-sidebar-header { display: none; } /* 移动端侧边栏不显示Logo头 */
         }
-
-        /* ===== 焦点可见性 ===== */
-        *:focus-visible {
-            outline: 2px solid var(--primary-blue);
-            outline-offset: 2px;
+        
+        @media (min-width: 769px) {
+            .mobile-header, .sidebar-overlay { display: none !important; }
         }
     </style>
 </head>
 <body>
-    <!-- 移动端标题栏 -->
+    <!-- 移动端顶部栏 -->
     <div class="mobile-header">
         <div class="mobile-header-logo">
-            <a href="https://lishuhang.me/" target="_blank" rel="noopener noreferrer">
-                <img src="assets/logo.svg" alt="航通社" class="logo-image">
+            <a href="https://lishuhang.me/" target="_blank">
+                <img src="assets/logo.svg" alt="Logo" class="logo-image">
             </a>
-            <a href="/index.html" class="logo-text">图片库</a>
+            <span class="logo-text">图片库</span>
         </div>
-        <button class="hamburger-button" id="hamburgerButton" aria-label="打开菜单">
+        <button class="hamburger-button" id="hamburgerButton" aria-label="菜单">
             <span class="hamburger-line"></span>
             <span class="hamburger-line"></span>
             <span class="hamburger-line"></span>
         </button>
     </div>
-    
-    <!-- 移动端遮罩层 -->
-    <div class="sidebar-overlay" id="sidebarOverlay">
-        <!-- 关闭按钮 -->
-        <button class="close-button" id="closeButton" aria-label="关闭菜单">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-        </button>
-    </div>
+
+    <!-- 移动端遮罩 -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <div class="gallery-container">
         <!-- 侧边栏 -->
         <aside class="gallery-sidebar" id="gallerySidebar">
             <div class="gallery-sidebar-header">
-                <a href="https://lishuhang.me/" target="_blank" rel="noopener noreferrer">
-                    <img src="assets/logo.svg" alt="航通社" class="sidebar-logo-image">
+                <a href="https://lishuhang.me/" target="_blank">
+                    <img src="assets/logo.svg" alt="Logo" class="sidebar-logo-image">
                 </a>
-                <a href="/index.html" class="gallery-sidebar-title">图片库</a>
+                <span class="gallery-sidebar-title">图片库</span>
             </div>
             
             <div class="gallery-sidebar-body">
                 <div class="date-selector">
-                    <!-- 原图开关 -->
+                    <!-- 开关控制区 -->
                     <div class="original-image-toggle">
                         <label class="toggle-label">
-                            <span class="toggle-text">原图</span>
+                            <span class="toggle-text">原图预览</span>
                             <div class="toggle-switch">
                                 <input type="checkbox" id="originalImageToggle" checked>
                                 <span class="toggle-slider"></span>
@@ -943,7 +510,6 @@
                         </label>
                     </div>
 
-                    <!-- 深色模式开关 -->
                     <div class="original-image-toggle" style="margin-top: 10px;">
                         <label class="toggle-label">
                             <span class="toggle-text">深色模式</span>
@@ -954,154 +520,99 @@
                         </label>
                     </div>
                     
-                    <label class="date-selector-label" style="margin-top: 20px;">选择年份和月份</label>
+                    <label class="date-selector-label" style="margin-top: 20px;">选择日期</label>
                     
-                    <!-- 年份和月份将动态生成 -->
+                    <!-- 动态生成的年份列表 -->
                     <div id="yearMonthContainer">
-                        <div class="loading" style="text-align: center; padding: 20px; color: #999;">
-                            正在检测数据...
-                        </div>
+                        <div class="loading">正在加载索引...</div>
                     </div>
                 </div>
 
-                <div class="copyright">
-                    © Li Shuhang
-                </div>
+                <div class="copyright">© Li Shuhang</div>
             </div>
         </aside>
 
-        <!-- 主内容区 -->
+        <!-- 主展示区 -->
         <main class="gallery-main">
             <div id="galleryContent">
-                <div class="loading" id="loadingIndicator">
-                    正在初始化图库...
-                </div>
+                <div class="loading" id="loadingIndicator">正在初始化...</div>
             </div>
         </main>
     </div>
 
     <script>
-        // 全局变量
-        // 注意：这里不再硬编码默认值，将在 initGallery 中根据数据动态设置
+        // 核心状态管理
         let currentYear = ''; 
         let currentMonth = '';
         let photosData = null;
-        let availableMonths = new Set(); // 存储所有可用的年月 (格式: "YYYYMM")
+        let availableMonths = new Set(); // 格式: "YYYYMM"
 
-        // 初始化函数
+        // 初始化入口
         async function initGallery() {
-            console.log('Initializing gallery...');
-            
-            // 初始化深色模式
             initDarkMode();
-
-            // 1. 先加载所有可用的月份索引
             await loadAvailableMonths();
-            
-            // 2. 核心逻辑修改：决定初始显示的年月
-            const now = new Date();
-            const realCurrentYear = now.getFullYear().toString();
-            const realCurrentMonth = (now.getMonth() + 1).toString().padStart(2, '0');
-            const realCurrentKey = `${realCurrentYear}${realCurrentMonth}`;
-
-            console.log(`Real world date: ${realCurrentYear}-${realCurrentMonth}`);
-
-            if (availableMonths.has(realCurrentKey)) {
-                // 情况A：当前现实月份有数据，直接显示
-                console.log('Current month has data. Loading current.');
-                currentYear = realCurrentYear;
-                currentMonth = realCurrentMonth;
-            } else {
-                // 情况B：当前月没数据，寻找最近的有数据的月份
-                console.log('Current month empty. Searching for latest available...');
-                
-                // 将 Set 转为数组并倒序排列 (大 -> 小)
-                const sortedKeys = Array.from(availableMonths).sort((a, b) => b - a);
-                
-                if (sortedKeys.length > 0) {
-                    // 取最大值（即最近的一个月）
-                    const latestKey = sortedKeys[0];
-                    currentYear = latestKey.substring(0, 4);
-                    currentMonth = latestKey.substring(4, 6);
-                    console.log(`Fallback to latest available: ${currentYear}-${currentMonth}`);
-                } else {
-                    // 情况C：完全没有任何数据（极端情况）
-                    currentYear = realCurrentYear;
-                    currentMonth = realCurrentMonth;
-                    console.warn('No data found at all.');
-                }
-            }
-
-            // 3. UI 渲染
+            determineInitialDate();
             generateYearMonthSelector();
             bindEvents();
             
-            // 4. 加载确定的月份数据
+            // 如果确定了日期，加载数据
             if (currentYear && currentMonth) {
                 loadPhotos(currentYear, currentMonth);
-                // 自动展开对应的年份栏
+                // 默认展开当前年
                 toggleYear(currentYear);
-                // 高亮对应的月份按钮 (因为 generateYearMonthSelector 已经运行，需要手动触发高亮状态)
-                setTimeout(() => {
-                    updateActiveButtonState(currentYear, currentMonth);
-                }, 0);
+                // 高亮当前月
+                setTimeout(() => updateActiveButtonState(currentYear, currentMonth), 0);
             }
-            
-            console.log('Gallery initialized successfully');
         }
 
-        // 加载所有可用的月份数据
+        // 1. 加载数据索引
         async function loadAvailableMonths() {
-            console.log('Loading available months...');
-            
-            // 定义可能的年份和月份范围
             const startYear = 2007;
-            // 修改：结束年份动态获取当前年份，确保跨年可用
-            const endYear = new Date().getFullYear(); 
-            
-            // 遍历所有可能的年月组合，检查文件是否存在
+            const endYear = new Date().getFullYear();
             const checkPromises = [];
+            
             for (let year = startYear; year <= endYear; year++) {
                 for (let month = 1; month <= 12; month++) {
-                    const yearStr = year.toString();
-                    const monthStr = month.toString().padStart(2, '0');
-                    const jsonPath = `data/${yearStr}${monthStr}.json`;
+                    const yStr = year.toString();
+                    const mStr = month.toString().padStart(2, '0');
+                    const path = `data/${yStr}${mStr}.json`;
                     
                     checkPromises.push(
-                        fetch(jsonPath, { method: 'HEAD' })
-                            .then(response => {
-                                if (response.ok) {
-                                    availableMonths.add(`${yearStr}${monthStr}`);
-                                }
-                            })
-                            .catch(() => {
-                                // 文件不存在，忽略
-                            })
+                        fetch(path, { method: 'HEAD' })
+                            .then(res => { if (res.ok) availableMonths.add(`${yStr}${mStr}`); })
+                            .catch(() => {})
                     );
                 }
             }
-            
             await Promise.all(checkPromises);
-            console.log('Available months loaded:', availableMonths.size, availableMonths);
         }
 
-        // 生成年份和月份选择器
+        // 2. 决定初始显示日期
+        function determineInitialDate() {
+            const now = new Date();
+            const y = now.getFullYear().toString();
+            const m = (now.getMonth() + 1).toString().padStart(2, '0');
+            const key = y + m;
+
+            if (availableMonths.has(key)) {
+                currentYear = y; currentMonth = m;
+            } else {
+                // 倒序找最近的一个月
+                const sorted = Array.from(availableMonths).sort((a, b) => b - a);
+                if (sorted.length > 0) {
+                    currentYear = sorted[0].substring(0, 4);
+                    currentMonth = sorted[0].substring(4, 6);
+                }
+            }
+        }
+
+        // 3. 渲染侧边栏年份
         function generateYearMonthSelector() {
             const container = document.getElementById('yearMonthContainer');
-            
-            // 从可用月份中提取年份
             const years = new Set();
-            availableMonths.forEach(yearMonth => {
-                const year = yearMonth.substring(0, 4);
-                years.add(year);
-            });
-            
-            // 如果 years 为空（可能是首次使用或无数据），至少显示当前年份
-            if (years.size === 0) {
-                years.add(new Date().getFullYear().toString());
-            }
+            availableMonths.forEach(ym => years.add(ym.substring(0, 4)));
+            if (years.size === 0) years.add(new Date().getFullYear().toString());
 
-            // 按年份倒序排列
             const sortedYears = Array.from(years).sort((a, b) => b - a);
             
             let html = '';
@@ -1114,386 +625,234 @@
                                 <path d="M6 8.825c-.2 0-.4-.1-.5-.2l-3.3-3.3c-.3-.3-.3-.8 0-1.1.3-.3.8-.3 1.1 0l2.7 2.7 2.7-2.7c.3-.3.8-.3 1.1 0 .3.3.3.8 0 1.1l-3.2 3.2c-.2.2-.4.3-.6.3Z"/>
                             </svg>
                         </div>
-                        <div class="month-grid" id="months-${year}">
-                `;
+                        <div class="month-grid" id="months-${year}">`;
                 
-                // 生成12个月份按钮
-                for (let month = 1; month <= 12; month++) {
-                    const monthStr = month.toString().padStart(2, '0');
-                    const yearMonth = `${year}${monthStr}`;
-                    const isAvailable = availableMonths.has(yearMonth);
-                    // 注意：这里不再生成 active 类，统一在 init 或点击时处理
-                    const disabledClass = isAvailable ? '' : ' disabled';
-                    
-                    if (isAvailable) {
-                        html += `<a href="#" class="month-btn${disabledClass}" data-year="${year}" data-month="${monthStr}">${month}</a>`;
-                    } else {
-                        html += `<span class="month-btn${disabledClass}">${month}</span>`;
-                    }
+                for (let m = 1; m <= 12; m++) {
+                    const mStr = m.toString().padStart(2, '0');
+                    const isAvail = availableMonths.has(year + mStr);
+                    const cls = isAvail ? 'month-btn' : 'month-btn disabled';
+                    const tag = isAvail ? 'div' : 'div'; // 统一用div配合CSS click事件
+                    html += `<div class="${cls}" data-year="${year}" data-month="${mStr}">${m}</div>`;
                 }
                 
-                html += `
-                        </div>
-                    </div>
-                `;
+                html += `</div></div>`;
             });
-            
             container.innerHTML = html;
         }
 
+        // 4. 事件绑定
         function bindEvents() {
-            // 年份展开/折叠
-            document.querySelectorAll('.year-header').forEach(header => {
-                header.addEventListener('click', (e) => {
-                    const year = e.currentTarget.dataset.year;
-                    toggleYear(year);
-                });
+            // 年份点击
+            document.querySelectorAll('.year-header').forEach(h => {
+                h.addEventListener('click', () => toggleYear(h.dataset.year));
             });
 
-            // 月份选择
+            // 月份点击
             document.querySelectorAll('.month-btn:not(.disabled)').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const year = e.target.dataset.year;
-                    const month = e.target.dataset.month;
-                    console.log('Month clicked:', year, month);
-                    selectMonth(year, month);
+                    const y = e.target.dataset.year;
+                    const m = e.target.dataset.month;
+                    selectMonth(y, m);
                 });
             });
 
-            // 移动端汉堡按钮切换
-            const hamburgerButton = document.getElementById('hamburgerButton');
-            if (hamburgerButton) {
-                hamburgerButton.addEventListener('click', () => {
-                    toggleMobileSidebar();
-                });
-            }
-
-            // 移动端遮罩层点击关闭
-            const sidebarOverlay = document.getElementById('sidebarOverlay');
-            if (sidebarOverlay) {
-                sidebarOverlay.addEventListener('click', (e) => {
-                    if (e.target === sidebarOverlay) {
-                        closeMobileSidebar();
-                    }
-                });
-            }
-
-            // 移动端关闭按钮点击关闭
-            const closeButton = document.getElementById('closeButton');
-            if (closeButton) {
-                closeButton.addEventListener('click', () => {
-                    closeMobileSidebar();
-                });
-            }
-
-            // 原图开关切换
-            const originalImageToggle = document.getElementById('originalImageToggle');
-            if (originalImageToggle) {
-                originalImageToggle.addEventListener('change', () => {
-                    reloadExpandedPhotos();
-                });
-            }
-
-            // 日期条目展开/折叠（事件委托）
+            // 日期条目点击 (事件委托)
             document.getElementById('galleryContent').addEventListener('click', (e) => {
-                const dateHeader = e.target.closest('.date-header');
-                if (dateHeader) {
-                    toggleDatePhotos(dateHeader);
-                }
+                const header = e.target.closest('.date-header');
+                if (header) toggleDatePhotos(header);
             });
+
+            // 移动端菜单
+            const burger = document.getElementById('hamburgerButton');
+            const overlay = document.getElementById('sidebarOverlay');
+            if (burger) {
+                burger.addEventListener('click', () => {
+                    document.getElementById('gallerySidebar').classList.add('active');
+                    overlay.classList.add('active');
+                });
+            }
+            if (overlay) {
+                overlay.addEventListener('click', () => {
+                    document.getElementById('gallerySidebar').classList.remove('active');
+                    overlay.classList.remove('active');
+                });
+            }
+
+            // 原图开关
+            document.getElementById('originalImageToggle').addEventListener('change', reloadExpandedPhotos);
         }
 
+        // 交互逻辑
         function toggleYear(year) {
-            const header = document.querySelector(`[data-year="${year}"]`);
-            // 防止 header 不存在报错（例如年份数据为空时）
-            if (!header) return; 
-
-            const monthGrid = document.getElementById(`months-${year}`);
+            const header = document.querySelector(`.year-header[data-year="${year}"]`);
+            const grid = document.getElementById(`months-${year}`);
             const icon = header.querySelector('.year-icon');
+            
+            // 简单的切换类名，CSS中display:none/grid控制，无动画
+            const isExpanded = grid.classList.contains('expanded');
+            
+            // 先关闭所有
+            document.querySelectorAll('.month-grid').forEach(el => el.classList.remove('expanded'));
+            document.querySelectorAll('.year-header').forEach(el => el.classList.remove('expanded'));
+            document.querySelectorAll('.year-icon').forEach(el => {
+                el.classList.remove('expanded');
+                el.classList.add('collapsed');
+            });
 
-            if (monthGrid.classList.contains('expanded')) {
-                // 折叠
-                monthGrid.classList.remove('expanded');
-                header.classList.remove('expanded');
-                icon.classList.remove('expanded');
-                icon.classList.add('collapsed');
-            } else {
-                // 先关闭其他年份
-                document.querySelectorAll('.month-grid.expanded').forEach(grid => {
-                    grid.classList.remove('expanded');
-                });
-                document.querySelectorAll('.year-header.expanded').forEach(h => {
-                    h.classList.remove('expanded');
-                });
-                document.querySelectorAll('.year-icon.expanded').forEach(ic => {
-                    ic.classList.remove('expanded');
-                    ic.classList.add('collapsed');
-                });
-
-                // 展开当前年份
-                monthGrid.classList.add('expanded');
+            if (!isExpanded) {
+                grid.classList.add('expanded');
                 header.classList.add('expanded');
                 icon.classList.remove('collapsed');
                 icon.classList.add('expanded');
             }
         }
 
-        // 辅助函数：更新选中状态UI
-        function updateActiveButtonState(year, month) {
-            document.querySelectorAll('.month-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            const targetBtn = document.querySelector(`[data-year="${year}"][data-month="${month}"]`);
-            if (targetBtn) {
-                targetBtn.classList.add('active');
-            }
-        }
-
-        function selectMonth(year, month) {
-            // 更新活动状态
-            updateActiveButtonState(year, month);
-
-            // 加载照片
-            currentYear = year;
-            currentMonth = month;
-            loadPhotos(year, month);
-
-            // 移动端自动收起侧边栏
+        function selectMonth(y, m) {
+            currentYear = y; currentMonth = m;
+            updateActiveButtonState(y, m);
+            loadPhotos(y, m);
+            // 移动端选完自动收起菜单
             if (window.innerWidth <= 768) {
-                closeMobileSidebar();
+                document.getElementById('sidebarOverlay').click();
             }
         }
 
-        function toggleMobileSidebar() {
-            const sidebar = document.getElementById('gallerySidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            const hamburger = document.getElementById('hamburgerButton');
-            
-            if (sidebar.classList.contains('active')) {
-                sidebar.classList.remove('active');
-                overlay.classList.remove('active');
-                hamburger.classList.remove('active');
-                document.body.style.overflow = '';
-            } else {
-                sidebar.classList.add('active');
-                overlay.classList.add('active');
-                hamburger.classList.add('active');
-                document.body.style.overflow = 'hidden';
-            }
+        function updateActiveButtonState(y, m) {
+            document.querySelectorAll('.month-btn').forEach(b => b.classList.remove('active'));
+            const target = document.querySelector(`.month-btn[data-year="${y}"][data-month="${m}"]`);
+            if (target) target.classList.add('active');
         }
 
-        function closeMobileSidebar() {
-            const sidebar = document.getElementById('gallerySidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            const hamburger = document.getElementById('hamburgerButton');
-            
-            sidebar.classList.remove('active');
-            overlay.classList.remove('active');
-            hamburger.classList.remove('active');
-            document.body.style.overflow = '';
-        }
-
-        async function loadPhotos(year, month) {
-            console.log('Loading photos for:', year, month);
-            
-            const galleryContent = document.getElementById('galleryContent');
-            
-            let loadingIndicator = document.getElementById('loadingIndicator');
-            if (!loadingIndicator) {
-                galleryContent.innerHTML = '<div class="loading" id="loadingIndicator">正在加载照片...</div>';
-                loadingIndicator = document.getElementById('loadingIndicator');
-            }
-            
-            loadingIndicator.style.display = 'flex';
+        // 加载照片列表
+        async function loadPhotos(y, m) {
+            const content = document.getElementById('galleryContent');
+            content.innerHTML = '<div class="loading">加载中...</div>';
             
             try {
-                const jsonPath = `data/${year}${month.padStart(2, '0')}.json`;
-                const response = await fetch(jsonPath);
-                
-                if (!response.ok) {
-                    throw new Error('No data available');
-                }
-                
-                photosData = await response.json();
-                renderPhotos();
-            } catch (error) {
-                console.error('加载照片数据失败:', error);
-                galleryContent.innerHTML = `
-                    <div class="empty-state">
-                        <p>暂无 ${year}年${month}月 的照片数据</p>
-                        <p>请选择其他月份</p>
-                    </div>
-                `;
-            } finally {
-                const finalLoadingIndicator = document.getElementById('loadingIndicator');
-                if (finalLoadingIndicator) {
-                    finalLoadingIndicator.style.display = 'none';
-                }
+                const res = await fetch(`data/${y}${m}.json`);
+                if (!res.ok) throw new Error();
+                photosData = await res.json();
+                renderPhotosList();
+            } catch (e) {
+                content.innerHTML = '<div class="empty-state">暂无数据</div>';
             }
         }
 
-        function renderPhotos() {
-            const galleryContent = document.getElementById('galleryContent');
-            
+        function renderPhotosList() {
+            const content = document.getElementById('galleryContent');
             if (!photosData || !photosData.photos) {
-                galleryContent.innerHTML = '<div class="empty-state">暂无照片</div>';
+                content.innerHTML = '<div class="empty-state">本月无照片</div>';
                 return;
             }
 
             let html = '';
-            const sortedDates = Object.keys(photosData.photos).sort();
-
-            sortedDates.forEach(date => {
-                const photos = photosData.photos[date];
-                const dateDisplay = `${photosData.month}/${date}`;
-                
+            Object.keys(photosData.photos).sort().forEach(day => {
+                const dateStr = `${photosData.month}/${day}`;
                 html += `
                     <div class="date-item">
-                        <div class="date-header" data-date="${date}">
-                            <span class="date-title">${dateDisplay}</span>
+                        <div class="date-header" data-date="${day}">
+                            <span class="date-title">${dateStr}</span>
                             <svg class="date-icon collapsed" viewBox="0 0 12 12" fill="currentColor">
                                 <path d="M6 8.825c-.2 0-.4-.1-.5-.2l-3.3-3.3c-.3-.3-.3-.8 0-1.1.3-.3.8-.3 1.1 0l2.7 2.7 2.7-2.7c.3-.3.8-.3 1.1 0 .3.3.3.8 0 1.1l-3.2 3.2c-.2.2-.4.3-.6.3Z"/>
                             </svg>
                         </div>
-                        <div class="photos-grid" data-date="${date}">
-                            <div class="photos-container" id="photos-${date}">
-                            </div>
+                        <div class="photos-grid" data-date="${day}">
+                            <div class="photos-container" id="photos-${day}"></div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
-
-            galleryContent.innerHTML = html;
+            content.innerHTML = html;
         }
 
-        function toggleDatePhotos(dateHeader) {
-            const date = dateHeader.dataset.date;
-            const photosGrid = document.querySelector(`.photos-grid[data-date="${date}"]`);
-            const photosContainer = document.getElementById(`photos-${date}`);
-            const icon = dateHeader.querySelector('.date-icon');
+        function toggleDatePhotos(header) {
+            const day = header.dataset.date;
+            const grid = document.querySelector(`.photos-grid[data-date="${day}"]`);
+            const container = document.getElementById(`photos-${day}`);
+            const icon = header.querySelector('.date-icon');
+            
+            const isExpanded = grid.classList.contains('expanded');
 
-            if (photosGrid.classList.contains('expanded')) {
-                // 折叠
-                photosGrid.classList.remove('expanded');
-                dateHeader.classList.remove('expanded');
+            if (isExpanded) {
+                grid.classList.remove('expanded');
+                header.classList.remove('expanded');
                 icon.classList.remove('expanded');
                 icon.classList.add('collapsed');
             } else {
-                // 展开
-                photosGrid.classList.add('expanded');
-                dateHeader.classList.add('expanded');
+                grid.classList.add('expanded');
+                header.classList.add('expanded');
                 icon.classList.remove('collapsed');
                 icon.classList.add('expanded');
-
-                if (photosContainer.children.length === 0) {
-                    loadDatePhotos(date, photosContainer);
+                
+                // 懒加载图片 DOM
+                if (container.children.length === 0) {
+                    renderDayImages(day, container);
                 }
             }
         }
 
-        function loadDatePhotos(date, container) {
-            if (!photosData || !photosData.photos[date]) {
-                container.innerHTML = '<div class="empty-state">这一天没有照片</div>';
-                return;
-            }
-
-            const photos = photosData.photos[date];
-            const baseUrl = photosData.base_url
-                .replace('{user_id}', photosData.user_id)
-                .replace('{year}', photosData.year)
-                .replace('{month}', photosData.month)
-                .replace('{day}', date);
+        function renderDayImages(day, container) {
+            const list = photosData.photos[day];
+            if (!list) return;
 
             const useOriginal = document.getElementById('originalImageToggle').checked;
-
             let html = '';
-            photos.forEach(filename => {
-                const fullUrl = baseUrl + filename;
-                const thumbnailUrl = `https://images.weserv.nl/?url=${encodeURIComponent(fullUrl)}&w=300&h=300&output=jpg&q=80&t=square`;
+            
+            list.forEach(file => {
+                // 简单的 URL 替换逻辑
+                let url = photosData.base_url
+                    .replace('{year}', photosData.year)
+                    .replace('{month}', photosData.month)
+                    .replace('{day}', day)
+                    .replace('{user_id}', photosData.user_id) + file;
                 
-                let clickUrl;
-                if (useOriginal) {
-                    clickUrl = fullUrl;
-                } else {
-                    clickUrl = `https://images.weserv.nl/?url=${encodeURIComponent(fullUrl)}&output=jpg&q=80`;
-                }
-                
+                // 缩略图服务 (Images.weserv.nl)
+                const thumb = `https://images.weserv.nl/?url=${encodeURIComponent(url)}&w=300&h=300&output=jpg&q=80&t=square`;
+                const view = useOriginal ? url : `https://images.weserv.nl/?url=${encodeURIComponent(url)}&output=jpg&q=80`;
+
                 html += `
                     <div class="photo-item">
-                        <a href="${clickUrl}" target="_blank">
-                            <img src="${thumbnailUrl}" alt="照片" loading="lazy">
+                        <a href="${view}" target="_blank">
+                            <img src="${thumb}" loading="lazy" alt="">
                         </a>
-                    </div>
-                `;
+                    </div>`;
             });
-
             container.innerHTML = html;
         }
 
         function reloadExpandedPhotos() {
-            const expandedGrids = document.querySelectorAll('.photos-grid.expanded');
-            expandedGrids.forEach(grid => {
-                const date = grid.dataset.date;
-                const photosContainer = document.getElementById(`photos-${date}`);
-                if (photosContainer && photosContainer.children.length > 0) {
-                    loadDatePhotos(date, photosContainer);
-                }
+            document.querySelectorAll('.photos-grid.expanded').forEach(grid => {
+                const day = grid.dataset.date;
+                const container = document.getElementById(`photos-${day}`);
+                if (container) renderDayImages(day, container);
             });
         }
 
-        // ===== 深色模式功能 =====
-
+        // 深色模式
         function initDarkMode() {
-            const darkModeToggle = document.getElementById('darkModeToggle');
-            if (!darkModeToggle) return;
-            
-            // 检查用户之前的选择
-            const savedTheme = localStorage.getItem('theme');
-            
-            if (savedTheme) {
-                // 如果用户之前选择过，使用保存的设置
-                applyTheme(savedTheme);
-                darkModeToggle.checked = savedTheme === 'dark';
+            const toggle = document.getElementById('darkModeToggle');
+            const saved = localStorage.getItem('theme');
+            const sysDark = window.matchMedia('(prefers-color-scheme: dark)');
+
+            const apply = (theme) => {
+                document.documentElement.setAttribute('data-theme', theme);
+                toggle.checked = (theme === 'dark');
+            };
+
+            if (saved) {
+                apply(saved);
             } else {
-                // 否则跟随系统设置
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                const theme = prefersDark ? 'dark' : 'light';
-                applyTheme(theme);
-                darkModeToggle.checked = prefersDark;
+                apply(sysDark.matches ? 'dark' : 'light');
             }
-            
-            // 监听切换按钮
-            darkModeToggle.addEventListener('change', (e) => {
-                const theme = e.target.checked ? 'dark' : 'light';
-                applyTheme(theme);
-                localStorage.setItem('theme', theme);
-            });
-            
-            // 监听系统主题变化（仅当用户未手动设置时）
-            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
-                if (!localStorage.getItem('theme')) {
-                    const theme = e.matches ? 'dark' : 'light';
-                    applyTheme(theme);
-                    darkModeToggle.checked = e.matches;
-                }
+
+            toggle.addEventListener('change', (e) => {
+                const t = e.target.checked ? 'dark' : 'light';
+                apply(t);
+                localStorage.setItem('theme', t);
             });
         }
 
-        // 应用主题
-        function applyTheme(theme) {
-            // 同时设置html和body的data-theme属性
-            document.documentElement.setAttribute('data-theme', theme);
-            document.body.setAttribute('data-theme', theme);
-        }
-
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initGallery);
-        } else {
-            initGallery();
-        }
-        
-        console.log('Gallery script loaded');
+        // 启动
+        document.addEventListener('DOMContentLoaded', initGallery);
     </script>
 </body>
 </html>

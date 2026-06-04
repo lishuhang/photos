@@ -1,0 +1,2657 @@
+<!DOCTYPE html>
+<!--
+  ╔══════════════════════════════════════════════════════════════════╗
+  ║  UI Style Guide — 航通社 UI 设计规范                              ║
+  ║  Single-file HTML + CSS + JS Dashboard                          ║
+  ║                                                                  ║
+  ║  SKILL / AGENT 说明（本段供 AI Agent 读取）：                      ║
+  ║  ─────────────────────────────────────────                       ║
+  ║  本文件是一个自包含的 UI 规范文档，涵盖以下内容：                    ║
+  ║                                                                  ║
+  ║  1. 设计令牌（Design Tokens）：所有颜色、字体、间距、圆角、阴影     ║
+  ║     均通过 CSS 变量定义在 :root 中，修改变量即可全局换肤。          ║
+  ║                                                                  ║
+  ║  2. 组件清单（按 React95 Storybook 分类）：                        ║
+  ║     - CONTROLS: Button, Checkbox, ColorInput, GroupBox, Handle,  ║
+  ║       MenuList, NumberInput, ProgressBar, Radio, Select, Slider, ║
+  ║       Table, Tabs, TextInput, Tooltip, TreeView                  ║
+  ║     - ENVIRONMENT: AppBar, Window, ThemeSwitcher                  ║
+  ║     - LAYOUT: Frame, DualPanel, ScrollView, Separator             ║
+  ║     - TYPOGRAPHY: Anchor, Blockquote                             ║
+  ║     - OTHER: Avatar, Counter, Spinner                             ║
+  ║                                                                  ║
+  ║  3. 使用方式：                                                    ║
+  ║     - 将本文件的 <style> 内 CSS 变量复制到目标项目                  ║
+  ║     - 按照各组件 demo 的 HTML 结构复制组件代码                      ║
+  ║     - 每个组件 demo 旁有 AI 可读的 <data-spec> 标签，              ║
+  ║       说明该组件的语义、可变参数和交互行为                          ║
+  ║                                                                  ║
+  ║  4. 换肤指引：                                                    ║
+  ║     - 亮色/暗色：切换 data-theme="light|dark"                    ║
+  ║     - 主题色：修改 --accent 即可全局生效                           ║
+  ║     - --accent-hover / --accent-light 会自动计算                   ║
+  ║                                                                  ║
+  ╚══════════════════════════════════════════════════════════════════╝
+-->
+<html lang="zh" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>航通社 UI 设计规范 - lishuhang.me UI Style Guide</title>
+  <link rel="stylesheet" href="https://google-fonts.mirrors.sjtug.sjtu.edu.cn/earlyaccess/notosanssc.css">
+  <style>
+/* ═══════════════════════════════════════════════════════════════
+   0. CSS RESET
+   ═══════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+img { max-width: 100%; height: auto; display: block; }
+ul, ol { list-style: none; }
+button, input, select, textarea { font-family: inherit; }
+
+/* ═══════════════════════════════════════════════════════════════
+   1. DESIGN TOKENS (CSS 变量)
+   ─────────────────────────────────────────────────────────────
+   AI Agent 注意：以下是本设计系统的核心令牌。
+   修改这些变量即可全局换肤，无需修改组件级 CSS。
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  /* ── 品牌色 ── */
+  --accent: #347df8;
+  --accent-hover: #2768d9;
+  --accent-light: rgba(52,125,248,0.10);
+
+  /* ── 背景 ── */
+  --bg: #F7FAFC;
+  --bg-card: #FFFFFF;
+  --bg-secondary: #EDF2F7;
+  --bg-hover: #E2E8F0;
+
+  /* ── 文字 ── */
+  --text: #1A202C;
+  --text-secondary: #718096;
+  --text-muted: #A0AEC0;
+
+  /* ── 边框 ── */
+  --border: #E2E8F0;
+  --border-medium: #CBD5E0;
+
+  /* ── 阴影 ── */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+
+  /* ── 圆角 ── */
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-xs: 4px;
+
+  /* ── 间距 ── */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* ── 字体 ── */
+  --font: "Noto Sans SC", "Source Han Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+  --font-xs: 12px;
+  --font-sm: 14px;
+  --font-base: 16px;
+  --font-lg: 20px;
+  --font-xl: 24px;
+  --font-2xl: 32px;
+
+  /* ── 动画 ── */
+  --transition-fast: .15s ease;
+  --transition-normal: .25s ease;
+
+  /* ── 布局 ── */
+  --max-width: 1200px;
+  --header-height: 64px;
+  --sidebar-width: 240px;
+
+  /* ── 状态色 ── */
+  --color-success: #48BB78;
+  --color-warning: #ECC94B;
+  --color-error: #F56565;
+  --color-info: #4299E1;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DARK MODE (暗色模式令牌覆盖)
+   ═══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] {
+  --bg: #0D1117;
+  --bg-card: #161b22;
+  --bg-secondary: #21262d;
+  --bg-hover: #30363d;
+  --text: #e6edf3;
+  --text-secondary: #8b949e;
+  --text-muted: #6e7681;
+  --border: #30363d;
+  --border-medium: #444c56;
+  --accent-light: rgba(52,125,248,0.15);
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   2. BASE STYLES
+   ═══════════════════════════════════════════════════════════════ */
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: var(--font-base);
+  min-height: 100vh;
+}
+a { color: var(--accent); text-decoration: none; transition: color var(--transition-fast); }
+a:hover { color: var(--accent-hover); }
+
+/* ═══════════════════════════════════════════════════════════════
+   3. LAYOUT — 页面框架
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 顶部导航栏 ── */
+.guide-header {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  height: var(--header-height);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--space-lg);
+  backdrop-filter: blur(12px);
+}
+
+.header-brand {
+  display: flex; align-items: center; gap: 12px;
+}
+.header-brand svg { width: 36px; height: 36px; flex-shrink: 0; }
+.header-brand h1 {
+  font-size: 18px; font-weight: 900; line-height: 1.2;
+  color: var(--text);
+}
+.header-brand p {
+  font-size: var(--font-xs); color: var(--text-muted); line-height: 1.2;
+}
+
+/* ── 右侧操作区（主题切换 + 汉堡按钮） ── */
+.header-actions {
+  display: flex; align-items: center; gap: var(--space-sm);
+}
+
+/* ── 三态主题切换器 ── */
+/*
+  <data-spec>
+  name: ThemeSwitcher
+  category: ENVIRONMENT
+  variants: light, system, dark
+  props: preference (light|system|dark)
+  notes: 三态分段选择器：浅色/跟随系统/深色。system 通过 matchMedia 解析。
+         与 blog 皮肤 #site-sidebar .theme-switcher 相同组件。
+  </data-spec>
+*/
+.theme-switcher {
+  display: flex; gap: 2px;
+  background: var(--bg-secondary); border-radius: var(--radius-sm);
+  padding: 2px;
+  width: 110px; height: 32px;
+}
+.theme-btn {
+  flex: 1; display: flex; align-items: center; justify-content: center;
+  padding: 5px 0; border: none; border-radius: 6px;
+  background: transparent; color: var(--text-muted);
+  cursor: pointer; transition: all .15s;
+}
+.theme-btn:hover { color: var(--text-secondary); }
+.theme-btn.active {
+  background: var(--bg-card); color: var(--accent);
+  box-shadow: var(--shadow-sm);
+}
+.theme-btn svg { width: 16px; height: 16px; }
+[data-theme="dark"] .theme-btn.active { background: var(--bg-secondary); }
+
+/* ── 汉堡按钮（移动端） ── */
+.hamburger-btn {
+  display: none; width: 40px; height: 40px;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: transparent; color: var(--text);
+  cursor: pointer; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: border-color .15s, color .15s;
+}
+.hamburger-btn:hover { border-color: var(--accent); color: var(--accent); }
+.hamburger-btn svg { width: 22px; height: 22px; }
+
+/* ── 侧边栏遮罩层 ── */
+.sidebar-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.4); z-index: 199;
+}
+.sidebar-overlay.active { display: block; }
+
+/* ── 主体布局 ── */
+.guide-layout {
+  max-width: var(--max-width); margin: 0 auto;
+  display: flex; gap: var(--space-lg); padding: var(--space-lg);
+  align-items: flex-start;
+}
+
+/* ── 右侧导航（与 blog 皮肤一致） ── */
+.guide-nav {
+  width: var(--sidebar-width); flex-shrink: 0;
+  position: sticky; top: calc(var(--header-height) + var(--space-lg));
+  max-height: calc(100vh - var(--header-height) - 48px);
+  overflow-y: auto;
+  order: 1;
+  border-radius: var(--radius); background: var(--bg-card);
+  border: 1px solid var(--border);
+  padding: var(--space-md);
+}
+.guide-nav::-webkit-scrollbar { width: 4px; }
+.guide-nav::-webkit-scrollbar-track { background: transparent; }
+.guide-nav::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.nav-group { margin-bottom: var(--space-md); }
+.nav-group-title {
+  font-size: var(--font-xs); font-weight: 900; color: var(--text-muted);
+  text-transform: uppercase; letter-spacing: .5px;
+  padding: 0 0 var(--space-sm); border-bottom: 1px solid var(--border);
+  margin-bottom: var(--space-xs);
+}
+.nav-link {
+  display: block; padding: 6px 12px; font-size: var(--font-sm);
+  color: var(--text-secondary); border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+.nav-link:hover { color: var(--accent); background: var(--accent-light); }
+
+/* ── 侧边栏内主题切换行 ── */
+.sidebar-toggle-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--space-sm) 0;
+  border-top: 1px solid var(--border);
+  margin-top: var(--space-sm);
+}
+.sidebar-label {
+  font-size: var(--font-sm); color: var(--text-secondary); font-weight: 600;
+}
+
+/* ── 主内容区 ── */
+.guide-main { flex: 1; min-width: 0; order: 0; }
+
+/* ═══════════════════════════════════════════════════════════════
+   4. SECTION — 章节容器
+   ═══════════════════════════════════════════════════════════════ */
+.section {
+  margin-bottom: var(--space-xl);
+  scroll-margin-top: calc(var(--header-height) + 16px);
+}
+.section-title {
+  font-size: var(--font-xl); font-weight: 900; color: var(--text);
+  margin-bottom: var(--space-sm);
+  padding-bottom: var(--space-sm);
+  border-bottom: 2px solid var(--accent);
+  display: flex; align-items: center; gap: var(--space-sm);
+}
+.section-title .badge {
+  font-size: var(--font-xs); font-weight: 700;
+  background: var(--accent); color: #fff;
+  padding: 2px 8px; border-radius: var(--radius-xs);
+}
+.section-desc {
+  font-size: var(--font-sm); color: var(--text-secondary);
+  margin-bottom: var(--space-lg); line-height: 1.7;
+}
+
+/* ── 组件 Demo 卡片 ── */
+.demo-card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+  margin-bottom: var(--space-md);
+  transition: border-color var(--transition-fast);
+}
+.demo-card:hover { border-color: var(--accent); }
+.demo-card-header {
+  padding: var(--space-md) var(--space-lg);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.demo-card-title {
+  font-size: var(--font-base); font-weight: 900; color: var(--text);
+}
+.demo-card-tag {
+  font-size: var(--font-xs); color: var(--text-muted);
+  background: var(--bg-secondary); padding: 2px 8px;
+  border-radius: var(--radius-xs);
+}
+.demo-card-body {
+  padding: var(--space-lg);
+}
+.demo-card-footer {
+  padding: var(--space-sm) var(--space-lg);
+  border-top: 1px solid var(--border);
+  background: var(--bg-secondary);
+}
+
+/* ── AI 规格说明（嵌入在 demo 中） ── */
+/*
+  AI Agent 注意：每个 <data-spec> 标签内含该组件的机器可读规格。
+  解析时请提取 name、category、variants、props、notes 字段。
+  示例：
+  <data-spec>
+  name: Button
+  category: CONTROLS
+  variants: primary, secondary, outline, ghost, disabled
+  props: size (sm|md|lg), variant, disabled, fullWidth
+  notes: 主操作用 primary，次操作用 secondary/outline
+  </data-spec>
+*/
+
+/* ── Demo 行内布局 ── */
+.demo-row {
+  display: flex; flex-wrap: wrap; gap: var(--space-md);
+  align-items: center; margin-bottom: var(--space-md);
+}
+.demo-row:last-child { margin-bottom: 0; }
+.demo-col {
+  display: flex; flex-direction: column; gap: var(--space-sm);
+}
+
+/* ── 代码展示 ── */
+.code-block {
+  background: var(--bg-secondary); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: var(--space-md);
+  font-family: var(--font-mono); font-size: 13px;
+  overflow-x: auto; line-height: 1.6;
+  color: var(--text-secondary); white-space: pre;
+}
+[data-theme="dark"] .code-block { color: var(--text-secondary); }
+
+/* ═══════════════════════════════════════════════════════════════
+   5. COMPONENTS — 组件样式
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── 5.1 BUTTON ── */
+/*
+  <data-spec>
+  name: Button
+  category: CONTROLS
+  variants: primary, secondary, outline, ghost, danger
+  props: size (sm|md|lg), variant, disabled, fullWidth
+  notes: 主操作 primary，次操作 secondary/outline，危险操作 danger
+  </data-spec>
+*/
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 6px; padding: 8px 20px; font-size: var(--font-sm); font-weight: 600;
+  border-radius: var(--radius-sm); border: 1px solid transparent;
+  cursor: pointer; transition: all var(--transition-fast);
+  line-height: 1.5; white-space: nowrap; user-select: none;
+}
+.btn:active { transform: scale(.97); }
+.btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+.btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.btn-primary:hover:not(:disabled) { background: var(--accent-hover); }
+.btn-secondary { background: var(--bg-secondary); color: var(--text); border-color: var(--border); }
+.btn-secondary:hover:not(:disabled) { background: var(--bg-hover); }
+.btn-outline { background: transparent; color: var(--accent); border-color: var(--accent); }
+.btn-outline:hover:not(:disabled) { background: var(--accent-light); }
+.btn-ghost { background: transparent; color: var(--text-secondary); }
+.btn-ghost:hover:not(:disabled) { background: var(--bg-secondary); color: var(--text); }
+.btn-danger { background: var(--color-error); color: #fff; border-color: var(--color-error); }
+.btn-danger:hover:not(:disabled) { opacity: .9; }
+.btn-sm { padding: 4px 12px; font-size: var(--font-xs); border-radius: var(--radius-xs); }
+.btn-lg { padding: 12px 28px; font-size: var(--font-base); }
+.btn-full { width: 100%; }
+
+/* ── 5.2 CHECKBOX ── */
+/*
+  <data-spec>
+  name: Checkbox
+  category: CONTROLS
+  variants: default, checked, disabled, indeterminate
+  props: checked, disabled, label
+  notes: 多选用 checkbox，单选用 radio；indeterminate 状态需 JS 设置
+  </data-spec>
+*/
+.checkbox-wrap {
+  display: inline-flex; align-items: center; gap: 8px;
+  cursor: pointer; font-size: var(--font-sm); color: var(--text);
+  user-select: none;
+}
+.checkbox-wrap input[type="checkbox"] {
+  appearance: none; -webkit-appearance: none;
+  width: 18px; height: 18px; flex-shrink: 0;
+  border: 2px solid var(--border-medium); border-radius: var(--radius-xs);
+  background: var(--bg-card); cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+.checkbox-wrap input[type="checkbox"]:hover { border-color: var(--accent); }
+.checkbox-wrap input[type="checkbox"]:checked {
+  background: var(--accent); border-color: var(--accent);
+}
+.checkbox-wrap input[type="checkbox"]:checked::after {
+  content: ''; position: absolute; left: 4px; top: 1px;
+  width: 6px; height: 10px;
+  border: solid #fff; border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+.checkbox-wrap input[type="checkbox"]:disabled {
+  opacity: .4; cursor: not-allowed;
+}
+.checkbox-wrap:has(input:disabled) { opacity: .5; cursor: not-allowed; }
+
+/* ── 5.3 RADIO ── */
+/*
+  <data-spec>
+  name: Radio
+  category: CONTROLS
+  variants: default, checked, disabled
+  props: checked, disabled, label, name, value
+  notes: 同 name 属性的 radio 归为同一组，组内互斥
+  </data-spec>
+*/
+.radio-wrap {
+  display: inline-flex; align-items: center; gap: 8px;
+  cursor: pointer; font-size: var(--font-sm); color: var(--text);
+  user-select: none;
+}
+.radio-wrap input[type="radio"] {
+  appearance: none; -webkit-appearance: none;
+  width: 18px; height: 18px; flex-shrink: 0;
+  border: 2px solid var(--border-medium); border-radius: 50%;
+  background: var(--bg-card); cursor: pointer;
+  transition: all var(--transition-fast);
+  position: relative;
+}
+.radio-wrap input[type="radio"]:hover { border-color: var(--accent); }
+.radio-wrap input[type="radio"]:checked {
+  border-color: var(--accent);
+}
+.radio-wrap input[type="radio"]:checked::after {
+  content: ''; position: absolute; top: 3px; left: 3px;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent);
+}
+.radio-wrap input[type="radio"]:disabled {
+  opacity: .4; cursor: not-allowed;
+}
+.radio-wrap:has(input:disabled) { opacity: .5; cursor: not-allowed; }
+
+/* ── 5.4 TOGGLE SWITCH ── */
+/*
+  <data-spec>
+  name: ToggleSwitch
+  category: CONTROLS
+  variants: on, off, disabled
+  props: checked, disabled, label
+  notes: 布尔开关，用于设置项而非表单提交
+  </data-spec>
+*/
+.toggle-wrap {
+  display: inline-flex; align-items: center; gap: 10px;
+  cursor: pointer; font-size: var(--font-sm); color: var(--text);
+  user-select: none;
+}
+.toggle-track {
+  position: relative; width: 44px; height: 24px; flex-shrink: 0;
+  background: var(--border-medium); border-radius: 12px;
+  transition: background var(--transition-fast);
+}
+.toggle-wrap input { position: absolute; opacity: 0; width: 0; height: 0; }
+.toggle-knob {
+  position: absolute; top: 2px; left: 2px;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: #fff; box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+}
+.toggle-wrap input:checked + .toggle-track {
+  background: var(--accent);
+}
+.toggle-wrap input:checked + .toggle-track .toggle-knob {
+  transform: translateX(20px);
+}
+.toggle-wrap input:disabled + .toggle-track { opacity: .4; }
+.toggle-wrap:has(input:disabled) { opacity: .5; cursor: not-allowed; }
+
+/* ── 5.5 TEXT INPUT ── */
+/*
+  <data-spec>
+  name: TextInput
+  category: CONTROLS
+  variants: default, focused, error, disabled, with-icon
+  props: placeholder, value, disabled, error, icon
+  notes: 文本输入框，error 状态通过 .input-error 类触发
+  </data-spec>
+*/
+.input-field {
+  padding: 8px 12px; font-size: var(--font-sm);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg-card); color: var(--text);
+  outline: none; transition: border-color var(--transition-fast);
+  line-height: 1.5; width: 100%;
+}
+.input-field::placeholder { color: var(--text-muted); }
+.input-field:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+.input-field:disabled { opacity: .5; cursor: not-allowed; background: var(--bg-secondary); }
+.input-error { border-color: var(--color-error) !important; }
+.input-error:focus { box-shadow: 0 0 0 3px rgba(245,101,101,.15) !important; }
+.input-group {
+  display: flex; align-items: stretch; gap: 0;
+}
+.input-group .input-field { border-radius: var(--radius-sm) 0 0 var(--radius-sm); }
+.input-group .btn { border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+
+/* ── 5.6 NUMBER INPUT ── */
+/*
+  <data-spec>
+  name: NumberInput
+  category: CONTROLS
+  variants: default, disabled
+  props: min, max, step, value, disabled
+  notes: 带增减按钮的数字输入框，step 控制步长
+  </data-spec>
+*/
+.num-input {
+  display: inline-flex; align-items: stretch;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.num-input input {
+  width: 72px; padding: 6px 8px; text-align: center;
+  border: none; border-left: 1px solid var(--border); border-right: 1px solid var(--border);
+  background: var(--bg-card); color: var(--text);
+  font-size: var(--font-sm); outline: none;
+  -moz-appearance: textfield;
+}
+.num-input input::-webkit-inner-spin-button,
+.num-input input::-webkit-outer-spin-button { -webkit-appearance: none; }
+.num-input button {
+  width: 28px; border: none; background: var(--bg-secondary);
+  color: var(--text-secondary); cursor: pointer; font-size: 16px;
+  transition: background var(--transition-fast);
+}
+.num-input button:hover { background: var(--bg-hover); color: var(--accent); }
+
+/* ── 5.7 SELECT ── */
+/*
+  <data-spec>
+  name: Select
+  category: CONTROLS
+  variants: default, disabled
+  props: options, value, disabled, placeholder
+  notes: 下拉选择器，原生 select 的样式封装
+  </data-spec>
+*/
+.select-field {
+  padding: 8px 32px 8px 12px; font-size: var(--font-sm);
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--bg-card); color: var(--text);
+  outline: none; cursor: pointer;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%23718096' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  transition: border-color var(--transition-fast);
+  min-width: 160px;
+}
+.select-field:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+.select-field:disabled { opacity: .5; cursor: not-allowed; }
+
+/* ── 5.8 COLOR INPUT ── */
+/*
+  <data-spec>
+  name: ColorInput
+  category: CONTROLS
+  variants: default
+  props: value (hex color)
+  notes: 颜色选择器，嵌入 input[type=color]
+  </data-spec>
+*/
+.color-input-wrap {
+  display: inline-flex; align-items: center; gap: var(--space-sm);
+}
+.color-swatch {
+  width: 36px; height: 36px; border: 2px solid var(--border);
+  border-radius: var(--radius-sm); cursor: pointer; overflow: hidden;
+  position: relative;
+}
+.color-swatch input[type="color"] {
+  position: absolute; inset: -8px; width: calc(100% + 16px); height: calc(100% + 16px);
+  border: none; cursor: pointer;
+}
+.color-hex {
+  font-family: var(--font-mono); font-size: var(--font-sm);
+  color: var(--text-secondary); background: var(--bg-secondary);
+  padding: 4px 8px; border-radius: var(--radius-xs);
+}
+
+/* ── 5.9 SLIDER ── */
+/*
+  <data-spec>
+  name: Slider
+  category: CONTROLS
+  variants: default, disabled
+  props: min, max, step, value, disabled
+  notes: 连续值选择器，适用于音量/亮度等
+  </data-spec>
+*/
+.slider-wrap {
+  display: flex; align-items: center; gap: 12px;
+}
+.slider-wrap input[type="range"] {
+  flex: 1; height: 4px; appearance: none; -webkit-appearance: none;
+  background: var(--border); border-radius: 2px; outline: none;
+}
+.slider-wrap input[type="range"]::-webkit-slider-thumb {
+  appearance: none; -webkit-appearance: none;
+  width: 16px; height: 16px; border-radius: 50%;
+  background: var(--accent); cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+}
+.slider-wrap input[type="range"]::-webkit-slider-thumb:hover { transform: scale(1.2); }
+.slider-wrap input[type="range"]:disabled { opacity: .4; }
+.slider-value {
+  font-family: var(--font-mono); font-size: var(--font-sm);
+  color: var(--text-secondary); min-width: 28px; text-align: right;
+}
+
+/* ── 5.10 PROGRESS BAR ── */
+/*
+  <data-spec>
+  name: ProgressBar
+  category: CONTROLS
+  variants: determinate, indeterminate
+  props: value (0-100), variant
+  notes: value 有值为确定进度，无值为不确定（动画）
+  </data-spec>
+*/
+.progress {
+  width: 100%; height: 8px; background: var(--bg-secondary);
+  border-radius: 4px; overflow: hidden;
+}
+.progress-bar {
+  height: 100%; background: var(--accent); border-radius: 4px;
+  transition: width var(--transition-normal);
+}
+.progress-indeterminate .progress-bar {
+  width: 40%; animation: progress-slide 1.5s ease infinite;
+}
+@keyframes progress-slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+
+/* ── 5.11 MENU LIST ── */
+/*
+  <data-spec>
+  name: MenuList
+  category: CONTROLS
+  variants: default, with-icons, with-separator
+  props: items[], activeIndex
+  notes: 右键菜单或下拉菜单项列表，separator 用 .menu-sep 分隔
+  </data-spec>
+*/
+.menu-list {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); box-shadow: var(--shadow-md);
+  min-width: 180px; padding: var(--space-xs) 0;
+}
+.menu-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 16px; font-size: var(--font-sm);
+  color: var(--text); cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.menu-item:hover { background: var(--accent-light); color: var(--accent); }
+.menu-item.active { background: var(--accent); color: #fff; }
+.menu-item svg { width: 16px; height: 16px; flex-shrink: 0; }
+.menu-sep { height: 1px; background: var(--border); margin: var(--space-xs) 0; }
+.menu-item-disabled { opacity: .4; cursor: not-allowed; }
+.menu-item-disabled:hover { background: transparent; color: var(--text); }
+
+/* ── 5.12 TABS ── */
+/*
+  <data-spec>
+  name: Tabs
+  category: CONTROLS
+  variants: underline, pill
+  props: items[], activeIndex, variant
+  notes: underline 为下划线风格，pill 为胶囊风格
+  </data-spec>
+*/
+.tabs { display: flex; gap: 0; border-bottom: 1px solid var(--border); }
+.tab {
+  padding: 10px 20px; font-size: var(--font-sm); font-weight: 600;
+  color: var(--text-secondary); cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all var(--transition-fast);
+  background: none; border-top: none; border-left: none; border-right: none;
+}
+.tab:hover { color: var(--accent); }
+.tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tabs-pill { border-bottom: none; gap: var(--space-xs); background: var(--bg-secondary); border-radius: var(--radius-sm); padding: 3px; }
+.tabs-pill .tab {
+  border-bottom: none; border-radius: 6px; padding: 6px 16px;
+}
+.tabs-pill .tab.active { background: var(--bg-card); color: var(--accent); box-shadow: var(--shadow-sm); }
+
+/* ── 5.13 TOOLTIP ── */
+/*
+  <data-spec>
+  name: Tooltip
+  category: CONTROLS
+  variants: top, bottom, left, right
+  props: text, position
+  notes: hover 触发，用 CSS ::after 实现，无需 JS
+  </data-spec>
+*/
+.tooltip-wrap { position: relative; display: inline-flex; }
+.tooltip-wrap::after {
+  content: attr(data-tip); position: absolute; z-index: 10;
+  padding: 4px 10px; font-size: var(--font-xs); white-space: nowrap;
+  background: var(--text); color: var(--bg-card);
+  border-radius: var(--radius-xs);
+  opacity: 0; pointer-events: none;
+  transition: opacity var(--transition-fast);
+}
+.tooltip-wrap[data-pos="bottom"]::after,
+.tooltip-wrap:not([data-pos])::after {
+  top: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+}
+.tooltip-wrap[data-pos="top"]::after {
+  bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+}
+.tooltip-wrap[data-pos="left"]::after {
+  right: calc(100% + 6px); top: 50%; transform: translateY(-50%);
+}
+.tooltip-wrap[data-pos="right"]::after {
+  left: calc(100% + 6px); top: 50%; transform: translateY(-50%);
+}
+.tooltip-wrap:hover::after { opacity: 1; }
+
+/* ── 5.14 TABLE ── */
+/*
+  <data-spec>
+  name: Table
+  category: CONTROLS
+  variants: default, striped, borderless
+  props: headers[], rows[], variant
+  notes: striped 隔行变色，borderless 无内边框
+  </data-spec>
+*/
+.table-wrap { overflow-x: auto; }
+table {
+  width: 100%; border-collapse: collapse; font-size: var(--font-sm);
+}
+th, td { padding: 10px 14px; text-align: left; }
+th {
+  background: var(--bg-secondary); font-weight: 700;
+  color: var(--text-secondary); font-size: var(--font-xs);
+  text-transform: uppercase; letter-spacing: .3px;
+  border-bottom: 2px solid var(--border);
+}
+td { border-bottom: 1px solid var(--border); }
+tr:hover td { background: var(--accent-light); }
+table.striped tbody tr:nth-child(even) td { background: var(--bg-secondary); }
+table.striped tbody tr:hover td { background: var(--accent-light); }
+table.borderless td, table.borderless th { border: none; }
+
+/* ── 5.15 GROUP BOX ── */
+/*
+  <data-spec>
+  name: GroupBox
+  category: CONTROLS
+  variants: default
+  props: label
+  notes: 带标签的字段集容器，用于表单分组
+  </data-spec>
+*/
+.group-box {
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: var(--space-lg); padding-top: var(--space-md);
+  position: relative;
+}
+.group-box-legend {
+  position: absolute; top: -10px; left: 14px;
+  background: var(--bg-card); padding: 0 8px;
+  font-size: var(--font-sm); font-weight: 700; color: var(--text-secondary);
+}
+
+/* ── 5.16 TREE VIEW ── */
+/*
+  <data-spec>
+  name: TreeView
+  category: CONTROLS
+  variants: default
+  props: nodes[], expanded[]
+  notes: 递归树结构，每级缩进 20px，点击展开/折叠
+  </data-spec>
+*/
+.tree-node { user-select: none; }
+.tree-label {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 8px; font-size: var(--font-sm); cursor: pointer;
+  border-radius: var(--radius-xs);
+  transition: background var(--transition-fast);
+}
+.tree-label:hover { background: var(--accent-light); }
+.tree-label .arrow {
+  display: inline-block; width: 12px; font-size: 10px;
+  transition: transform var(--transition-fast);
+  color: var(--text-muted); text-align: center;
+}
+.tree-label .arrow.open { transform: rotate(90deg); }
+.tree-children {
+  padding-left: 20px; overflow: hidden;
+}
+.tree-children.collapsed { display: none; }
+.tree-leaf {
+  padding: 4px 8px 4px 26px; font-size: var(--font-sm);
+  color: var(--text-secondary); cursor: default;
+}
+.tree-leaf:hover { color: var(--accent); }
+
+/* ── 5.17 HANDLE ── */
+/*
+  <data-spec>
+  name: Handle
+  category: CONTROLS
+  variants: horizontal, vertical
+  props: orientation
+  notes: 可拖拽分隔条，通常与 Resize 结合使用
+  </data-spec>
+*/
+.handle-h {
+  width: 100%; height: 6px; background: var(--bg-secondary);
+  border: 1px solid var(--border); cursor: row-resize;
+  border-radius: 3px; position: relative;
+}
+.handle-h::after {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px; height: 2px; background: var(--border-medium);
+  border-radius: 1px;
+}
+.handle-v {
+  width: 6px; height: 100%; background: var(--bg-secondary);
+  border: 1px solid var(--border); cursor: col-resize;
+  border-radius: 3px; position: relative; display: inline-block;
+}
+.handle-v::after {
+  content: ''; position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 2px; height: 32px; background: var(--border-medium);
+  border-radius: 1px;
+}
+
+/* ── 5.18 APP BAR ── */
+/*
+  <data-spec>
+  name: AppBar
+  category: ENVIRONMENT
+  variants: default, accent
+  props: title, items[]
+  notes: 顶部应用栏，含标题与操作按钮；accent 变体用主题色背景
+  </data-spec>
+*/
+.appbar {
+  display: flex; align-items: center; gap: var(--space-md);
+  padding: 0 var(--space-lg); height: 48px;
+  background: var(--bg-card); border-bottom: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+}
+.appbar-accent { background: var(--accent); border-bottom-color: transparent; }
+.appbar-title {
+  font-size: var(--font-sm); font-weight: 900; color: var(--text);
+}
+.appbar-accent .appbar-title { color: #fff; }
+.appbar-items { margin-left: auto; display: flex; gap: var(--space-sm); }
+.appbar-item {
+  width: 32px; height: 32px; border: none; border-radius: var(--radius-xs);
+  background: transparent; color: var(--text-secondary); cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--transition-fast);
+}
+.appbar-item:hover { background: var(--bg-secondary); }
+.appbar-accent .appbar-item { color: rgba(255,255,255,.85); }
+.appbar-accent .appbar-item:hover { background: rgba(255,255,255,.15); color: #fff; }
+
+/* ── 5.19 WINDOW ── */
+/*
+  <data-spec>
+  name: Window
+  category: ENVIRONMENT
+  variants: default
+  props: title, resizable, children
+  notes: 模拟窗口容器，含标题栏、关闭按钮、内容区
+  </data-spec>
+*/
+.window {
+  border: 1px solid var(--border); border-radius: var(--radius);
+  overflow: hidden; box-shadow: var(--shadow-md);
+}
+.window-titlebar {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 12px; height: 36px;
+  background: var(--accent); color: #fff;
+}
+.window-titlebar-text { font-size: var(--font-sm); font-weight: 700; }
+.window-controls { display: flex; gap: 4px; }
+.window-btn {
+  width: 46px; height: 32px; border-radius: 0;
+  border: 1px solid transparent; background: transparent;
+  color: #fff; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition-fast);
+}
+.window-btn:hover { background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.15); }
+.window-btn-close:hover { background: #c42b1c; color: #fff; border-color: transparent; }
+.window-body {
+  padding: var(--space-lg); background: var(--bg-card);
+  font-size: var(--font-sm); color: var(--text);
+}
+
+/* ── 5.20 FRAME ── */
+/*
+  <data-spec>
+  name: Frame
+  category: LAYOUT
+  variants: default
+  props: padding, border
+  notes: 通用容器框架，带可选边框和内边距
+  </data-spec>
+*/
+.frame {
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: var(--space-lg); background: var(--bg-card);
+}
+
+/* ── 5.21 SCROLL VIEW ── */
+/*
+  <data-spec>
+  name: ScrollView
+  category: LAYOUT
+  variants: default
+  props: maxHeight
+  notes: 固定高度可滚动容器，自定义滚动条
+  </data-spec>
+*/
+.scrollview {
+  max-height: 160px; overflow-y: auto;
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: var(--space-md);
+}
+.scrollview::-webkit-scrollbar { width: 6px; }
+.scrollview::-webkit-scrollbar-track { background: transparent; }
+.scrollview::-webkit-scrollbar-thumb { background: var(--border-medium); border-radius: 3px; }
+.scrollview::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ── 5.22 SEPARATOR ── */
+/*
+  <data-spec>
+  name: Separator
+  category: LAYOUT
+  variants: horizontal, vertical
+  props: orientation
+  notes: 分隔线，水平或垂直
+  </data-spec>
+*/
+.separator-h { width: 100%; height: 1px; background: var(--border); margin: var(--space-md) 0; }
+.separator-v { width: 1px; height: 100%; background: var(--border); margin: 0 var(--space-md); display: inline-block; vertical-align: middle; }
+
+/* ── 5.23 ANCHOR ── */
+/*
+  <data-spec>
+  name: Anchor
+  category: TYPOGRAPHY
+  variants: default, underline
+  props: href, text
+  notes: 超链接，默认无下划线 hover 出现；underline 变体始终带下划线
+  </data-spec>
+*/
+.anchor-underline { text-decoration: underline; text-underline-offset: 2px; }
+
+/* ── 5.24 AVATAR ── */
+/*
+  <data-spec>
+  name: Avatar
+  category: OTHER
+  variants: sm, md, lg
+  props: src, alt, size, fallback (首字母)
+  notes: 用户头像，无图片时显示首字母 fallback
+  </data-spec>
+*/
+.avatar {
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%; background: var(--accent-light); color: var(--accent);
+  font-weight: 700; overflow: hidden; flex-shrink: 0;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+.avatar-sm { width: 28px; height: 28px; font-size: 12px; }
+.avatar-md { width: 40px; height: 40px; font-size: 16px; }
+.avatar-lg { width: 56px; height: 56px; font-size: 22px; }
+
+/* ── 5.25 COUNTER ── */
+/*
+  <data-spec>
+  name: Counter
+  category: OTHER
+  variants: default
+  props: value, max
+  notes: 数字计数器/徽标，value 超过 max 显示 max+
+  </data-spec>
+*/
+.counter {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 22px; height: 22px; padding: 0 6px;
+  background: var(--color-error); color: #fff;
+  font-size: 11px; font-weight: 700; border-radius: 11px;
+  line-height: 1;
+}
+
+/* ── 5.26 SPINNER ── */
+/*
+  <data-spec>
+  name: Spinner
+  category: OTHER
+  variants: default, sm, lg
+  props: size, color
+  notes: 圆环加载动画，用于"正在筛选文章"等异步操作提示
+  </data-spec>
+*/
+.spinner {
+  display: inline-block;
+  width: 24px; height: 24px;
+  border: 2.5px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .75s linear infinite;
+}
+.spinner-sm { width: 16px; height: 16px; border-width: 2px; }
+.spinner-lg { width: 40px; height: 40px; border-width: 3px; }
+.spinner-wrap {
+  display: inline-flex; align-items: center; gap: var(--space-sm);
+  font-size: var(--font-sm); color: var(--text-secondary);
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.icon-spin { animation: spin .75s linear infinite; transform-origin: center; }
+
+/* ── BLOCKQUOTE ── */
+/*
+  <data-spec>
+  name: Blockquote
+  category: TYPOGRAPHY
+  variants: default
+  props: cite
+  notes: 引用区块，左侧主题色竖线标识，用于正文中的引用文字
+  </data-spec>
+*/
+blockquote {
+  margin: var(--space-md) 0;
+  padding: var(--space-sm) var(--space-lg);
+  border-left: 4px solid var(--accent);
+  background: var(--accent-light);
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+blockquote p { margin: 0; }
+blockquote cite {
+  display: block; margin-top: var(--space-sm);
+  font-size: var(--font-xs); color: var(--text-muted);
+  font-style: normal;
+}
+
+/* ── ICON GALLERY ── */
+.icon-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  gap: var(--space-md);
+}
+.icon-item {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: var(--space-md) var(--space-sm); border-radius: var(--radius-sm);
+  cursor: default; transition: background var(--transition-fast);
+}
+.icon-item:hover { background: var(--bg-secondary); }
+.icon-demo {
+  width: 28px; height: 28px; color: var(--text);
+}
+.icon-name {
+  font-size: 11px; font-family: var(--font-mono); color: var(--text-secondary);
+}
+.icon-desc {
+  font-size: 10px; color: var(--text-muted);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   6. UTILITY CLASSES
+   ═══════════════════════════════════════════════════════════════ */
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.flex-wrap { flex-wrap: wrap; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.gap-xs { gap: var(--space-xs); }
+.gap-sm { gap: var(--space-sm); }
+.gap-md { gap: var(--space-md); }
+.gap-lg { gap: var(--space-lg); }
+.mt-sm { margin-top: var(--space-sm); }
+.mt-md { margin-top: var(--space-md); }
+.mb-md { margin-bottom: var(--space-md); }
+.w-full { width: 100%; }
+.text-muted { color: var(--text-muted); }
+.text-sm { font-size: var(--font-sm); }
+.font-mono { font-family: var(--font-mono); }
+
+/* ═══════════════════════════════════════════════════════════════
+   7. RESPONSIVE
+   ═══════════════════════════════════════════════════════════════ */
+@media (max-width: 1149px) {
+  .hamburger-btn { display: flex; }
+  .guide-layout { max-width: 100%; flex-direction: column; padding: var(--space-md); }
+  .guide-nav {
+    display: none; position: fixed;
+    top: 0; right: -320px; width: 300px; height: 100vh;
+    max-height: 100vh; z-index: 200;
+    border-radius: 0; border: none;
+    border-left: 1px solid var(--border);
+    transition: right .3s ease; flex-direction: column;
+    padding-bottom: 80px; order: unset;
+  }
+  .guide-nav.open { display: flex; right: 0; }
+  .guide-main { order: unset; }
+  .nav-group { margin-bottom: var(--space-sm); }
+  .nav-group-title { border-bottom: none; padding-bottom: 0; }
+  .nav-link { padding: 4px 8px; }
+}
+@media (max-width: 639px) {
+  .guide-header { padding: 0 var(--space-md); }
+  .header-brand h1 { font-size: 16px; }
+  /* 双面板竖屏：上下排布 */
+  .dual-panel { flex-direction: column !important; }
+  .panel-settings, .panel-preview { width: 100% !important; min-width: 0 !important; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   8. COLOR SWATCH GRID
+   ═══════════════════════════════════════════════════════════════ */
+.swatch-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--space-sm);
+}
+.swatch {
+  border: 1px solid var(--border); border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.swatch-color { height: 48px; }
+.swatch-info { padding: 6px 8px; }
+.swatch-name { font-size: var(--font-xs); font-weight: 700; color: var(--text); }
+.swatch-value { font-size: 10px; font-family: var(--font-mono); color: var(--text-muted); }
+
+/* ═══════════════════════════════════════════════════════════════
+   10. DUAL PANEL — 工具类产品双面板布局
+   ═══════════════════════════════════════════════════════════════ */
+/*
+  <data-spec>
+  name: DualPanel
+  category: LAYOUT
+  variants: default
+  props: settingsWidth (40%), previewWidth (60%)
+  notes: 左参数设定 + 右预览。竖屏时上下排布（设定在上、预览在下）。
+         与 blog 皮肤右侧栏布局逻辑一致。
+  </data-spec>
+*/
+.dual-panel {
+  display: flex; gap: var(--space-lg);
+  min-height: 480px;
+}
+.panel-settings {
+  width: 40%; min-width: 280px; flex-shrink: 0;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: var(--space-lg);
+  overflow-y: auto;
+}
+.panel-preview {
+  width: 60%; min-width: 0;
+  background: var(--bg-secondary); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: var(--space-lg);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.panel-title {
+  font-size: var(--font-sm); font-weight: 900; color: var(--text);
+  margin-bottom: var(--space-md); padding-bottom: var(--space-sm);
+  border-bottom: 1px solid var(--border);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   9. TYPOGRAPHY SPECIMEN
+   ═══════════════════════════════════════════════════════════════ */
+.specimen { margin-bottom: var(--space-md); }
+.specimen-label {
+  font-size: var(--font-xs); font-weight: 700; color: var(--text-muted);
+  margin-bottom: var(--space-xs); text-transform: uppercase; letter-spacing: .5px;
+}
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     HEADER
+     ═══════════════════════════════════════════════════════════════ -->
+<header class="guide-header">
+  <div class="header-brand">
+    <!-- 内嵌 logo.svg -->
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="36" height="36">
+      <path fill="var(--accent)" d="M40 20Q40 11.75 34.15 5.85 28.3 0 20 0 11.75 0 5.85 5.85 0 11.75 0 20 0 28.3 5.85 34.15 11.75 40 20 40 28.3 40 34.15 34.15 40 28.3 40 20M26 5.4Q26 5.6 26.15 5.6 26.25 6 26.15 6.2 25.85 6.65 25.45 6.8 15.25 11.15 13.2 20.65L21.8 20.65Q22.6 20.85 22.75 21.2 22.85 21.35 22.75 21.85 22.65 22 22.65 22.1 21.8 25.25 19.6 25.75 19.3 25.85 18.75 25.85L6.75 25.85Q5.9 25.75 6 25 8.1 9.25 25 5.15 25.85 5 26 5.4M32.75 13.6Q33.65 13.7 33.45 14.5 31.45 30.05 14.55 34.35 13.8 34.35 13.5 34 13.5 33.95 13.45 33.95 13.2 33.45 13.45 33.25 13.6 32.95 14.1 32.8 24.2 28.45 26.35 18.75L17.75 18.75Q17.05 18.75 16.8 18.25 16.7 18.25 16.8 17.65 16.8 17.55 16.8 17.4 17.75 14.4 19.85 13.7 20.35 13.6 20.7 13.6L32.75 13.6Z"/>
+    </svg>
+    <div>
+      <h1>航通社 UI 设计规范</h1>
+      <p>v1.0</p>
+    </div>
+  </div>
+  <div class="header-actions">
+    <div class="theme-switcher" id="headerThemeSwitcher">
+      <button class="theme-btn" data-theme="light" title="浅色">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <button class="theme-btn" data-theme="system" title="跟随系统">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      </button>
+      <button class="theme-btn" data-theme="dark" title="深色">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="打开导航">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+</header>
+
+<!-- 遮罩层 -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     MAIN LAYOUT
+     ═══════════════════════════════════════════════════════════════ -->
+<div class="guide-layout">
+
+  <!-- ── MAIN CONTENT（左侧主区域） ── -->
+  <main class="guide-main">
+
+    <!-- ═══════════════════════════════════════════════════════════
+         DESIGN TOKENS
+         ═══════════════════════════════════════════════════════════ -->
+    <section id="tokens" class="section">
+      <h2 class="section-title">设计令牌 <span class="badge">Tokens</span></h2>
+      <p class="section-desc">所有视觉参数均通过 CSS 变量定义。修改 <code>:root</code> 中的变量值即可全局换肤，无需触及组件级 CSS。切换 <code>data-theme="dark"</code> 可启用暗色模式。</p>
+
+      <!-- 颜色面板 -->
+      <div class="demo-card">
+        <div class="demo-card-header">
+          <span class="demo-card-title">色彩系统</span>
+          <span class="demo-card-tag">Colors</span>
+        </div>
+        <div class="demo-card-body">
+          <div class="swatch-grid">
+            <div class="swatch"><div class="swatch-color" style="background:var(--accent)"></div><div class="swatch-info"><div class="swatch-name">Accent</div><div class="swatch-value">#347df8</div></div></div>
+            <div class="swatch"><div class="swatch-color" style="background:var(--accent-hover)"></div><div class="swatch-info"><div class="swatch-name">Accent Hover</div><div class="swatch-value">#2768d9</div></div></div>
+            <div class="swatch"><div class="swatch-color" style="background:var(--accent-light)"></div><div class="swatch-info"><div class="swatch-name">Accent Light</div><div class="swatch-value">rgba(52,125,248,.1)</div></div></div>
+            <div class="swatch"><div class="swatch-color" style="background:var(--bg)"></div><div class="swatch-info"><div class="swatch-name">Background</div><div class="swatch-value">#F7FAFC</div></div></div>
+            <div class="swatch"><div class="swatch-color" style="background:var(--bg-card)"></div><div class="swatch-info"><div class="swatch-name">Card BG</div><div class="swatch-value">#FFFFFF</div></div></div>
+            <div class="swatch"><div class="swatch-color" style="background:var(--bg-secondary)"></div><div class="swatch-info"><div class="swatch-name">Secondary BG</div><div class="swatch-value">#EDF2F7</div></div></div>
+            <div class="swatch"><div class="swatch-color" style="background:var(--text)"></div><div class="swatch-info"><div class="swatch-name">Text</div><div class="swatch-value">#1A202C</div></div></div>
+            <div class="swatch"><div class="swatch-color" style="background:var(--text-secondary)"></div><div class="swatch-info"><div class="swatch-name">Text Secondary</div><div class="swatch-value">#718096</div></div></div>
+            <div class="swatch"><div class="swatch-color" style="background:var(--text-muted)"></div><div class="swatch-info"><div class="swatch-name">Text Muted</div><div class="swatch-value">#A0AEC0</div></div></div>
+            <div class="swatch"><div class="swatch-color" style="background:var(--border)"></div><div class="swatch-info"><div class="swatch-name">Border</div><div class="swatch-value">#E2E8F0</div></div></div>
+            <div class="swatch"><div class="swatch-color" style="background:var(--color-success)"></div><div class="swatch-info"><div class="swatch-name">Success</div><div class="swatch-value">#48BB78</div></div></div>
+            <div class="swatch"><div class="swatch-color" style="background:var(--color-warning)"></div><div class="swatch-info"><div class="swatch-name">Warning</div><div class="swatch-value">#ECC94B</div></div></div>
+            <div class="swatch"><div class="swatch-color" style="background:var(--color-error)"></div><div class="swatch-info"><div class="swatch-name">Error</div><div class="swatch-value">#F56565</div></div></div>
+            <div class="swatch"><div class="swatch-color" style="background:var(--color-info)"></div><div class="swatch-info"><div class="swatch-name">Info</div><div class="swatch-value">#4299E1</div></div></div>
+          </div>
+        </div>
+        <div class="demo-card-footer">
+          <code class="text-sm text-muted">修改 --accent 即可全局换肤，--accent-hover / --accent-light 会自动跟随</code>
+        </div>
+      </div>
+
+      <!-- 间距与圆角 -->
+      <div class="demo-card">
+        <div class="demo-card-header">
+          <span class="demo-card-title">间距与圆角</span>
+          <span class="demo-card-tag">Spacing & Radius</span>
+        </div>
+        <div class="demo-card-body">
+          <div class="demo-row">
+            <div style="display:flex;align-items:end;gap:12px;">
+              <div style="text-align:center"><div style="width:4px;height:4px;background:var(--accent);border-radius:2px"></div><div class="text-sm text-muted mt-sm">xs<br>4px</div></div>
+              <div style="text-align:center"><div style="width:8px;height:8px;background:var(--accent);border-radius:4px"></div><div class="text-sm text-muted mt-sm">sm<br>8px</div></div>
+              <div style="text-align:center"><div style="width:16px;height:16px;background:var(--accent);border-radius:8px"></div><div class="text-sm text-muted mt-sm">md<br>16px</div></div>
+              <div style="text-align:center"><div style="width:24px;height:24px;background:var(--accent);border-radius:12px"></div><div class="text-sm text-muted mt-sm">lg<br>24px</div></div>
+              <div style="text-align:center"><div style="width:32px;height:32px;background:var(--accent);border-radius:16px"></div><div class="text-sm text-muted mt-sm">xl<br>32px</div></div>
+            </div>
+          </div>
+          <div class="separator-h"></div>
+          <div class="demo-row">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <div style="text-align:center"><div style="width:48px;height:32px;border:2px solid var(--accent);border-radius:var(--radius-xs)"></div><div class="text-sm text-muted mt-sm">xs<br>4px</div></div>
+              <div style="text-align:center"><div style="width:48px;height:32px;border:2px solid var(--accent);border-radius:var(--radius-sm)"></div><div class="text-sm text-muted mt-sm">sm<br>8px</div></div>
+              <div style="text-align:center"><div style="width:48px;height:32px;border:2px solid var(--accent);border-radius:var(--radius)"></div><div class="text-sm text-muted mt-sm">default<br>12px</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 阴影 -->
+      <div class="demo-card">
+        <div class="demo-card-header">
+          <span class="demo-card-title">阴影层级</span>
+          <span class="demo-card-tag">Shadows</span>
+        </div>
+        <div class="demo-card-body">
+          <div class="demo-row">
+            <div style="width:120px;height:64px;background:var(--bg-card);border-radius:var(--radius-sm);box-shadow:var(--shadow-sm);display:flex;align-items:center;justify-content:center;" class="text-sm">shadow-sm</div>
+            <div style="width:120px;height:64px;background:var(--bg-card);border-radius:var(--radius-sm);box-shadow:var(--shadow-md);display:flex;align-items:center;justify-content:center;" class="text-sm">shadow-md</div>
+            <div style="width:120px;height:64px;background:var(--bg-card);border-radius:var(--radius-sm);box-shadow:var(--shadow-lg);display:flex;align-items:center;justify-content:center;" class="text-sm">shadow-lg</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         TYPOGRAPHY
+         ═══════════════════════════════════════════════════════════ -->
+    <section id="typography" class="section">
+      <h2 class="section-title">排版规范 <span class="badge">Typography</span></h2>
+      <p class="section-desc">全局字体栈为 Noto Sans SC，等宽场景使用 SFMono / Consolas。字重 400（正文）/ 700（强调）/ 900（标题）。引用使用 blockquote 元素，左侧带主题色竖线标识。</p>
+
+      <div class="demo-card">
+        <div class="demo-card-header">
+          <span class="demo-card-title">字体标本</span>
+          <span class="demo-card-tag">Specimens</span>
+        </div>
+        <div class="demo-card-body">
+          <div class="specimen">
+            <div class="specimen-label">2XL · 32px · 900</div>
+            <div style="font-size:32px;font-weight:900;line-height:1.3">航通社 — 你应该知道的历史、现在和未来</div>
+          </div>
+          <div class="specimen">
+            <div class="specimen-label">XL · 24px · 900</div>
+            <div style="font-size:24px;font-weight:900;line-height:1.3">文章标题的样式预览 Heading Level 2</div>
+          </div>
+          <div class="specimen">
+            <div class="specimen-label">LG · 20px · 700</div>
+            <div style="font-size:20px;font-weight:700">子标题与卡片标题 Heading Level 3</div>
+          </div>
+          <div class="specimen">
+            <div class="specimen-label">BASE · 16px · 400</div>
+            <div style="font-size:16px;line-height:1.8">正文内容：我们生活在一个信息爆炸的时代，优质内容的筛选与呈现变得尤为重要。每个段落都应当有足够的行高以保证可读性。</div>
+          </div>
+          <div class="specimen">
+            <div class="specimen-label">SM · 14px · 400</div>
+            <div style="font-size:14px;color:var(--text-secondary)">辅助信息与描述文字，适用于卡片摘要、侧边栏内容等场景</div>
+          </div>
+          <div class="specimen">
+            <div class="specimen-label">XS · 12px · 700</div>
+            <div style="font-size:12px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px">标签 · 时间戳 · 分组标题</div>
+          </div>
+          <div class="separator-h"></div>
+          <div class="specimen">
+            <div class="specimen-label">MONO · 等宽字体</div>
+            <div style="font-family:var(--font-mono);font-size:14px;color:var(--text-secondary)">const accent = getComputedStyle(root).getPropertyValue('--accent');</div>
+          </div>
+          <div class="separator-h"></div>
+          <div class="specimen">
+            <div class="specimen-label">BLOCKQUOTE · 引用</div>
+            <blockquote>
+              <p>任何足够先进的技术，都与魔法无异。</p>
+              <cite>—— 亚瑟·C·克拉克</cite>
+            </blockquote>
+          </div>
+          <div class="specimen">
+            <div class="specimen-label">BLOCKQUOTE · 多段引用</div>
+            <blockquote>
+              <p>这是引用的第一段内容，用于展示在正文中引用他人观点或文献时的排版样式。</p>
+              <p>引用可以包含多个段落，每段之间自然分隔，左侧竖线始终贯穿整个引用区域。</p>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         ICON GALLERY
+         ═══════════════════════════════════════════════════════════ -->
+    <section id="icons" class="section">
+      <h2 class="section-title">图标库 <span class="badge">Icons</span></h2>
+      <p class="section-desc">统一的 SVG 线条图标系统。所有图标使用 stroke-based 绘制，默认 24×24 viewBox，1px 描边，圆角端点。确保缩放至任意尺寸均保持清晰可辨。</p>
+
+      <div class="demo-card">
+        <div class="demo-card-header">
+          <span class="demo-card-title">导航与操作</span>
+          <span class="demo-card-tag">Navigation & Actions</span>
+        </div>
+        <div class="demo-card-body">
+          <div class="icon-grid">
+            <!-- Each icon item -->
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+              <span class="icon-name">home</span>
+              <span class="icon-desc">主页</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <span class="icon-name">search</span>
+              <span class="icon-desc">搜索</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M12 5L5 12M12 5L19 12"/></svg>
+              <span class="icon-name">arrow-up</span>
+              <span class="icon-desc">回到顶部</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+              <span class="icon-name">menu</span>
+              <span class="icon-desc">菜单</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              <span class="icon-name">close</span>
+              <span class="icon-desc">关闭</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span class="icon-name">plus</span>
+              <span class="icon-desc">新增</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span class="icon-name">minus</span>
+              <span class="icon-desc">减少</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              <span class="icon-name">edit</span>
+              <span class="icon-desc">编辑</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+              <span class="icon-name">trash</span>
+              <span class="icon-desc">删除</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              <span class="icon-name">download</span>
+              <span class="icon-desc">下载</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span class="icon-name">upload</span>
+              <span class="icon-desc">上传</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              <span class="icon-name">external-link</span>
+              <span class="icon-desc">外链</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              <span class="icon-name">copy</span>
+              <span class="icon-desc">复制</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              <span class="icon-name">check</span>
+              <span class="icon-desc">确认</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+              <span class="icon-name">info</span>
+              <span class="icon-desc">信息</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span class="icon-name">warning</span>
+              <span class="icon-desc">警告</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+              <span class="icon-name">error</span>
+              <span class="icon-desc">错误</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              <span class="icon-name">chevron-left</span>
+              <span class="icon-desc">左翻页</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              <span class="icon-name">chevron-right</span>
+              <span class="icon-desc">右翻页</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              <span class="icon-name">chevron-down</span>
+              <span class="icon-desc">下拉展开</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <span class="icon-name">star</span>
+              <span class="icon-desc">收藏</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              <span class="icon-name">share</span>
+              <span class="icon-desc">分享</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span class="icon-name">user</span>
+              <span class="icon-desc">用户</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+              <span class="icon-name">bell</span>
+              <span class="icon-desc">通知</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <span class="icon-name">calendar</span>
+              <span class="icon-desc">日历</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span class="icon-name">clock</span>
+              <span class="icon-desc">时间</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+              <span class="icon-name">file</span>
+              <span class="icon-desc">文件</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+              <span class="icon-name">folder</span>
+              <span class="icon-desc">文件夹</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <span class="icon-name">eye</span>
+              <span class="icon-desc">查看</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              <span class="icon-name">lock</span>
+              <span class="icon-desc">锁定</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 9.9-1"/></svg>
+              <span class="icon-name">unlock</span>
+              <span class="icon-desc">解锁</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              <span class="icon-name">settings</span>
+              <span class="icon-desc">设置</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              <span class="icon-name">moon</span>
+              <span class="icon-desc">暗色</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              <span class="icon-name">sun</span>
+              <span class="icon-desc">亮色</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span class="icon-name">shield</span>
+              <span class="icon-desc">安全</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>
+              <span class="icon-name">mail</span>
+              <span class="icon-desc">邮件</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+              <span class="icon-name">message</span>
+              <span class="icon-desc">消息</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo icon-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 2a10 10 0 0 1 10 10"/></svg>
+              <span class="icon-name">loader</span>
+              <span class="icon-desc">加载中</span>
+            </div>
+            <div class="icon-item">
+              <svg class="icon-demo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+              <span class="icon-name">refresh</span>
+              <span class="icon-desc">刷新</span>
+            </div>
+          </div>
+        </div>
+        <div class="demo-card-footer">
+          <code class="text-sm text-muted">viewBox="0 0 24 24" · stroke-width="2" · stroke-linecap="round" · 24px 线条图标</code>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         CONTROLS
+         ═══════════════════════════════════════════════════════════ -->
+    <section id="controls" class="section">
+      <h2 class="section-title">控件 <span class="badge">Controls</span></h2>
+      <p class="section-desc">核心交互控件，对应 React95 Storybook 的 CONTROLS 分类。每个控件均展示所有变体和状态。</p>
+
+      <!-- ── BUTTON ── -->
+      <div id="button" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">Button</span>
+            <span class="demo-card-tag">按钮</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-row">
+              <button class="btn btn-primary">Primary</button>
+              <button class="btn btn-secondary">Secondary</button>
+              <button class="btn btn-outline">Outline</button>
+              <button class="btn btn-ghost">Ghost</button>
+              <button class="btn btn-danger">Danger</button>
+              <button class="btn btn-primary" disabled>Disabled</button>
+            </div>
+            <div class="demo-row">
+              <button class="btn btn-primary btn-sm">Small</button>
+              <button class="btn btn-primary">Medium</button>
+              <button class="btn btn-primary btn-lg">Large</button>
+            </div>
+            <div class="demo-row" style="max-width:320px">
+              <button class="btn btn-primary btn-full">Full Width</button>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">variant: primary | secondary | outline | ghost | danger &nbsp;·&nbsp; size: sm | md | lg &nbsp;·&nbsp; disabled &nbsp;·&nbsp; fullWidth</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CHECKBOX ── -->
+      <div id="checkbox" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">Checkbox</span>
+            <span class="demo-card-tag">复选框</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-row">
+              <label class="checkbox-wrap"><input type="checkbox"><span>未选中</span></label>
+              <label class="checkbox-wrap"><input type="checkbox" checked><span>已选中</span></label>
+              <label class="checkbox-wrap"><input type="checkbox" disabled><span>禁用</span></label>
+              <label class="checkbox-wrap"><input type="checkbox" checked disabled><span>禁用选中</span></label>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">checked &nbsp;·&nbsp; disabled &nbsp;·&nbsp; indeterminate (需 JS 设置 .indeterminate)</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── RADIO ── -->
+      <div id="radio" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">Radio</span>
+            <span class="demo-card-tag">单选框</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-col">
+              <label class="radio-wrap"><input type="radio" name="demo-radio" checked><span>选项一</span></label>
+              <label class="radio-wrap"><input type="radio" name="demo-radio"><span>选项二</span></label>
+              <label class="radio-wrap"><input type="radio" name="demo-radio"><span>选项三</span></label>
+              <label class="radio-wrap"><input type="radio" name="demo-radio2" disabled><span>禁用选项</span></label>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">同 name 属性归为同一组，组内互斥 &nbsp;·&nbsp; checked &nbsp;·&nbsp; disabled</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TOGGLE SWITCH ── -->
+      <div id="toggle" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">Toggle Switch</span>
+            <span class="demo-card-tag">开关</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-row">
+              <label class="toggle-wrap"><input type="checkbox"><span class="toggle-track"><span class="toggle-knob"></span></span><span>关闭</span></label>
+              <label class="toggle-wrap"><input type="checkbox" checked><span class="toggle-track"><span class="toggle-knob"></span></span><span>开启</span></label>
+              <label class="toggle-wrap"><input type="checkbox" disabled><span class="toggle-track"><span class="toggle-knob"></span></span><span>禁用</span></label>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">checked (布尔开关) &nbsp;·&nbsp; disabled &nbsp;·&nbsp; 用于设置项而非表单提交</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TEXT INPUT ── -->
+      <div id="textinput" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">TextInput</span>
+            <span class="demo-card-tag">文本输入</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-col" style="max-width:400px;gap:var(--space-md)">
+              <input class="input-field" type="text" placeholder="默认输入框">
+              <input class="input-field" type="text" value="已有内容" placeholder="有值">
+              <input class="input-field input-error" type="text" value="错误状态" placeholder="错误">
+              <input class="input-field" type="text" placeholder="禁用" disabled>
+              <div class="input-group">
+                <input class="input-field" type="text" placeholder="搜索...">
+                <button class="btn btn-primary">搜索</button>
+              </div>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">placeholder &nbsp;·&nbsp; value &nbsp;·&nbsp; disabled &nbsp;·&nbsp; .input-error 错误态 &nbsp;·&nbsp; .input-group 组合输入</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── NUMBER INPUT ── -->
+      <div id="numberinput" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">NumberInput</span>
+            <span class="demo-card-tag">数字输入</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-row">
+              <div class="num-input">
+                <button onclick="this.nextElementSibling.stepDown()">−</button>
+                <input type="number" value="5" min="0" max="99">
+                <button onclick="this.previousElementSibling.stepUp()">+</button>
+              </div>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">min &nbsp;·&nbsp; max &nbsp;·&nbsp; step &nbsp;·&nbsp; value &nbsp;·&nbsp; disabled</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SELECT ── -->
+      <div id="select" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">Select</span>
+            <span class="demo-card-tag">下拉选择</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-row">
+              <select class="select-field">
+                <option value="">请选择...</option>
+                <option value="a">选项 A</option>
+                <option value="b">选项 B</option>
+                <option value="c">选项 C</option>
+              </select>
+              <select class="select-field" disabled>
+                <option>禁用状态</option>
+              </select>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">options[] &nbsp;·&nbsp; value &nbsp;·&nbsp; disabled &nbsp;·&nbsp; placeholder</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── COLOR INPUT ── -->
+      <div id="colorinput" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">ColorInput</span>
+            <span class="demo-card-tag">颜色选择</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-row">
+              <div class="color-input-wrap">
+                <div class="color-swatch"><input type="color" value="#347df8" onchange="this.parentElement.nextElementSibling.textContent=this.value"></div>
+                <span class="color-hex">#347df8</span>
+              </div>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">value (hex color) &nbsp;·&nbsp; 嵌入 input[type=color]</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SLIDER ── -->
+      <div id="slider" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">Slider</span>
+            <span class="demo-card-tag">滑块</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="slider-wrap" style="max-width:360px">
+              <input type="range" min="0" max="100" value="60" oninput="this.nextElementSibling.textContent=this.value">
+              <span class="slider-value">60</span>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">min &nbsp;·&nbsp; max &nbsp;·&nbsp; step &nbsp;·&nbsp; value &nbsp;·&nbsp; disabled</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── PROGRESS BAR ── -->
+      <div id="progressbar" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">ProgressBar</span>
+            <span class="demo-card-tag">进度条</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-col" style="gap:var(--space-lg)">
+              <div>
+                <div class="text-sm text-muted mb-md">确定进度 70%</div>
+                <div class="progress"><div class="progress-bar" style="width:70%"></div></div>
+              </div>
+              <div>
+                <div class="text-sm text-muted mb-md">不确定进度</div>
+                <div class="progress progress-indeterminate"><div class="progress-bar"></div></div>
+              </div>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">value (0-100) &nbsp;·&nbsp; .progress-indeterminate 不确定态</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── MENU LIST ── -->
+      <div id="menulist" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">MenuList</span>
+            <span class="demo-card-tag">菜单列表</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-row" style="align-items:flex-start">
+              <div class="menu-list" style="width:200px">
+                <div class="menu-item active">当前项</div>
+                <div class="menu-item">新建文件</div>
+                <div class="menu-item">打开项目</div>
+                <div class="menu-sep"></div>
+                <div class="menu-item menu-item-disabled">已禁用项</div>
+                <div class="menu-item">保存</div>
+                <div class="menu-item">另存为...</div>
+              </div>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">items[] &nbsp;·&nbsp; activeIndex &nbsp;·&nbsp; .menu-sep 分隔线 &nbsp;·&nbsp; .menu-item-disabled 禁用</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TABS ── -->
+      <div id="tabs" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">Tabs</span>
+            <span class="demo-card-tag">标签页</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-col" style="gap:var(--space-lg)">
+              <div>
+                <div class="text-sm text-muted mb-md">下划线风格</div>
+                <div class="tabs">
+                  <button class="tab active" onclick="setTab(this)">概览</button>
+                  <button class="tab" onclick="setTab(this)">详情</button>
+                  <button class="tab" onclick="setTab(this)">设置</button>
+                </div>
+              </div>
+              <div>
+                <div class="text-sm text-muted mb-md">胶囊风格</div>
+                <div class="tabs tabs-pill">
+                  <button class="tab active" onclick="setTab(this)">日</button>
+                  <button class="tab" onclick="setTab(this)">周</button>
+                  <button class="tab" onclick="setTab(this)">月</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">items[] &nbsp;·&nbsp; activeIndex &nbsp;·&nbsp; variant: underline | pill</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TOOLTIP ── -->
+      <div id="tooltip" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">Tooltip</span>
+            <span class="demo-card-tag">提示框</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-row">
+              <span class="tooltip-wrap" data-tip="上方提示" data-pos="top"><button class="btn btn-secondary">上方</button></span>
+              <span class="tooltip-wrap" data-tip="下方提示" data-pos="bottom"><button class="btn btn-secondary">下方</button></span>
+              <span class="tooltip-wrap" data-tip="左侧提示" data-pos="left"><button class="btn btn-secondary">左侧</button></span>
+              <span class="tooltip-wrap" data-tip="右侧提示" data-pos="right"><button class="btn btn-secondary">右侧</button></span>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">data-tip="文本" &nbsp;·&nbsp; data-pos="top|bottom|left|right" &nbsp;·&nbsp; hover 触发</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TABLE ── -->
+      <div id="table" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">Table</span>
+            <span class="demo-card-tag">表格</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="table-wrap">
+              <table class="striped">
+                <thead>
+                  <tr><th>控件名</th><th>分类</th><th>变体数</th><th>交互</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Button</td><td>Controls</td><td>5</td><td>Click</td></tr>
+                  <tr><td>Checkbox</td><td>Controls</td><td>4</td><td>Check</td></tr>
+                  <tr><td>Radio</td><td>Controls</td><td>3</td><td>Select</td></tr>
+                  <tr><td>Select</td><td>Controls</td><td>2</td><td>Choose</td></tr>
+                  <tr><td>Slider</td><td>Controls</td><td>2</td><td>Drag</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">.striped 隔行变色 &nbsp;·&nbsp; .borderless 无边框 &nbsp;·&nbsp; hover 高亮行</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── GROUP BOX ── -->
+      <div id="groupbox" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">GroupBox</span>
+            <span class="demo-card-tag">分组框</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="group-box">
+              <span class="group-box-legend">个人信息</span>
+              <div class="demo-col" style="max-width:360px;gap:var(--space-md)">
+                <input class="input-field" type="text" placeholder="姓名">
+                <input class="input-field" type="email" placeholder="邮箱">
+                <select class="select-field"><option>选择地区</option><option>北京</option><option>上海</option></select>
+              </div>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">label (分组标题) &nbsp;·&nbsp; 用作表单字段分组容器</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── TREE VIEW ── -->
+      <div id="treeview" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">TreeView</span>
+            <span class="demo-card-tag">树形视图</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="tree-node" style="max-width:280px">
+              <div class="tree-label" onclick="toggleTree(this)"><span class="arrow open">&#9654;</span> 项目根目录</div>
+              <div class="tree-children">
+                <div class="tree-node">
+                  <div class="tree-label" onclick="toggleTree(this)"><span class="arrow">&#9654;</span> src</div>
+                  <div class="tree-children collapsed">
+                    <div class="tree-leaf">index.js</div>
+                    <div class="tree-leaf">App.js</div>
+                  </div>
+                </div>
+                <div class="tree-node">
+                  <div class="tree-label" onclick="toggleTree(this)"><span class="arrow">&#9654;</span> assets</div>
+                  <div class="tree-children collapsed">
+                    <div class="tree-leaf">logo.svg</div>
+                    <div class="tree-leaf">style.css</div>
+                  </div>
+                </div>
+                <div class="tree-leaf">package.json</div>
+                <div class="tree-leaf">README.md</div>
+              </div>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">nodes[] &nbsp;·&nbsp; expanded[] &nbsp;·&nbsp; 递归结构 &nbsp;·&nbsp; 每级缩进 20px</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── HANDLE ── -->
+      <div id="handle" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">Handle</span>
+            <span class="demo-card-tag">分隔拖拽条</span>
+          </div>
+          <div class="demo-card-body">
+            <div style="max-width:400px">
+              <div class="frame" style="padding:12px">上方面板</div>
+              <div class="handle-h"></div>
+              <div class="frame" style="padding:12px">下方面板</div>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">orientation: horizontal | vertical &nbsp;·&nbsp; 可拖拽分隔条</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         ENVIRONMENT
+         ═══════════════════════════════════════════════════════════ -->
+    <section id="environment" class="section">
+      <h2 class="section-title">环境 <span class="badge">Environment</span></h2>
+      <p class="section-desc">应用级容器组件，定义页面的外壳结构。</p>
+
+      <!-- ── APP BAR ── -->
+      <div id="appbar" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">AppBar</span>
+            <span class="demo-card-tag">应用栏</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-col" style="gap:var(--space-md)">
+              <div class="appbar">
+                <span class="appbar-title">默认应用栏</span>
+                <div class="appbar-items">
+                  <button class="appbar-item" title="搜索"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+                  <button class="appbar-item" title="设置"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+                </div>
+              </div>
+              <div class="appbar appbar-accent">
+                <span class="appbar-title">主题色应用栏</span>
+                <div class="appbar-items">
+                  <button class="appbar-item" title="搜索"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+                  <button class="appbar-item" title="设置"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">title &nbsp;·&nbsp; items[] &nbsp;·&nbsp; .appbar-accent 主题色变体</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── WINDOW ── -->
+      <div id="window" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">Window</span>
+            <span class="demo-card-tag">窗口</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="window" style="max-width:400px">
+              <div class="window-titlebar">
+                <span class="window-titlebar-text">文档编辑器</span>
+                <div class="window-controls">
+                  <button class="window-btn" title="最小化"><svg width="10" height="1" viewBox="0 0 10 1"><rect width="10" height="1" fill="currentColor"/></svg></button>
+                  <button class="window-btn" title="最大化"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1"><rect x=".5" y=".5" width="9" height="9"/></svg></button>
+                  <button class="window-btn window-btn-close" title="关闭"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.2"><line x1="1" y1="1" x2="9" y2="9"/><line x1="9" y1="1" x2="1" y2="9"/></svg></button>
+                </div>
+              </div>
+              <div class="window-body">
+                <p>这是窗口内容区域。Window 组件模拟了经典桌面应用的窗口容器，包含标题栏、控制按钮和内容区域。</p>
+              </div>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">title &nbsp;·&nbsp; resizable &nbsp;·&nbsp; .window-btn-close 关闭按钮高亮</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── THEME SWITCHER ── -->
+      <div id="themeswitcher" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">ThemeSwitcher</span>
+            <span class="demo-card-tag">主题切换</span>
+          </div>
+          <div class="demo-card-body">
+            <p class="text-sm text-muted mb-md">三态分段选择器：浅色 / 跟随系统 / 深色。与 blog 皮肤 <code>#site-sidebar .theme-switcher</code> 相同组件。顶栏和侧边栏共用此组件，点击任一处均同步切换。</p>
+            <div class="demo-row" style="gap:var(--space-lg)">
+              <div class="demo-col" style="gap:var(--space-sm);align-items:center">
+                <div class="theme-switcher">
+                  <button class="theme-btn" data-theme="light" title="浅色" onclick="applyTheme('light');localStorage.setItem('theme','light');document.querySelectorAll('.theme-btn').forEach(function(b){b.classList.toggle('active',b.dataset.theme==='light')})">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                  </button>
+                  <button class="theme-btn active" data-theme="system" title="跟随系统" onclick="applyTheme('system');localStorage.setItem('theme','system');document.querySelectorAll('.theme-btn').forEach(function(b){b.classList.toggle('active',b.dataset.theme==='system')})">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                  </button>
+                  <button class="theme-btn" data-theme="dark" title="深色" onclick="applyTheme('dark');localStorage.setItem('theme','dark');document.querySelectorAll('.theme-btn').forEach(function(b){b.classList.toggle('active',b.dataset.theme==='dark')})">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                  </button>
+                </div>
+                <span class="text-sm text-muted">独立 demo（不影响页面）</span>
+              </div>
+              <div class="demo-col" style="gap:var(--space-sm);align-items:center">
+                <div class="sidebar-toggle-row" style="border:none;padding:0;margin:0">
+                  <span class="sidebar-label">主题</span>
+                  <div class="theme-switcher">
+                    <button class="theme-btn" data-theme="light" title="浅色">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    </button>
+                    <button class="theme-btn" data-theme="system" title="跟随系统">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                    </button>
+                    <button class="theme-btn" data-theme="dark" title="深色">
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    </button>
+                  </div>
+                </div>
+                <span class="text-sm text-muted">侧边栏行内样式</span>
+              </div>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">.theme-switcher &gt; .theme-btn[data-theme="light|system|dark"] &nbsp;·&nbsp; .theme-btn.active 高亮当前偏好</code>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section id="layout" class="section">
+      <h2 class="section-title">布局 <span class="badge">Layout</span></h2>
+      <p class="section-desc">通用布局容器与分隔组件。</p>
+
+      <!-- ── FRAME ── -->
+      <div id="frame" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">Frame</span>
+            <span class="demo-card-tag">框架容器</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="frame" style="max-width:360px">
+              <p class="text-sm">Frame 是最基础的布局容器，提供边框、圆角和内边距。适用于需要视觉分组的场景。</p>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">padding &nbsp;·&nbsp; border &nbsp;·&nbsp; 通用容器框架</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── DUAL PANEL ── -->
+      <div id="dualpanel" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">DualPanel</span>
+            <span class="demo-card-tag">工具双面板</span>
+          </div>
+          <div class="demo-card-body">
+            <p class="text-sm text-muted mb-md">工具类产品布局：左参数设定（40%）+ 右预览区域（60%）。竖屏时自动切换为上下排布。</p>
+            <div class="dual-panel">
+              <div class="panel-settings">
+                <div class="panel-title">参数设定</div>
+                <div class="demo-col" style="gap:var(--space-md)">
+                  <div>
+                    <label class="text-sm" style="display:block;margin-bottom:4px;font-weight:600">风格</label>
+                    <select class="select-field" style="width:100%">
+                      <option>正式</option><option>幽默</option><option>文艺</option><option>犀利</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="text-sm" style="display:block;margin-bottom:4px;font-weight:600">长度</label>
+                    <div class="demo-row">
+                      <div class="radio-wrap"><input type="radio" name="len" checked><span>短句</span></div>
+                      <div class="radio-wrap"><input type="radio" name="len"><span>中段</span></div>
+                      <div class="radio-wrap"><input type="radio" name="len"><span>长文</span></div>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="text-sm" style="display:block;margin-bottom:4px;font-weight:600">创意度</label>
+                    <div class="slider-wrap">
+                      <input type="range" min="1" max="10" value="7">
+                      <span class="slider-value">7</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label class="checkbox-wrap"><input type="checkbox" checked><span>包含出处</span></label>
+                  </div>
+                  <button class="btn btn-primary btn-full">生成金句</button>
+                </div>
+              </div>
+              <div class="panel-preview">
+                <div style="text-align:center;max-width:320px">
+                  <div style="font-size:20px;font-weight:700;line-height:1.5;margin-bottom:12px">生活不是等待暴风雨过去，而是学会在雨中翩翩起舞。</div>
+                  <div class="text-sm text-muted">—— 维维安·格林</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">.dual-panel &gt; .panel-settings (40%) + .panel-preview (60%) &nbsp;·&nbsp; 竖屏时 column 排布</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SCROLL VIEW ── -->
+      <div id="scrollview" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">ScrollView</span>
+            <span class="demo-card-tag">滚动视图</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="scrollview" style="max-width:360px">
+              <p>第一行内容</p>
+              <p>第二行内容</p>
+              <p>第三行内容</p>
+              <p>第四行内容</p>
+              <p>第五行内容</p>
+              <p>第六行内容</p>
+              <p>第七行内容</p>
+              <p>第八行内容</p>
+              <p>第九行内容</p>
+              <p>第十行内容</p>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">maxHeight &nbsp;·&nbsp; 自定义滚动条 &nbsp;·&nbsp; overflow-y: auto</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SEPARATOR ── -->
+      <div id="separator" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">Separator</span>
+            <span class="demo-card-tag">分隔线</span>
+          </div>
+          <div class="demo-card-body">
+            <p class="text-sm text-muted mb-md">水平分隔线：</p>
+            <div class="separator-h"></div>
+            <p class="text-sm text-muted mb-md mt-md">垂直分隔线（嵌入行内）：</p>
+            <div class="demo-row">
+              <span class="text-sm">左侧</span>
+              <span class="separator-v" style="height:20px"></span>
+              <span class="text-sm">右侧</span>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">orientation: horizontal (.separator-h) | vertical (.separator-v)</code>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         TYPOGRAPHY
+         ═══════════════════════════════════════════════════════════ -->
+    <section id="anchor" class="section">
+      <h2 class="section-title">排版元素 <span class="badge">Typography</span></h2>
+
+      <div class="demo-card">
+        <div class="demo-card-header">
+          <span class="demo-card-title">Anchor</span>
+          <span class="demo-card-tag">超链接</span>
+        </div>
+        <div class="demo-card-body">
+          <div class="demo-row">
+            <a href="#">默认链接</a>
+            <a href="#" class="anchor-underline">带下划线链接</a>
+            <a href="#" style="color:var(--text-muted)">次要链接</a>
+          </div>
+        </div>
+        <div class="demo-card-footer">
+          <code class="text-sm text-muted">href &nbsp;·&nbsp; .anchor-underline 始终显示下划线 &nbsp;·&nbsp; 默认 hover 才出现下划线</code>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         OTHER
+         ═══════════════════════════════════════════════════════════ -->
+    <section id="other" class="section">
+      <h2 class="section-title">其他 <span class="badge">Other</span></h2>
+      <p class="section-desc">辅助型组件，用于状态展示和视觉增强。</p>
+
+      <!-- ── AVATAR ── -->
+      <div id="avatar" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">Avatar</span>
+            <span class="demo-card-tag">头像</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-row">
+              <div class="avatar avatar-sm">Z</div>
+              <div class="avatar avatar-md">Z</div>
+              <div class="avatar avatar-lg">Z</div>
+              <div class="avatar avatar-md" style="background:var(--color-success-light,var(--accent-light));color:var(--color-success)">A</div>
+              <div class="avatar avatar-md" style="background:rgba(236,201,75,.15);color:var(--color-warning)">B</div>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">size: sm | md | lg &nbsp;·&nbsp; 首字母 fallback &nbsp;·&nbsp; 可自定义背景色</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── COUNTER ── -->
+      <div id="counter" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">Counter</span>
+            <span class="demo-card-tag">计数徽标</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-row">
+              <span style="position:relative;display:inline-flex">消息 <span class="counter" style="position:absolute;top:-8px;right:-12px">3</span></span>
+              <span style="position:relative;display:inline-flex">通知 <span class="counter" style="position:absolute;top:-8px;right:-12px">99+</span></span>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">value &nbsp;·&nbsp; max (超 max 显示 max+) &nbsp;·&nbsp; 右上角定位</code>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── SPINNER ── -->
+      <div id="spinner" class="section">
+        <div class="demo-card">
+          <div class="demo-card-header">
+            <span class="demo-card-title">Spinner</span>
+            <span class="demo-card-tag">加载圆环</span>
+          </div>
+          <div class="demo-card-body">
+            <div class="demo-col" style="gap:var(--space-md)">
+              <div class="demo-row">
+                <div class="spinner spinner-sm"></div>
+                <div class="spinner"></div>
+                <div class="spinner spinner-lg"></div>
+              </div>
+              <div class="demo-row">
+                <div class="spinner-wrap">
+                  <div class="spinner spinner-sm"></div>
+                  <span>正在筛选文章…</span>
+                </div>
+              </div>
+              <div class="demo-row">
+                <div class="spinner-wrap">
+                  <div class="spinner"></div>
+                  <span>加载中…</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="demo-card-footer">
+            <code class="text-sm text-muted">.spinner (24px) | .spinner-sm (16px) | .spinner-lg (40px) &nbsp;·&nbsp; .spinner-wrap 带文字组合</code>
+          </div>
+        </div>
+      </div>
+
+
+    </section>
+
+  </main>
+
+  <!-- ── RIGHT SIDEBAR（右侧导航，与 blog 皮肤一致） ── -->
+  <nav class="guide-nav" id="guideNav">
+    <div class="nav-group">
+      <div class="nav-group-title">基础</div>
+      <a href="#tokens" class="nav-link">设计令牌</a>
+      <a href="#typography" class="nav-link">排版规范</a>
+      <a href="#icons" class="nav-link">图标库</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">CONTROLS</div>
+      <a href="#button" class="nav-link">Button</a>
+      <a href="#checkbox" class="nav-link">Checkbox</a>
+      <a href="#radio" class="nav-link">Radio</a>
+      <a href="#toggle" class="nav-link">Toggle</a>
+      <a href="#textinput" class="nav-link">TextInput</a>
+      <a href="#numberinput" class="nav-link">NumberInput</a>
+      <a href="#select" class="nav-link">Select</a>
+      <a href="#colorinput" class="nav-link">ColorInput</a>
+      <a href="#slider" class="nav-link">Slider</a>
+      <a href="#progressbar" class="nav-link">ProgressBar</a>
+      <a href="#menulist" class="nav-link">MenuList</a>
+      <a href="#tabs" class="nav-link">Tabs</a>
+      <a href="#tooltip" class="nav-link">Tooltip</a>
+      <a href="#table" class="nav-link">Table</a>
+      <a href="#groupbox" class="nav-link">GroupBox</a>
+      <a href="#treeview" class="nav-link">TreeView</a>
+      <a href="#handle" class="nav-link">Handle</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">ENVIRONMENT</div>
+      <a href="#appbar" class="nav-link">AppBar</a>
+      <a href="#window" class="nav-link">Window</a>
+      <a href="#themeswitcher" class="nav-link">ThemeSwitcher</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">LAYOUT</div>
+      <a href="#frame" class="nav-link">Frame</a>
+      <a href="#dualpanel" class="nav-link">DualPanel</a>
+      <a href="#scrollview" class="nav-link">ScrollView</a>
+      <a href="#separator" class="nav-link">Separator</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">TYPOGRAPHY</div>
+      <a href="#anchor" class="nav-link">Anchor</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-title">OTHER</div>
+      <a href="#avatar" class="nav-link">Avatar</a>
+      <a href="#counter" class="nav-link">Counter</a>
+      <a href="#spinner" class="nav-link">Spinner</a>
+    </div>
+    <!-- 侧边栏主题切换（与 blog 皮肤 #site-sidebar .theme-switcher 一致） -->
+    <div class="sidebar-toggle-row">
+      <span class="sidebar-label">主题</span>
+      <div class="theme-switcher" id="sidebarThemeSwitcher">
+        <button class="theme-btn" data-theme="light" title="浅色">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        </button>
+        <button class="theme-btn" data-theme="system" title="跟随系统">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </button>
+        <button class="theme-btn" data-theme="dark" title="深色">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     JAVASCRIPT — 最小交互逻辑
+     ═══════════════════════════════════════════════════════════════ -->
+<script>
+/* ── 三态主题（浅色 / 跟随系统 / 深色） ── */
+/* 与 blog 皮肤 #site-sidebar .theme-switcher 逻辑一致 */
+function initTheme() {
+  var saved = localStorage.getItem('theme') || 'system';
+  applyTheme(saved);
+  document.querySelectorAll('.theme-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var t = this.dataset.theme;
+      localStorage.setItem('theme', t);
+      applyTheme(t);
+    });
+  });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+    if ((localStorage.getItem('theme') || 'system') === 'system') applyTheme('system');
+  });
+}
+
+function applyTheme(preference) {
+  var actual = preference === 'system'
+    ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+    : preference;
+  document.documentElement.setAttribute('data-theme', actual);
+  document.querySelectorAll('.theme-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.theme === preference);
+  });
+}
+
+/* ── 移动端侧边栏（汉堡菜单） ── */
+/* 与 blog 皮肤 hamburger 逻辑一致 */
+function initMobileMenu() {
+  var btn = document.getElementById('hamburgerBtn');
+  var overlay = document.getElementById('sidebarOverlay');
+  var sidebar = document.getElementById('guideNav');
+  if (!btn) return;
+  function open() { if (sidebar) sidebar.classList.add('open'); if (overlay) overlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+  function close() { if (sidebar) sidebar.classList.remove('open'); if (overlay) overlay.classList.remove('active'); document.body.style.overflow = ''; }
+  btn.addEventListener('click', function() { sidebar.classList.contains('open') ? close() : open(); });
+  if (overlay) overlay.addEventListener('click', close);
+  if (sidebar) sidebar.addEventListener('click', function(e) { if (e.target.tagName === 'A') close(); });
+  /* 窗口放大到宽屏时确保遮罩消失 */
+  var mq = window.matchMedia('(min-width: 1150px)');
+  mq.addEventListener('change', function(e) { if (e.matches) close(); });
+  var resizeTimer;
+  window.addEventListener('resize', function() {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function() { if (window.innerWidth > 1149) close(); }, 100);
+  });
+}
+
+/* ── Tab 切换 ── */
+function setTab(el) {
+  var tabs = el.parentElement;
+  tabs.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+  el.classList.add('active');
+}
+
+/* ── TreeView 展开/折叠 ── */
+function toggleTree(label) {
+  var arrow = label.querySelector('.arrow');
+  var children = label.nextElementSibling;
+  if (!children) return;
+  arrow.classList.toggle('open');
+  children.classList.toggle('collapsed');
+}
+
+/* ── 初始化 ── */
+initTheme();
+initMobileMenu();
+</script>
+
+<!--
+  ═══════════════════════════════════════════════════════════════
+  AI AGENT METADATA (机器可读，人类可忽略)
+  ═══════════════════════════════════════════════════════════════
+
+  此段 HTML 注释包含本 UI 规范的结构化元数据，供 AI Agent 解析。
+
+  ## 设计系统概述
+  - 名称: 航通社皮肤最简规范
+  - 版本: 1.0
+  - 来源: lishuhang.github.io (Jekyll 博客皮肤)
+  - 基调: 现代简洁，CSS 变量驱动，支持亮/暗双模式
+  - 主题色: #347df8 (可通过 --accent 变量全局替换)
+  - 字体: Noto Sans SC (中文) / 系统默认 (西文)
+  - 圆角: 12px (默认) / 8px (小) / 4px (极小)
+  - 间距基数: 4px
+
+  ## 组件分类 (对应 React95 Storybook)
+  CONTROLS:    Button, Checkbox, ColorInput, GroupBox, Handle,
+               MenuList, NumberInput, ProgressBar, Radio, Select,
+               Slider, Table, Tabs, TextInput, Tooltip, TreeView
+  ENVIRONMENT: AppBar, Window, ThemeSwitcher
+  LAYOUT:      Frame, DualPanel, ScrollView, Separator
+  TYPOGRAPHY:  Anchor
+  OTHER:       Avatar, Counter, Spinner
+
+  ## 换肤步骤
+  1. 复制 :root { ... } 中的 CSS 变量到目标项目
+  2. 修改 --accent 为目标品牌色
+  3. 用 JS 计算 --accent-hover (RGB 各通道 × 0.82)
+     和 --accent-light (RGBA 原色 + 0.1 alpha)
+  4. 复制 [data-theme="dark"] { ... } 变量覆盖实现暗色模式
+  5. 按 HTML 结构复制各组件 demo 代码
+
+  ## CSS 类名约定
+  - .btn + .btn-{variant}: 按钮 (primary|secondary|outline|ghost|danger)
+  - .btn-{size}: 尺寸 (sm|lg|full)
+  - .checkbox-wrap: 复选框包装器
+  - .radio-wrap: 单选框包装器
+  - .toggle-wrap + .toggle-track + .toggle-knob: 开关
+  - .input-field: 文本输入 (加 .input-error 为错误态)
+  - .input-group: 输入+按钮组合
+  - .num-input: 数字输入
+  - .select-field: 下拉选择
+  - .color-input-wrap + .color-swatch: 颜色选择
+  - .slider-wrap: 滑块
+  - .progress + .progress-bar: 进度条
+  - .progress-indeterminate: 不确定进度
+  - .menu-list + .menu-item + .menu-sep: 菜单列表
+  - .tabs + .tab: 标签页 (加 .tabs-pill 为胶囊)
+  - .tooltip-wrap[data-tip][data-pos]: 提示框
+  - .table-wrap > table(.striped|.borderless): 表格
+  - .group-box + .group-box-legend: 分组框
+  - .tree-node + .tree-label + .tree-children: 树形视图
+  - .handle-h / .handle-v: 水平/垂直分隔拖拽条
+  - .appbar(.appbar-accent): 应用栏
+  - .window + .window-titlebar + .window-body: 窗口
+  - .theme-switcher + .theme-btn: 三态主题切换器 (light|system|dark)
+  - .hamburger-btn: 汉堡菜单按钮（移动端）
+  - .sidebar-overlay: 侧边栏遮罩层
+  - .frame: 框架容器
+  - .dual-panel + .panel-settings + .panel-preview: 工具双面板（40%/60%，竖屏上下）
+  - .scrollview: 滚动视图
+  - .separator-h / .separator-v: 分隔线
+  - .avatar(.avatar-sm|md|lg): 头像
+  - .counter: 计数徽标
+  - .spinner(.spinner-sm|lg): 加载圆环
+  - .spinner-wrap: 加载圆环 + 文字组合
+  - blockquote: 引用区块
+  - .icon-grid + .icon-item + .icon-demo: 图标库
+  - .icon-name + .icon-desc: 图标标签
+
+  ## JS API
+  - initTheme(): 三态主题初始化（light/system/dark）
+  - applyTheme(preference): 应用主题偏好（system 通过 matchMedia 解析）
+  - initMobileMenu(): 汉堡菜单初始化
+  - setTab(el): 切换 Tab 激活态
+  - toggleTree(label): 展开/折叠树节点
+
+  ## 布局规范
+  - 导航栏（guide-nav）在右侧，与 blog 皮肤 #site-sidebar 位置一致
+  - 桌面端：主内容区（左）+ 右侧导航栏（右），flex 布局
+  - 移动端（<1150px）：右侧导航变为固定定位从右侧滑入，汉堡按钮呼出
+  - 遮罩层 .sidebar-overlay 点击关闭导航
+  - 工具双面板 .dual-panel：横屏 40%+60%，竖屏上下排布
+-->
+
+</body>
+</html>

@@ -6,58 +6,90 @@
 <title>AI生图</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#FFF;--nav-bg:#F5F5F5;--border:#E0E0E0;--blue:#3333CC;--purple:#6A5ACD;--green:#00CC00;--red:#FF0000;--yellow:#FFCC00;--gray:#666;--lgray:#999;--gap:20px}
-html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:#000;font-size:14px}
+:root{
+  /* From styleguide — brand & surface */
+  --accent:#3333CC;--accent-hover:#2768d9;--accent-light:rgba(51,51,204,.10);
+  --bg:#FFF;--bg-card:#FFF;--bg-secondary:#F5F5F5;--bg-hover:#E2E8F0;
+  --text:#1A202C;--text-secondary:#718096;--text-muted:#A0AEC0;
+  --border:#E0E0E0;--border-medium:#CBD5E0;
+  --radius-sm:8px;--radius-xs:4px;
+  --space-xs:4px;--space-sm:8px;--space-md:16px;--space-lg:24px;
+  --font:"Noto Sans SC",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --font-xs:12px;--font-sm:14px;--font-base:16px;--font-lg:20px;--font-xl:24px;
+  /* Project-specific */
+  --purple:#6A5ACD;--green:#00CC00;--red:#FF0000;--yellow:#FFCC00;--gray:#666;
+}
+html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--text);font-size:var(--font-sm);line-height:1.6}
 
-/* === SHARED CONTROLS === */
-.btn-outline{height:30px;padding:0 14px;border:1px solid var(--blue);border-radius:4px;background:none;color:var(--blue);font-size:14px;cursor:pointer}
-.btn-outline.danger{border-color:var(--red);color:var(--red)}
-.btn-text{display:inline-flex;align-items:center;gap:4px;background:none;border:none;color:var(--blue);font-size:14px;cursor:pointer;padding:4px 0}
-.btn-text svg{flex-shrink:0}
-.btn-primary{width:100%;height:50px;background:var(--purple);color:#FFF;border:none;border-radius:4px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
-.btn-secondary{flex:1;height:40px;border:1px solid var(--purple);border-radius:4px;background:none;color:var(--blue);font-size:14px;cursor:pointer}
-.select-ctl{width:100%;height:40px;border:1px solid var(--border);border-radius:4px;padding:0 10px;font-size:14px;color:#000;background:var(--bg);cursor:pointer;appearance:auto}
-.input-ctl{width:100%;border:1px solid var(--border);border-radius:4px;padding:12px;font-size:14px;font-family:inherit}
-.input-ctl::placeholder{color:var(--lgray)}
-.icon-btn{background:none;border:none;cursor:pointer;padding:2px;color:var(--gray)}
-.icon-btn:hover{color:var(--blue)}
+/* ═══ SHARED CONTROLS (from styleguide) ═══ */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 20px;font-size:var(--font-sm);font-weight:600;border-radius:var(--radius-sm);border:1px solid transparent;cursor:pointer;line-height:1.5;white-space:nowrap;user-select:none}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-primary{background:var(--purple);color:#fff;border-color:var(--purple)}
+.btn-primary:hover:not(:disabled){background:#5a4bbd}
+.btn-secondary{background:var(--bg-secondary);color:var(--text);border-color:var(--border)}
+.btn-secondary:hover:not(:disabled){background:var(--bg-hover)}
+.btn-outline{background:transparent;color:var(--accent);border-color:var(--accent)}
+.btn-outline:hover:not(:disabled){background:var(--accent-light)}
+.btn-ghost{background:transparent;color:var(--text-secondary)}
+.btn-ghost:hover:not(:disabled){background:var(--bg-secondary);color:var(--text)}
+.btn-danger-outline{background:transparent;color:var(--red);border-color:var(--red)}
+.btn-danger-outline:hover:not(:disabled){background:rgba(255,0,0,.06)}
+.btn-sm{padding:4px 12px;font-size:var(--font-xs);border-radius:var(--radius-xs)}
+.btn-full{width:100%}
 
-/* === NAV === */
-#topNav{background:var(--nav-bg);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;position:sticky;top:0;z-index:100}
-#topNav .title{font-size:24px;font-weight:700}
+.select-field{padding:8px 32px 8px 12px;font-size:var(--font-sm);border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text);outline:none;cursor:pointer;appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M2 4l4 4 4-4' fill='none' stroke='%23718096' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;min-width:0;width:100%;height:40px}
+.select-field:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-light)}
+
+.input-field{padding:8px 12px;font-size:var(--font-sm);border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-card);color:var(--text);outline:none;line-height:1.5;width:100%}
+.input-field::placeholder{color:var(--text-muted)}
+.input-field:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-light)}
+
+.checkbox-wrap{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:var(--font-sm);color:var(--text);user-select:none}
+.checkbox-wrap input[type="checkbox"]{appearance:none;-webkit-appearance:none;width:18px;height:18px;flex-shrink:0;border:2px solid var(--border-medium);border-radius:var(--radius-xs);background:var(--bg-card);cursor:pointer;position:relative}
+.checkbox-wrap input[type="checkbox"]:hover{border-color:var(--accent)}
+.checkbox-wrap input[type="checkbox"]:checked{background:var(--accent);border-color:var(--accent)}
+.checkbox-wrap input[type="checkbox"]:checked::after{content:'';position:absolute;left:4px;top:1px;width:6px;height:10px;border:solid #fff;border-width:0 2px 2px 0;transform:rotate(45deg)}
+
+.icon-btn{background:none;border:none;cursor:pointer;padding:2px;color:var(--text-secondary)}
+.icon-btn:hover{color:var(--accent)}
+
+/* ═══ NAV ═══ */
+#topNav{background:var(--bg-secondary);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 var(--space-lg);position:sticky;top:0;z-index:100;border-bottom:1px solid var(--border)}
+#topNav .title{font-size:var(--font-xl);font-weight:700}
 .nav-right{display:flex;align-items:center;gap:12px}
-.points{color:var(--blue);font-size:18px}
+.points{color:var(--accent);font-size:18px;font-weight:600}
 
-/* === LAYOUT === */
+/* ═══ LAYOUT ═══ */
 #mainWrap{display:flex;height:calc(100vh - 60px);overflow:hidden}
-#leftPanel{width:380px;min-width:320px;overflow-y:auto;padding:var(--gap);border-right:1px solid var(--border);flex-shrink:0}
-#centerPanel{flex:1;overflow-y:auto;padding:var(--gap)}
+#leftPanel{width:380px;min-width:320px;overflow-y:auto;padding:var(--space-lg);border-right:1px solid var(--border);flex-shrink:0}
+#centerPanel{flex:1;overflow-y:auto;padding:var(--space-lg)}
 
-/* === LEFT FORM === */
+/* ═══ LEFT FORM ═══ */
 #promptArea{height:100px;resize:vertical}
 .prompt-actions{display:flex;gap:12px;margin-top:12px;flex-wrap:wrap}
 .dropdown-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}
-.ref-upload{width:150px;height:150px;border:1px dashed var(--border);border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin-top:16px;cursor:pointer;color:var(--gray);font-size:14px}
+.ref-upload{width:150px;height:150px;border:1px dashed var(--border);border-radius:var(--radius-sm);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;margin-top:16px;cursor:pointer;color:var(--text-secondary);font-size:var(--font-sm)}
+.ref-upload:hover{border-color:var(--accent);color:var(--accent)}
 .ref-scroll-wrap{display:flex;gap:10px;margin-top:16px;align-items:flex-start}
 .ref-images{display:flex;gap:10px;overflow-x:auto;flex:1;padding-bottom:4px}
-.ref-images img{width:60px;height:60px;border-radius:4px;object-fit:cover;border:1px solid var(--border);flex-shrink:0}
-.ref-add-btn{flex-shrink:0;width:60px;height:60px;border:1px solid var(--border);border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--bg);color:var(--gray)}
+.ref-images img{width:60px;height:60px;border-radius:var(--radius-xs);object-fit:cover;border:1px solid var(--border);flex-shrink:0}
+.ref-add-btn{flex-shrink:0;width:60px;height:60px;border:1px solid var(--border);border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;cursor:pointer;background:var(--bg-card);color:var(--text-secondary)}
+.ref-add-btn:hover{border-color:var(--accent);color:var(--accent)}
 .extra-btns{display:flex;gap:10px;margin-top:12px}
+.extra-btns .btn{flex:1;height:40px}
 
-/* === TASK LIST === */
+/* ═══ TASK LIST ═══ */
 .task-header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
-.task-header label{display:inline-flex;align-items:center;gap:6px;font-size:14px;cursor:pointer;user-select:none}
-.task-header input[type=checkbox]{width:16px;height:16px;accent-color:var(--blue)}
 .hdr-btns{margin-left:auto;display:flex;gap:8px}
 .task-list{margin-top:16px;display:flex;flex-direction:column;gap:12px}
-.task-item{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--border);border-radius:4px}
+.task-item{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid var(--border);border-radius:var(--radius-sm)}
 .status-icon{flex-shrink:0;margin-top:2px}
 .task-body{flex:1;min-width:0}
-.task-time{color:var(--lgray);font-size:12px}
-.task-desc{margin-top:4px;font-size:14px;line-height:1.5;word-break:break-all}
+.task-time{color:var(--text-muted);font-size:var(--font-xs)}
+.task-desc{margin-top:4px;font-size:var(--font-sm);line-height:1.5;word-break:break-all}
 .task-actions{flex-shrink:0;display:flex;gap:8px;margin-top:2px}
 
-/* === DRAWER: portrait only — header at top, body below, whole thing fixed to bottom === */
+/* ═══ DRAWER: portrait only ═══ */
 #historyDrawer{display:none}
 
 @media(max-width:768px){
@@ -68,26 +100,26 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Ro
   #historyDrawer{
     display:flex;flex-direction:column;
     position:fixed;bottom:0;left:0;right:0;
-    z-index:150;background:var(--bg);
+    z-index:150;background:var(--bg-card);
   }
   .drawer-header{
-    background:var(--nav-bg);border-top:1px solid var(--border);
-    padding:0 20px;height:56px;
+    background:var(--bg-secondary);border-top:1px solid var(--border);
+    padding:0 var(--space-lg);height:56px;
     display:flex;align-items:center;justify-content:space-between;
     flex-shrink:0;cursor:pointer;
   }
-  .drawer-header h3{font-size:16px;font-weight:700}
-  .drawer-header button{background:none;border:none;cursor:pointer;color:var(--gray);padding:4px}
+  .drawer-header h3{font-size:var(--font-base);font-weight:700}
+  .drawer-header button{background:none;border:none;cursor:pointer;color:var(--text-secondary);padding:4px}
   .drawer-body{
     display:none;
-    max-height:65vh;overflow-y:auto;padding:20px;
+    max-height:65vh;overflow-y:auto;padding:var(--space-lg);
     border-top:1px solid var(--border);
   }
   #historyDrawer.open .drawer-body{display:block}
 }
 @media(max-width:420px){
   .dropdown-grid{grid-template-columns:1fr}
-  #leftPanel{padding:12px}
+  #leftPanel{padding:var(--space-md)}
   .drawer-body{max-height:75vh}
 }
 </style>
@@ -98,40 +130,39 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Ro
   <div class="title">AI生图</div>
   <div class="nav-right">
     <span class="points">剩余 151.6</span>
-    <span class="icon-btn" onclick="return false" title="设置">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-    </span>
+    <button class="icon-btn" onclick="return false" title="设置">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
   </div>
 </nav>
 
 <div id="mainWrap">
   <div id="leftPanel">
-    <textarea id="promptArea" class="input-ctl" placeholder="提示词" onclick="return false"></textarea>
+    <textarea id="promptArea" class="input-field" placeholder="提示词" onclick="return false"></textarea>
 
     <div class="prompt-actions">
-      <button class="btn-text" id="pasteBtn" onclick="return false">
+      <button class="btn btn-ghost btn-sm" id="pasteBtn" onclick="return false">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>粘贴
       </button>
-      <button class="btn-text" id="clearBtn" onclick="return false">
+      <button class="btn btn-ghost btn-sm" id="clearBtn" onclick="return false">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>清空
       </button>
-      <button class="btn-text" id="promptLibBtn" onclick="return false">
+      <button class="btn btn-ghost btn-sm" id="promptLibBtn" onclick="return false">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>提示词库
       </button>
     </div>
 
     <div class="dropdown-grid">
-      <select class="select-ctl" id="modelSelect" onclick="return false"><option>GPT-Image-2</option><option>DALL·E 3</option></select>
-      <select class="select-ctl" id="quantitySelect" onclick="return false"><option>1张</option><option>2张</option><option>4张</option></select>
-      <select class="select-ctl" id="qualitySelect" onclick="return false"><option>1.5K 标准</option><option>1K 经济</option><option>2K 高清</option></select>
-      <select class="select-ctl" id="ratioSelect" onclick="return false"><option>1:1</option><option>16:9</option><option>9:16</option><option>4:3</option><option>3:4</option><option>3:2</option><option>2:3</option></select>
+      <select class="select-field" id="modelSelect" onclick="return false"><option>GPT-Image-2</option><option>DALL·E 3</option></select>
+      <select class="select-field" id="quantitySelect" onclick="return false"><option>1张</option><option>2张</option><option>4张</option></select>
+      <select class="select-field" id="qualitySelect" onclick="return false"><option>1.5K 标准</option><option>1K 经济</option><option>2K 高清</option></select>
+      <select class="select-field" id="ratioSelect" onclick="return false"><option>1:1</option><option>16:9</option><option>9:16</option><option>4:3</option><option>3:4</option><option>3:2</option><option>2:3</option></select>
     </div>
 
     <div class="ref-upload" id="refUpload" onclick="return false">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       <span>参考图</span>
     </div>
-
     <div class="ref-scroll-wrap" id="refScrollWrap" style="display:none">
       <div class="ref-images" id="refImages"></div>
       <div class="ref-add-btn" onclick="return false" title="添加参考图">
@@ -139,23 +170,23 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Ro
       </div>
     </div>
 
-    <button class="btn-primary" id="generateBtn" onclick="return false">
+    <button class="btn btn-primary btn-full" id="generateBtn" onclick="return false" style="height:50px;font-size:var(--font-base);margin-top:16px">
       生成图片 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg> 2点
     </button>
 
     <div class="extra-btns">
-      <button class="btn-secondary" id="watermarkBtn" onclick="return false">添加水印</button>
-      <button class="btn-secondary" id="synthIdBtn" onclick="return false">去除SynthID</button>
+      <button class="btn btn-outline" id="watermarkBtn" onclick="return false">添加水印</button>
+      <button class="btn btn-outline" id="synthIdBtn" onclick="return false">去除SynthID</button>
     </div>
   </div>
 
   <div id="centerPanel">
     <div id="taskCard">
       <div class="task-header">
-        <label><input type="checkbox" id="ongoingChk" onclick="return false"> 进行中</label>
+        <label class="checkbox-wrap"><input type="checkbox" id="ongoingChk" onclick="return false"> 进行中</label>
         <div class="hdr-btns">
-          <button class="btn-outline" id="exportBtn" onclick="return false">导出</button>
-          <button class="btn-outline danger" id="clearAllBtn" onclick="return false">清空</button>
+          <button class="btn btn-outline btn-sm" id="exportBtn" onclick="return false">导出</button>
+          <button class="btn btn-danger-outline btn-sm" id="clearAllBtn" onclick="return false">清空</button>
         </div>
       </div>
       <div class="task-list" id="taskList">
@@ -179,41 +210,22 @@ html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Ro
   </div>
 </div>
 
-<!-- DRAWER: portrait only — header at top of drawer, body below; whole drawer fixed to bottom -->
+<!-- DRAWER: portrait — header at top, body below -->
 <div id="historyDrawer">
   <div class="drawer-header" onclick="toggleDrawer()">
     <h3>历史记录</h3>
     <button onclick="event.stopPropagation();toggleDrawer()" title="展开/收起">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
     </button>
   </div>
-  <div class="drawer-body" id="drawerBody">
-    <!-- taskCard moved here by JS in portrait -->
-  </div>
+  <div class="drawer-body" id="drawerBody"></div>
 </div>
 
 <script>
-function relocate(){
-  var tc=document.getElementById('taskCard'),cp=document.getElementById('centerPanel'),db=document.getElementById('drawerBody');
-  if(innerWidth<=768){if(tc.parentElement!==db)db.appendChild(tc)}
-  else{if(tc.parentElement!==cp)cp.appendChild(tc);document.getElementById('historyDrawer').classList.remove('open')}
-}
-function toggleDrawer(){
-  var d=document.getElementById('historyDrawer'),svg=d.querySelector('.drawer-header button svg');
-  d.classList.toggle('open');
-  svg.setAttribute('points',d.classList.contains('open')?'6 9 12 15 18 9':'18 15 12 9 6 15');
-}
-relocate();
-addEventListener('resize',relocate);
-
-// sample placeholder images
-(function(){
-  function mk(c,t){var v=document.createElement('canvas');v.width=60;v.height=60;var x=v.getContext('2d');x.fillStyle=c;x.fillRect(0,0,60,60);x.fillStyle='#FFF';x.font='bold 12px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(t,30,30);return v.toDataURL()}
-  var w=document.getElementById('refScrollWrap'),i1=document.createElement('img'),i2=document.createElement('img');
-  i1.src=mk('#6A5ACD','图1');i2.src=mk('#3333CC','图2');
-  var r=document.getElementById('refImages');r.appendChild(i1);r.appendChild(i2);
-  w.style.display='flex';document.getElementById('refUpload').style.display='none';
-})();
+function relocate(){var tc=document.getElementById('taskCard'),cp=document.getElementById('centerPanel'),db=document.getElementById('drawerBody');if(innerWidth<=768){if(tc.parentElement!==db)db.appendChild(tc)}else{if(tc.parentElement!==cp)cp.appendChild(tc);document.getElementById('historyDrawer').classList.remove('open')}}
+function toggleDrawer(){var d=document.getElementById('historyDrawer'),svg=d.querySelector('.drawer-header button svg');d.classList.toggle('open');svg.setAttribute('points',d.classList.contains('open')?'6 9 12 15 18 9':'18 15 12 9 6 15')}
+relocate();addEventListener('resize',relocate);
+(function(){function mk(c,t){var v=document.createElement('canvas');v.width=60;v.height=60;var x=v.getContext('2d');x.fillStyle=c;x.fillRect(0,0,60,60);x.fillStyle='#FFF';x.font='bold 12px sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(t,30,30);return v.toDataURL()}var r=document.getElementById('refImages'),i1=document.createElement('img'),i2=document.createElement('img');i1.src=mk('#6A5ACD','图1');i2.src=mk('#3333CC','图2');r.appendChild(i1);r.appendChild(i2);document.getElementById('refScrollWrap').style.display='flex';document.getElementById('refUpload').style.display='none'})();
 </script>
 </body>
 </html>

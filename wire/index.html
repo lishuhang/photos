@@ -1,0 +1,1467 @@
+<html lang="zh-CN"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="7x24 Global Breaking News Aggregator">
+    <title>Global Wire | 7x24 突发新闻</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin=""></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin=""></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Configure Tailwind theme -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            850: '#1e293b',
+                            900: '#0f172a',
+                        },
+                        red: {
+                            650: '#c53030',
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in-down': 'fadeInDown 0.5s ease-out',
+                        'highlight-fade': 'highlightFade 5s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        highlightFade: {
+                            '0%': { backgroundColor: 'rgba(59, 130, 246, 0.25)' },
+                            '70%': { backgroundColor: 'rgba(59, 130, 246, 0.15)' },
+                            '100%': { backgroundColor: 'transparent' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        
+        .timeline-line {
+            position: absolute;
+            left: 1.25rem; 
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background-color: #e2e8f0;
+            z-index: 0;
+        }
+        
+        .dark .timeline-line {
+            background-color: #334155;
+        }
+
+        /* Loading Bar Animation */
+        .loading-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+            background: #3b82f6;
+            animation: loading 2s infinite ease-in-out;
+            width: 0%;
+        }
+        
+        @keyframes loading {
+            0% { width: 0%; left: 0; }
+            50% { width: 100%; left: 0; }
+            100% { width: 0%; left: 100%; }
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        /* Custom Toggle Switch */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #3b82f6;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #3b82f6;
+        }
+        
+        /* Compact Scrollbar for feeds list */
+        .scrollbar-thin::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scrollbar-thin::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .scrollbar-thin::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1;
+            border-radius: 20px;
+        }
+        .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+            background-color: #475569;
+        }
+
+        /* Filter Bar Scroll */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* New item highlight */
+        .new-item-highlight {
+            animation: highlightFade 5s ease-out forwards;
+        }
+        @keyframes highlightFade {
+            0% { background-color: rgba(59, 130, 246, 0.25); }
+            70% { background-color: rgba(59, 130, 246, 0.10); }
+            100% { background-color: transparent; }
+        }
+
+        /* Banner transition */
+        .banner-enter {
+            animation: bannerSlideDown 0.3s ease-out;
+        }
+        @keyframes bannerSlideDown {
+            0% { transform: translateY(-100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Spinner for banner */
+        .banner-spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* README collapsible sections */
+        .readme-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .readme-content.expanded {
+            max-height: 2000px;
+            transition: max-height 0.5s ease-in;
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-slate-900">
+    <div id="root"></div>
+
+    <script type="application/json" id="default-feeds-data">
+    [
+      { "id": "thepaper", "name": "澎湃新闻", "url": "https://feedx.net/rss/thepaper.xml", "type": "rss", "enabled": true, "category": "中国大陆" },
+      { "id": "ithome", "name": "IT之家", "url": "https://www.ithome.com/rss/", "type": "rss", "enabled": true, "category": "中国大陆" },
+      { "id": "huxiu", "name": "虎嗅", "url": "https://rss.huxiu.com/", "type": "rss", "enabled": true, "category": "中国大陆" },
+      { "id": "mydrivers", "name": "快科技", "url": "https://rss.mydrivers.com/rss.aspx?CID=1", "type": "rss", "enabled": true, "category": "中国大陆" },
+      { "id": "technode", "name": "动点科技", "url": "https://cn.technode.com/feed/", "type": "rss", "enabled": true, "category": "中国大陆" },
+      { "id": "cnbeta", "name": "cnBeta", "url": "https://feeds2.feedburner.com/cnbeta-full", "type": "rss", "enabled": true, "category": "中国大陆" },
+      { "id": "google-cn", "name": "Google News (CN)", "url": "https://news.google.com/rss?hl=zh-CN&gl=CN&ceid=CN:zh-CN", "type": "rss", "enabled": true, "category": "中国大陆" },
+      { "id": "ruanyifeng", "name": "阮一峰", "url": "https://feeds.feedburner.com/ruanyifeng", "type": "rss", "enabled": true, "category": "中国大陆" },
+      { "id": "1q43", "name": "虹线周刊", "url": "https://weekly.1q43.blog/rss/feed.xml", "type": "rss", "enabled": false, "category": "中国大陆" },
+      { "id": "rthk-local", "name": "香港电台-本地", "url": "https://rthk.hk/rthk/news/rss/c_expressnews_clocal.xml", "type": "rss", "enabled": true, "category": "中国香港" },
+      { "id": "rthk-intl", "name": "香港电台-国际", "url": "https://rthk.hk/rthk/news/rss/c_expressnews_cinternational.xml", "type": "rss", "enabled": true, "category": "中国香港" },
+      { "id": "rthk-china", "name": "香港电台-大中华", "url": "https://rthk.hk/rthk/news/rss/c_expressnews_greaterchina.xml", "type": "rss", "enabled": true, "category": "中国香港" },
+      { "id": "rthk-fin", "name": "香港电台-财经", "url": "https://rthk.hk/rthk/news/rss/c_expressnews_cfinance.xml", "type": "rss", "enabled": true, "category": "中国香港" },
+      { "id": "yahoo-hk", "name": "雅虎香港", "url": "https://hk.news.yahoo.com/rss/", "type": "rss", "enabled": true, "category": "中国香港" },
+      { "id": "mingpao", "name": "明报-要闻", "url": "https://news.mingpao.com/rss/pns/s00001.xml", "type": "rss", "enabled": true, "category": "中国香港" },
+      { "id": "initium", "name": "端传媒", "url": "https://theinitium.com/rss/", "type": "rss", "enabled": true, "category": "中国香港" },
+      { "id": "pulse-hk", "name": "追光者", "url": "https://pulsehknews.com/feed/", "type": "rss", "enabled": true, "category": "中国香港" },
+      { "id": "cna-tw", "name": "中央社", "url": "https://feeds.feedburner.com/cnaFirstNews", "type": "rss", "enabled": true, "category": "中国台湾" },
+      { "id": "twreporter", "name": "报导者", "url": "https://www.twreporter.org/a/rss2.xml", "type": "rss", "enabled": true, "category": "中国台湾" },
+      { "id": "ltn-tw", "name": "自由时报", "url": "https://news.ltn.com.tw/rss/all.xml", "type": "rss", "enabled": true, "category": "中国台湾" },
+      { "id": "nhk-jp", "name": "NHK", "url": "https://www3.nhk.or.jp/rss/news/cat0.xml", "type": "rss", "enabled": true, "category": "日本" },
+      { "id": "nikkei-en", "name": "Nikkei Asia", "url": "https://asia.nikkei.com/rss/feed/nar", "type": "rss", "enabled": true, "category": "日本" },
+      { "id": "asahi-shimbun", "name": "朝日新聞", "url": "http://www.asahi.com/rss/asahi/newsheadlines.rdf", "type": "rss", "enabled": true, "category": "日本" },
+      { "id": "yonhap-cn", "name": "韩联社中文版", "url": "https://cn.yna.co.kr/RSS/news.xml", "type": "rss", "enabled": true, "category": "韩国" },
+      { "id": "chosun-kr", "name": "朝鲜日报", "url": "https://www.chosun.com/arc/outboundfeeds/rss/?outputType=xml", "type": "rss", "enabled": false, "category": "韩国" },
+      { "id": "chosun-cn", "name": "朝鲜日报中文网", "url": "https://feedx.net/rss/chosun.xml", "type": "rss", "enabled": true, "category": "韩国" },
+      { "id": "zaobao-china", "name": "联合早报-中港台", "url": "https://plink.anyfeeder.com/zaobao/realtime/china", "type": "rss", "enabled": true, "category": "新加坡" },
+      { "id": "cna-sg", "name": "CNA (Channel News Asia)", "url": "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml", "type": "rss", "enabled": true, "category": "新加坡" },
+      { "id": "tagesschau", "name": "Tagesschau", "url": "https://www.tagesschau.de/xml/rss2/", "type": "rss", "enabled": true, "category": "欧洲" },
+      { "id": "le-monde", "name": "Le Monde", "url": "https://www.lemonde.fr/en/rss/une.xml", "type": "rss", "enabled": true, "category": "欧洲" },
+      { "id": "fr-24", "name": "France 24", "url": "https://www.france24.com/en/rss", "type": "rss", "enabled": true, "category": "欧洲" },
+      { "id": "guardian-uk", "name": "The Guardian", "url": "https://www.theguardian.com/world/rss", "type": "rss", "enabled": true, "category": "欧洲" },
+      { "id": "bbc-world", "name": "BBC World", "url": "http://feeds.bbci.co.uk/news/world/rss.xml", "type": "rss", "enabled": true, "category": "欧洲" },
+      { "id": "ft-uk", "name": "Financial Times", "url": "https://www.ft.com/rss/home/uk", "type": "rss", "enabled": true, "category": "欧洲" },
+      { "id": "skynews", "name": "Sky News", "url": "https://feeds.skynews.com/feeds/rss/home.xml", "type": "rss", "enabled": true, "category": "欧洲" },
+      { "id": "euronews", "name": "Euronews", "url": "https://www.euronews.com/rss?format=xml", "type": "rss", "enabled": true, "category": "欧洲" },
+      { "id": "sinocism", "name": "Sinocism", "url": "https://sinocism.com/feed", "type": "rss", "enabled": true, "category": "美国" },
+      { "id": "wsj-cn", "name": "华尔街日报中文版", "url": "https://cn.wsj.com/zh-hans/rss", "type": "rss", "enabled": true, "category": "美国" },
+      { "id": "nytimes", "name": "The New York Times", "url": "https://rss.nytimes.com/services/xml/rss/nyt/World.xml", "type": "rss", "enabled": true, "category": "美国" },
+      { "id": "npr", "name": "NPR", "url": "https://feeds.npr.org/1001/rss.xml", "type": "rss", "enabled": true, "category": "美国" },
+      { "id": "bloomberg", "name": "Bloomberg", "url": "https://feeds.bloomberg.com/markets/news.rss", "type": "rss", "enabled": true, "category": "美国" },
+      { "id": "techmeme", "name": "Techmeme", "url": "https://techmeme.com/feed.xml", "type": "rss", "enabled": true, "category": "美国" },
+      { "id": "techcrunch", "name": "TechCrunch", "url": "https://techcrunch.com/feed/", "type": "rss", "enabled": true, "category": "美国" },
+      { "id": "abc-us", "name": "ABC News (US)", "url": "https://abcnews.go.com/abcnews/topstories", "type": "rss", "enabled": true, "category": "美国" },
+      { "id": "foxnews", "name": "Fox News", "url": "https://moxie.foxnews.com/google-publisher/latest.xml", "type": "rss", "enabled": true, "category": "美国" }
+    ]
+    </script>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef, useMemo, useCallback } = React;
+
+        // --- Configuration ---
+        const MAX_ITEMS = 150; 
+        const UPDATE_INTERVAL = 30000; // 30 seconds
+        const FETCH_CONCURRENCY = 6; // v1.1: Parallel fetching concurrency
+        const FETCH_TIMEOUT = 12000; // v1.1: Reduced from 15s to 12s
+        const APP_VERSION = 'v1.1'; // v1.1: Version number
+        
+        // Proxy Fallback System
+        const PROXY_LIST = [
+            "https://corsproxy.io/?", 
+            "https://api.allorigins.win/raw?url="
+        ];
+
+        // --- Localization ---
+        const STRINGS = {
+            'zh-CN': {
+                title: 'GLOBAL WIRE',
+                subtitle: '7x24 突发新闻',
+                settings: '设置',
+                refresh: '刷新',
+                tab_feeds: '新闻源',
+                tab_general: '通用',
+                tab_readme: '说明',
+                lang_label: '界面语言',
+                theme_label: '深色模式',
+                notif_label: '桌面通知',
+                theme_dark: '开启',
+                theme_light: '关闭',
+                notif_on: '已开启',
+                notif_off: '已关闭',
+                add_feed: '添加 RSS 源',
+                feed_name: '名称',
+                feed_category: '类别 (可选)',
+                feed_url: 'RSS 链接 / ID',
+                add_btn: '添加',
+                active_sources: '已添加信源',
+                import_btn: '导入配置 (JSON)',
+                export_btn: '导出配置',
+                no_items: '暂无消息。请点击刷新按钮或检查设置中的新闻源。',
+                updating: '更新中...',
+                last_updated: '上次更新: ',
+                sources_via: '信源: ',
+                parser_note: '注意：系统仅支持标准 RSS/XML。X/Weibo 等源请自行转换为 RSS 链接填入。',
+                import_warn: '警告：导入操作将完全替换当前的信源列表，此操作无法撤销。是否继续？',
+                error_fetch: '部分或全部更新失败。',
+                success_rate: '更新成功率: ',
+                filter_all: '全部',
+                // v1.1 new strings
+                banner_updating: '正在更新所有新闻源...',
+                banner_updates_available: '已获取 {count} 条更新，点击展开',
+                banner_updated: '内容已更新',
+                notif_new_updates_title: 'Global Wire 有新消息',
+                notif_new_updates_body: '已获取 {count} 条新闻更新',
+            },
+            'en': {
+                title: 'GLOBAL WIRE',
+                subtitle: '7x24 BREAKING',
+                settings: 'Settings',
+                refresh: 'Refresh',
+                tab_feeds: 'Feeds',
+                tab_general: 'General',
+                tab_readme: 'Readme',
+                lang_label: 'Interface Language',
+                theme_label: 'Dark Mode',
+                notif_label: 'Notifications',
+                theme_dark: 'On',
+                theme_light: 'Off',
+                notif_on: 'On',
+                notif_off: 'Off',
+                add_feed: 'Add RSS Feed',
+                feed_name: 'Name',
+                feed_category: 'Category (Optional)',
+                feed_url: 'RSS URL / ID',
+                add_btn: 'Add Source',
+                active_sources: 'Managed Sources',
+                import_btn: 'Import Config (JSON)',
+                export_btn: 'Export Config',
+                no_items: 'No news items. Click Refresh or check your Feed Settings.',
+                updating: 'UPDATING...',
+                last_updated: 'LAST UPDATED: ',
+                sources_via: 'Sources: ',
+                parser_note: 'Note: Only RSS/XML supported. Please convert X/Weibo sources to RSS links yourself.',
+                import_warn: 'WARNING: Importing will completely REPLACE your current feed list. Continue?',
+                error_fetch: 'Update partial/failed.',
+                success_rate: 'Success Rate: ',
+                filter_all: 'All',
+                // v1.1 new strings
+                banner_updating: 'Updating all sources...',
+                banner_updates_available: '{count} updates fetched, click to expand',
+                banner_updated: 'Content updated',
+                notif_new_updates_title: 'Global Wire Updates',
+                notif_new_updates_body: '{count} new articles fetched',
+            }
+        };
+
+        // --- Helper Functions ---
+
+        const getLazyDefaultFeeds = () => {
+            try {
+                const element = document.getElementById('default-feeds-data');
+                if (element) {
+                    return JSON.parse(element.textContent);
+                }
+            } catch (e) {
+                console.error("Failed to parse default feeds from HTML", e);
+            }
+            return [];
+        };
+
+        // v1.1: Parallel fetch with concurrency control
+        const parallelFetch = async (feeds, concurrency) => {
+            const results = [];
+            let successCount = 0;
+            let index = 0;
+
+            const worker = async () => {
+                while (index < feeds.length) {
+                    const currentIndex = index++;
+                    const feed = feeds[currentIndex];
+                    try {
+                        const xmlText = await fetchFeedContent(feed.url);
+                        successCount++;
+                        results.push(parseRSS(xmlText, feed));
+                    } catch (err) {
+                        results.push([]);
+                    }
+                }
+            };
+
+            const workers = [];
+            for (let i = 0; i < Math.min(concurrency, feeds.length); i++) {
+                workers.push(worker());
+            }
+            await Promise.all(workers);
+            
+            return { results: results.flat(), successCount };
+        };
+
+        // Robust Fetcher with Proxy Fallback and Encoding Handling
+        const fetchFeedContent = async (url) => {
+            let lastError = null;
+            const cacheBuster = `&_t=${Date.now()}`;
+
+            for (const proxy of PROXY_LIST) {
+                try {
+                    const controller = new AbortController();
+                    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT); // v1.1: 12s timeout
+
+                    const targetUrl = proxy + encodeURIComponent(url) + cacheBuster;
+                    
+                    const response = await fetch(targetUrl, { signal: controller.signal });
+                    clearTimeout(timeoutId);
+
+                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                    const buffer = await response.arrayBuffer();
+                    const decoder = new TextDecoder("utf-8");
+                    const text = decoder.decode(buffer);
+                    
+                    if (text.includes("<?xml") || text.includes("<rss") || text.includes("<feed") || text.includes("<rdf")) {
+                        return text;
+                    }
+                    throw new Error("Invalid content type or empty");
+
+                } catch (err) {
+                    lastError = err;
+                }
+            }
+            throw lastError || new Error("All proxies failed");
+        };
+
+        const parseRSS = (xmlText, feedInfo) => {
+            try {
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, "text/xml");
+                
+                const items = xmlDoc.querySelectorAll("item, entry");
+                const newsItems = [];
+
+                items.forEach(item => {
+                    const title = item.querySelector("title")?.textContent;
+                    
+                    let link = item.querySelector("link")?.textContent;
+                    if (!link) {
+                        const linkElem = item.querySelector("link[href]");
+                        if (linkElem) link = linkElem.getAttribute("href");
+                    }
+                    
+                    let pubDate = item.querySelector("pubDate, published, updated")?.textContent;
+                    if (!pubDate) {
+                        const dcDate = item.getElementsByTagName("dc:date")[0] 
+                                    || item.getElementsByTagNameNS("*", "date")[0];
+                        if (dcDate) pubDate = dcDate.textContent;
+                    }
+                    
+                    if (title && link) {
+                        let sourceName = feedInfo.name;
+                        let cleanTitle = title;
+                        
+                        if (title.includes(" - ")) {
+                            const parts = title.split(" - ");
+                            if (parts[parts.length - 1].length < 20) {
+                                sourceName = parts[parts.length - 1];
+                            }
+                            cleanTitle = parts.slice(0, -1).join(" - ");
+                        }
+
+                        const isImportant = 
+                            title.includes("Urgent") || 
+                            title.includes("Breaking") || 
+                            title.includes("\u7a81\u53d1") || 
+                            title.includes("\u91cd\u78c5");
+
+                        let ts = Date.now();
+                        if (pubDate) {
+                            const parsedTs = new Date(pubDate.trim()).getTime();
+                            if (!isNaN(parsedTs)) {
+                                ts = parsedTs;
+                            }
+                        }
+
+                        newsItems.push({
+                            id: link, 
+                            timestamp: ts,
+                            source: sourceName,
+                            content: cleanTitle,
+                            url: link,
+                            important: isImportant,
+                            type: feedInfo.type,
+                            category: feedInfo.category || 'General'
+                        });
+                    }
+                });
+                
+                newsItems.sort((a, b) => b.timestamp - a.timestamp);
+                return newsItems.slice(0, 3);
+
+            } catch (e) {
+                console.warn(`XML Parse Error for ${feedInfo.name}`, e);
+                return [];
+            }
+        };
+
+        const formatTime = (timestamp) => {
+            if (!timestamp) return '--:--';
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+        };
+
+        // --- Components ---
+
+        // v1.1: Banner component for update notifications
+        const UpdateBanner = ({ bannerState, updateCount, onExpand, uiStrings }) => {
+            if (bannerState === 'hidden') return null;
+
+            let content = null;
+            
+            if (bannerState === 'updating') {
+                content = (
+                    <div className="flex items-center gap-2">
+                        <div className="banner-spinner"></div>
+                        <span className="text-sm font-medium text-white">{uiStrings.banner_updating}</span>
+                    </div>
+                );
+            } else if (bannerState === 'available') {
+                const text = uiStrings.banner_updates_available.replace('{count}', updateCount);
+                content = (
+                    <div className="flex items-center gap-2 cursor-pointer" onClick={onExpand}>
+                        <i data-lucide="bell-ring" width="16" height="16" className="text-white"></i>
+                        <span className="text-sm font-medium text-white">{text}</span>
+                        <i data-lucide="chevron-down" width="14" height="14" className="text-white/70"></i>
+                    </div>
+                );
+            } else if (bannerState === 'updated') {
+                content = (
+                    <div className="flex items-center gap-2">
+                        <i data-lucide="check-circle" width="16" height="16" className="text-white"></i>
+                        <span className="text-sm font-medium text-white">{uiStrings.banner_updated}</span>
+                    </div>
+                );
+            }
+
+            return (
+                <div className="banner-enter bg-blue-600 dark:bg-blue-700 px-4 py-2.5 text-center z-[60] shadow-md">
+                    {content}
+                </div>
+            );
+        };
+
+        const Header = ({ status, onOpenSettings, onRefresh, uiStrings, hasError }) => {
+            let statusColor = 'bg-green-500'; 
+            let pingColor = 'bg-green-400';
+            
+            if (status === 'fetching') {
+                statusColor = 'bg-yellow-500';
+                pingColor = 'bg-yellow-400';
+            } else if (status === 'error') {
+                statusColor = 'bg-red-600';
+                pingColor = 'bg-red-500';
+            } else if (hasError) {
+                statusColor = 'bg-yellow-600';
+                pingColor = 'bg-yellow-500';
+            }
+
+            return (
+                <header className="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-gray-200 dark:border-slate-800 px-4 py-3 flex justify-between items-center shadow-sm transition-colors duration-300">
+                    <div className="flex items-center space-x-3">
+                        <div className="relative flex h-3 w-3">
+                          <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${pingColor}`}></span>
+                          <span className={`relative inline-flex rounded-full h-3 w-3 ${statusColor}`}></span>
+                        </div>
+                        <h1 className="text-lg font-bold tracking-tight text-slate-800 dark:text-white flex flex-col sm:flex-row sm:items-center leading-none">
+                            {uiStrings.title}
+                            <span className="hidden sm:inline mx-2 text-gray-300 dark:text-slate-700">|</span>
+                            <span className="text-xs font-normal text-gray-500 dark:text-slate-400 mt-1 sm:mt-0">
+                                {uiStrings.subtitle}
+                            </span>
+                            <span className="ml-2 text-[10px] font-mono text-gray-400 dark:text-slate-600 bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">{APP_VERSION}</span>
+                        </h1>
+                    </div>
+                    
+                    <div className="flex items-center space-x-3 sm:space-x-4">
+                        <button 
+                            onClick={onRefresh}
+                            className="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-slate-800 transition-colors"
+                            title={uiStrings.refresh}
+                        >
+                            <i data-lucide="rotate-cw" width="18" height="18" className={status === 'fetching' ? 'animate-spin' : ''}></i>
+                        </button>
+                        <button 
+                            onClick={onOpenSettings}
+                            className="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-slate-800 transition-colors"
+                            title={uiStrings.settings}
+                        >
+                            <i data-lucide="settings" width="18" height="18"></i>
+                        </button>
+                    </div>
+                    
+                    {status === 'fetching' && <div className="loading-bar"></div>}
+                </header>
+            );
+        };
+
+        const FilterBar = ({ categories, activeCategory, onSelectCategory, uiStrings }) => {
+            return (
+                <div className="sticky top-[61px] z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-gray-100 dark:border-slate-800 py-2 px-4 flex gap-2 overflow-x-auto hide-scrollbar">
+                    <button
+                        onClick={() => onSelectCategory('ALL')}
+                        className={`whitespace-nowrap px-3 py-1 rounded-full text-xs font-medium transition-all ${
+                            activeCategory === 'ALL' 
+                            ? 'bg-blue-600 text-white shadow-sm' 
+                            : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700'
+                        }`}
+                    >
+                        {uiStrings.filter_all}
+                    </button>
+                    {categories.map(cat => (
+                        <button
+                            key={cat}
+                            onClick={() => onSelectCategory(cat)}
+                            className={`whitespace-nowrap px-3 py-1 rounded-full text-xs font-medium transition-all ${
+                                activeCategory === cat 
+                                ? 'bg-blue-600 text-white shadow-sm' 
+                                : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700'
+                            }`}
+                        >
+                            {cat}
+                        </button>
+                    ))}
+                </div>
+            );
+        };
+
+        // v1.1: NewsCard with isNew prop for highlight
+        const NewsCard = ({ item, isNew }) => {
+            return (
+                <a href={item.url} target="_blank" rel="noopener noreferrer" 
+                   className={`block relative pl-6 pb-6 group animate-fade-in-down hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors rounded-r-lg -ml-2 p-2 ${isNew ? 'new-item-highlight' : ''}`}>
+                    {/* Timestamp Dot */}
+                    <div className={`absolute left-[0.5rem] top-4 -translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-slate-900 z-10 transition-colors duration-300
+                        ${item.important ? 'bg-red-600 shadow-[0_0_6px_rgba(220,38,38,0.6)]' : 'bg-blue-500 dark:bg-blue-400'}`}>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row sm:items-baseline gap-1.5 sm:gap-2 mb-0.5">
+                        <div className="flex items-center gap-2 flex-wrap">
+                            <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider border transition-colors shrink-0
+                                ${item.important 
+                                    ? 'bg-red-50 border-red-100 text-red-700 dark:bg-red-900/20 dark:border-red-900/50 dark:text-red-300' 
+                                    : 'bg-gray-100 border-gray-200 text-gray-600 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400'}`}>
+                                {item.source}
+                            </span>
+                            <span className="font-mono text-xs text-gray-400 dark:text-slate-500">
+                                {formatTime(item.timestamp)}
+                            </span>
+                            {isNew && (
+                                <span className="text-[9px] px-1 py-0.5 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold uppercase">NEW</span>
+                            )}
+                        </div>
+                        <h2 className={`text-base leading-snug font-medium transition-colors duration-300
+                            ${item.important ? 'text-red-700 dark:text-red-400 font-bold' : 'text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400'}`}>
+                            {item.content}
+                        </h2>
+                    </div>
+                </a>
+            );
+        };
+
+        const ToggleSwitch = ({ checked, onChange }) => (
+            <div className="relative inline-block w-10 h-5 align-middle select-none transition duration-200 ease-in">
+                <input 
+                    type="checkbox" 
+                    name="toggle" 
+                    id={`toggle-${Math.random()}`}
+                    checked={checked}
+                    onChange={onChange}
+                    className="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-2 border-gray-300 appearance-none cursor-pointer transition-all duration-300 ease-in-out"
+                />
+                <label 
+                    className={`toggle-label block overflow-hidden h-5 rounded-full cursor-pointer transition-colors duration-300 ${checked ? 'bg-blue-500' : 'bg-gray-300 dark:bg-slate-600'}`}
+                ></label>
+            </div>
+        );
+
+        // v1.1: README collapsible section component
+        const ReadmeSection = ({ title, children, defaultOpen = false }) => {
+            const [isOpen, setIsOpen] = useState(defaultOpen);
+            return (
+                <div className="border border-gray-200 dark:border-slate-700 rounded overflow-hidden">
+                    <button 
+                        onClick={() => setIsOpen(!isOpen)}
+                        className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
+                    >
+                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{title}</span>
+                        <i data-lucide={isOpen ? "chevron-up" : "chevron-down"} width="16" height="16" className="text-gray-400"></i>
+                    </button>
+                    <div className={`readme-content ${isOpen ? 'expanded' : ''}`}>
+                        <div className="p-3 text-xs text-gray-600 dark:text-gray-400 leading-relaxed space-y-2 bg-white dark:bg-slate-900/50">
+                            {children}
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const SettingsModal = ({ 
+            isOpen, 
+            onClose, 
+            feeds, 
+            setFeeds, 
+            uiLang, 
+            setUiLang, 
+            theme, 
+            toggleTheme, 
+            notifications, 
+            toggleNotifications 
+        }) => {
+            const [activeTab, setActiveTab] = useState('feeds'); 
+            const [newName, setNewName] = useState('');
+            const [newUrl, setNewUrl] = useState('');
+            const [newCategory, setNewCategory] = useState('General');
+            const fileInputRef = useRef(null);
+
+            const strings = STRINGS[uiLang];
+
+            if (!isOpen) return null;
+
+            const handleAdd = () => {
+                if (!newName || !newUrl) return;
+                const newFeed = {
+                    id: Date.now().toString(),
+                    name: newName,
+                    url: newUrl,
+                    type: 'rss',
+                    enabled: true,
+                    category: newCategory || 'General'
+                };
+                setFeeds([...feeds, newFeed]);
+                setNewName('');
+                setNewUrl('');
+                setNewCategory('General');
+            };
+
+            const handleDelete = (id) => {
+                setFeeds(feeds.filter(f => f.id !== id));
+            };
+
+            const toggleFeed = (id) => {
+                setFeeds(feeds.map(f => f.id === id ? { ...f, enabled: !f.enabled } : f));
+            };
+
+            const handleExport = () => {
+                const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(feeds, null, 2));
+                const downloadAnchorNode = document.createElement('a');
+                downloadAnchorNode.setAttribute("href", dataStr);
+                downloadAnchorNode.setAttribute("download", "global_wire_feeds.json");
+                document.body.appendChild(downloadAnchorNode);
+                downloadAnchorNode.click();
+                downloadAnchorNode.remove();
+            };
+
+            const handleImportClick = () => {
+                if (window.confirm(strings.import_warn)) {
+                    fileInputRef.current.click();
+                }
+            };
+
+            const handleFileChange = (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    try {
+                        const rawData = JSON.parse(event.target.result);
+                        
+                        let parsedFeeds = [];
+                        let currentCategory = 'Imported';
+
+                        if (Array.isArray(rawData)) {
+                            rawData.forEach(item => {
+                                if (item.__comment) {
+                                    currentCategory = item.__comment.replace(/^=== | ===$/g, '').trim();
+                                } else if (item.url && item.name) {
+                                    parsedFeeds.push({
+                                        ...item,
+                                        category: item.category || currentCategory,
+                                        id: item.id || Date.now().toString() + Math.random().toString().substr(2, 5),
+                                        type: item.type || 'rss',
+                                        enabled: item.enabled !== false
+                                    });
+                                }
+                            });
+                            
+                            setFeeds(parsedFeeds);
+                            alert('Import successful!');
+                        } else {
+                            alert('Invalid JSON structure: Root must be an array');
+                        }
+                    } catch (error) {
+                        console.error(error);
+                        alert('Error parsing JSON file');
+                    }
+                };
+                reader.readAsText(file);
+                e.target.value = null; 
+            };
+
+            return (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center modal-overlay p-4">
+                    <div className="bg-white dark:bg-slate-800 rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col border border-gray-200 dark:border-slate-700">
+                        {/* Modal Header */}
+                        <div className="p-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center">
+                            <h2 className="text-lg font-bold text-slate-800 dark:text-white">{strings.settings}</h2>
+                            <button onClick={onClose} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
+                                <i data-lucide="x" width="20" height="20"></i>
+                            </button>
+                        </div>
+
+                        {/* Tabs - v1.1: Added Readme tab */}
+                        <div className="flex border-b border-gray-200 dark:border-slate-700">
+                            <button 
+                                onClick={() => setActiveTab('feeds')}
+                                className={`flex-1 py-3 text-sm font-medium transition-colors ${activeTab === 'feeds' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/10 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'}`}
+                            >
+                                {strings.tab_feeds}
+                            </button>
+                            <button 
+                                onClick={() => setActiveTab('general')}
+                                className={`flex-1 py-3 text-sm font-medium transition-colors ${activeTab === 'general' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/10 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'}`}
+                            >
+                                {strings.tab_general}
+                            </button>
+                            <button 
+                                onClick={() => setActiveTab('readme')}
+                                className={`flex-1 py-3 text-sm font-medium transition-colors ${activeTab === 'readme' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/10 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'}`}
+                            >
+                                {strings.tab_readme}
+                            </button>
+                        </div>
+                        
+                        <div className="p-4 overflow-y-auto flex-1 space-y-6 scrollbar-thin">
+                            
+                            {activeTab === 'feeds' && (
+                                <>
+                                    {/* Add New */}
+                                    <div className="bg-gray-50 dark:bg-slate-900 p-3 rounded border border-gray-200 dark:border-slate-700">
+                                        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">{strings.add_feed}</h3>
+                                        <div className="flex flex-col gap-2">
+                                            <div className="flex gap-2">
+                                                <input 
+                                                    type="text" 
+                                                    placeholder={strings.feed_name}
+                                                    value={newName}
+                                                    onChange={e => setNewName(e.target.value)}
+                                                    className="w-1/3 text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500"
+                                                />
+                                                <input 
+                                                    type="text" 
+                                                    placeholder={strings.feed_category}
+                                                    value={newCategory}
+                                                    onChange={e => setNewCategory(e.target.value)}
+                                                    className="w-1/3 text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500"
+                                                />
+                                            </div>
+                                            <div className="flex gap-2">
+                                                <input 
+                                                    type="text" 
+                                                    placeholder={strings.feed_url}
+                                                    value={newUrl}
+                                                    onChange={e => setNewUrl(e.target.value)}
+                                                    className="flex-1 text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500"
+                                                />
+                                                <button 
+                                                    onClick={handleAdd}
+                                                    className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-4 py-1.5 rounded transition-colors"
+                                                >
+                                                    {strings.add_btn}
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <p className="text-[10px] text-gray-400 mt-2">
+                                            {strings.parser_note}
+                                        </p>
+                                    </div>
+
+                                    {/* Import/Export */}
+                                    <div className="grid grid-cols-2 gap-3 pt-2 pb-2">
+                                        <input 
+                                            type="file" 
+                                            ref={fileInputRef}
+                                            onChange={handleFileChange}
+                                            accept=".json"
+                                            className="hidden"
+                                        />
+                                        <button 
+                                            onClick={handleImportClick}
+                                            className="flex items-center justify-center gap-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 text-xs font-medium py-2 rounded transition-colors"
+                                        >
+                                            <i data-lucide="upload" width="12" height="12"></i> {strings.import_btn}
+                                        </button>
+                                        <button 
+                                            onClick={handleExport}
+                                            className="flex items-center justify-center gap-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 text-xs font-medium py-2 rounded transition-colors"
+                                        >
+                                            <i data-lucide="download" width="12" height="12"></i> {strings.export_btn}
+                                        </button>
+                                    </div>
+
+                                    {/* Manage List */}
+                                    <div>
+                                        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">{strings.active_sources} ({feeds.length})</h3>
+                                        <div className="border border-gray-200 dark:border-slate-700 rounded overflow-hidden">
+                                            {feeds.map((feed, index) => (
+                                                <div key={feed.id} className={`flex items-center p-2 bg-white dark:bg-slate-900 gap-3 ${index !== feeds.length - 1 ? 'border-b border-gray-100 dark:border-slate-800' : ''}`}>
+                                                    {/* Toggle Switch */}
+                                                    <div className="flex-shrink-0 pt-1 scale-75 origin-left">
+                                                        <ToggleSwitch 
+                                                            checked={feed.enabled} 
+                                                            onChange={() => toggleFeed(feed.id)}
+                                                        />
+                                                    </div>
+
+                                                    {/* Info */}
+                                                    <div className={`flex-1 min-w-0 ${!feed.enabled ? 'opacity-50 grayscale' : ''}`}>
+                                                        <div className="flex items-center gap-2">
+                                                            <div className="font-medium text-sm text-slate-700 dark:text-slate-200 truncate">
+                                                                {feed.name}
+                                                            </div>
+                                                            {feed.category && (
+                                                                <span className="text-[10px] px-1.5 py-0.5 bg-gray-100 dark:bg-slate-800 text-gray-500 rounded-full truncate max-w-[100px]">
+                                                                    {feed.category}
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                        <div className="text-[10px] text-gray-400 truncate mt-0.5 font-mono">
+                                                            {feed.url}
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Delete Action */}
+                                                    <button 
+                                                        onClick={() => handleDelete(feed.id)}
+                                                        className="p-1.5 text-gray-400 hover:text-red-500 transition-colors"
+                                                    >
+                                                        <i data-lucide="trash-2" width="14" height="14"></i>
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </>
+                            )}
+
+                            {activeTab === 'general' && (
+                                <div className="space-y-4">
+                                    {/* Language */}
+                                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
+                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{strings.lang_label}</span>
+                                        <select 
+                                            value={uiLang} 
+                                            onChange={(e) => setUiLang(e.target.value)}
+                                            className="bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-gray-300 rounded px-2 py-1 outline-none border border-gray-300 dark:border-slate-600"
+                                        >
+                                            <option value="zh-CN">简体中文</option>
+                                            <option value="en">English</option>
+                                        </select>
+                                    </div>
+
+                                    {/* Theme */}
+                                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
+                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{strings.theme_label}</span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs text-gray-500">{theme === 'dark' ? strings.theme_dark : strings.theme_light}</span>
+                                            <ToggleSwitch 
+                                                checked={theme === 'dark'} 
+                                                onChange={toggleTheme}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    {/* Notifications */}
+                                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
+                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{strings.notif_label}</span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-xs text-gray-500">{notifications ? strings.notif_on : strings.notif_off}</span>
+                                            <ToggleSwitch 
+                                                checked={notifications} 
+                                                onChange={toggleNotifications}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* v1.1: Readme Tab */}
+                            {activeTab === 'readme' && (
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <i data-lucide="book-open" width="16" height="16" className="text-blue-500"></i>
+                                        <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">Global Wire {APP_VERSION}</h3>
+                                    </div>
+
+                                    {/* Product Purpose */}
+                                    <ReadmeSection title={uiLang === 'zh-CN' ? '产品用途' : 'Product Purpose'} defaultOpen={true}>
+                                        {uiLang === 'zh-CN' ? (
+                                            <>
+                                                <p><strong>Global Wire</strong> 是一个轻量级的全球突发新闻聚合器，无需后端服务器，纯前端运行。</p>
+                                                <p>它从全球 40+ 个 RSS 新闻源实时抓取新闻，通过 CORS 代理访问，支持中国内地、香港、台湾、日本、韩国、新加坡、欧洲、美国等地区的主流媒体。</p>
+                                                <p>所有数据存储在浏览器 localStorage 中，无需注册、无追踪、无服务端。可作为静态页面部署在 GitHub Pages 或 Cloudflare Workers 上。</p>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <p><strong>Global Wire</strong> is a lightweight global breaking news aggregator that runs entirely in the browser with no backend server.</p>
+                                                <p>It fetches news in real-time from 40+ RSS sources worldwide via CORS proxies, covering mainstream media from Mainland China, Hong Kong, Taiwan, Japan, South Korea, Singapore, Europe, and the US.</p>
+                                                <p>All data is stored in browser localStorage. No registration, no tracking, no server side. Can be deployed as a static page on GitHub Pages or Cloudflare Workers.</p>
+                                            </>
+                                        )}
+                                    </ReadmeSection>
+
+                                    {/* Usage Guide */}
+                                    <ReadmeSection title={uiLang === 'zh-CN' ? '使用指南' : 'Usage Guide'}>
+                                        {uiLang === 'zh-CN' ? (
+                                            <>
+                                                <p><strong>浏览新闻：</strong>打开页面即自动抓取所有已启用的新闻源，按时间倒序排列。</p>
+                                                <p><strong>分类筛选：</strong>使用顶部分类标签栏按地区/类别筛选新闻。</p>
+                                                <p><strong>手动刷新：</strong>点击右上角刷新按钮立即更新所有新闻源。</p>
+                                                <p><strong>添加/管理新闻源：</strong>在设置 → 新闻源中添加自定义 RSS 链接，或导入/导出配置。</p>
+                                                <p><strong>界面定制：</strong>在设置 → 通用中切换语言、深色模式、桌面通知。</p>
+                                                <p><strong>桌面通知：</strong>开启后，当页面在后台时有新新闻会发送浏览器桌面通知。</p>
+                                                <p><strong>更新横幅（v1.1 新增）：</strong>刷新时顶部显示蓝色横幅，若有新内容且页面在前台，需手动点击展开；若在后台则自动应用。</p>
+                                                <p><strong>新条目高亮（v1.1 新增）：</strong>展开新内容后，新条目带有蓝色高亮动画，5秒后自动消退。</p>
+                                                <p><strong>重要新闻标记：</strong>标题含"Breaking"、"突发"、"Urgent"、"重磅"的新闻会以红色醒目显示。</p>
+                                                <p><strong>数据存储：</strong>所有配置和缓存存储在浏览器 localStorage 中，清除浏览器数据会重置应用。</p>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <p><strong>Browsing News:</strong> Opening the page automatically fetches all enabled news sources, sorted by time in reverse order.</p>
+                                                <p><strong>Category Filter:</strong> Use the top category tabs to filter news by region/category.</p>
+                                                <p><strong>Manual Refresh:</strong> Click the refresh button in the top right to update all sources immediately.</p>
+                                                <p><strong>Add/Manage Feeds:</strong> In Settings → Feeds, add custom RSS links, or import/export configuration.</p>
+                                                <p><strong>UI Customization:</strong> In Settings → General, switch language, dark mode, and desktop notifications.</p>
+                                                <p><strong>Desktop Notifications:</strong> When enabled, new articles will trigger browser notifications when the page is in the background.</p>
+                                                <p><strong>Update Banner (v1.1):</strong> A blue banner appears at the top during refreshes. If new content arrives while you're on the page, click to expand; if in background, it auto-applies.</p>
+                                                <p><strong>New Item Highlight (v1.1):</strong> After expanding new content, new items get a blue highlight animation that fades after 5 seconds.</p>
+                                                <p><strong>Breaking News Markers:</strong> Articles with "Breaking", "Urgent", or similar keywords are highlighted in red.</p>
+                                                <p><strong>Data Storage:</strong> All configuration and cache are stored in browser localStorage. Clearing browser data resets the app.</p>
+                                            </>
+                                        )}
+                                    </ReadmeSection>
+
+                                    {/* AI Agent Debug Notes */}
+                                    <ReadmeSection title={uiLang === 'zh-CN' ? 'AI Agent 调试笔记' : 'AI Agent Debug Notes'}>
+                                        {uiLang === 'zh-CN' ? (
+                                            <>
+                                                <p><strong>v1.1 Agent 笔记：</strong></p>
+                                                <p>- 新增 UpdateBanner 组件，4种状态：hidden / updating / available / updated</p>
+                                                <p>- fetchData 改为使用 parallelFetch 并发控制（FETCH_CONCURRENCY=6），替代 Promise.all</p>
+                                                <p>- 超时从 15s 降至 12s (FETCH_TIMEOUT)</p>
+                                                <p>- 初始加载不再检查 news.length === 0，始终触发 fetchData</p>
+                                                <p>- 新增 newItemIds Set 跟踪新条目，用于高亮动画</p>
+                                                <p>- 新增 desktop notification 增强：后台标签页获取到新内容时发送系统通知</p>
+                                                <p>- Settings 新增 Readme 标签页，含 4 个可折叠小节</p>
+                                                <p>- 版本号从 v1.0 升级至 v1.1，显示在 header 和 footer</p>
+                                                <p>- localStorage keys: theme, ui_lang, news_feeds_config, news_cache_v3 (未变更)</p>
+                                                <p>- 注意：Babel in-browser transpilation，async/await 和 for...of 均可使用</p>
+                                                <p>- parallelFetch 使用 worker 模式而非 Promise.all，避免同时发出过多请求</p>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <p><strong>v1.1 Agent Notes:</strong></p>
+                                                <p>- Added UpdateBanner component with 4 states: hidden / updating / available / updated</p>
+                                                <p>- fetchData now uses parallelFetch with concurrency control (FETCH_CONCURRENCY=6), replacing Promise.all</p>
+                                                <p>- Timeout reduced from 15s to 12s (FETCH_TIMEOUT)</p>
+                                                <p>- Initial load no longer checks news.length === 0, always triggers fetchData</p>
+                                                <p>- Added newItemIds Set to track new items for highlight animation</p>
+                                                <p>- Enhanced desktop notification: sends system notification when new content arrives in background tab</p>
+                                                <p>- Settings now has a Readme tab with 4 collapsible subsections</p>
+                                                <p>- Version bumped from v1.0 to v1.1, shown in header and footer</p>
+                                                <p>- localStorage keys: theme, ui_lang, news_feeds_config, news_cache_v3 (unchanged)</p>
+                                                <p>- Note: Babel in-browser transpilation; async/await and for...of are safe to use</p>
+                                                <p>- parallelFetch uses worker pattern instead of Promise.all to avoid flooding requests</p>
+                                            </>
+                                        )}
+                                    </ReadmeSection>
+
+                                    {/* Changelog */}
+                                    <ReadmeSection title={uiLang === 'zh-CN' ? '更新日志' : 'Changelog'}>
+                                        {uiLang === 'zh-CN' ? (
+                                            <>
+                                                <p><strong>v1.0 (基线版本)</strong></p>
+                                                <ul className="list-disc pl-4 space-y-1">
+                                                    <li>全球 RSS 新闻聚合器，40+ 新闻源</li>
+                                                    <li>双 CORS 代理回退系统</li>
+                                                    <li>分类筛选、深色模式、双语界面</li>
+                                                    <li>桌面通知（基础版，仅通知最新一条）</li>
+                                                    <li>配置导入/导出</li>
+                                                    <li>localStorage 缓存</li>
+                                                </ul>
+                                                <p className="mt-2"><strong>v1.1 (当前版本)</strong></p>
+                                                <ul className="list-disc pl-4 space-y-1">
+                                                    <li>新增更新横幅系统：刷新时顶部蓝色横幅显示状态</li>
+                                                    <li>智能内容更新：前台需手动展开，后台自动应用并发送通知</li>
+                                                    <li>并行抓取优化：并发数 6，替代全部同时请求</li>
+                                                    <li>超时优化：15s → 12s</li>
+                                                    <li>桌面通知增强：后台更新时发送包含数量的系统通知</li>
+                                                    <li>新条目高亮：展开更新后新条目蓝色高亮 5 秒</li>
+                                                    <li>设置新增说明(Readme)标签页，含产品用途、使用指南、调试笔记、更新日志</li>
+                                                    <li>版本号显示在 header 和 footer</li>
+                                                    <li>页面加载始终触发抓取，不再仅依赖缓存为空</li>
+                                                </ul>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <p><strong>v1.0 (Baseline)</strong></p>
+                                                <ul className="list-disc pl-4 space-y-1">
+                                                    <li>Global RSS news aggregator with 40+ sources</li>
+                                                    <li>Dual CORS proxy fallback system</li>
+                                                    <li>Category filtering, dark mode, bilingual UI</li>
+                                                    <li>Desktop notifications (basic, single latest item)</li>
+                                                    <li>Config import/export</li>
+                                                    <li>localStorage caching</li>
+                                                </ul>
+                                                <p className="mt-2"><strong>v1.1 (Current)</strong></p>
+                                                <ul className="list-disc pl-4 space-y-1">
+                                                    <li>New update banner system: blue banner at top during refreshes</li>
+                                                    <li>Smart content updates: manual expand in foreground, auto-apply + notification in background</li>
+                                                    <li>Parallel fetch optimization: concurrency of 6, replacing all-at-once requests</li>
+                                                    <li>Timeout optimization: 15s → 12s</li>
+                                                    <li>Enhanced desktop notifications: system notification with count when updates arrive in background</li>
+                                                    <li>New item highlight: blue highlight animation for 5s after expanding updates</li>
+                                                    <li>Settings Readme tab with product purpose, usage guide, debug notes, changelog</li>
+                                                    <li>Version number displayed in header and footer</li>
+                                                    <li>Always fetch on page load, not only when cache is empty</li>
+                                                </ul>
+                                            </>
+                                        )}
+                                    </ReadmeSection>
+                                </div>
+                            )}
+
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const App = () => {
+            const [feeds, setFeeds] = useState([]);
+            const [news, setNews] = useState([]);
+            const [theme, setTheme] = useState('light');
+            const [uiLang, setUiLang] = useState('zh-CN');
+            const [notifications, setNotifications] = useState(false);
+            const [status, setStatus] = useState('idle');
+            const [lastUpdated, setLastUpdated] = useState(Date.now());
+            const [retryCount, setRetryCount] = useState(0);
+            const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+            const [fetchStats, setFetchStats] = useState({ total: 0, success: 0 });
+            
+            // v1.1: Category filter
+            const [activeCategory, setActiveCategory] = useState('ALL');
+            
+            // v1.1: Banner state
+            const [bannerState, setBannerState] = useState('hidden'); // 'hidden' | 'updating' | 'available' | 'updated'
+            const [updateCount, setUpdateCount] = useState(0);
+            
+            // v1.1: New item tracking for highlight
+            const [newItemIds, setNewItemIds] = useState(new Set());
+            const bannerDismissTimerRef = useRef(null);
+            
+            const prevFeedsStrRef = useRef('');
+            const initialFetchDoneRef = useRef(false);
+
+            // Computed categories from current feeds
+            const categories = useMemo(() => {
+                const cats = new Set(feeds.filter(f => f.enabled).map(f => f.category || 'General'));
+                return Array.from(cats).sort();
+            }, [feeds]);
+
+            // Filtered news based on active category
+            const filteredNews = useMemo(() => {
+                if (activeCategory === 'ALL') return news;
+                return news.filter(item => item.category === activeCategory);
+            }, [news, activeCategory]);
+
+            // Initialize System
+            useEffect(() => {
+                const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const savedTheme = localStorage.getItem('theme');
+                setTheme(savedTheme || (systemDark ? 'dark' : 'light'));
+
+                const savedLang = localStorage.getItem('ui_lang');
+                if (savedLang) setUiLang(savedLang);
+
+                if (Notification.permission === 'granted') setNotifications(true);
+
+                // Load Feeds Config
+                const savedFeeds = localStorage.getItem('news_feeds_config');
+                const defaultFeeds = getLazyDefaultFeeds();
+
+                if (savedFeeds) {
+                    try {
+                        const parsed = JSON.parse(savedFeeds);
+                        if (parsed.length < 15) { 
+                            setFeeds(defaultFeeds); 
+                        } else {
+                            setFeeds(parsed);
+                        }
+                    } catch(e) {
+                        setFeeds(defaultFeeds);
+                    }
+                } else {
+                    setFeeds(defaultFeeds);
+                }
+
+                // Load News Cache
+                const cached = localStorage.getItem('news_cache_v3');
+                if (cached) {
+                    try {
+                        setNews(JSON.parse(cached));
+                    } catch(e) { console.error("Cache error"); }
+                }
+            }, []);
+
+            // v1.1: Always fetch on page load (not just when news.length === 0)
+            useEffect(() => {
+                if (feeds.length > 0 && !initialFetchDoneRef.current) {
+                    initialFetchDoneRef.current = true;
+                    fetchData();
+                }
+                
+                const timer = setInterval(fetchData, UPDATE_INTERVAL);
+                return () => clearInterval(timer);
+            }, [feeds, notifications]); 
+
+            // Save feeds when changed
+            useEffect(() => {
+                if (feeds.length > 0) {
+                    localStorage.setItem('news_feeds_config', JSON.stringify(feeds));
+                }
+            }, [feeds]);
+
+            // Save UI Lang
+            useEffect(() => {
+                localStorage.setItem('ui_lang', uiLang);
+            }, [uiLang]);
+
+            // Theme Management
+            useEffect(() => {
+                if (theme === 'dark') document.documentElement.classList.add('dark');
+                else document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', theme);
+            }, [theme]);
+
+            // Icon Refresh
+            useEffect(() => {
+                if (window.lucide) window.lucide.createIcons();
+            }, [news, theme, status, isSettingsOpen, feeds, bannerState]);
+
+            // v1.1: Clear highlight after 5 seconds
+            useEffect(() => {
+                if (newItemIds.size > 0) {
+                    const timer = setTimeout(() => {
+                        setNewItemIds(new Set());
+                    }, 5500); // Slightly longer than animation to ensure it completes
+                    return () => clearTimeout(timer);
+                }
+            }, [newItemIds]);
+
+            // v1.1: Handle page visibility changes
+            useEffect(() => {
+                const handleVisibilityChange = () => {
+                    // When page becomes visible and there are pending items already applied in background,
+                    // the banner should be hidden since updates were already merged.
+                    // If banner was "available" and user left and came back, keep it as is.
+                };
+                document.addEventListener('visibilitychange', handleVisibilityChange);
+                return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+            }, []);
+
+            // v1.1: Enhanced notification sender
+            const sendNotification = useCallback((count) => {
+                if (!notifications || document.visibilityState === 'visible' || count === 0) return;
+                const strings = STRINGS[uiLang];
+                try {
+                    new Notification(strings.notif_new_updates_title, {
+                        body: strings.notif_new_updates_body.replace('{count}', count),
+                        icon: 'https://cdn-icons-png.flaticon.com/512/2965/2965879.png'
+                    });
+                } catch(e) {
+                    console.warn('Notification failed:', e);
+                }
+            }, [notifications, uiLang]);
+
+            // v1.1: Handle banner expand
+            const handleBannerExpand = useCallback(() => {
+                setBannerState('updated');
+                // Auto-hide the "updated" banner after 2 seconds
+                if (bannerDismissTimerRef.current) clearTimeout(bannerDismissTimerRef.current);
+                bannerDismissTimerRef.current = setTimeout(() => {
+                    setBannerState('hidden');
+                }, 2000);
+            }, []);
+
+            // Main Fetch Logic - v1.1: Uses parallelFetch with concurrency control
+            const fetchData = async () => {
+                if (feeds.length === 0) return;
+
+                setStatus('fetching');
+                setBannerState('updating'); // v1.1: Show updating banner
+
+                const activeFeeds = feeds.filter(f => f.enabled !== false);
+
+                try {
+                    const { results: allItems, successCount } = await parallelFetch(activeFeeds, FETCH_CONCURRENCY);
+                    
+                    setFetchStats({ total: activeFeeds.length, success: successCount });
+
+                    if (allItems.length > 0) {
+                        setNews(prevNews => {
+                            const currentIds = new Set(prevNews.map(n => n.id));
+                            const newUniqueItems = allItems.filter(item => !currentIds.has(item.id));
+                            
+                            if (newUniqueItems.length > 0) {
+                                const combined = [...newUniqueItems, ...prevNews]
+                                    .sort((a, b) => b.timestamp - a.timestamp)
+                                    .slice(0, MAX_ITEMS);
+                                
+                                localStorage.setItem('news_cache_v3', JSON.stringify(combined));
+
+                                // v1.1: Smart banner behavior based on tab visibility
+                                const isVisible = document.visibilityState === 'visible';
+                                if (isVisible) {
+                                    // User is viewing the page - show "available" banner
+                                    setUpdateCount(newUniqueItems.length);
+                                    setBannerState('available');
+                                    // Track new item IDs for highlight
+                                    const newIds = new Set(newUniqueItems.map(item => item.id));
+                                    setNewItemIds(newIds);
+                                } else {
+                                    // User is NOT viewing the page - auto-apply and send notification
+                                    setBannerState('hidden');
+                                    sendNotification(newUniqueItems.length);
+                                }
+
+                                return combined;
+                            }
+                            // No new items
+                            setBannerState('hidden');
+                            return prevNews;
+                        });
+                        setLastUpdated(Date.now());
+                        setStatus('idle');
+                        setRetryCount(0);
+                    } else {
+                        setStatus('idle');
+                        setBannerState('hidden');
+                        if (news.length === 0 && successCount === 0 && retryCount < 2) {
+                             setStatus('error');
+                        }
+                    }
+
+                } catch (error) {
+                    console.error("Fetch Cycle Error:", error);
+                    setStatus('error');
+                    setBannerState('hidden');
+                }
+            };
+            
+            const toggleNotifications = async () => {
+                if (!notifications) {
+                    const permission = await Notification.requestPermission();
+                    if (permission === 'granted') setNotifications(true);
+                } else {
+                    setNotifications(false);
+                }
+            };
+            
+            const toggleTheme = () => {
+                setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+            };
+
+            const handleOpenSettings = () => {
+                prevFeedsStrRef.current = JSON.stringify(feeds);
+                setIsSettingsOpen(true);
+            };
+
+            const handleCloseSettings = () => {
+                setIsSettingsOpen(false);
+                const currentFeedsStr = JSON.stringify(feeds);
+                if (prevFeedsStrRef.current !== currentFeedsStr) {
+                    setNews([]); 
+                    localStorage.removeItem('news_cache_v3');
+                    setStatus('idle');
+                    setActiveCategory('ALL');
+                    setNewItemIds(new Set());
+                    setTimeout(() => fetchData(), 50);
+                }
+            };
+
+            const handleManualRefresh = () => {
+                fetchData();
+            };
+
+            const hasError = status === 'error' || (status === 'idle' && fetchStats.total > 0 && fetchStats.success === 0);
+
+            return (
+                <div className="min-h-screen flex flex-col max-w-4xl mx-auto border-x border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl transition-colors duration-300">
+                    {/* v1.1: Update Banner */}
+                    <UpdateBanner 
+                        bannerState={bannerState}
+                        updateCount={updateCount}
+                        onExpand={handleBannerExpand}
+                        uiStrings={STRINGS[uiLang]}
+                    />
+
+                    <Header 
+                        status={status}
+                        onOpenSettings={handleOpenSettings}
+                        onRefresh={handleManualRefresh}
+                        uiStrings={STRINGS[uiLang]}
+                        hasError={hasError}
+                    />
+
+                    {/* Category Filter Bar */}
+                    <FilterBar 
+                        categories={categories}
+                        activeCategory={activeCategory}
+                        onSelectCategory={setActiveCategory}
+                        uiStrings={STRINGS[uiLang]}
+                    />
+
+                    <main className="flex-1 relative p-4 sm:p-6 overflow-x-hidden">
+                        <div className="timeline-line"></div>
+
+                        {filteredNews.length === 0 && status !== 'fetching' && (
+                            <div className="pl-10 pt-10 text-gray-400">
+                                <p>{hasError ? STRINGS[uiLang].error_fetch : STRINGS[uiLang].no_items}</p>
+                            </div>
+                        )}
+
+                        <div className="space-y-0">
+                            {filteredNews.map((item) => (
+                                <NewsCard 
+                                    key={item.id} 
+                                    item={item} 
+                                    isNew={newItemIds.has(item.id)} 
+                                />
+                            ))}
+                        </div>
+
+                        <div className="relative pl-8 py-12 text-center opacity-60 hover:opacity-100 transition-opacity">
+                            <div className="absolute left-[1.25rem] -translate-x-1/2 w-2 h-2 bg-gray-300 dark:bg-slate-700 rounded-full top-1/2"></div>
+                            <div className="flex flex-col items-center gap-1">
+                                <button 
+                                    onClick={handleManualRefresh}
+                                    className={`text-xs font-mono transition-colors ${hasError ? 'text-red-500 font-bold' : 'text-gray-400 hover:text-blue-500'}`}
+                                >
+                                    {status === 'fetching' ? STRINGS[uiLang].updating : 
+                                     hasError ? STRINGS[uiLang].error_fetch : 
+                                     `${STRINGS[uiLang].last_updated} ${formatTime(lastUpdated)}`}
+                                </button>
+                                {fetchStats.total > 0 && (
+                                    <span className={`text-[10px] font-mono ${fetchStats.success < fetchStats.total ? 'text-yellow-600 dark:text-yellow-500' : 'text-gray-300 dark:text-slate-700'}`}>
+                                        {STRINGS[uiLang].success_rate} {fetchStats.success}/{fetchStats.total}
+                                    </span>
+                                )}
+                                <p className="text-[10px] text-gray-300 dark:text-slate-700 mt-1">
+                                    {STRINGS[uiLang].sources_via} Global RSS Feeds (Proxy)
+                                </p>
+                                <p className="text-[10px] text-gray-300 dark:text-slate-700">
+                                    Global Wire {APP_VERSION}
+                                </p>
+                            </div>
+                        </div>
+                    </main>
+
+                    <SettingsModal 
+                        isOpen={isSettingsOpen} 
+                        onClose={handleCloseSettings}
+                        feeds={feeds}
+                        setFeeds={setFeeds}
+                        uiLang={uiLang}
+                        setUiLang={setUiLang}
+                        theme={theme}
+                        toggleTheme={toggleTheme}
+                        notifications={notifications}
+                        toggleNotifications={toggleNotifications}
+                    />
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body></html>

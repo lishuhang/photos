@@ -3,77 +3,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="7x24 Global Breaking News Aggregator">
     <title>Global Wire | 7x24 突发新闻</title>
-    
+
+    <!-- Preconnect hints -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://unpkg.com">
+    <link rel="preconnect" href="https://corsproxy.io">
+    <link rel="preconnect" href="https://api.allorigins.win">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
+
     <!-- React & ReactDOM -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin=""></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin=""></script>
-    
-    <!-- Babel for JSX -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- htm (~1KB) replaces Babel (~800KB) -->
+    <script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
 
-    <!-- Configure Tailwind theme -->
+    <!-- Configure Tailwind theme - simplified v1.2 -->
     <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        slate: {
-                            850: '#1e293b',
-                            900: '#0f172a',
-                        },
-                        red: {
-                            650: '#c53030',
-                        }
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                        'fade-in-down': 'fadeInDown 0.5s ease-out',
-                        'highlight-fade': 'highlightFade 5s ease-out forwards',
-                    },
-                    keyframes: {
-                        fadeInDown: {
-                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        highlightFade: {
-                            '0%': { backgroundColor: 'rgba(59, 130, 246, 0.25)' },
-                            '70%': { backgroundColor: 'rgba(59, 130, 246, 0.15)' },
-                            '100%': { backgroundColor: 'transparent' },
-                        }
-                    }
-                }
-            }
-        }
+        tailwind.config = { darkMode: 'class' }
     </script>
 
     <style>
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            transition: background-color 0.3s ease, color 0.3s ease;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
         }
-        
+
         .timeline-line {
             position: absolute;
-            left: 1.25rem; 
+            left: 1.25rem;
             top: 0;
             bottom: 0;
             width: 2px;
             background-color: #e2e8f0;
             z-index: 0;
         }
-        
+
         .dark .timeline-line {
             background-color: #334155;
         }
 
-        /* Loading Bar Animation */
         .loading-bar {
             position: absolute;
             bottom: 0;
@@ -83,19 +53,17 @@
             animation: loading 2s infinite ease-in-out;
             width: 0%;
         }
-        
+
         @keyframes loading {
             0% { width: 0%; left: 0; }
             50% { width: 100%; left: 0; }
             100% { width: 0%; left: 100%; }
         }
 
-        /* Modal Overlay */
         .modal-overlay {
             background-color: rgba(0, 0, 0, 0.5);
         }
 
-        /* Custom Toggle Switch */
         .toggle-checkbox:checked {
             right: 0;
             border-color: #3b82f6;
@@ -103,8 +71,7 @@
         .toggle-checkbox:checked + .toggle-label {
             background-color: #3b82f6;
         }
-        
-        /* Compact Scrollbar for feeds list */
+
         .scrollbar-thin::-webkit-scrollbar {
             width: 6px;
         }
@@ -119,7 +86,6 @@
             background-color: #475569;
         }
 
-        /* Filter Bar Scroll */
         .hide-scrollbar::-webkit-scrollbar {
             display: none;
         }
@@ -128,26 +94,6 @@
             scrollbar-width: none;
         }
 
-        /* New item highlight */
-        .new-item-highlight {
-            animation: highlightFade 5s ease-out forwards;
-        }
-        @keyframes highlightFade {
-            0% { background-color: rgba(59, 130, 246, 0.25); }
-            70% { background-color: rgba(59, 130, 246, 0.10); }
-            100% { background-color: transparent; }
-        }
-
-        /* Banner transition */
-        .banner-enter {
-            animation: bannerSlideDown 0.3s ease-out;
-        }
-        @keyframes bannerSlideDown {
-            0% { transform: translateY(-100%); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
-
-        /* Spinner for banner */
         .banner-spinner {
             display: inline-block;
             width: 14px;
@@ -159,17 +105,6 @@
         }
         @keyframes spin {
             to { transform: rotate(360deg); }
-        }
-
-        /* README collapsible sections */
-        .readme-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-        }
-        .readme-content.expanded {
-            max-height: 2000px;
-            transition: max-height 0.5s ease-in;
         }
     </style>
 </head>
@@ -226,21 +161,35 @@
     ]
     </script>
 
-    <script type="text/babel">
+    <script>
+        const html = htm.bind(React.createElement);
         const { useState, useEffect, useRef, useMemo, useCallback } = React;
 
         // --- Configuration ---
-        const MAX_ITEMS = 150; 
-        const UPDATE_INTERVAL = 30000; // 30 seconds
-        const FETCH_CONCURRENCY = 6; // v1.1: Parallel fetching concurrency
-        const FETCH_TIMEOUT = 12000; // v1.1: Reduced from 15s to 12s
-        const APP_VERSION = 'v1.1'; // v1.1: Version number
-        
+        const MAX_ITEMS = 150;
+        const UPDATE_INTERVAL = 30000;
+        const FETCH_TIMEOUT = 8000; // v1.2: Reduced from 12s to 8s
+        const APP_VERSION = 'v1.2';
+
         // Proxy Fallback System
         const PROXY_LIST = [
-            "https://corsproxy.io/?", 
+            "https://corsproxy.io/?",
             "https://api.allorigins.win/raw?url="
         ];
+
+        // --- Inline SVG Icons (replaces Lucide ~100KB) ---
+        const IconRefresh = () => html`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
+        const IconSettings = () => html`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>`;
+        const IconClose = () => html`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
+        const IconBell = () => html`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>`;
+        const IconCheckCircle = () => html`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>`;
+        const IconChevronDown = () => html`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`;
+        const IconChevronUp = () => html`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>`;
+        const IconPlus = () => html`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`;
+        const IconTrash = () => html`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>`;
+        const IconDownload = () => html`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
+        const IconUpload = () => html`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`;
+        const IconBookOpen = () => html`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`;
 
         // --- Localization ---
         const STRINGS = {
@@ -276,8 +225,8 @@
                 error_fetch: '部分或全部更新失败。',
                 success_rate: '更新成功率: ',
                 filter_all: '全部',
-                // v1.1 new strings
                 banner_updating: '正在更新所有新闻源...',
+                banner_progress: '正在更新 {done}/{total}...',
                 banner_updates_available: '已获取 {count} 条更新，点击展开',
                 banner_updated: '内容已更新',
                 notif_new_updates_title: 'Global Wire 有新消息',
@@ -315,8 +264,8 @@
                 error_fetch: 'Update partial/failed.',
                 success_rate: 'Success Rate: ',
                 filter_all: 'All',
-                // v1.1 new strings
                 banner_updating: 'Updating all sources...',
+                banner_progress: 'Updating {done}/{total}...',
                 banner_updates_available: '{count} updates fetched, click to expand',
                 banner_updated: 'Content updated',
                 notif_new_updates_title: 'Global Wire Updates',
@@ -338,35 +287,6 @@
             return [];
         };
 
-        // v1.1: Parallel fetch with concurrency control
-        const parallelFetch = async (feeds, concurrency) => {
-            const results = [];
-            let successCount = 0;
-            let index = 0;
-
-            const worker = async () => {
-                while (index < feeds.length) {
-                    const currentIndex = index++;
-                    const feed = feeds[currentIndex];
-                    try {
-                        const xmlText = await fetchFeedContent(feed.url);
-                        successCount++;
-                        results.push(parseRSS(xmlText, feed));
-                    } catch (err) {
-                        results.push([]);
-                    }
-                }
-            };
-
-            const workers = [];
-            for (let i = 0; i < Math.min(concurrency, feeds.length); i++) {
-                workers.push(worker());
-            }
-            await Promise.all(workers);
-            
-            return { results: results.flat(), successCount };
-        };
-
         // Robust Fetcher with Proxy Fallback and Encoding Handling
         const fetchFeedContent = async (url) => {
             let lastError = null;
@@ -375,19 +295,19 @@
             for (const proxy of PROXY_LIST) {
                 try {
                     const controller = new AbortController();
-                    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT); // v1.1: 12s timeout
+                    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
 
                     const targetUrl = proxy + encodeURIComponent(url) + cacheBuster;
-                    
+
                     const response = await fetch(targetUrl, { signal: controller.signal });
                     clearTimeout(timeoutId);
 
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+                    if (!response.ok) throw new Error('HTTP ' + response.status);
 
                     const buffer = await response.arrayBuffer();
                     const decoder = new TextDecoder("utf-8");
                     const text = decoder.decode(buffer);
-                    
+
                     if (text.includes("<?xml") || text.includes("<rss") || text.includes("<feed") || text.includes("<rdf")) {
                         return text;
                     }
@@ -404,30 +324,30 @@
             try {
                 const parser = new DOMParser();
                 const xmlDoc = parser.parseFromString(xmlText, "text/xml");
-                
+
                 const items = xmlDoc.querySelectorAll("item, entry");
                 const newsItems = [];
 
                 items.forEach(item => {
                     const title = item.querySelector("title")?.textContent;
-                    
+
                     let link = item.querySelector("link")?.textContent;
                     if (!link) {
                         const linkElem = item.querySelector("link[href]");
                         if (linkElem) link = linkElem.getAttribute("href");
                     }
-                    
+
                     let pubDate = item.querySelector("pubDate, published, updated")?.textContent;
                     if (!pubDate) {
-                        const dcDate = item.getElementsByTagName("dc:date")[0] 
+                        const dcDate = item.getElementsByTagName("dc:date")[0]
                                     || item.getElementsByTagNameNS("*", "date")[0];
                         if (dcDate) pubDate = dcDate.textContent;
                     }
-                    
+
                     if (title && link) {
                         let sourceName = feedInfo.name;
                         let cleanTitle = title;
-                        
+
                         if (title.includes(" - ")) {
                             const parts = title.split(" - ");
                             if (parts[parts.length - 1].length < 20) {
@@ -436,10 +356,10 @@
                             cleanTitle = parts.slice(0, -1).join(" - ");
                         }
 
-                        const isImportant = 
-                            title.includes("Urgent") || 
-                            title.includes("Breaking") || 
-                            title.includes("\u7a81\u53d1") || 
+                        const isImportant =
+                            title.includes("Urgent") ||
+                            title.includes("Breaking") ||
+                            title.includes("\u7a81\u53d1") ||
                             title.includes("\u91cd\u78c5");
 
                         let ts = Date.now();
@@ -451,7 +371,7 @@
                         }
 
                         newsItems.push({
-                            id: link, 
+                            id: link,
                             timestamp: ts,
                             source: sourceName,
                             content: cleanTitle,
@@ -462,12 +382,12 @@
                         });
                     }
                 });
-                
+
                 newsItems.sort((a, b) => b.timestamp - a.timestamp);
                 return newsItems.slice(0, 3);
 
             } catch (e) {
-                console.warn(`XML Parse Error for ${feedInfo.name}`, e);
+                console.warn('XML Parse Error for ' + feedInfo.name, e);
                 return [];
             }
         };
@@ -480,212 +400,209 @@
 
         // --- Components ---
 
-        // v1.1: Banner component for update notifications
-        const UpdateBanner = ({ bannerState, updateCount, onExpand, uiStrings }) => {
+        // v1.2: UpdateBanner with progress display
+        const UpdateBanner = ({ bannerState, updateCount, bannerProgress, onExpand, uiStrings }) => {
             if (bannerState === 'hidden') return null;
 
-            let content = null;
-            
             if (bannerState === 'updating') {
-                content = (
-                    <div className="flex items-center gap-2">
-                        <div className="banner-spinner"></div>
-                        <span className="text-sm font-medium text-white">{uiStrings.banner_updating}</span>
+                const progressText = bannerProgress.total > 0
+                    ? uiStrings.banner_progress.replace('{done}', bannerProgress.completed).replace('{total}', bannerProgress.total)
+                    : uiStrings.banner_updating;
+                return html`
+                    <div className="bg-blue-600 dark:bg-blue-700 px-4 py-2 text-center z-[60]">
+                        <div className="flex items-center justify-center gap-2">
+                            <div className="banner-spinner"></div>
+                            <span className="text-sm font-medium text-white">${progressText}</span>
+                        </div>
                     </div>
-                );
-            } else if (bannerState === 'available') {
-                const text = uiStrings.banner_updates_available.replace('{count}', updateCount);
-                content = (
-                    <div className="flex items-center gap-2 cursor-pointer" onClick={onExpand}>
-                        <i data-lucide="bell-ring" width="16" height="16" className="text-white"></i>
-                        <span className="text-sm font-medium text-white">{text}</span>
-                        <i data-lucide="chevron-down" width="14" height="14" className="text-white/70"></i>
-                    </div>
-                );
-            } else if (bannerState === 'updated') {
-                content = (
-                    <div className="flex items-center gap-2">
-                        <i data-lucide="check-circle" width="16" height="16" className="text-white"></i>
-                        <span className="text-sm font-medium text-white">{uiStrings.banner_updated}</span>
-                    </div>
-                );
+                `;
             }
 
-            return (
-                <div className="banner-enter bg-blue-600 dark:bg-blue-700 px-4 py-2.5 text-center z-[60] shadow-md">
-                    {content}
-                </div>
-            );
+            if (bannerState === 'available') {
+                const text = uiStrings.banner_updates_available.replace('{count}', updateCount);
+                return html`
+                    <div className="bg-blue-600 dark:bg-blue-700 px-4 py-2 text-center z-[60]">
+                        <div className="flex items-center justify-center gap-2 cursor-pointer" onClick=${onExpand}>
+                            <${IconBell} />
+                            <span className="text-sm font-medium text-white">${text}</span>
+                            <span className="text-white/70"><${IconChevronDown} /></span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (bannerState === 'updated') {
+                return html`
+                    <div className="bg-blue-600 dark:bg-blue-700 px-4 py-2 text-center z-[60]">
+                        <div className="flex items-center justify-center gap-2">
+                            <${IconCheckCircle} />
+                            <span className="text-sm font-medium text-white">${uiStrings.banner_updated}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            return null;
         };
 
         const Header = ({ status, onOpenSettings, onRefresh, uiStrings, hasError }) => {
-            let statusColor = 'bg-green-500'; 
-            let pingColor = 'bg-green-400';
-            
-            if (status === 'fetching') {
-                statusColor = 'bg-yellow-500';
-                pingColor = 'bg-yellow-400';
-            } else if (status === 'error') {
-                statusColor = 'bg-red-600';
-                pingColor = 'bg-red-500';
-            } else if (hasError) {
-                statusColor = 'bg-yellow-600';
-                pingColor = 'bg-yellow-500';
-            }
+            let statusColor = 'bg-green-500';
+            if (status === 'fetching') statusColor = 'bg-yellow-500';
+            else if (status === 'error') statusColor = 'bg-red-600';
+            else if (hasError) statusColor = 'bg-yellow-600';
 
-            return (
-                <header className="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-gray-200 dark:border-slate-800 px-4 py-3 flex justify-between items-center shadow-sm transition-colors duration-300">
+            return html`
+                <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 px-4 py-3 flex justify-between items-center relative">
                     <div className="flex items-center space-x-3">
                         <div className="relative flex h-3 w-3">
-                          <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${pingColor}`}></span>
-                          <span className={`relative inline-flex rounded-full h-3 w-3 ${statusColor}`}></span>
+                            <span className=${`relative inline-flex rounded-full h-3 w-3 ${statusColor}`}></span>
                         </div>
                         <h1 className="text-lg font-bold tracking-tight text-slate-800 dark:text-white flex flex-col sm:flex-row sm:items-center leading-none">
-                            {uiStrings.title}
+                            ${uiStrings.title}
                             <span className="hidden sm:inline mx-2 text-gray-300 dark:text-slate-700">|</span>
                             <span className="text-xs font-normal text-gray-500 dark:text-slate-400 mt-1 sm:mt-0">
-                                {uiStrings.subtitle}
+                                ${uiStrings.subtitle}
                             </span>
-                            <span className="ml-2 text-[10px] font-mono text-gray-400 dark:text-slate-600 bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">{APP_VERSION}</span>
+                            <span className="ml-2 text-[10px] font-mono text-gray-400 dark:text-slate-600 bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">${APP_VERSION}</span>
                         </h1>
                     </div>
-                    
+
                     <div className="flex items-center space-x-3 sm:space-x-4">
-                        <button 
-                            onClick={onRefresh}
-                            className="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-slate-800 transition-colors"
-                            title={uiStrings.refresh}
+                        <button
+                            onClick=${onRefresh}
+                            className="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-slate-800"
+                            title=${uiStrings.refresh}
                         >
-                            <i data-lucide="rotate-cw" width="18" height="18" className={status === 'fetching' ? 'animate-spin' : ''}></i>
+                            <${IconRefresh} />
                         </button>
-                        <button 
-                            onClick={onOpenSettings}
-                            className="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-slate-800 transition-colors"
-                            title={uiStrings.settings}
+                        <button
+                            onClick=${onOpenSettings}
+                            className="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-slate-800"
+                            title=${uiStrings.settings}
                         >
-                            <i data-lucide="settings" width="18" height="18"></i>
+                            <${IconSettings} />
                         </button>
                     </div>
-                    
-                    {status === 'fetching' && <div className="loading-bar"></div>}
+
+                    ${status === 'fetching' && html`<div className="loading-bar"></div>`}
                 </header>
-            );
+            `;
         };
 
         const FilterBar = ({ categories, activeCategory, onSelectCategory, uiStrings }) => {
-            return (
-                <div className="sticky top-[61px] z-40 bg-white/95 dark:bg-slate-900/95 backdrop-blur border-b border-gray-100 dark:border-slate-800 py-2 px-4 flex gap-2 overflow-x-auto hide-scrollbar">
+            return html`
+                <div className="sticky top-[53px] z-40 bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 py-2 px-4 flex gap-2 overflow-x-auto hide-scrollbar">
                     <button
-                        onClick={() => onSelectCategory('ALL')}
-                        className={`whitespace-nowrap px-3 py-1 rounded-full text-xs font-medium transition-all ${
-                            activeCategory === 'ALL' 
-                            ? 'bg-blue-600 text-white shadow-sm' 
+                        onClick=${() => onSelectCategory('ALL')}
+                        className=${`whitespace-nowrap px-3 py-1 rounded text-xs font-medium ${
+                            activeCategory === 'ALL'
+                            ? 'bg-blue-600 text-white'
                             : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700'
                         }`}
                     >
-                        {uiStrings.filter_all}
+                        ${uiStrings.filter_all}
                     </button>
-                    {categories.map(cat => (
+                    ${categories.map(cat => html`
                         <button
-                            key={cat}
-                            onClick={() => onSelectCategory(cat)}
-                            className={`whitespace-nowrap px-3 py-1 rounded-full text-xs font-medium transition-all ${
-                                activeCategory === cat 
-                                ? 'bg-blue-600 text-white shadow-sm' 
+                            key=${cat}
+                            onClick=${() => onSelectCategory(cat)}
+                            className=${`whitespace-nowrap px-3 py-1 rounded text-xs font-medium ${
+                                activeCategory === cat
+                                ? 'bg-blue-600 text-white'
                                 : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700'
                             }`}
                         >
-                            {cat}
+                            ${cat}
                         </button>
-                    ))}
+                    `)}
                 </div>
-            );
+            `;
         };
 
-        // v1.1: NewsCard with isNew prop for highlight
-        const NewsCard = ({ item, isNew }) => {
-            return (
-                <a href={item.url} target="_blank" rel="noopener noreferrer" 
-                   className={`block relative pl-6 pb-6 group animate-fade-in-down hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-colors rounded-r-lg -ml-2 p-2 ${isNew ? 'new-item-highlight' : ''}`}>
-                    {/* Timestamp Dot */}
-                    <div className={`absolute left-[0.5rem] top-4 -translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-slate-900 z-10 transition-colors duration-300
-                        ${item.important ? 'bg-red-600 shadow-[0_0_6px_rgba(220,38,38,0.6)]' : 'bg-blue-500 dark:bg-blue-400'}`}>
-                    </div>
+        // v1.2: NewsCard simplified - no animations, no glow, no transitions
+        const NewsCard = ({ item }) => {
+            return html`
+                <a href=${item.url} target="_blank" rel="noopener noreferrer"
+                   className="block relative pl-6 pb-6 group hover:bg-gray-50 dark:hover:bg-slate-800/50 rounded-r-lg -ml-2 p-2">
+                    <div className=${`absolute left-[0.5rem] top-4 -translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-slate-900 z-10
+                        ${item.important ? 'bg-red-600' : 'bg-blue-500 dark:bg-blue-400'}`}></div>
 
                     <div className="flex flex-col sm:flex-row sm:items-baseline gap-1.5 sm:gap-2 mb-0.5">
                         <div className="flex items-center gap-2 flex-wrap">
-                            <span className={`text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider border transition-colors shrink-0
-                                ${item.important 
-                                    ? 'bg-red-50 border-red-100 text-red-700 dark:bg-red-900/20 dark:border-red-900/50 dark:text-red-300' 
+                            <span className=${`text-[10px] px-1.5 py-0.5 rounded font-bold uppercase tracking-wider border shrink-0
+                                ${item.important
+                                    ? 'bg-red-50 border-red-100 text-red-700 dark:bg-red-900/20 dark:border-red-900/50 dark:text-red-300'
                                     : 'bg-gray-100 border-gray-200 text-gray-600 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400'}`}>
-                                {item.source}
+                                ${item.source}
                             </span>
                             <span className="font-mono text-xs text-gray-400 dark:text-slate-500">
-                                {formatTime(item.timestamp)}
+                                ${formatTime(item.timestamp)}
                             </span>
-                            {isNew && (
-                                <span className="text-[9px] px-1 py-0.5 rounded bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 font-bold uppercase">NEW</span>
-                            )}
                         </div>
-                        <h2 className={`text-base leading-snug font-medium transition-colors duration-300
+                        <h2 className=${`text-base leading-snug font-medium
                             ${item.important ? 'text-red-700 dark:text-red-400 font-bold' : 'text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400'}`}>
-                            {item.content}
+                            ${item.content}
                         </h2>
                     </div>
                 </a>
-            );
+            `;
         };
 
-        const ToggleSwitch = ({ checked, onChange }) => (
-            <div className="relative inline-block w-10 h-5 align-middle select-none transition duration-200 ease-in">
-                <input 
-                    type="checkbox" 
-                    name="toggle" 
-                    id={`toggle-${Math.random()}`}
-                    checked={checked}
-                    onChange={onChange}
-                    className="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-2 border-gray-300 appearance-none cursor-pointer transition-all duration-300 ease-in-out"
-                />
-                <label 
-                    className={`toggle-label block overflow-hidden h-5 rounded-full cursor-pointer transition-colors duration-300 ${checked ? 'bg-blue-500' : 'bg-gray-300 dark:bg-slate-600'}`}
-                ></label>
-            </div>
-        );
-
-        // v1.1: README collapsible section component
-        const ReadmeSection = ({ title, children, defaultOpen = false }) => {
-            const [isOpen, setIsOpen] = useState(defaultOpen);
-            return (
-                <div className="border border-gray-200 dark:border-slate-700 rounded overflow-hidden">
-                    <button 
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors"
-                    >
-                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{title}</span>
-                        <i data-lucide={isOpen ? "chevron-up" : "chevron-down"} width="16" height="16" className="text-gray-400"></i>
-                    </button>
-                    <div className={`readme-content ${isOpen ? 'expanded' : ''}`}>
-                        <div className="p-3 text-xs text-gray-600 dark:text-gray-400 leading-relaxed space-y-2 bg-white dark:bg-slate-900/50">
-                            {children}
-                        </div>
-                    </div>
+        // v1.2: ToggleSwitch without transition animations
+        const ToggleSwitch = ({ checked, onChange }) => {
+            const idRef = useRef('toggle-' + Math.random());
+            return html`
+                <div className="relative inline-block w-10 h-5 align-middle select-none">
+                    <input
+                        type="checkbox"
+                        name="toggle"
+                        id=${idRef.current}
+                        checked=${checked}
+                        onChange=${onChange}
+                        className="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-2 border-gray-300 appearance-none cursor-pointer"
+                    />
+                    <label
+                        htmlFor=${idRef.current}
+                        className=${`toggle-label block overflow-hidden h-5 rounded-full cursor-pointer ${checked ? 'bg-blue-500' : 'bg-gray-300 dark:bg-slate-600'}`}
+                    ></label>
                 </div>
-            );
+            `;
         };
 
-        const SettingsModal = ({ 
-            isOpen, 
-            onClose, 
-            feeds, 
-            setFeeds, 
-            uiLang, 
-            setUiLang, 
-            theme, 
-            toggleTheme, 
-            notifications, 
-            toggleNotifications 
+        // v1.2: ReadmeSection with instant expand/collapse
+        const ReadmeSection = ({ title, children, defaultOpen }) => {
+            const [isOpen, setIsOpen] = useState(!!defaultOpen);
+            return html`
+                <div className="border border-gray-200 dark:border-slate-700 rounded overflow-hidden">
+                    <button
+                        onClick=${() => setIsOpen(!isOpen)}
+                        className="w-full flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 hover:bg-gray-100 dark:hover:bg-slate-800"
+                    >
+                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${title}</span>
+                        ${isOpen ? html`<${IconChevronUp} />` : html`<${IconChevronDown} />`}
+                    </button>
+                    ${isOpen && html`
+                        <div className="p-3 text-xs text-gray-600 dark:text-gray-400 leading-relaxed space-y-2 bg-white dark:bg-slate-900/50">
+                            ${children}
+                        </div>
+                    `}
+                </div>
+            `;
+        };
+
+        const SettingsModal = ({
+            isOpen,
+            onClose,
+            feeds,
+            setFeeds,
+            uiLang,
+            setUiLang,
+            theme,
+            toggleTheme,
+            notifications,
+            toggleNotifications
         }) => {
-            const [activeTab, setActiveTab] = useState('feeds'); 
+            const [activeTab, setActiveTab] = useState('feeds');
             const [newName, setNewName] = useState('');
             const [newUrl, setNewUrl] = useState('');
             const [newCategory, setNewCategory] = useState('General');
@@ -738,12 +655,12 @@
             const handleFileChange = (e) => {
                 const file = e.target.files[0];
                 if (!file) return;
-                
+
                 const reader = new FileReader();
                 reader.onload = (event) => {
                     try {
                         const rawData = JSON.parse(event.target.result);
-                        
+
                         let parsedFeeds = [];
                         let currentCategory = 'Imported';
 
@@ -761,7 +678,7 @@
                                     });
                                 }
                             });
-                            
+
                             setFeeds(parsedFeeds);
                             alert('Import successful!');
                         } else {
@@ -773,163 +690,163 @@
                     }
                 };
                 reader.readAsText(file);
-                e.target.value = null; 
+                e.target.value = null;
             };
 
-            return (
+            return html`
                 <div className="fixed inset-0 z-[100] flex items-center justify-center modal-overlay p-4">
-                    <div className="bg-white dark:bg-slate-800 rounded-lg shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col border border-gray-200 dark:border-slate-700">
-                        {/* Modal Header */}
+                    <div className="bg-white dark:bg-slate-800 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col border border-gray-200 dark:border-slate-700">
+                        <!-- Modal Header -->
                         <div className="p-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center">
-                            <h2 className="text-lg font-bold text-slate-800 dark:text-white">{strings.settings}</h2>
-                            <button onClick={onClose} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
-                                <i data-lucide="x" width="20" height="20"></i>
+                            <h2 className="text-lg font-bold text-slate-800 dark:text-white">${strings.settings}</h2>
+                            <button onClick=${onClose} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
+                                <${IconClose} />
                             </button>
                         </div>
 
-                        {/* Tabs - v1.1: Added Readme tab */}
+                        <!-- Tabs -->
                         <div className="flex border-b border-gray-200 dark:border-slate-700">
-                            <button 
-                                onClick={() => setActiveTab('feeds')}
-                                className={`flex-1 py-3 text-sm font-medium transition-colors ${activeTab === 'feeds' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/10 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'}`}
+                            <button
+                                onClick=${() => setActiveTab('feeds')}
+                                className=${`flex-1 py-3 text-sm font-medium ${activeTab === 'feeds' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/10 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'}`}
                             >
-                                {strings.tab_feeds}
+                                ${strings.tab_feeds}
                             </button>
-                            <button 
-                                onClick={() => setActiveTab('general')}
-                                className={`flex-1 py-3 text-sm font-medium transition-colors ${activeTab === 'general' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/10 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'}`}
+                            <button
+                                onClick=${() => setActiveTab('general')}
+                                className=${`flex-1 py-3 text-sm font-medium ${activeTab === 'general' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/10 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'}`}
                             >
-                                {strings.tab_general}
+                                ${strings.tab_general}
                             </button>
-                            <button 
-                                onClick={() => setActiveTab('readme')}
-                                className={`flex-1 py-3 text-sm font-medium transition-colors ${activeTab === 'readme' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/10 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'}`}
+                            <button
+                                onClick=${() => setActiveTab('readme')}
+                                className=${`flex-1 py-3 text-sm font-medium ${activeTab === 'readme' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/10 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'}`}
                             >
-                                {strings.tab_readme}
+                                ${strings.tab_readme}
                             </button>
                         </div>
-                        
+
                         <div className="p-4 overflow-y-auto flex-1 space-y-6 scrollbar-thin">
-                            
-                            {activeTab === 'feeds' && (
+
+                            ${activeTab === 'feeds' && html`
                                 <>
-                                    {/* Add New */}
+                                    <!-- Add New -->
                                     <div className="bg-gray-50 dark:bg-slate-900 p-3 rounded border border-gray-200 dark:border-slate-700">
-                                        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">{strings.add_feed}</h3>
+                                        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">${strings.add_feed}</h3>
                                         <div className="flex flex-col gap-2">
                                             <div className="flex gap-2">
-                                                <input 
-                                                    type="text" 
-                                                    placeholder={strings.feed_name}
-                                                    value={newName}
-                                                    onChange={e => setNewName(e.target.value)}
+                                                <input
+                                                    type="text"
+                                                    placeholder=${strings.feed_name}
+                                                    value=${newName}
+                                                    onChange=${e => setNewName(e.target.value)}
                                                     className="w-1/3 text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500"
                                                 />
-                                                <input 
-                                                    type="text" 
-                                                    placeholder={strings.feed_category}
-                                                    value={newCategory}
-                                                    onChange={e => setNewCategory(e.target.value)}
+                                                <input
+                                                    type="text"
+                                                    placeholder=${strings.feed_category}
+                                                    value=${newCategory}
+                                                    onChange=${e => setNewCategory(e.target.value)}
                                                     className="w-1/3 text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500"
                                                 />
                                             </div>
                                             <div className="flex gap-2">
-                                                <input 
-                                                    type="text" 
-                                                    placeholder={strings.feed_url}
-                                                    value={newUrl}
-                                                    onChange={e => setNewUrl(e.target.value)}
+                                                <input
+                                                    type="text"
+                                                    placeholder=${strings.feed_url}
+                                                    value=${newUrl}
+                                                    onChange=${e => setNewUrl(e.target.value)}
                                                     className="flex-1 text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500"
                                                 />
-                                                <button 
-                                                    onClick={handleAdd}
-                                                    className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-4 py-1.5 rounded transition-colors"
+                                                <button
+                                                    onClick=${handleAdd}
+                                                    className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-4 py-1.5 rounded"
                                                 >
-                                                    {strings.add_btn}
+                                                    ${strings.add_btn}
                                                 </button>
                                             </div>
                                         </div>
                                         <p className="text-[10px] text-gray-400 mt-2">
-                                            {strings.parser_note}
+                                            ${strings.parser_note}
                                         </p>
                                     </div>
 
-                                    {/* Import/Export */}
+                                    <!-- Import/Export -->
                                     <div className="grid grid-cols-2 gap-3 pt-2 pb-2">
-                                        <input 
-                                            type="file" 
-                                            ref={fileInputRef}
-                                            onChange={handleFileChange}
+                                        <input
+                                            type="file"
+                                            ref=${fileInputRef}
+                                            onChange=${handleFileChange}
                                             accept=".json"
                                             className="hidden"
                                         />
-                                        <button 
-                                            onClick={handleImportClick}
-                                            className="flex items-center justify-center gap-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 text-xs font-medium py-2 rounded transition-colors"
+                                        <button
+                                            onClick=${handleImportClick}
+                                            className="flex items-center justify-center gap-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 text-xs font-medium py-2 rounded"
                                         >
-                                            <i data-lucide="upload" width="12" height="12"></i> {strings.import_btn}
+                                            <${IconUpload} /> ${strings.import_btn}
                                         </button>
-                                        <button 
-                                            onClick={handleExport}
-                                            className="flex items-center justify-center gap-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 text-xs font-medium py-2 rounded transition-colors"
+                                        <button
+                                            onClick=${handleExport}
+                                            className="flex items-center justify-center gap-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 text-xs font-medium py-2 rounded"
                                         >
-                                            <i data-lucide="download" width="12" height="12"></i> {strings.export_btn}
+                                            <${IconDownload} /> ${strings.export_btn}
                                         </button>
                                     </div>
 
-                                    {/* Manage List */}
+                                    <!-- Manage List -->
                                     <div>
-                                        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">{strings.active_sources} ({feeds.length})</h3>
+                                        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">${strings.active_sources} (${feeds.length})</h3>
                                         <div className="border border-gray-200 dark:border-slate-700 rounded overflow-hidden">
-                                            {feeds.map((feed, index) => (
-                                                <div key={feed.id} className={`flex items-center p-2 bg-white dark:bg-slate-900 gap-3 ${index !== feeds.length - 1 ? 'border-b border-gray-100 dark:border-slate-800' : ''}`}>
-                                                    {/* Toggle Switch */}
+                                            ${feeds.map((feed, index) => html`
+                                                <div key=${feed.id} className=${`flex items-center p-2 bg-white dark:bg-slate-900 gap-3 ${index !== feeds.length - 1 ? 'border-b border-gray-100 dark:border-slate-800' : ''}`}>
+                                                    <!-- Toggle Switch -->
                                                     <div className="flex-shrink-0 pt-1 scale-75 origin-left">
-                                                        <ToggleSwitch 
-                                                            checked={feed.enabled} 
-                                                            onChange={() => toggleFeed(feed.id)}
+                                                        <${ToggleSwitch}
+                                                            checked=${feed.enabled}
+                                                            onChange=${() => toggleFeed(feed.id)}
                                                         />
                                                     </div>
 
-                                                    {/* Info */}
-                                                    <div className={`flex-1 min-w-0 ${!feed.enabled ? 'opacity-50 grayscale' : ''}`}>
+                                                    <!-- Info -->
+                                                    <div className=${`flex-1 min-w-0 ${!feed.enabled ? 'opacity-50 grayscale' : ''}`}>
                                                         <div className="flex items-center gap-2">
                                                             <div className="font-medium text-sm text-slate-700 dark:text-slate-200 truncate">
-                                                                {feed.name}
+                                                                ${feed.name}
                                                             </div>
-                                                            {feed.category && (
-                                                                <span className="text-[10px] px-1.5 py-0.5 bg-gray-100 dark:bg-slate-800 text-gray-500 rounded-full truncate max-w-[100px]">
-                                                                    {feed.category}
+                                                            ${feed.category && html`
+                                                                <span className="text-[10px] px-1.5 py-0.5 bg-gray-100 dark:bg-slate-800 text-gray-500 rounded truncate max-w-[100px]">
+                                                                    ${feed.category}
                                                                 </span>
-                                                            )}
+                                                            `}
                                                         </div>
                                                         <div className="text-[10px] text-gray-400 truncate mt-0.5 font-mono">
-                                                            {feed.url}
+                                                            ${feed.url}
                                                         </div>
                                                     </div>
 
-                                                    {/* Delete Action */}
-                                                    <button 
-                                                        onClick={() => handleDelete(feed.id)}
-                                                        className="p-1.5 text-gray-400 hover:text-red-500 transition-colors"
+                                                    <!-- Delete Action -->
+                                                    <button
+                                                        onClick=${() => handleDelete(feed.id)}
+                                                        className="p-1.5 text-gray-400 hover:text-red-500"
                                                     >
-                                                        <i data-lucide="trash-2" width="14" height="14"></i>
+                                                        <${IconTrash} />
                                                     </button>
                                                 </div>
-                                            ))}
+                                            `)}
                                         </div>
                                     </div>
                                 </>
-                            )}
+                            `}
 
-                            {activeTab === 'general' && (
+                            ${activeTab === 'general' && html`
                                 <div className="space-y-4">
-                                    {/* Language */}
+                                    <!-- Language -->
                                     <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
-                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{strings.lang_label}</span>
-                                        <select 
-                                            value={uiLang} 
-                                            onChange={(e) => setUiLang(e.target.value)}
+                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.lang_label}</span>
+                                        <select
+                                            value=${uiLang}
+                                            onChange=${(e) => setUiLang(e.target.value)}
                                             className="bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-gray-300 rounded px-2 py-1 outline-none border border-gray-300 dark:border-slate-600"
                                         >
                                             <option value="zh-CN">简体中文</option>
@@ -937,60 +854,60 @@
                                         </select>
                                     </div>
 
-                                    {/* Theme */}
+                                    <!-- Theme -->
                                     <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
-                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{strings.theme_label}</span>
+                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.theme_label}</span>
                                         <div className="flex items-center gap-2">
-                                            <span className="text-xs text-gray-500">{theme === 'dark' ? strings.theme_dark : strings.theme_light}</span>
-                                            <ToggleSwitch 
-                                                checked={theme === 'dark'} 
-                                                onChange={toggleTheme}
+                                            <span className="text-xs text-gray-500">${theme === 'dark' ? strings.theme_dark : strings.theme_light}</span>
+                                            <${ToggleSwitch}
+                                                checked=${theme === 'dark'}
+                                                onChange=${toggleTheme}
                                             />
                                         </div>
                                     </div>
 
-                                    {/* Notifications */}
+                                    <!-- Notifications -->
                                     <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
-                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{strings.notif_label}</span>
+                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.notif_label}</span>
                                         <div className="flex items-center gap-2">
-                                            <span className="text-xs text-gray-500">{notifications ? strings.notif_on : strings.notif_off}</span>
-                                            <ToggleSwitch 
-                                                checked={notifications} 
-                                                onChange={toggleNotifications}
+                                            <span className="text-xs text-gray-500">${notifications ? strings.notif_on : strings.notif_off}</span>
+                                            <${ToggleSwitch}
+                                                checked=${notifications}
+                                                onChange=${toggleNotifications}
                                             />
                                         </div>
                                     </div>
                                 </div>
-                            )}
+                            `}
 
-                            {/* v1.1: Readme Tab */}
-                            {activeTab === 'readme' && (
+                            <!-- v1.2: Readme Tab -->
+                            ${activeTab === 'readme' && html`
                                 <div className="space-y-3">
                                     <div className="flex items-center gap-2 mb-2">
-                                        <i data-lucide="book-open" width="16" height="16" className="text-blue-500"></i>
-                                        <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">Global Wire {APP_VERSION}</h3>
+                                        <span className="text-blue-500"><${IconBookOpen} /></span>
+                                        <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">Global Wire ${APP_VERSION}</h3>
                                     </div>
 
-                                    {/* Product Purpose */}
-                                    <ReadmeSection title={uiLang === 'zh-CN' ? '产品用途' : 'Product Purpose'} defaultOpen={true}>
-                                        {uiLang === 'zh-CN' ? (
+                                    <!-- Product Purpose -->
+                                    <${ReadmeSection} title=${uiLang === 'zh-CN' ? '产品用途' : 'Product Purpose'} defaultOpen=${true}>
+                                        ${uiLang === 'zh-CN' ? html`
                                             <>
                                                 <p><strong>Global Wire</strong> 是一个轻量级的全球突发新闻聚合器，无需后端服务器，纯前端运行。</p>
                                                 <p>它从全球 40+ 个 RSS 新闻源实时抓取新闻，通过 CORS 代理访问，支持中国内地、香港、台湾、日本、韩国、新加坡、欧洲、美国等地区的主流媒体。</p>
                                                 <p>所有数据存储在浏览器 localStorage 中，无需注册、无追踪、无服务端。可作为静态页面部署在 GitHub Pages 或 Cloudflare Workers 上。</p>
                                             </>
-                                        ) : (
+                                        ` : html`
                                             <>
                                                 <p><strong>Global Wire</strong> is a lightweight global breaking news aggregator that runs entirely in the browser with no backend server.</p>
                                                 <p>It fetches news in real-time from 40+ RSS sources worldwide via CORS proxies, covering mainstream media from Mainland China, Hong Kong, Taiwan, Japan, South Korea, Singapore, Europe, and the US.</p>
                                                 <p>All data is stored in browser localStorage. No registration, no tracking, no server side. Can be deployed as a static page on GitHub Pages or Cloudflare Workers.</p>
                                             </>
-                                        )}
-                                    </ReadmeSection>
+                                        `}
+                                    <//>
 
-                                    {/* Usage Guide */}
-                                    <ReadmeSection title={uiLang === 'zh-CN' ? '使用指南' : 'Usage Guide'}>
-                                        {uiLang === 'zh-CN' ? (
+                                    <!-- Usage Guide -->
+                                    <${ReadmeSection} title=${uiLang === 'zh-CN' ? '使用指南' : 'Usage Guide'}>
+                                        ${uiLang === 'zh-CN' ? html`
                                             <>
                                                 <p><strong>浏览新闻：</strong>打开页面即自动抓取所有已启用的新闻源，按时间倒序排列。</p>
                                                 <p><strong>分类筛选：</strong>使用顶部分类标签栏按地区/类别筛选新闻。</p>
@@ -998,12 +915,12 @@
                                                 <p><strong>添加/管理新闻源：</strong>在设置 → 新闻源中添加自定义 RSS 链接，或导入/导出配置。</p>
                                                 <p><strong>界面定制：</strong>在设置 → 通用中切换语言、深色模式、桌面通知。</p>
                                                 <p><strong>桌面通知：</strong>开启后，当页面在后台时有新新闻会发送浏览器桌面通知。</p>
-                                                <p><strong>更新横幅（v1.1 新增）：</strong>刷新时顶部显示蓝色横幅，若有新内容且页面在前台，需手动点击展开；若在后台则自动应用。</p>
-                                                <p><strong>新条目高亮（v1.1 新增）：</strong>展开新内容后，新条目带有蓝色高亮动画，5秒后自动消退。</p>
+                                                <p><strong>更新横幅：</strong>刷新时顶部显示蓝色横幅，显示进度"正在更新 X/Y..."。若有新内容且页面在前台，需手动点击展开；若在后台则自动应用。</p>
+                                                <p><strong>渐进式渲染：</strong>v1.2 新增，新闻条目在各源返回时即时显示，无需等待所有源完成。</p>
                                                 <p><strong>重要新闻标记：</strong>标题含"Breaking"、"突发"、"Urgent"、"重磅"的新闻会以红色醒目显示。</p>
                                                 <p><strong>数据存储：</strong>所有配置和缓存存储在浏览器 localStorage 中，清除浏览器数据会重置应用。</p>
                                             </>
-                                        ) : (
+                                        ` : html`
                                             <>
                                                 <p><strong>Browsing News:</strong> Opening the page automatically fetches all enabled news sources, sorted by time in reverse order.</p>
                                                 <p><strong>Category Filter:</strong> Use the top category tabs to filter news by region/category.</p>
@@ -1011,52 +928,54 @@
                                                 <p><strong>Add/Manage Feeds:</strong> In Settings → Feeds, add custom RSS links, or import/export configuration.</p>
                                                 <p><strong>UI Customization:</strong> In Settings → General, switch language, dark mode, and desktop notifications.</p>
                                                 <p><strong>Desktop Notifications:</strong> When enabled, new articles will trigger browser notifications when the page is in the background.</p>
-                                                <p><strong>Update Banner (v1.1):</strong> A blue banner appears at the top during refreshes. If new content arrives while you're on the page, click to expand; if in background, it auto-applies.</p>
-                                                <p><strong>New Item Highlight (v1.1):</strong> After expanding new content, new items get a blue highlight animation that fades after 5 seconds.</p>
+                                                <p><strong>Update Banner:</strong> A blue banner appears at the top during refreshes showing progress "Updating X/Y...". If new content arrives while you're on the page, click to expand; if in background, it auto-applies.</p>
+                                                <p><strong>Progressive Rendering:</strong> New in v1.2, news items appear as each source returns, without waiting for all sources to complete.</p>
                                                 <p><strong>Breaking News Markers:</strong> Articles with "Breaking", "Urgent", or similar keywords are highlighted in red.</p>
                                                 <p><strong>Data Storage:</strong> All configuration and cache are stored in browser localStorage. Clearing browser data resets the app.</p>
                                             </>
-                                        )}
-                                    </ReadmeSection>
+                                        `}
+                                    <//>
 
-                                    {/* AI Agent Debug Notes */}
-                                    <ReadmeSection title={uiLang === 'zh-CN' ? 'AI Agent 调试笔记' : 'AI Agent Debug Notes'}>
-                                        {uiLang === 'zh-CN' ? (
+                                    <!-- AI Agent Debug Notes -->
+                                    <${ReadmeSection} title=${uiLang === 'zh-CN' ? 'AI Agent 调试笔记' : 'AI Agent Debug Notes'}>
+                                        ${uiLang === 'zh-CN' ? html`
                                             <>
-                                                <p><strong>v1.1 Agent 笔记：</strong></p>
-                                                <p>- 新增 UpdateBanner 组件，4种状态：hidden / updating / available / updated</p>
-                                                <p>- fetchData 改为使用 parallelFetch 并发控制（FETCH_CONCURRENCY=6），替代 Promise.all</p>
-                                                <p>- 超时从 15s 降至 12s (FETCH_TIMEOUT)</p>
-                                                <p>- 初始加载不再检查 news.length === 0，始终触发 fetchData</p>
-                                                <p>- 新增 newItemIds Set 跟踪新条目，用于高亮动画</p>
-                                                <p>- 新增 desktop notification 增强：后台标签页获取到新内容时发送系统通知</p>
-                                                <p>- Settings 新增 Readme 标签页，含 4 个可折叠小节</p>
-                                                <p>- 版本号从 v1.0 升级至 v1.1，显示在 header 和 footer</p>
-                                                <p>- localStorage keys: theme, ui_lang, news_feeds_config, news_cache_v3 (未变更)</p>
-                                                <p>- 注意：Babel in-browser transpilation，async/await 和 for...of 均可使用</p>
-                                                <p>- parallelFetch 使用 worker 模式而非 Promise.all，避免同时发出过多请求</p>
+                                                <p><strong>v1.2 Agent 笔记：</strong></p>
+                                                <p>- 移除 Babel (~800KB)，使用 htm (~1KB) 实现类 JSX 模板字面量</p>
+                                                <p>- 移除 Lucide 图标 (~100KB)，使用内联 SVG 替代</p>
+                                                <p>- 添加 CDN 和代理域名的 DNS preconnect 提示</p>
+                                                <p>- 移除所有非必要动画：fadeInDown、bannerSlideDown、highlightFade、animate-ping、animate-spin</p>
+                                                <p>- 移除所有阴影和 backdrop-blur 效果</p>
+                                                <p>- 实现渐进式渲染：新闻条目在各源返回时即时显示，不再等待全部完成</p>
+                                                <p>- RSS 竞速：所有源同时抓取（无并发限制），最快的源最先显示</p>
+                                                <p>- 横幅现在显示实时进度："正在更新 X/Y..."</p>
+                                                <p>- FETCH_TIMEOUT 从 12s 降至 8s</p>
+                                                <p>- 版本号从 v1.1 升级至 v1.2</p>
+                                                <p>- localStorage keys 未变更: theme, ui_lang, news_feeds_config, news_cache_v3</p>
+                                                <p>- 首次加载 JS 总减少: ~1MB+（移除 Babel+Lucide）</p>
                                             </>
-                                        ) : (
+                                        ` : html`
                                             <>
-                                                <p><strong>v1.1 Agent Notes:</strong></p>
-                                                <p>- Added UpdateBanner component with 4 states: hidden / updating / available / updated</p>
-                                                <p>- fetchData now uses parallelFetch with concurrency control (FETCH_CONCURRENCY=6), replacing Promise.all</p>
-                                                <p>- Timeout reduced from 15s to 12s (FETCH_TIMEOUT)</p>
-                                                <p>- Initial load no longer checks news.length === 0, always triggers fetchData</p>
-                                                <p>- Added newItemIds Set to track new items for highlight animation</p>
-                                                <p>- Enhanced desktop notification: sends system notification when new content arrives in background tab</p>
-                                                <p>- Settings now has a Readme tab with 4 collapsible subsections</p>
-                                                <p>- Version bumped from v1.0 to v1.1, shown in header and footer</p>
-                                                <p>- localStorage keys: theme, ui_lang, news_feeds_config, news_cache_v3 (unchanged)</p>
-                                                <p>- Note: Babel in-browser transpilation; async/await and for...of are safe to use</p>
-                                                <p>- parallelFetch uses worker pattern instead of Promise.all to avoid flooding requests</p>
+                                                <p><strong>v1.2 Agent Notes:</strong></p>
+                                                <p>- Removed Babel (~800KB), replaced with htm (~1KB) for JSX-like template literals</p>
+                                                <p>- Removed Lucide icons (~100KB), replaced with inline SVGs</p>
+                                                <p>- Added preconnect hints for CDN and proxy domains</p>
+                                                <p>- Removed all non-essential animations: fadeInDown, bannerSlideDown, highlightFade, animate-ping, animate-spin</p>
+                                                <p>- Removed all shadows and backdrop-blur effects</p>
+                                                <p>- Implemented progressive feed rendering: results display as each feed returns, not after all complete</p>
+                                                <p>- RSS racing: all feeds fetched simultaneously (no concurrency limit), fastest sources appear first</p>
+                                                <p>- Banner now shows live progress: "Updating X/Y..." during fetch</p>
+                                                <p>- FETCH_TIMEOUT reduced from 12s to 8s</p>
+                                                <p>- Version bumped from v1.1 to v1.2</p>
+                                                <p>- localStorage keys unchanged: theme, ui_lang, news_feeds_config, news_cache_v3</p>
+                                                <p>- Total first-load JS reduction: ~1MB+ (Babel+Lucide removed)</p>
                                             </>
-                                        )}
-                                    </ReadmeSection>
+                                        `}
+                                    <//>
 
-                                    {/* Changelog */}
-                                    <ReadmeSection title={uiLang === 'zh-CN' ? '更新日志' : 'Changelog'}>
-                                        {uiLang === 'zh-CN' ? (
+                                    <!-- Changelog -->
+                                    <${ReadmeSection} title=${uiLang === 'zh-CN' ? '更新日志' : 'Changelog'}>
+                                        ${uiLang === 'zh-CN' ? html`
                                             <>
                                                 <p><strong>v1.0 (基线版本)</strong></p>
                                                 <ul className="list-disc pl-4 space-y-1">
@@ -1067,7 +986,7 @@
                                                     <li>配置导入/导出</li>
                                                     <li>localStorage 缓存</li>
                                                 </ul>
-                                                <p className="mt-2"><strong>v1.1 (当前版本)</strong></p>
+                                                <p className="mt-2"><strong>v1.1</strong></p>
                                                 <ul className="list-disc pl-4 space-y-1">
                                                     <li>新增更新横幅系统：刷新时顶部蓝色横幅显示状态</li>
                                                     <li>智能内容更新：前台需手动展开，后台自动应用并发送通知</li>
@@ -1075,12 +994,25 @@
                                                     <li>超时优化：15s → 12s</li>
                                                     <li>桌面通知增强：后台更新时发送包含数量的系统通知</li>
                                                     <li>新条目高亮：展开更新后新条目蓝色高亮 5 秒</li>
-                                                    <li>设置新增说明(Readme)标签页，含产品用途、使用指南、调试笔记、更新日志</li>
+                                                    <li>设置新增说明(Readme)标签页</li>
                                                     <li>版本号显示在 header 和 footer</li>
                                                     <li>页面加载始终触发抓取，不再仅依赖缓存为空</li>
                                                 </ul>
+                                                <p className="mt-2"><strong>v1.2 (当前版本)</strong></p>
+                                                <ul className="list-disc pl-4 space-y-1">
+                                                    <li>移除 Babel standalone (~800KB)，使用 htm (~1KB) 实现零编译 JSX</li>
+                                                    <li>移除 Lucide 图标 (~100KB)，使用内联 SVG</li>
+                                                    <li>添加 CDN 和代理域名的 DNS preconnect</li>
+                                                    <li>移除所有非必要动画和过渡效果</li>
+                                                    <li>移除所有阴影和 backdrop-blur 装饰</li>
+                                                    <li>渐进式渲染：新闻条目在各源返回时即时显示</li>
+                                                    <li>RSS 竞速：所有源同时抓取，最快的最先显示</li>
+                                                    <li>实时进度指示器：横幅显示"正在更新 X/Y 源..."</li>
+                                                    <li>超时优化：12s → 8s</li>
+                                                    <li>首次加载 JavaScript 总减少 ~1MB+</li>
+                                                </ul>
                                             </>
-                                        ) : (
+                                        ` : html`
                                             <>
                                                 <p><strong>v1.0 (Baseline)</strong></p>
                                                 <ul className="list-disc pl-4 space-y-1">
@@ -1091,7 +1023,7 @@
                                                     <li>Config import/export</li>
                                                     <li>localStorage caching</li>
                                                 </ul>
-                                                <p className="mt-2"><strong>v1.1 (Current)</strong></p>
+                                                <p className="mt-2"><strong>v1.1</strong></p>
                                                 <ul className="list-disc pl-4 space-y-1">
                                                     <li>New update banner system: blue banner at top during refreshes</li>
                                                     <li>Smart content updates: manual expand in foreground, auto-apply + notification in background</li>
@@ -1099,20 +1031,33 @@
                                                     <li>Timeout optimization: 15s → 12s</li>
                                                     <li>Enhanced desktop notifications: system notification with count when updates arrive in background</li>
                                                     <li>New item highlight: blue highlight animation for 5s after expanding updates</li>
-                                                    <li>Settings Readme tab with product purpose, usage guide, debug notes, changelog</li>
+                                                    <li>Settings Readme tab</li>
                                                     <li>Version number displayed in header and footer</li>
                                                     <li>Always fetch on page load, not only when cache is empty</li>
                                                 </ul>
+                                                <p className="mt-2"><strong>v1.2 (Current)</strong></p>
+                                                <ul className="list-disc pl-4 space-y-1">
+                                                    <li>Removed Babel standalone (~800KB), using htm (~1KB) for zero-transpile JSX</li>
+                                                    <li>Removed Lucide icons (~100KB), using inline SVGs</li>
+                                                    <li>Added DNS preconnect for CDN and proxy domains</li>
+                                                    <li>Removed all non-essential animations and transitions</li>
+                                                    <li>Removed all shadows and backdrop-blur decorations</li>
+                                                    <li>Progressive feed rendering: news items appear as each source returns</li>
+                                                    <li>RSS racing: all sources fetched simultaneously, fastest displayed first</li>
+                                                    <li>Live progress indicator: "Updating X/Y sources..." banner</li>
+                                                    <li>Fetch timeout reduced: 12s → 8s</li>
+                                                    <li>~1MB+ total JavaScript reduction on first load</li>
+                                                </ul>
                                             </>
-                                        )}
-                                    </ReadmeSection>
+                                        `}
+                                    <//>
                                 </div>
-                            )}
+                            `}
 
                         </div>
                     </div>
                 </div>
-            );
+            `;
         };
 
         const App = () => {
@@ -1126,18 +1071,16 @@
             const [retryCount, setRetryCount] = useState(0);
             const [isSettingsOpen, setIsSettingsOpen] = useState(false);
             const [fetchStats, setFetchStats] = useState({ total: 0, success: 0 });
-            
-            // v1.1: Category filter
+
+            // Category filter
             const [activeCategory, setActiveCategory] = useState('ALL');
-            
-            // v1.1: Banner state
-            const [bannerState, setBannerState] = useState('hidden'); // 'hidden' | 'updating' | 'available' | 'updated'
+
+            // v1.2: Banner state with progress
+            const [bannerState, setBannerState] = useState('hidden');
             const [updateCount, setUpdateCount] = useState(0);
-            
-            // v1.1: New item tracking for highlight
-            const [newItemIds, setNewItemIds] = useState(new Set());
+            const [bannerProgress, setBannerProgress] = useState({ completed: 0, total: 0 });
+
             const bannerDismissTimerRef = useRef(null);
-            
             const prevFeedsStrRef = useRef('');
             const initialFetchDoneRef = useRef(false);
 
@@ -1171,8 +1114,8 @@
                 if (savedFeeds) {
                     try {
                         const parsed = JSON.parse(savedFeeds);
-                        if (parsed.length < 15) { 
-                            setFeeds(defaultFeeds); 
+                        if (parsed.length < 15) {
+                            setFeeds(defaultFeeds);
                         } else {
                             setFeeds(parsed);
                         }
@@ -1192,16 +1135,16 @@
                 }
             }, []);
 
-            // v1.1: Always fetch on page load (not just when news.length === 0)
+            // Always fetch on page load
             useEffect(() => {
                 if (feeds.length > 0 && !initialFetchDoneRef.current) {
                     initialFetchDoneRef.current = true;
                     fetchData();
                 }
-                
+
                 const timer = setInterval(fetchData, UPDATE_INTERVAL);
                 return () => clearInterval(timer);
-            }, [feeds, notifications]); 
+            }, [feeds, notifications]);
 
             // Save feeds when changed
             useEffect(() => {
@@ -1222,33 +1165,14 @@
                 localStorage.setItem('theme', theme);
             }, [theme]);
 
-            // Icon Refresh
+            // Handle page visibility changes
             useEffect(() => {
-                if (window.lucide) window.lucide.createIcons();
-            }, [news, theme, status, isSettingsOpen, feeds, bannerState]);
-
-            // v1.1: Clear highlight after 5 seconds
-            useEffect(() => {
-                if (newItemIds.size > 0) {
-                    const timer = setTimeout(() => {
-                        setNewItemIds(new Set());
-                    }, 5500); // Slightly longer than animation to ensure it completes
-                    return () => clearTimeout(timer);
-                }
-            }, [newItemIds]);
-
-            // v1.1: Handle page visibility changes
-            useEffect(() => {
-                const handleVisibilityChange = () => {
-                    // When page becomes visible and there are pending items already applied in background,
-                    // the banner should be hidden since updates were already merged.
-                    // If banner was "available" and user left and came back, keep it as is.
-                };
+                const handleVisibilityChange = () => {};
                 document.addEventListener('visibilitychange', handleVisibilityChange);
                 return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
             }, []);
 
-            // v1.1: Enhanced notification sender
+            // v1.2: Enhanced notification sender
             const sendNotification = useCallback((count) => {
                 if (!notifications || document.visibilityState === 'visible' || count === 0) return;
                 const strings = STRINGS[uiLang];
@@ -1262,81 +1186,87 @@
                 }
             }, [notifications, uiLang]);
 
-            // v1.1: Handle banner expand
+            // Handle banner expand
             const handleBannerExpand = useCallback(() => {
                 setBannerState('updated');
-                // Auto-hide the "updated" banner after 2 seconds
                 if (bannerDismissTimerRef.current) clearTimeout(bannerDismissTimerRef.current);
                 bannerDismissTimerRef.current = setTimeout(() => {
                     setBannerState('hidden');
                 }, 2000);
             }, []);
 
-            // Main Fetch Logic - v1.1: Uses parallelFetch with concurrency control
+            // v1.2: RSS Racing - Fire ALL requests simultaneously, display results progressively
             const fetchData = async () => {
                 if (feeds.length === 0) return;
 
                 setStatus('fetching');
-                setBannerState('updating'); // v1.1: Show updating banner
+                setBannerState('updating');
+                setBannerProgress({ completed: 0, total: 0 });
 
-                const activeFeeds = feeds.filter(f => f.enabled !== false);
+                const active = feeds.filter(f => f.enabled !== false);
+                const totalFeeds = active.length;
+                let completedCount = 0;
+                let successCount = 0;
+                const prevIds = new Set(news.map(n => n.id));
+                let newItemsCount = 0;
 
-                try {
-                    const { results: allItems, successCount } = await parallelFetch(activeFeeds, FETCH_CONCURRENCY);
-                    
-                    setFetchStats({ total: activeFeeds.length, success: successCount });
+                // Fire ALL requests simultaneously - no concurrency limit (RSS Racing)
+                const promises = active.map(async (feed) => {
+                    try {
+                        const xml = await fetchFeedContent(feed.url);
+                        const items = parseRSS(xml, feed);
+                        successCount++;
 
-                    if (allItems.length > 0) {
-                        setNews(prevNews => {
-                            const currentIds = new Set(prevNews.map(n => n.id));
-                            const newUniqueItems = allItems.filter(item => !currentIds.has(item.id));
-                            
-                            if (newUniqueItems.length > 0) {
-                                const combined = [...newUniqueItems, ...prevNews]
-                                    .sort((a, b) => b.timestamp - a.timestamp)
-                                    .slice(0, MAX_ITEMS);
-                                
-                                localStorage.setItem('news_cache_v3', JSON.stringify(combined));
-
-                                // v1.1: Smart banner behavior based on tab visibility
-                                const isVisible = document.visibilityState === 'visible';
-                                if (isVisible) {
-                                    // User is viewing the page - show "available" banner
-                                    setUpdateCount(newUniqueItems.length);
-                                    setBannerState('available');
-                                    // Track new item IDs for highlight
-                                    const newIds = new Set(newUniqueItems.map(item => item.id));
-                                    setNewItemIds(newIds);
-                                } else {
-                                    // User is NOT viewing the page - auto-apply and send notification
-                                    setBannerState('hidden');
-                                    sendNotification(newUniqueItems.length);
+                        // Immediately merge items into state
+                        if (items.length > 0) {
+                            setNews(prev => {
+                                const currentIds = new Set(prev.map(n => n.id));
+                                const unique = items.filter(item => !currentIds.has(item.id));
+                                if (unique.length > 0) {
+                                    const combined = [...unique, ...prev]
+                                        .sort((a, b) => b.timestamp - a.timestamp)
+                                        .slice(0, MAX_ITEMS);
+                                    localStorage.setItem('news_cache_v3', JSON.stringify(combined));
+                                    return combined;
                                 }
-
-                                return combined;
-                            }
-                            // No new items
-                            setBannerState('hidden');
-                            return prevNews;
-                        });
-                        setLastUpdated(Date.now());
-                        setStatus('idle');
-                        setRetryCount(0);
-                    } else {
-                        setStatus('idle');
-                        setBannerState('hidden');
-                        if (news.length === 0 && successCount === 0 && retryCount < 2) {
-                             setStatus('error');
+                                return prev;
+                            });
                         }
-                    }
+                    } catch(e) {}
 
-                } catch (error) {
-                    console.error("Fetch Cycle Error:", error);
-                    setStatus('error');
+                    completedCount++;
+                    setBannerProgress({ completed: completedCount, total: totalFeeds });
+                });
+
+                await Promise.allSettled(promises);
+
+                // Count total new items by reading final state
+                setNews(currentNews => {
+                    newItemsCount = currentNews.filter(n => !prevIds.has(n.id)).length;
+                    return currentNews;
+                });
+
+                setFetchStats({ total: totalFeeds, success: successCount });
+                setLastUpdated(Date.now());
+                setStatus(successCount > 0 ? 'idle' : 'error');
+
+                if (newItemsCount > 0) {
+                    const isVisible = document.visibilityState === 'visible';
+                    if (isVisible) {
+                        setUpdateCount(newItemsCount);
+                        setBannerState('available');
+                    } else {
+                        setBannerState('hidden');
+                        sendNotification(newItemsCount);
+                    }
+                } else {
                     setBannerState('hidden');
+                    if (successCount === 0 && retryCount < 2) {
+                        setStatus('error');
+                    }
                 }
             };
-            
+
             const toggleNotifications = async () => {
                 if (!notifications) {
                     const permission = await Notification.requestPermission();
@@ -1345,7 +1275,7 @@
                     setNotifications(false);
                 }
             };
-            
+
             const toggleTheme = () => {
                 setTheme(prev => prev === 'dark' ? 'light' : 'dark');
             };
@@ -1359,11 +1289,10 @@
                 setIsSettingsOpen(false);
                 const currentFeedsStr = JSON.stringify(feeds);
                 if (prevFeedsStrRef.current !== currentFeedsStr) {
-                    setNews([]); 
+                    setNews([]);
                     localStorage.removeItem('news_cache_v3');
                     setStatus('idle');
                     setActiveCategory('ALL');
-                    setNewItemIds(new Set());
                     setTimeout(() => fetchData(), 50);
                 }
             };
@@ -1374,94 +1303,94 @@
 
             const hasError = status === 'error' || (status === 'idle' && fetchStats.total > 0 && fetchStats.success === 0);
 
-            return (
-                <div className="min-h-screen flex flex-col max-w-4xl mx-auto border-x border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl transition-colors duration-300">
-                    {/* v1.1: Update Banner */}
-                    <UpdateBanner 
-                        bannerState={bannerState}
-                        updateCount={updateCount}
-                        onExpand={handleBannerExpand}
-                        uiStrings={STRINGS[uiLang]}
+            return html`
+                <div className="min-h-screen flex flex-col max-w-4xl mx-auto border-x border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                    <!-- v1.2: Update Banner with Progress -->
+                    <${UpdateBanner}
+                        bannerState=${bannerState}
+                        updateCount=${updateCount}
+                        bannerProgress=${bannerProgress}
+                        onExpand=${handleBannerExpand}
+                        uiStrings=${STRINGS[uiLang]}
                     />
 
-                    <Header 
-                        status={status}
-                        onOpenSettings={handleOpenSettings}
-                        onRefresh={handleManualRefresh}
-                        uiStrings={STRINGS[uiLang]}
-                        hasError={hasError}
+                    <${Header}
+                        status=${status}
+                        onOpenSettings=${handleOpenSettings}
+                        onRefresh=${handleManualRefresh}
+                        uiStrings=${STRINGS[uiLang]}
+                        hasError=${hasError}
                     />
 
-                    {/* Category Filter Bar */}
-                    <FilterBar 
-                        categories={categories}
-                        activeCategory={activeCategory}
-                        onSelectCategory={setActiveCategory}
-                        uiStrings={STRINGS[uiLang]}
+                    <!-- Category Filter Bar -->
+                    <${FilterBar}
+                        categories=${categories}
+                        activeCategory=${activeCategory}
+                        onSelectCategory=${setActiveCategory}
+                        uiStrings=${STRINGS[uiLang]}
                     />
 
                     <main className="flex-1 relative p-4 sm:p-6 overflow-x-hidden">
                         <div className="timeline-line"></div>
 
-                        {filteredNews.length === 0 && status !== 'fetching' && (
+                        ${filteredNews.length === 0 && status !== 'fetching' && html`
                             <div className="pl-10 pt-10 text-gray-400">
-                                <p>{hasError ? STRINGS[uiLang].error_fetch : STRINGS[uiLang].no_items}</p>
+                                <p>${hasError ? STRINGS[uiLang].error_fetch : STRINGS[uiLang].no_items}</p>
                             </div>
-                        )}
+                        `}
 
                         <div className="space-y-0">
-                            {filteredNews.map((item) => (
-                                <NewsCard 
-                                    key={item.id} 
-                                    item={item} 
-                                    isNew={newItemIds.has(item.id)} 
+                            ${filteredNews.map((item) => html`
+                                <${NewsCard}
+                                    key=${item.id}
+                                    item=${item}
                                 />
-                            ))}
+                            `)}
                         </div>
 
-                        <div className="relative pl-8 py-12 text-center opacity-60 hover:opacity-100 transition-opacity">
+                        <div className="relative pl-8 py-12 text-center opacity-60 hover:opacity-100">
                             <div className="absolute left-[1.25rem] -translate-x-1/2 w-2 h-2 bg-gray-300 dark:bg-slate-700 rounded-full top-1/2"></div>
                             <div className="flex flex-col items-center gap-1">
-                                <button 
-                                    onClick={handleManualRefresh}
-                                    className={`text-xs font-mono transition-colors ${hasError ? 'text-red-500 font-bold' : 'text-gray-400 hover:text-blue-500'}`}
+                                <button
+                                    onClick=${handleManualRefresh}
+                                    className=${`text-xs font-mono ${hasError ? 'text-red-500 font-bold' : 'text-gray-400 hover:text-blue-500'}`}
                                 >
-                                    {status === 'fetching' ? STRINGS[uiLang].updating : 
-                                     hasError ? STRINGS[uiLang].error_fetch : 
-                                     `${STRINGS[uiLang].last_updated} ${formatTime(lastUpdated)}`}
+                                    ${status === 'fetching' ? STRINGS[uiLang].updating :
+                                     hasError ? STRINGS[uiLang].error_fetch :
+                                     STRINGS[uiLang].last_updated + ' ' + formatTime(lastUpdated)}
                                 </button>
-                                {fetchStats.total > 0 && (
-                                    <span className={`text-[10px] font-mono ${fetchStats.success < fetchStats.total ? 'text-yellow-600 dark:text-yellow-500' : 'text-gray-300 dark:text-slate-700'}`}>
-                                        {STRINGS[uiLang].success_rate} {fetchStats.success}/{fetchStats.total}
+                                ${fetchStats.total > 0 && html`
+                                    <span className=${`text-[10px] font-mono ${fetchStats.success < fetchStats.total ? 'text-yellow-600 dark:text-yellow-500' : 'text-gray-300 dark:text-slate-700'}`}>
+                                        ${STRINGS[uiLang].success_rate} ${fetchStats.success}/${fetchStats.total}
                                     </span>
-                                )}
+                                `}
                                 <p className="text-[10px] text-gray-300 dark:text-slate-700 mt-1">
-                                    {STRINGS[uiLang].sources_via} Global RSS Feeds (Proxy)
+                                    ${STRINGS[uiLang].sources_via} Global RSS Feeds (Proxy)
                                 </p>
                                 <p className="text-[10px] text-gray-300 dark:text-slate-700">
-                                    Global Wire {APP_VERSION}
+                                    Global Wire ${APP_VERSION}
                                 </p>
                             </div>
                         </div>
                     </main>
 
-                    <SettingsModal 
-                        isOpen={isSettingsOpen} 
-                        onClose={handleCloseSettings}
-                        feeds={feeds}
-                        setFeeds={setFeeds}
-                        uiLang={uiLang}
-                        setUiLang={setUiLang}
-                        theme={theme}
-                        toggleTheme={toggleTheme}
-                        notifications={notifications}
-                        toggleNotifications={toggleNotifications}
+                    <${SettingsModal}
+                        isOpen=${isSettingsOpen}
+                        onClose=${handleCloseSettings}
+                        feeds=${feeds}
+                        setFeeds=${setFeeds}
+                        uiLang=${uiLang}
+                        setUiLang=${setUiLang}
+                        theme=${theme}
+                        toggleTheme=${toggleTheme}
+                        notifications=${notifications}
+                        toggleNotifications=${toggleNotifications}
                     />
                 </div>
-            );
+            `;
         };
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+        root.render(html`<${App} />`);
     </script>
 </body></html>

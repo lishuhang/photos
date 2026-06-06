@@ -200,7 +200,7 @@
         const MAX_ITEMS = 150;
         const UPDATE_INTERVAL = 30000;
         const FETCH_TIMEOUT = 8000;
-        const APP_VERSION = 'v2.2';
+        const APP_VERSION = 'v2.3';
 
         const PROXY_LIST = [
             "https://corsproxy.io/?",
@@ -298,6 +298,9 @@
                 retry: '重试',
                 retry_translate: '重试翻译',
                 retry_summary: '重试摘要',
+                clear_summary_cache: '清空摘要缓存',
+                clear_summary_cache_done: '已清空',
+                clear_summary_cache_confirm: '确认清空所有已缓存的摘要？此操作无法撤销。',
             },
             'en': {
                 title: 'GLOBAL WIRE',
@@ -366,6 +369,9 @@
                 retry: 'Retry',
                 retry_translate: 'Retry translate',
                 retry_summary: 'Retry summary',
+                clear_summary_cache: 'Clear summary cache',
+                clear_summary_cache_done: 'Cleared',
+                clear_summary_cache_confirm: 'Clear all cached summaries? This cannot be undone.',
             },
             'zh-TW': {
                 title: 'GLOBAL WIRE',
@@ -434,6 +440,9 @@
                 retry: '重試',
                 retry_translate: '重試翻譯',
                 retry_summary: '重試摘要',
+                clear_summary_cache: '清空摘要快取',
+                clear_summary_cache_done: '已清空',
+                clear_summary_cache_confirm: '確認清空所有已快取的摘要？此操作無法撤銷。',
             }
         };
 
@@ -770,7 +779,7 @@
             const displayTitle = (autoTranslate && hasTranslation) ? translation : item.content;
 
             return html`
-                <div className="block relative pl-6 pb-6 group hover:bg-gray-50 dark:hover:bg-slate-800/50 rounded-r-lg -ml-2 p-2">
+                <div data-item-id=${item.id} className="block relative pl-6 pb-6 group hover:bg-gray-50 dark:hover:bg-slate-800/50 rounded-r-lg -ml-2 p-2">
                     <div className=${`absolute left-[0.5rem] top-4 -translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-slate-900 z-10
                         ${item.important ? 'bg-red-600' : 'bg-blue-500 dark:bg-blue-400'}`}></div>
 
@@ -808,7 +817,7 @@
                             <p className="text-sm text-purple-600 dark:text-purple-400 mt-0.5 leading-snug">${translation}</p>
                         `}
                     </div>
-                    ${(showSummary || hasSummary || hasSummaryError) && html`
+                    ${showSummary && html`
                         <div className="mt-1.5 ml-0 sm:ml-0">
                             ${aiState === 'summarizing' && html`
                                 <div className="flex items-center gap-1.5 text-[10px] text-amber-600 dark:text-amber-400">
@@ -892,7 +901,8 @@
             showSummary,
             setShowSummary,
             aiCacheLimit,
-            setAiCacheLimit
+            setAiCacheLimit,
+            onClearSummaryCache
         }) => {
             const [activeTab, setActiveTab] = useState('feeds');
             const [newName, setNewName] = useState('');
@@ -939,7 +949,8 @@
                     theme: theme,
                     autoTranslate: autoTranslate,
                     showSummary: showSummary,
-                    aiCacheLimit: aiCacheLimit
+                    aiCacheLimit: aiCacheLimit,
+                    translations: translationsRef.current
                 };
                 const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
                 const downloadAnchorNode = document.createElement('a');
@@ -1290,6 +1301,13 @@
                                             <option value="all">${strings.cache_all}</option>
                                         </select>
                                     </div>
+                                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
+                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.clear_summary_cache}</span>
+                                        <button
+                                            onClick=${() => { if (confirm(strings.clear_summary_cache_confirm)) onClearSummaryCache(); }}
+                                            className="text-xs px-3 py-1 rounded bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50 hover:bg-red-100 dark:hover:bg-red-900/40"
+                                        >${strings.clear_summary_cache}</button>
+                                    </div>
                                 </div>
                             `}
 
@@ -1305,29 +1323,29 @@
                                                 <p><strong>Global Wire</strong> 是一个轻量级的全球突发新闻聚合器，无需后端服务器，纯前端运行。</p>
                                                 <p>它从全球 40+ 个 RSS 新闻源实时抓取新闻，通过 CORS 代理访问，支持中国内地、香港、台湾、日本、韩国、新加坡、欧洲、美国等地区的主流媒体。</p>
                                                 <p>所有数据存储在浏览器 localStorage 中，无需注册、无追踪、无服务端。可作为静态页面部署在 GitHub Pages 或 Cloudflare Workers 上。</p>
-                                                <p>v2.2 修复摘要生成逻辑（使用 turndown 将文章转为 markdown 后再交给 AI 总结，不再仅复述标题）；移除"摘"按钮（摘要由开关统一控制）；自动翻译时不再附带原文标题；修复新加载条目自动翻译失败；更新 toast 动画（漂移淡出）。</p>
+                                                <p>v2.3 取消摘要时自动收起；摘要限流（每批10条，滚动触发，逐条处理）；清空摘要缓存按钮；改进文章正文抓取（更多CSS选择器+诊断日志）。</p>
                                             </div>
                                         ` : uiLang === 'zh-TW' ? html`
                                             <div>
                                                 <p><strong>Global Wire</strong> 是一個輕量級的全球突發新聞聚合器，無需後端伺服器，純前端運行。</p>
                                                 <p>它從全球 40+ 個 RSS 新聞源即時抓取新聞，透過 CORS 代理存取，支援中國內地、香港、台灣、日本、韓國、新加坡、歐洲、美國等地區的主流媒體。</p>
                                                 <p>所有資料儲存在瀏覽器 localStorage 中，無需註冊、無追蹤、無伺服器端。可作為靜態頁面部署在 GitHub Pages 或 Cloudflare Workers 上。</p>
-                                                <p>v2.2 修復摘要生成邏輯（使用 turndown 將文章轉為 markdown 後再交給 AI 總結）；移除「摘」按鈕（摘要由開關統一控制）；自動翻譯時不再附帶原文標題；修復新載入條目自動翻譯失敗；更新 toast 動畫。</p>
+                                                <p>v2.3 取消摘要時自動收起；摘要限流（每批10條，滾動觸發，逐條處理）；清空摘要快取按鈕；改進文章正文抓取。</p>
                                             </div>
                                         ` : html`
                                             <div>
                                                 <p><strong>Global Wire</strong> is a lightweight global breaking news aggregator that runs entirely in the browser with no backend server.</p>
                                                 <p>It fetches news in real-time from 40+ RSS sources worldwide via CORS proxies, covering mainstream media from Mainland China, Hong Kong, Taiwan, Japan, South Korea, Singapore, Europe, and the US.</p>
                                                 <p>All data is stored in browser localStorage. No registration, no tracking, no server side. Can be deployed as a static page on GitHub Pages or Cloudflare Workers.</p>
-                                                <p>v2.2 fixes summary generation (uses turndown to convert article HTML to markdown before AI summarization); removes per-entry summary button (controlled by global toggle); auto-translate no longer shows original title alongside; fixes auto-translate for newly loaded entries; toast animation with drift-out effect.</p>
+                                                <p>v2.3 adds summary collapse on toggle-off; summary throttling (max 10 batch, scroll-triggered, one-at-a-time); clear summary cache button; improved article content fetching with more selectors and diagnostic logging.</p>
                                             </div>
                                         `}
                                     <//>
                                     <${ReadmeSection} title=${uiLang === 'zh-CN' ? '更新日志' : uiLang === 'zh-TW' ? '更新日誌' : 'Changelog'}>
                                         ${uiLang === 'zh-CN' ? html`
                                             <div>
+                                                <p><strong>v2.3</strong> - 取消摘要时自动收起；摘要限流（10条/批，滚动触发，逐条处理）；清空摘要缓存按钮；改进正文抓取</p>
                                                 <p><strong>v2.2</strong> - 摘要改用turndown转markdown后AI总结；移除"摘"按钮；自动翻译不附带原文；修复新条目自动翻译；toast漂移淡出动画</p>
-                                                <p><strong>v2.1</strong> - AI助手设置面板；自动翻译开关；摘要开关；失败重试；API Key变更自动重试；本地存储上限</p>
                                                 <p><strong>v2.0</strong> - AI翻译和摘要功能（GLM-4-flash/Gemini-2.0-flash）；i18n（简体中文/English/繁体中文）；更新banner移至时间线区域；修复浏览器通知；设置图标改回齿轮</p>
                                                 <p><strong>v1.3</strong> - 修复浅色模式崩溃；三态主题；修复htm兼容性（HTML注释和Fragment简写）</p>
                                                 <p><strong>v1.2</strong> - 移除Babel(省800KB)改用htm；移除Lucide改用内联SVG；RSS竞速；并发获取+渐进渲染</p>
@@ -1336,8 +1354,8 @@
                                             </div>
                                         ` : uiLang === 'zh-TW' ? html`
                                             <div>
+                                                <p><strong>v2.3</strong> - 取消摘要時自動收起；摘要限流（10條/批，滾動觸發，逐條處理）；清空摘要快取按鈕；改進正文抓取</p>
                                                 <p><strong>v2.2</strong> - 摘要改用turndown轉markdown後AI總結；移除「摘」按鈕；自動翻譯不附帶原文；修復新條目自動翻譯；toast漂移淡出動畫</p>
-                                                <p><strong>v2.1</strong> - AI助手設定面板；自動翻譯開關；摘要開關；失敗重試；本地儲存上限</p>
                                                 <p><strong>v2.0</strong> - AI翻譯和摘要功能；i18n；更新banner移至時間線區域；修復瀏覽器通知</p>
                                                 <p><strong>v1.3</strong> - 修復淺色模式崩潰；三態主題；修復htm相容性</p>
                                                 <p><strong>v1.2</strong> - 移除Babel改用htm；RSS競速；併發獲取</p>
@@ -1346,8 +1364,8 @@
                                             </div>
                                         ` : html`
                                             <div>
+                                                <p><strong>v2.3</strong> - Summary collapse on toggle-off; summary throttling (10/batch, scroll-triggered, sequential); clear cache button; improved article fetching</p>
                                                 <p><strong>v2.2</strong> - Summary uses turndown for HTML-to-markdown before AI; removed per-entry summary button; auto-translate no longer shows original; fixed auto-translate for new entries; toast drift-out animation</p>
-                                                <p><strong>v2.1</strong> - AI Assistant panel; auto-translate toggle; summary toggle; failure retry; API Key auto-retry; storage limit</p>
                                                 <p><strong>v2.0</strong> - AI translate/summary; i18n; banner moved to timeline; fixed notifications</p>
                                                 <p><strong>v1.3</strong> - Fixed light mode crash; three-state theme; htm compatibility fixes</p>
                                                 <p><strong>v1.2</strong> - Removed Babel (htm); RSS racing; concurrent fetch</p>
@@ -1362,21 +1380,21 @@
                                                 <p><strong>htm 限制：</strong>不支持 HTML 注释 (-- 语法)，不支持 Fragment 简写 (尖括号语法)，否则 InvalidCharacterError 崩溃白屏。</p>
                                                 <p><strong>部署流程：</strong>push 到 GitHub + 调用 Cloudflare Worker API 更新。两者缺一不可。</p>
                                                 <p><strong>localStorage keys：</strong>theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v1</p>
-                                                <p><strong>v2.2 架构：</strong>摘要改用 Turndown.js 将抓取的网页转为 Markdown，再送 AI 总结。无法获取正文时不生成摘要（标记错误）。自动翻译失败条目也会被重试。</p>
+                                                <p><strong>v2.3 架构：</strong>摘要限流：最多10条同时处理（summaryInFlightRef），逐条排队（aiQueueRef），滚动触发（IntersectionObserver + data-item-id）。取消摘要时所有摘要立即隐藏。设置中可清空摘要缓存。文章正文抓取增加更多CSS选择器和诊断日志。</p>
                                             </div>
                                         ` : uiLang === 'zh-TW' ? html`
                                             <div>
                                                 <p><strong>htm 限制：</strong>不支援 HTML 註解、Fragment 簡寫，否則 InvalidCharacterError 崩潰白畫面。</p>
                                                 <p><strong>部署流程：</strong>push 到 GitHub + 呼叫 Cloudflare Worker API 更新。</p>
                                                 <p><strong>localStorage keys：</strong>theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v1</p>
-                                                <p><strong>v2.2 架構：</strong>摘要改用 Turndown.js 將抓取的網頁轉為 Markdown，再送 AI 總結。無法取得正文時不生成摘要。自動翻譯失敗條目也會被重試。</p>
+                                                <p><strong>v2.3 架構：</strong>摘要限流：最多10條同時處理，逐條排隊，滾動觸發（IntersectionObserver）。取消摘要時立即隱藏。設定中可清空摘要快取。</p>
                                             </div>
                                         ` : html`
                                             <div>
                                                 <p><strong>htm limitations:</strong> No HTML comments, no Fragment shorthand, otherwise InvalidCharacterError crash.</p>
                                                 <p><strong>Deploy flow:</strong> push to GitHub + update Cloudflare Worker API.</p>
                                                 <p><strong>localStorage keys:</strong> theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v1</p>
-                                                <p><strong>v2.2 architecture:</strong> Summary uses Turndown.js to convert fetched HTML to Markdown before AI summarization. If article content cannot be fetched, summary is marked as error. Failed auto-translate entries are also retried.</p>
+                                                <p><strong>v2.3 architecture:</strong> Summary throttling: max 10 in-flight (summaryInFlightRef), one-at-a-time queue (aiQueueRef), scroll-triggered (IntersectionObserver + data-item-id). Summary collapses on toggle-off. Clear summary cache button in settings. Article content fetching uses more CSS selectors and diagnostic logging.</p>
                                             </div>
                                         `}
                                     <//>
@@ -1567,7 +1585,7 @@
                 bannerDismissTimerRef.current = setTimeout(() => { setBannerState('hidden'); }, 2000);
             }, []);
 
-            // v2.1: AI processing queue
+            // v2.3: AI processing queue — one-at-a-time sequential processing
             const processAiQueue = useCallback(async () => {
                 if (aiProcessingRef.current || aiQueueRef.current.length === 0) return;
                 aiProcessingRef.current = true;
@@ -1582,12 +1600,35 @@
                 }
 
                 aiProcessingRef.current = false;
-            }, []);
+                // After queue drains, check if more summary tasks should be scheduled
+                if (showSummary) scheduleSummaryBatch();
+            }, [showSummary]);
 
             const enqueueAiTask = useCallback((task) => {
                 aiQueueRef.current.push(task);
                 processAiQueue();
             }, [processAiQueue]);
+
+            // v2.3: Summary batch tracking — max 10 in-flight summaries
+            const summaryInFlightRef = useRef(0);
+            const MAX_SUMMARY_INFLIGHT = 10;
+
+            // Schedule a batch of summary tasks (newest first, max 10 in-flight)
+            const scheduleSummaryBatch = useCallback(() => {
+                if (!showSummary || !aiApiKey) return;
+                const needed = news.filter(item => {
+                    const existing = summariesRef.current[item.id];
+                    return !existing || existing.startsWith(AI_ERROR_PREFIX);
+                });
+                // Only schedule up to the in-flight limit
+                const available = MAX_SUMMARY_INFLIGHT - summaryInFlightRef.current;
+                const toSchedule = needed.slice(0, Math.max(0, available));
+                toSchedule.forEach(item => {
+                    if (aiStatesRef.current[item.id] !== 'summarizing') {
+                        handleSummary(item, !!summariesRef.current[item.id]);
+                    }
+                });
+            }, [showSummary, aiApiKey, news, handleSummary]);
 
             // v2.1: Translate handler with localStorage cache
             const handleTranslate = useCallback((item, isRetry) => {
@@ -1617,44 +1658,58 @@
                 });
             }, [aiProvider, aiApiKey, aiEndpoint, uiLang, aiCacheLimit, triggerAiRerender, enqueueAiTask]);
 
-            // v2.2: Summary handler — fetch article, turndown to markdown, then AI summarize
+            // v2.3: Summary handler — fetch article content, turndown to markdown, then AI summarize
             const handleSummary = useCallback((item, isRetry) => {
                 if (!aiApiKey) return;
                 const existing = summariesRef.current[item.id];
                 if (!isRetry && existing && !existing.startsWith(AI_ERROR_PREFIX)) return;
                 if (aiStatesRef.current[item.id] === 'summarizing') return;
+                // Throttle: max 10 in-flight summary requests
+                if (summaryInFlightRef.current >= MAX_SUMMARY_INFLIGHT) return;
 
+                summaryInFlightRef.current++;
                 aiStatesRef.current[item.id] = 'summarizing';
                 triggerAiRerender();
 
                 enqueueAiTask(async () => {
                     try {
                         let articleMarkdown = '';
+                        let fetchLog = '';
                         try {
                             const turndownService = new TurndownService({
                                 headingStyle: 'atx',
                                 codeBlockStyle: 'fenced',
                                 bulletListMarker: '-'
                             });
-                            // Remove noisy elements before conversion
                             turndownService.remove(['script', 'style', 'nav', 'footer', 'header', 'iframe', 'noscript', 'aside', '.ad', '.advertisement', '.sidebar', '.comments', '.social-share', '.related', '#comments']);
 
+                            // Try each CORS proxy with extended timeout for article fetch
+                            const ARTICLE_TIMEOUT = 12000;
                             for (const proxy of PROXY_LIST) {
                                 try {
                                     const controller = new AbortController();
-                                    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+                                    const timeoutId = setTimeout(() => controller.abort(), ARTICLE_TIMEOUT);
                                     const response = await fetch(proxy + encodeURIComponent(item.url), { signal: controller.signal });
                                     clearTimeout(timeoutId);
+                                    fetchLog += proxy.includes('corsproxy') ? 'corsproxy:' : 'allorigins:';
+                                    fetchLog += response.status + ' ';
                                     if (response.ok) {
                                         const htmlText = await response.text();
+                                        fetchLog += 'len=' + htmlText.length + ' ';
                                         const doc = new DOMParser().parseFromString(htmlText, 'text/html');
 
-                                        // Try to find the main article content
-                                        const articleEl = doc.querySelector('article') || doc.querySelector('[role="article"]') || doc.querySelector('.article-content') || doc.querySelector('.post-content') || doc.querySelector('.entry-content') || doc.querySelector('.content') || doc.body;
+                                        // Smart article element detection — try many selectors
+                                        const selectors = ['article', '[role="article"]', '.article-content', '.post-content', '.entry-content', '.article_body', '.news-content', '.story-body', '.article__body', '.post-body', '.content-body', '#article-body', '.main-content', '#content', '.content'];
+                                        let articleEl = null;
+                                        for (const sel of selectors) {
+                                            articleEl = doc.querySelector(sel);
+                                            if (articleEl && articleEl.textContent.trim().length > 300) break;
+                                            articleEl = null;
+                                        }
+                                        if (!articleEl) articleEl = doc.body;
 
                                         if (articleEl) {
                                             articleMarkdown = turndownService.turndown(articleEl);
-                                            // Clean up: remove excessive whitespace and limit length
                                             articleMarkdown = articleMarkdown.replace(/\n{3,}/g, '\n\n').trim();
                                             if (articleMarkdown.length > 4000) {
                                                 articleMarkdown = articleMarkdown.substring(0, 4000);
@@ -1662,11 +1717,15 @@
                                         }
                                         if (articleMarkdown.length > 200) break;
                                     }
-                                } catch(e) {}
+                                } catch(e) {
+                                    fetchLog += 'err:' + (e.message || 'timeout') + ' ';
+                                }
                             }
                         } catch(e) {
                             console.warn('Turndown conversion failed:', e);
                         }
+
+                        console.log('[Summary] ' + item.content.substring(0, 40) + ' | fetch: ' + fetchLog + '| mdLen: ' + articleMarkdown.length);
 
                         let messages;
                         if (articleMarkdown && articleMarkdown.length > 200) {
@@ -1675,9 +1734,10 @@
                                 { role: 'user', content: articleMarkdown }
                             ];
                         } else {
-                            // Fallback: cannot get article content, mark as error
-                            summariesRef.current[item.id] = AI_ERROR_PREFIX + 'Unable to fetch article content for summarization';
+                            // Cannot get article content — mark as error with diagnostic info
+                            summariesRef.current[item.id] = AI_ERROR_PREFIX + 'Unable to fetch article content (mdLen=' + articleMarkdown.length + ')';
                             aiStatesRef.current[item.id] = null;
+                            summaryInFlightRef.current--;
                             saveAiCache('ai_summaries_v1', summariesRef.current, aiCacheLimit);
                             triggerAiRerender();
                             return;
@@ -1690,31 +1750,88 @@
                         summariesRef.current[item.id] = AI_ERROR_PREFIX + (e.message || 'Unknown error');
                     } finally {
                         aiStatesRef.current[item.id] = null;
+                        summaryInFlightRef.current--;
                         saveAiCache('ai_summaries_v1', summariesRef.current, aiCacheLimit);
                         triggerAiRerender();
                     }
                 });
             }, [aiProvider, aiApiKey, aiEndpoint, uiLang, aiCacheLimit, triggerAiRerender, enqueueAiTask]);
 
-            // v2.2: Auto-translate and auto-summary when news items arrive
+            // v2.3: Auto-translate when news items arrive (no batch limit for translate)
             useEffect(() => {
                 if (!aiApiKey || news.length === 0) return;
-
-                news.forEach(item => {
-                    if (autoTranslate) {
+                if (autoTranslate) {
+                    news.forEach(item => {
                         const existing = translationsRef.current[item.id];
                         if (!existing || existing.startsWith(AI_ERROR_PREFIX)) {
                             handleTranslate(item, !!existing);
                         }
+                    });
+                }
+            }, [news, autoTranslate, aiApiKey, handleTranslate]);
+
+            // v2.3: Auto-summary — initial batch (newest 10), scroll-triggered via IntersectionObserver
+            useEffect(() => {
+                if (!showSummary || !aiApiKey || news.length === 0) return;
+                scheduleSummaryBatch();
+            }, [news, showSummary, aiApiKey, scheduleSummaryBatch]);
+
+            // v2.3: IntersectionObserver — trigger summary for entries visible on scroll
+            const summaryObserverRef = useRef(null);
+            const observedEntriesRef = useRef(new Set());
+
+            useEffect(() => {
+                if (!showSummary) {
+                    // Clean up observer when summary is off
+                    if (summaryObserverRef.current) {
+                        summaryObserverRef.current.disconnect();
+                        summaryObserverRef.current = null;
                     }
-                    if (showSummary) {
-                        const existing = summariesRef.current[item.id];
-                        if (!existing || existing.startsWith(AI_ERROR_PREFIX)) {
-                            handleSummary(item, !!existing);
-                        }
+                    observedEntriesRef.current.clear();
+                    return;
+                }
+                if (!aiApiKey) return;
+
+                // Create observer that triggers summary for entries that become visible
+                if (!summaryObserverRef.current) {
+                    summaryObserverRef.current = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                const itemId = entry.target.getAttribute('data-item-id');
+                                if (itemId && showSummary) {
+                                    const existing = summariesRef.current[itemId];
+                                    if (!existing || existing.startsWith(AI_ERROR_PREFIX)) {
+                                        const newsItem = news.find(n => n.id === itemId);
+                                        if (newsItem && summaryInFlightRef.current < MAX_SUMMARY_INFLIGHT) {
+                                            handleSummary(newsItem, !!existing);
+                                        }
+                                    }
+                                }
+                                // Stop observing once triggered
+                                summaryObserverRef.current.unobserve(entry.target);
+                            }
+                        });
+                    }, { rootMargin: '200px' });
+                }
+
+                // Observe all entry elements that haven't been observed yet
+                const elements = document.querySelectorAll('[data-item-id]');
+                elements.forEach(el => {
+                    const itemId = el.getAttribute('data-item-id');
+                    if (!observedEntriesRef.current.has(itemId)) {
+                        observedEntriesRef.current.add(itemId);
+                        summaryObserverRef.current.observe(el);
                     }
                 });
-            }, [news, autoTranslate, showSummary, aiApiKey, handleTranslate, handleSummary]);
+
+                return () => {
+                    if (summaryObserverRef.current) {
+                        summaryObserverRef.current.disconnect();
+                        summaryObserverRef.current = null;
+                    }
+                    observedEntriesRef.current.clear();
+                };
+            }, [showSummary, aiApiKey, news, handleSummary]);
 
             // v2.1: Retry failed items
             const handleRetryTranslate = useCallback((item) => {
@@ -1724,6 +1841,13 @@
             const handleRetrySummary = useCallback((item) => {
                 handleSummary(item, true);
             }, [handleSummary]);
+
+            // v2.3: Clear summary cache
+            const handleClearSummaryCache = useCallback(() => {
+                summariesRef.current = {};
+                localStorage.removeItem('ai_summaries_v1');
+                triggerAiRerender();
+            }, [triggerAiRerender]);
 
             // RSS Racing
             const fetchData = async () => {
@@ -1952,6 +2076,7 @@
                         setShowSummary=${setShowSummary}
                         aiCacheLimit=${aiCacheLimit}
                         setAiCacheLimit=${setAiCacheLimit}
+                        onClearSummaryCache=${handleClearSummaryCache}
                     />
                 </div>
             `;

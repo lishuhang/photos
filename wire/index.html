@@ -4,23 +4,16 @@
     <meta name="description" content="7x24 Global Breaking News Aggregator">
     <title>Global Wire | 7x24 突发新闻</title>
 
-    <!-- Preconnect hints -->
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://unpkg.com">
     <link rel="preconnect" href="https://corsproxy.io">
     <link rel="preconnect" href="https://api.allorigins.win">
 
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- React & ReactDOM -->
     <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin=""></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin=""></script>
+    <script src="https://unpkg.com/htm@3.1.1/dist/htm.umd.js"></script>
 
-    <!-- htm v3.1.1 - INLINED to avoid CDN tracking prevention blocking -->
-    <script>!function(n,e){"object"==typeof exports&&"undefined"!=typeof module?module.exports=e():"function"==typeof define&&define.amd?define(e):n.htm=e()}(this,function(){var n=function(e,t,u,s){var r;t[0]=0;for(var p=1;p<t.length;p++){var h=t[p++],o=t[p]?(t[0]|=h?1:2,u[t[p++]]):t[++p];3===h?s[0]=o:4===h?s[1]=Object.assign(s[1]||{},o):5===h?(s[1]=s[1]||{})[t[++p]]=o:6===h?s[1][t[++p]]+=o+"":h?(r=e.apply(o,n(e,o,u,["",null])),s.push(r),o[0]?t[0]|=2:(t[p-2]=0,t[p]=r)):s.push(o)}return s},e=new Map;return function(t){var u=e.get(this);return u||(u=new Map,e.set(this,u)),(u=n(this,u.get(t)||(u.set(t,u=function(n){for(var e,t,u=1,s="",r="",p=[0],h=function(n){1===u&&(n||(s=s.replace(/^\s*\n\s*|\s*\n\s*$/g,"")))?p.push(0,n,s):3===u&&(n||s)?(p.push(3,n,s),u=2):2===u&&"..."===s&&n?p.push(4,n,0):2===u&&s&&!n?p.push(5,0,!0,s):u>=5&&((s||!n&&5===u)&&(p.push(u,0,s,t),u=6),n&&(p.push(u,n,0,t),u=6)),s=""},o=0;o<n.length;o++){o&&(1===u&&h(),h(o));for(var f=0;f<n[o].length;f++)e=n[o][f],1===u?"<"===e?(h(),p=[p],u=3):s+=e:4===u?"--"===s&&">"===e?(u=1,s=""):s=e+s[0]:r?e===r?r="":s+=e:'"'===e||"'"===e?r=e:">"===e?(h(),u=1):u&&("="===e?(u=5,t=s,s=""):"/"===e&&(u<5||">"===n[o][f+1])?(h(),3===u&&(p=p[0]),u=p,(p=p[0]).push(2,0,u),u=0):" "===e||"\t"===e||"\n"===e||"\r"===e?(h(),u=2):s+=e),3===u&&"!--"===s&&(u=4,p=p[0])}return h(),p}(t)),u),arguments,[])).length>1?u:u[0]}});</script>
-
-    <!-- Configure Tailwind theme -->
     <script>
         tailwind.config = { darkMode: 'class' }
     </script>
@@ -107,20 +100,27 @@
             to { transform: rotate(360deg); }
         }
 
-        .update-toast {
-            animation: toastSlideIn 0.3s ease-out;
+        @keyframes ai-spin {
+            to { transform: rotate(360deg); }
         }
-        @keyframes toastSlideIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .ai-loader {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: 2px solid rgba(59,130,246,0.3);
+            border-top-color: #3b82f6;
+            border-radius: 50%;
+            animation: ai-spin 0.6s linear infinite;
         }
-
-        .ai-result {
-            animation: fadeIn 0.2s ease-out;
+        .retry-link {
+            cursor: pointer;
+            color: #3b82f6;
+            text-decoration: underline;
+            font-size: 10px;
+            margin-left: 4px;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .retry-link:hover {
+            color: #2563eb;
         }
     </style>
 </head>
@@ -181,13 +181,11 @@
         const html = htm.bind(React.createElement);
         const { useState, useEffect, useRef, useMemo, useCallback } = React;
 
-        // --- Configuration ---
         const MAX_ITEMS = 150;
         const UPDATE_INTERVAL = 30000;
         const FETCH_TIMEOUT = 8000;
-        const APP_VERSION = 'v2.0';
+        const APP_VERSION = 'v2.1';
 
-        // Proxy Fallback System
         const PROXY_LIST = [
             "https://corsproxy.io/?",
             "https://api.allorigins.win/raw?url="
@@ -195,7 +193,6 @@
 
         // --- Inline SVG Icons ---
         const IconRefresh = () => html`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
-        // v2.0: Proper gear/cog icon (was sun icon in v1.3)
         const IconSettings = () => html`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>`;
         const IconClose = () => html`<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`;
         const IconBell = () => html`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>`;
@@ -210,13 +207,13 @@
         const IconSun = () => html`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
         const IconMoon = () => html`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
         const IconMonitor = () => html`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`;
-        // v2.0: AI icons
         const IconTranslate = () => html`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8l6 6"/><path d="M4 14l6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="M22 22l-5-10-5 10"/><path d="M14 18h6"/></svg>`;
-        const IconSummary = () => html`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>`;
         const IconKey = () => html`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>`;
-        const IconSparkles = () => html`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.912 5.813a2 2 0 0 0 1.275 1.275L21 12l-5.813 1.912a2 2 0 0 0-1.275 1.275L12 21l-1.912-5.813a2 2 0 0 0-1.275-1.275L3 12l5.813-1.912a2 2 0 0 0 1.275-1.275L12 3z"/></svg>`;
+        const IconEye = () => html`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`;
+        const IconEyeOff = () => html`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+        const IconLoader = () => html`<span className="ai-loader"></span>`;
 
-        // --- Localization (zh-CN, en, zh-TW) ---
+        // --- Localization ---
         const STRINGS = {
             'zh-CN': {
                 title: 'GLOBAL WIRE',
@@ -225,7 +222,7 @@
                 refresh: '刷新',
                 tab_feeds: '新闻源',
                 tab_general: '通用',
-                tab_ai: 'AI 助手',
+                tab_ai: 'AI助手',
                 tab_readme: '说明',
                 lang_label: '界面语言',
                 theme_label: '外观模式',
@@ -258,18 +255,33 @@
                 banner_updated: '内容已更新',
                 notif_new_updates_title: 'Global Wire 有新消息',
                 notif_new_updates_body: '已获取 {count} 条新闻更新',
-                translate_btn: '翻译',
-                summarize_btn: '摘要',
-                translating: '翻译中...',
-                summarizing: '生成摘要中...',
+                translate: '翻译',
+                summary: '摘要',
+                ai_settings: 'AI 助手',
+                ai_provider: 'AI 模型',
+                ai_apikey: 'API Key',
+                ai_lang_and_target: '界面及AI助手语言',
+                ai_endpoint: 'API 端点',
+                ai_endpoint_placeholder: '留空使用默认',
+                translate_btn: '译',
+                summary_btn: '摘',
+                ai_no_key: '请先在设置中配置 API Key',
+                ai_translating: '翻译中...',
+                ai_summarizing: '生成摘要中...',
                 ai_error: 'AI 请求失败',
-                ai_no_key: '请先在设置 → AI 助手中配置 API Key',
-                ai_api_key_label: 'API Key',
-                ai_api_key_placeholder: '输入 GLM / Gemini API Key',
-                ai_model_label: '模型',
-                ai_target_lang_label: '翻译/摘要目标语言',
-                ai_target_lang_hint: '翻译和摘要将输出为此语言',
-                ai_notif_permission: '请在浏览器中允许通知权限',
+                summary_fetching: '获取文章内容...',
+                auto_translate: '自动翻译所有条目标题',
+                auto_translate_on: '自动替换为翻译标题',
+                auto_translate_off: '显示原文',
+                show_summary_label: '摘要',
+                cache_limit: '本地存储翻译和摘要',
+                cache_100: '100条',
+                cache_500: '500条',
+                cache_1000: '1000条',
+                cache_all: '全部',
+                retry: '重试',
+                retry_translate: '重试翻译',
+                retry_summary: '重试摘要',
             },
             'en': {
                 title: 'GLOBAL WIRE',
@@ -311,27 +323,42 @@
                 banner_updated: 'Content updated',
                 notif_new_updates_title: 'Global Wire Updates',
                 notif_new_updates_body: '{count} new articles fetched',
-                translate_btn: 'Translate',
-                summarize_btn: 'Summary',
-                translating: 'Translating...',
-                summarizing: 'Summarizing...',
+                translate: 'Translate',
+                summary: 'Summary',
+                ai_settings: 'AI Assistant',
+                ai_provider: 'AI Provider',
+                ai_apikey: 'API Key',
+                ai_lang_and_target: 'Interface & AI Language',
+                ai_endpoint: 'API Endpoint',
+                ai_endpoint_placeholder: 'Leave empty for default',
+                translate_btn: 'TR',
+                summary_btn: 'SM',
+                ai_no_key: 'Please configure API Key in Settings',
+                ai_translating: 'Translating...',
+                ai_summarizing: 'Summarizing...',
                 ai_error: 'AI request failed',
-                ai_no_key: 'Please configure API Key in Settings → AI Assistant first',
-                ai_api_key_label: 'API Key',
-                ai_api_key_placeholder: 'Enter GLM / Gemini API Key',
-                ai_model_label: 'Model',
-                ai_target_lang_label: 'Translation/Summary Target Language',
-                ai_target_lang_hint: 'Translation and summary output language',
-                ai_notif_permission: 'Please allow notifications in your browser',
+                summary_fetching: 'Fetching article...',
+                auto_translate: 'Auto-translate all titles',
+                auto_translate_on: 'Replace with translated titles',
+                auto_translate_off: 'Show original',
+                show_summary_label: 'Summary',
+                cache_limit: 'Local storage for translations & summaries',
+                cache_100: '100 items',
+                cache_500: '500 items',
+                cache_1000: '1000 items',
+                cache_all: 'All',
+                retry: 'Retry',
+                retry_translate: 'Retry translate',
+                retry_summary: 'Retry summary',
             },
             'zh-TW': {
                 title: 'GLOBAL WIRE',
                 subtitle: '7x24 突發新聞',
                 settings: '設定',
                 refresh: '重新整理',
-                tab_feeds: '新聞來源',
+                tab_feeds: '新聞源',
                 tab_general: '一般',
-                tab_ai: 'AI 助手',
+                tab_ai: 'AI助手',
                 tab_readme: '說明',
                 lang_label: '介面語言',
                 theme_label: '外觀模式',
@@ -341,41 +368,56 @@
                 theme_system: '跟隨系統',
                 notif_on: '已開啟',
                 notif_off: '已關閉',
-                add_feed: '新增 RSS 來源',
+                add_feed: '新增 RSS 源',
                 feed_name: '名稱',
-                feed_category: '類別 (可選)',
+                feed_category: '類別 (選填)',
                 feed_url: 'RSS 連結 / ID',
                 add_btn: '新增',
-                active_sources: '已新增來源',
+                active_sources: '已新增信源',
                 import_btn: '匯入設定 (JSON)',
                 export_btn: '匯出設定',
-                no_items: '暫無消息。請點擊重新整理按鈕或檢查設定中的新聞來源。',
+                no_items: '暫無消息。請點擊重新整理按鈕或檢查設定中的新聞源。',
                 updating: '更新中...',
                 last_updated: '上次更新: ',
-                sources_via: '來源: ',
-                parser_note: '注意：系統僅支援標準 RSS/XML。X/Weibo 等來源請自行轉換為 RSS 連結填入。',
-                import_warn: '警告：匯入操作將完全取代目前的來源列表，此操作無法撤銷。是否繼續？',
+                sources_via: '信源: ',
+                parser_note: '注意：系統僅支援標準 RSS/XML。X/Weibo 等源請自行轉換為 RSS 連結填入。',
+                import_warn: '警告：匯入操作將完全替換當前的信源列表，此操作無法撤銷。是否繼續？',
                 error_fetch: '部分或全部更新失敗。',
                 success_rate: '更新成功率: ',
                 filter_all: '全部',
-                banner_updating: '正在更新所有新聞來源...',
+                banner_updating: '正在更新所有新聞源...',
                 banner_progress: '正在更新 {done}/{total}...',
-                banner_updates_available: '已取得 {count} 筆更新，點擊展開',
+                banner_updates_available: '已取得 {count} 條更新，點擊展開',
                 banner_updated: '內容已更新',
                 notif_new_updates_title: 'Global Wire 有新消息',
-                notif_new_updates_body: '已取得 {count} 筆新聞更新',
-                translate_btn: '翻譯',
-                summarize_btn: '摘要',
-                translating: '翻譯中...',
-                summarizing: '生成摘要中...',
+                notif_new_updates_body: '已取得 {count} 條新聞更新',
+                translate: '翻譯',
+                summary: '摘要',
+                ai_settings: 'AI 助手',
+                ai_provider: 'AI 模型',
+                ai_apikey: 'API Key',
+                ai_lang_and_target: '介面及AI助手語言',
+                ai_endpoint: 'API 端點',
+                ai_endpoint_placeholder: '留空使用預設',
+                translate_btn: '譯',
+                summary_btn: '摘',
+                ai_no_key: '請先在設定中配置 API Key',
+                ai_translating: '翻譯中...',
+                ai_summarizing: '生成摘要中...',
                 ai_error: 'AI 請求失敗',
-                ai_no_key: '請先在設定 → AI 助手中配置 API Key',
-                ai_api_key_label: 'API Key',
-                ai_api_key_placeholder: '輸入 GLM / Gemini API Key',
-                ai_model_label: '模型',
-                ai_target_lang_label: '翻譯/摘要目標語言',
-                ai_target_lang_hint: '翻譯和摘要將輸出為此語言',
-                ai_notif_permission: '請在瀏覽器中允許通知權限',
+                summary_fetching: '獲取文章內容...',
+                auto_translate: '自動翻譯所有條目標題',
+                auto_translate_on: '自動替換為翻譯標題',
+                auto_translate_off: '顯示原文',
+                show_summary_label: '摘要',
+                cache_limit: '本地儲存翻譯和摘要',
+                cache_100: '100條',
+                cache_500: '500條',
+                cache_1000: '1000條',
+                cache_all: '全部',
+                retry: '重試',
+                retry_translate: '重試翻譯',
+                retry_summary: '重試摘要',
             }
         };
 
@@ -393,10 +435,10 @@
             return [];
         };
 
-        // Robust Fetcher with Proxy Fallback
         const fetchFeedContent = async (url) => {
             let lastError = null;
             const cacheBuster = `&_t=${Date.now()}`;
+
             for (const proxy of PROXY_LIST) {
                 try {
                     const controller = new AbortController();
@@ -425,6 +467,7 @@
                 const xmlDoc = parser.parseFromString(xmlText, "text/xml");
                 const items = xmlDoc.querySelectorAll("item, entry");
                 const newsItems = [];
+
                 items.forEach(item => {
                     const title = item.querySelector("title")?.textContent;
                     let link = item.querySelector("link")?.textContent;
@@ -434,9 +477,11 @@
                     }
                     let pubDate = item.querySelector("pubDate, published, updated")?.textContent;
                     if (!pubDate) {
-                        const dcDate = item.getElementsByTagName("dc:date")[0] || item.getElementsByTagNameNS("*", "date")[0];
+                        const dcDate = item.getElementsByTagName("dc:date")[0]
+                                    || item.getElementsByTagNameNS("*", "date")[0];
                         if (dcDate) pubDate = dcDate.textContent;
                     }
+
                     if (title && link) {
                         let sourceName = feedInfo.name;
                         let cleanTitle = title;
@@ -447,7 +492,11 @@
                             }
                             cleanTitle = parts.slice(0, -1).join(" - ");
                         }
-                        const isImportant = title.includes("Urgent") || title.includes("Breaking") || title.includes("\u7a81\u53d1") || title.includes("\u91cd\u78c5");
+                        const isImportant =
+                            title.includes("Urgent") ||
+                            title.includes("Breaking") ||
+                            title.includes("\u7a81\u53d1") ||
+                            title.includes("\u91cd\u78c5");
                         let ts = Date.now();
                         if (pubDate) {
                             const parsedTs = new Date(pubDate.trim()).getTime();
@@ -479,105 +528,140 @@
             return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
         };
 
-        // v2.0: AI API call helper
+        // --- AI Helper Functions ---
         const LANG_NAMES = {
-            'zh-CN': 'Simplified Chinese',
-            'zh-TW': 'Traditional Chinese',
-            'en': 'English',
-            'ja': 'Japanese',
-            'ko': 'Korean',
-            'fr': 'French',
-            'de': 'German',
-            'es': 'Spanish',
+            'zh-CN': { 'zh-CN': '简体中文', 'en': 'Simplified Chinese', 'zh-TW': '簡體中文' },
+            'zh-TW': { 'zh-CN': '繁体中文', 'en': 'Traditional Chinese', 'zh-TW': '繁體中文' },
+            'en': { 'zh-CN': '英语', 'en': 'English', 'zh-TW': '英語' },
+            'ja': { 'zh-CN': '日语', 'en': 'Japanese', 'zh-TW': '日語' },
+            'ko': { 'zh-CN': '韩语', 'en': 'Korean', 'zh-TW': '韓語' }
         };
 
-        const callAI = async (apiKey, model, prompt) => {
-            if (!apiKey) throw new Error('No API key');
+        const getTargetLangName = (langCode, uiLang) => {
+            const names = LANG_NAMES[langCode];
+            if (!names) return langCode;
+            return names[uiLang] || names['en'] || langCode;
+        };
 
-            // Use the Worker's own /api/ai endpoint as a server-side proxy (no CORS issues)
-            const response = await fetch('/api/ai', {
+        const callAI = async (provider, apiKey, endpoint, messages, maxTokens) => {
+            if (provider === 'gemini-2.0-flash') {
+                const geminiEndpoint = endpoint || 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+                const url = geminiEndpoint + '?key=' + apiKey;
+                const geminiContents = [];
+                if (messages.length >= 2 && messages[0].role === 'system') {
+                    geminiContents.push({ role: 'user', parts: [{ text: messages[0].content }] });
+                    geminiContents.push({ role: 'model', parts: [{ text: 'Understood.' }] });
+                    geminiContents.push({ role: 'user', parts: [{ text: messages[1].content }] });
+                } else {
+                    messages.forEach(m => {
+                        geminiContents.push({ role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content }] });
+                    });
+                }
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: geminiContents, generationConfig: { temperature: 0.1, maxOutputTokens: maxTokens || 300 } })
+                });
+                const data = await response.json();
+                if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                    return data.candidates[0].content.parts[0].text;
+                }
+                throw new Error('Gemini API error: ' + JSON.stringify(data));
+            }
+            const glmEndpoint = endpoint || 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
+            const response = await fetch(glmEndpoint, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ apiKey, model, prompt })
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + apiKey
+                },
+                body: JSON.stringify({
+                    model: 'glm-4-flash',
+                    messages: messages,
+                    temperature: 0.1,
+                    max_tokens: maxTokens || 200
+                })
             });
-
-            if (!response.ok) {
-                const errText = await response.text();
-                let errMsg = 'API error: ' + response.status;
-                try { const errJson = JSON.parse(errText); errMsg = errJson.error || errMsg; } catch(e) { errMsg += ' ' + errText.substring(0, 200); }
-                throw new Error(errMsg);
-            }
-
             const data = await response.json();
-
-            if (data.error) throw new Error(data.error);
-
-            // GLM response format
-            if (data.choices?.[0]?.message?.content) {
-                return data.choices[0].message.content.trim();
+            if (data.choices && data.choices[0]) {
+                return data.choices[0].message.content;
             }
-            // Gemini response format
-            if (data.candidates?.[0]?.content?.parts?.[0]?.text) {
-                return data.candidates[0].content.parts[0].text.trim();
-            }
-
-            throw new Error('Unexpected API response format');
+            throw new Error('GLM API error: ' + JSON.stringify(data));
         };
+
+        // --- AI Cache Management ---
+        const loadAiCache = (key) => {
+            try {
+                const data = localStorage.getItem(key);
+                return data ? JSON.parse(data) : {};
+            } catch(e) { return {}; }
+        };
+
+        const saveAiCache = (key, data, limit) => {
+            try {
+                const entries = Object.entries(data);
+                if (limit && limit !== 'all' && entries.length > parseInt(limit)) {
+                    entries.sort((a, b) => (b[1].ts || 0) - (a[1].ts || 0));
+                    const trimmed = {};
+                    entries.slice(0, parseInt(limit)).forEach(([k, v]) => { trimmed[k] = v; });
+                    localStorage.setItem(key, JSON.stringify(trimmed));
+                } else {
+                    localStorage.setItem(key, JSON.stringify(data));
+                }
+            } catch(e) {
+                console.warn('Cache save failed, clearing old data:', e);
+                const entries = Object.entries(data);
+                const trimmed = {};
+                entries.slice(0, 50).forEach(([k, v]) => { trimmed[k] = v; });
+                try { localStorage.setItem(key, JSON.stringify(trimmed)); } catch(e2) {}
+            }
+        };
+
+        const AI_ERROR_PREFIX = '__ERROR__:';
 
         // --- Components ---
 
-        // v2.0: UpdateToast - centered toast below header in timeline area
-        const UpdateToast = ({ bannerState, updateCount, bannerProgress, onExpand, uiStrings }) => {
+        const UpdateBanner = ({ bannerState, updateCount, bannerProgress, onExpand, uiStrings }) => {
             if (bannerState === 'hidden') return null;
-
             if (bannerState === 'updating') {
                 const progressText = bannerProgress.total > 0
                     ? uiStrings.banner_progress.replace('{done}', bannerProgress.completed).replace('{total}', bannerProgress.total)
                     : uiStrings.banner_updating;
                 return html`
-                    <div className="update-toast mx-auto mb-4 max-w-sm">
-                        <div className="bg-blue-600 dark:bg-blue-700 px-4 py-2 rounded-lg text-center">
-                            <div className="flex items-center justify-center gap-2">
-                                <div className="banner-spinner"></div>
-                                <span className="text-sm font-medium text-white">${progressText}</span>
-                            </div>
+                    <div className="sticky top-[105px] z-30 mx-auto max-w-sm">
+                        <div className="bg-blue-600 dark:bg-blue-700 px-4 py-2 rounded-lg shadow-lg text-center flex items-center justify-center gap-2">
+                            <div className="banner-spinner"></div>
+                            <span className="text-sm font-medium text-white">${progressText}</span>
                         </div>
                     </div>
                 `;
             }
-
             if (bannerState === 'available') {
                 const text = uiStrings.banner_updates_available.replace('{count}', updateCount);
                 return html`
-                    <div className="update-toast mx-auto mb-4 max-w-sm">
-                        <div className="bg-blue-600 dark:bg-blue-700 px-4 py-2 rounded-lg text-center cursor-pointer" onClick=${onExpand}>
-                            <div className="flex items-center justify-center gap-2">
-                                <${IconBell} />
-                                <span className="text-sm font-medium text-white">${text}</span>
-                                <span className="text-white/70"><${IconChevronDown} /></span>
-                            </div>
+                    <div className="sticky top-[105px] z-30 mx-auto max-w-sm">
+                        <div className="bg-blue-600 dark:bg-blue-700 px-4 py-2 rounded-lg shadow-lg text-center flex items-center justify-center gap-2 cursor-pointer" onClick=${onExpand}>
+                            <${IconBell} />
+                            <span className="text-sm font-medium text-white">${text}</span>
+                            <span className="text-white/70"><${IconChevronDown} /></span>
                         </div>
                     </div>
                 `;
             }
-
             if (bannerState === 'updated') {
                 return html`
-                    <div className="update-toast mx-auto mb-4 max-w-sm">
-                        <div className="bg-blue-600 dark:bg-blue-700 px-4 py-2 rounded-lg text-center">
-                            <div className="flex items-center justify-center gap-2">
-                                <${IconCheckCircle} />
-                                <span className="text-sm font-medium text-white">${uiStrings.banner_updated}</span>
-                            </div>
+                    <div className="sticky top-[105px] z-30 mx-auto max-w-sm">
+                        <div className="bg-green-600 dark:bg-green-700 px-4 py-2 rounded-lg shadow-lg text-center flex items-center justify-center gap-2">
+                            <${IconCheckCircle} />
+                            <span className="text-sm font-medium text-white">${uiStrings.banner_updated}</span>
                         </div>
                     </div>
                 `;
             }
-
             return null;
         };
 
-        const Header = ({ status, onOpenSettings, onRefresh, uiStrings, hasError }) => {
+        const Header = ({ status, onOpenSettings, onRefresh, uiStrings, hasError, showSummary, setShowSummary }) => {
             let statusColor = 'bg-green-500';
             if (status === 'fetching') statusColor = 'bg-yellow-500';
             else if (status === 'error') statusColor = 'bg-red-600';
@@ -596,9 +680,17 @@
                                 ${uiStrings.subtitle}
                             </span>
                             <span className="ml-2 text-[10px] font-mono text-gray-400 dark:text-slate-600 bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">${APP_VERSION}</span>
+                            <label className="ml-2 flex items-center gap-1 cursor-pointer select-none">
+                                <input
+                                    type="checkbox"
+                                    checked=${showSummary}
+                                    onChange=${(e) => setShowSummary(e.target.checked)}
+                                    className="w-3 h-3 rounded border-gray-300 text-amber-500 focus:ring-amber-400 cursor-pointer"
+                                />
+                                <span className="text-[10px] font-medium text-amber-600 dark:text-amber-400">${uiStrings.show_summary_label}</span>
+                            </label>
                         </h1>
                     </div>
-
                     <div className="flex items-center space-x-3 sm:space-x-4">
                         <button
                             onClick=${onRefresh}
@@ -615,7 +707,6 @@
                             <${IconSettings} />
                         </button>
                     </div>
-
                     ${status === 'fetching' && html`<div className="loading-bar"></div>`}
                 </header>
             `;
@@ -651,16 +742,18 @@
             `;
         };
 
-        // v2.0: NewsCard with translate/summary buttons (state managed by parent via aiResults/aiLoadingMap)
-        const NewsCard = ({ item, aiResults, aiLoadingMap, aiErrorMap, onTranslate, onSummarize, uiStrings }) => {
-            const itemId = item.id;
-            const translation = aiResults[itemId + '_translate'] || null;
-            const summary = aiResults[itemId + '_summary'] || null;
-            const aiLoading = aiLoadingMap[itemId] || null;
-            const aiError = aiErrorMap[itemId] || null;
+        // v2.1: NewsCard with auto-translate and auto-summary support
+        const NewsCard = ({ item, translation, summaryText, aiState, onTranslate, onSummary, onRetryTranslate, onRetrySummary, autoTranslate, showSummary, uiStrings }) => {
+            const hasTranslation = translation && !translation.startsWith(AI_ERROR_PREFIX);
+            const hasTranslationError = translation && translation.startsWith(AI_ERROR_PREFIX);
+            const hasSummaryError = summaryText && summaryText.startsWith(AI_ERROR_PREFIX);
+            const hasSummary = summaryText && !summaryText.startsWith(AI_ERROR_PREFIX);
+
+            // Display title: if auto-translate is on and we have a valid translation, show it
+            const displayTitle = (autoTranslate && hasTranslation) ? translation : item.content;
 
             return html`
-                <div className="block relative pl-6 pb-4 group hover:bg-gray-50 dark:hover:bg-slate-800/50 rounded-r-lg -ml-2 p-2">
+                <div className="block relative pl-6 pb-6 group hover:bg-gray-50 dark:hover:bg-slate-800/50 rounded-r-lg -ml-2 p-2">
                     <div className=${`absolute left-[0.5rem] top-4 -translate-x-1/2 w-2.5 h-2.5 rounded-full border-2 border-white dark:border-slate-900 z-10
                         ${item.important ? 'bg-red-600' : 'bg-blue-500 dark:bg-blue-400'}`}></div>
 
@@ -675,57 +768,63 @@
                             <span className="font-mono text-xs text-gray-400 dark:text-slate-500">
                                 ${formatTime(item.timestamp)}
                             </span>
+                            ${!autoTranslate && html`
+                                <button
+                                    onClick=${(e) => { e.preventDefault(); e.stopPropagation(); onTranslate(item); }}
+                                    className="text-[10px] px-1.5 py-0.5 rounded bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 border border-purple-100 dark:border-purple-900/50 hover:bg-purple-100 dark:hover:bg-purple-900/40 shrink-0"
+                                    title=${uiStrings.translate}
+                                >
+                                    ${aiState === 'translating' ? html`<${IconLoader} />` : uiStrings.translate_btn}
+                                </button>
+                            `}
+                            ${!showSummary && html`
+                                <button
+                                    onClick=${(e) => { e.preventDefault(); e.stopPropagation(); onSummary(item); }}
+                                    className="text-[10px] px-1.5 py-0.5 rounded bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 border border-amber-100 dark:border-amber-900/50 hover:bg-amber-100 dark:hover:bg-amber-900/40 shrink-0"
+                                    title=${uiStrings.summary}
+                                >
+                                    ${aiState === 'summarizing' ? html`<${IconLoader} />` : uiStrings.summary_btn}
+                                </button>
+                            `}
                         </div>
-                        <a href=${item.url} target="_blank" rel="noopener noreferrer"
-                           className=${`text-base leading-snug font-medium hover:underline
-                            ${item.important ? 'text-red-700 dark:text-red-400 font-bold' : 'text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400'}`}>
-                            ${item.content}
+                        <a href=${item.url} target="_blank" rel="noopener noreferrer" className="no-underline">
+                            <h2 className=${`text-base leading-snug font-medium
+                                ${item.important ? 'text-red-700 dark:text-red-400 font-bold' : 'text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400'}`}>
+                                ${displayTitle}
+                            </h2>
                         </a>
+                        ${hasTranslationError && html`
+                            <span className="retry-link" onClick=${(e) => { e.preventDefault(); e.stopPropagation(); onRetryTranslate(item); }}>${uiStrings.retry_translate}</span>
+                        `}
+                        ${!autoTranslate && hasTranslation && html`
+                            <p className="text-sm text-purple-600 dark:text-purple-400 mt-0.5 leading-snug">${translation}</p>
+                        `}
+                        ${autoTranslate && hasTranslation && html`
+                            <p className="text-[10px] text-gray-400 dark:text-slate-500 mt-0.5 leading-snug italic">${item.content}</p>
+                        `}
                     </div>
-
-                    ${translation && html`
-                        <div className="ai-result ml-0 mt-1 text-xs text-gray-500 dark:text-slate-400 italic">
-                            ${translation}
+                    ${(showSummary || hasSummary || hasSummaryError) && html`
+                        <div className="mt-1.5 ml-0 sm:ml-0">
+                            ${aiState === 'summarizing' && html`
+                                <div className="flex items-center gap-1.5 text-[10px] text-amber-600 dark:text-amber-400">
+                                    <${IconLoader} /> ${uiStrings.ai_summarizing}
+                                </div>
+                            `}
+                            ${hasSummaryError && html`
+                                <div className="text-xs text-red-500 dark:text-red-400 mt-1 p-2 bg-red-50 dark:bg-red-900/20 rounded border border-red-100 dark:border-red-900/50 leading-relaxed">
+                                    ${summaryText.replace(AI_ERROR_PREFIX, '')}
+                                    <span className="retry-link" onClick=${(e) => { e.preventDefault(); e.stopPropagation(); onRetrySummary(item); }}>${uiStrings.retry_summary}</span>
+                                </div>
+                            `}
+                            ${hasSummary && html`
+                                <p className="text-xs text-amber-700 dark:text-amber-300 mt-1 p-2 bg-amber-50 dark:bg-amber-900/20 rounded border border-amber-100 dark:border-amber-900/50 leading-relaxed">${summaryText}</p>
+                            `}
                         </div>
                     `}
-
-                    ${summary && html`
-                        <div className="ai-result ml-0 mt-1 text-xs text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/10 p-2 rounded">
-                            <span className="font-semibold"><${IconSummary} /> </span> ${summary}
-                        </div>
-                    `}
-
-                    ${aiError && html`
-                        <div className="ml-0 mt-1 text-xs text-red-500">${aiError}</div>
-                    `}
-
-                    <div className="flex items-center gap-2 mt-1.5 ml-0">
-                        <button
-                            onClick=${() => onTranslate(item)}
-                            disabled=${aiLoading !== null}
-                            className="flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded border border-gray-200 dark:border-slate-700 text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 disabled:opacity-50"
-                        >
-                            ${aiLoading === 'translate'
-                                ? html`<span className="banner-spinner" style=${{width: '10px', height: '10px', borderWidth: '1px'}}></span> ${uiStrings.translating}`
-                                : html`<${IconTranslate} /> ${uiStrings.translate_btn}`
-                            }
-                        </button>
-                        <button
-                            onClick=${() => onSummarize(item)}
-                            disabled=${aiLoading !== null}
-                            className="flex items-center gap-1 text-[10px] px-1.5 py-0.5 rounded border border-gray-200 dark:border-slate-700 text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-slate-800 disabled:opacity-50"
-                        >
-                            ${aiLoading === 'summarize'
-                                ? html`<span className="banner-spinner" style=${{width: '10px', height: '10px', borderWidth: '1px'}}></span> ${uiStrings.summarizing}`
-                                : html`<${IconSummary} /> ${uiStrings.summarize_btn}`
-                            }
-                        </button>
-                    </div>
                 </div>
             `;
         };
 
-        // ToggleSwitch
         const ToggleSwitch = ({ checked, onChange }) => {
             const idRef = useRef('toggle-' + Math.random());
             return html`
@@ -746,7 +845,6 @@
             `;
         };
 
-        // ReadmeSection
         const ReadmeSection = ({ title, children, defaultOpen }) => {
             const [isOpen, setIsOpen] = useState(!!defaultOpen);
             return html`
@@ -767,7 +865,6 @@
             `;
         };
 
-        // v2.0: SettingsModal with 4 tabs (Feeds, General, AI, Readme)
         const SettingsModal = ({
             isOpen,
             onClose,
@@ -779,17 +876,24 @@
             setTheme,
             notifications,
             toggleNotifications,
+            aiProvider,
+            setAiProvider,
             aiApiKey,
             setAiApiKey,
-            aiModel,
-            setAiModel,
-            aiTargetLang,
-            setAiTargetLang,
+            aiEndpoint,
+            setAiEndpoint,
+            autoTranslate,
+            setAutoTranslate,
+            showSummary,
+            setShowSummary,
+            aiCacheLimit,
+            setAiCacheLimit
         }) => {
             const [activeTab, setActiveTab] = useState('feeds');
             const [newName, setNewName] = useState('');
             const [newUrl, setNewUrl] = useState('');
             const [newCategory, setNewCategory] = useState('General');
+            const [showApiKey, setShowApiKey] = useState(false);
             const fileInputRef = useRef(null);
 
             const strings = STRINGS[uiLang];
@@ -823,7 +927,14 @@
             const handleExport = () => {
                 const exportData = {
                     feeds: feeds,
-                    aiConfig: { apiKey: aiApiKey, model: aiModel, targetLang: aiTargetLang }
+                    aiProvider: aiProvider,
+                    aiApiKey: aiApiKey,
+                    aiEndpoint: aiEndpoint,
+                    uiLang: uiLang,
+                    theme: theme,
+                    autoTranslate: autoTranslate,
+                    showSummary: showSummary,
+                    aiCacheLimit: aiCacheLimit
                 };
                 const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
                 const downloadAnchorNode = document.createElement('a');
@@ -847,7 +958,6 @@
                 reader.onload = (event) => {
                     try {
                         const rawData = JSON.parse(event.target.result);
-                        // v2.0: Support both old format (array) and new format (object with feeds + aiConfig)
                         if (Array.isArray(rawData)) {
                             let parsedFeeds = [];
                             let currentCategory = 'Imported';
@@ -865,18 +975,21 @@
                                 }
                             });
                             setFeeds(parsedFeeds);
+                            alert('Import successful!');
                         } else if (rawData.feeds && Array.isArray(rawData.feeds)) {
                             setFeeds(rawData.feeds);
-                            if (rawData.aiConfig) {
-                                if (rawData.aiConfig.apiKey) setAiApiKey(rawData.aiConfig.apiKey);
-                                if (rawData.aiConfig.model) setAiModel(rawData.aiConfig.model);
-                                if (rawData.aiConfig.targetLang) setAiTargetLang(rawData.aiConfig.targetLang);
-                            }
+                            if (rawData.aiProvider) setAiProvider(rawData.aiProvider);
+                            if (rawData.aiApiKey) setAiApiKey(rawData.aiApiKey);
+                            if (rawData.aiEndpoint) setAiEndpoint(rawData.aiEndpoint);
+                            if (rawData.uiLang) setUiLang(rawData.uiLang);
+                            if (rawData.theme) setTheme(rawData.theme);
+                            if (rawData.autoTranslate !== undefined) setAutoTranslate(rawData.autoTranslate);
+                            if (rawData.showSummary !== undefined) setShowSummary(rawData.showSummary);
+                            if (rawData.aiCacheLimit) setAiCacheLimit(rawData.aiCacheLimit);
+                            alert('Import successful!');
                         } else {
-                            alert('Invalid JSON structure');
-                            return;
+                            alert('Invalid JSON structure: Root must be an array or config object');
                         }
-                        alert('Import successful!');
                     } catch (error) {
                         console.error(error);
                         alert('Error parsing JSON file');
@@ -886,7 +999,11 @@
                 e.target.value = null;
             };
 
-            const tabClass = (tab) => `flex-1 py-3 text-sm font-medium ${activeTab === tab ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/10 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'}`;
+            const langOptions = [
+                { value: 'zh-CN', label: getTargetLangName('zh-CN', uiLang) },
+                { value: 'en', label: getTargetLangName('en', uiLang) },
+                { value: 'zh-TW', label: getTargetLangName('zh-TW', uiLang) }
+            ];
 
             return html`
                 <div className="fixed inset-0 z-[100] flex items-center justify-center modal-overlay p-4">
@@ -898,12 +1015,30 @@
                             </button>
                         </div>
                         <div className="flex border-b border-gray-200 dark:border-slate-700">
-                            <button onClick=${() => setActiveTab('feeds')} className=${tabClass('feeds')}>${strings.tab_feeds}</button>
-                            <button onClick=${() => setActiveTab('general')} className=${tabClass('general')}>${strings.tab_general}</button>
-                            <button onClick=${() => setActiveTab('ai')} className=${tabClass('ai')}>
-                                <span className="flex items-center justify-center gap-1"><${IconSparkles} /> ${strings.tab_ai}</span>
+                            <button
+                                onClick=${() => setActiveTab('feeds')}
+                                className=${`flex-1 py-3 text-sm font-medium ${activeTab === 'feeds' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/10 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'}`}
+                            >
+                                ${strings.tab_feeds}
                             </button>
-                            <button onClick=${() => setActiveTab('readme')} className=${tabClass('readme')}>${strings.tab_readme}</button>
+                            <button
+                                onClick=${() => setActiveTab('general')}
+                                className=${`flex-1 py-3 text-sm font-medium ${activeTab === 'general' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/10 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'}`}
+                            >
+                                ${strings.tab_general}
+                            </button>
+                            <button
+                                onClick=${() => setActiveTab('ai')}
+                                className=${`flex-1 py-3 text-sm font-medium ${activeTab === 'ai' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/10 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'}`}
+                            >
+                                ${strings.tab_ai}
+                            </button>
+                            <button
+                                onClick=${() => setActiveTab('readme')}
+                                className=${`flex-1 py-3 text-sm font-medium ${activeTab === 'readme' ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/10 dark:text-blue-400' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700'}`}
+                            >
+                                ${strings.tab_readme}
+                            </button>
                         </div>
 
                         <div className="p-4 overflow-y-auto flex-1 space-y-6 scrollbar-thin">
@@ -914,29 +1049,59 @@
                                         <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">${strings.add_feed}</h3>
                                         <div className="flex flex-col gap-2">
                                             <div className="flex gap-2">
-                                                <input type="text" placeholder=${strings.feed_name} value=${newName} onChange=${e => setNewName(e.target.value)}
-                                                    className="w-1/3 text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500" />
-                                                <input type="text" placeholder=${strings.feed_category} value=${newCategory} onChange=${e => setNewCategory(e.target.value)}
-                                                    className="w-1/3 text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500" />
+                                                <input
+                                                    type="text"
+                                                    placeholder=${strings.feed_name}
+                                                    value=${newName}
+                                                    onChange=${e => setNewName(e.target.value)}
+                                                    className="w-1/3 text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500"
+                                                />
+                                                <input
+                                                    type="text"
+                                                    placeholder=${strings.feed_category}
+                                                    value=${newCategory}
+                                                    onChange=${e => setNewCategory(e.target.value)}
+                                                    className="w-1/3 text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500"
+                                                />
                                             </div>
                                             <div className="flex gap-2">
-                                                <input type="text" placeholder=${strings.feed_url} value=${newUrl} onChange=${e => setNewUrl(e.target.value)}
-                                                    className="flex-1 text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500" />
-                                                <button onClick=${handleAdd} className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-4 py-1.5 rounded">
+                                                <input
+                                                    type="text"
+                                                    placeholder=${strings.feed_url}
+                                                    value=${newUrl}
+                                                    onChange=${e => setNewUrl(e.target.value)}
+                                                    className="flex-1 text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500"
+                                                />
+                                                <button
+                                                    onClick=${handleAdd}
+                                                    className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium px-4 py-1.5 rounded"
+                                                >
                                                     ${strings.add_btn}
                                                 </button>
                                             </div>
                                         </div>
-                                        <p className="text-[10px] text-gray-400 mt-2">${strings.parser_note}</p>
+                                        <p className="text-[10px] text-gray-400 mt-2">
+                                            ${strings.parser_note}
+                                        </p>
                                     </div>
                                     <div className="grid grid-cols-2 gap-3 pt-2 pb-2">
-                                        <input type="file" ref=${fileInputRef} onChange=${handleFileChange} accept=".json" className="hidden" />
-                                        <button onClick=${handleImportClick}
-                                            className="flex items-center justify-center gap-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 text-xs font-medium py-2 rounded">
+                                        <input
+                                            type="file"
+                                            ref=${fileInputRef}
+                                            onChange=${handleFileChange}
+                                            accept=".json"
+                                            className="hidden"
+                                        />
+                                        <button
+                                            onClick=${handleImportClick}
+                                            className="flex items-center justify-center gap-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 text-xs font-medium py-2 rounded"
+                                        >
                                             <${IconUpload} /> ${strings.import_btn}
                                         </button>
-                                        <button onClick=${handleExport}
-                                            className="flex items-center justify-center gap-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 text-xs font-medium py-2 rounded">
+                                        <button
+                                            onClick=${handleExport}
+                                            className="flex items-center justify-center gap-2 border border-gray-300 dark:border-slate-600 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-slate-700 text-xs font-medium py-2 rounded"
+                                        >
                                             <${IconDownload} /> ${strings.export_btn}
                                         </button>
                                     </div>
@@ -946,16 +1111,32 @@
                                             ${feeds.map((feed, index) => html`
                                                 <div key=${feed.id} className=${`flex items-center p-2 bg-white dark:bg-slate-900 gap-3 ${index !== feeds.length - 1 ? 'border-b border-gray-100 dark:border-slate-800' : ''}`}>
                                                     <div className="flex-shrink-0 pt-1 scale-75 origin-left">
-                                                        <${ToggleSwitch} checked=${feed.enabled} onChange=${() => toggleFeed(feed.id)} />
+                                                        <${ToggleSwitch}
+                                                            checked=${feed.enabled}
+                                                            onChange=${() => toggleFeed(feed.id)}
+                                                        />
                                                     </div>
                                                     <div className=${`flex-1 min-w-0 ${!feed.enabled ? 'opacity-50 grayscale' : ''}`}>
                                                         <div className="flex items-center gap-2">
-                                                            <div className="font-medium text-sm text-slate-700 dark:text-slate-200 truncate">${feed.name}</div>
-                                                            ${feed.category && html`<span className="text-[10px] px-1.5 py-0.5 bg-gray-100 dark:bg-slate-800 text-gray-500 rounded truncate max-w-[100px]">${feed.category}</span>`}
+                                                            <div className="font-medium text-sm text-slate-700 dark:text-slate-200 truncate">
+                                                                ${feed.name}
+                                                            </div>
+                                                            ${feed.category && html`
+                                                                <span className="text-[10px] px-1.5 py-0.5 bg-gray-100 dark:bg-slate-800 text-gray-500 rounded truncate max-w-[100px]">
+                                                                    ${feed.category}
+                                                                </span>
+                                                            `}
                                                         </div>
-                                                        <div className="text-[10px] text-gray-400 truncate mt-0.5 font-mono">${feed.url}</div>
+                                                        <div className="text-[10px] text-gray-400 truncate mt-0.5 font-mono">
+                                                            ${feed.url}
+                                                        </div>
                                                     </div>
-                                                    <button onClick=${() => handleDelete(feed.id)} className="p-1.5 text-gray-400 hover:text-red-500"><${IconTrash} /></button>
+                                                    <button
+                                                        onClick=${() => handleDelete(feed.id)}
+                                                        className="p-1.5 text-gray-400 hover:text-red-500"
+                                                    >
+                                                        <${IconTrash} />
+                                                    </button>
                                                 </div>
                                             `)}
                                         </div>
@@ -967,26 +1148,47 @@
                                 <div className="space-y-4">
                                     <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
                                         <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.lang_label}</span>
-                                        <select value=${uiLang} onChange=${(e) => setUiLang(e.target.value)}
-                                            className="bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-gray-300 rounded px-2 py-1 outline-none border border-gray-300 dark:border-slate-600">
+                                        <select
+                                            value=${uiLang}
+                                            onChange=${(e) => setUiLang(e.target.value)}
+                                            className="bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-gray-300 rounded px-2 py-1 outline-none border border-gray-300 dark:border-slate-600"
+                                        >
                                             <option value="zh-CN">简体中文</option>
-                                            <option value="zh-TW">繁體中文</option>
                                             <option value="en">English</option>
+                                            <option value="zh-TW">繁體中文</option>
                                         </select>
                                     </div>
                                     <div className="p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
                                         <span className="text-sm font-medium text-slate-700 dark:text-slate-200 block mb-2">${strings.theme_label}</span>
                                         <div className="flex gap-2">
-                                            <button onClick=${() => setTheme('light')}
-                                                className=${`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border ${theme === 'light' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700'}`}>
+                                            <button
+                                                onClick=${() => setTheme('light')}
+                                                className=${`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border ${
+                                                    theme === 'light'
+                                                        ? 'bg-blue-600 text-white border-blue-600'
+                                                        : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700'
+                                                }`}
+                                            >
                                                 <${IconSun} /> ${strings.theme_light}
                                             </button>
-                                            <button onClick=${() => setTheme('dark')}
-                                                className=${`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border ${theme === 'dark' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700'}`}>
+                                            <button
+                                                onClick=${() => setTheme('dark')}
+                                                className=${`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border ${
+                                                    theme === 'dark'
+                                                        ? 'bg-blue-600 text-white border-blue-600'
+                                                        : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700'
+                                                }`}
+                                            >
                                                 <${IconMoon} /> ${strings.theme_dark}
                                             </button>
-                                            <button onClick=${() => setTheme('system')}
-                                                className=${`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border ${theme === 'system' ? 'bg-blue-600 text-white border-blue-600' : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700'}`}>
+                                            <button
+                                                onClick=${() => setTheme('system')}
+                                                className=${`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border ${
+                                                    theme === 'system'
+                                                        ? 'bg-blue-600 text-white border-blue-600'
+                                                        : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700'
+                                                }`}
+                                            >
                                                 <${IconMonitor} /> ${strings.theme_system}
                                             </button>
                                         </div>
@@ -995,7 +1197,10 @@
                                         <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.notif_label}</span>
                                         <div className="flex items-center gap-2">
                                             <span className="text-xs text-gray-500">${notifications ? strings.notif_on : strings.notif_off}</span>
-                                            <${ToggleSwitch} checked=${notifications} onChange=${toggleNotifications} />
+                                            <${ToggleSwitch}
+                                                checked=${notifications}
+                                                onChange=${toggleNotifications}
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -1003,45 +1208,81 @@
 
                             ${activeTab === 'ai' && html`
                                 <div className="space-y-4">
-                                    <div className="p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
-                                        <div className="flex items-center gap-2 mb-3">
-                                            <span className="text-blue-500"><${IconKey} /></span>
-                                            <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.ai_api_key_label}</span>
-                                        </div>
-                                        <input type="password" value=${aiApiKey} onChange=${(e) => setAiApiKey(e.target.value)}
-                                            placeholder=${strings.ai_api_key_placeholder}
-                                            className="w-full text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500 font-mono" />
-                                        <p className="text-[10px] text-gray-400 mt-1.5">
-                                            ${uiLang === 'zh-CN' ? '支持 GLM-4-Flash (智谱AI) 和 Gemini Flash 模型。API Key 存储在浏览器本地，导出配置时会包含。' :
-                                              uiLang === 'zh-TW' ? '支援 GLM-4-Flash (智譜AI) 和 Gemini Flash 模型。API Key 儲存在瀏覽器本地，匯出設定時會包含。' :
-                                              'Supports GLM-4-Flash (ZhipuAI) and Gemini Flash models. API Key is stored locally in browser and included in config export.'}
-                                        </p>
-                                    </div>
                                     <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
-                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.ai_model_label}</span>
-                                        <select value=${aiModel} onChange=${(e) => setAiModel(e.target.value)}
-                                            className="bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-gray-300 rounded px-2 py-1 outline-none border border-gray-300 dark:border-slate-600">
-                                            <option value="glm-4-flash">GLM-4-Flash</option>
-                                            <option value="glm-4-flash-250414">GLM-4-Flash-250414</option>
-                                            <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
-                                            <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash Lite</option>
+                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.ai_lang_and_target}</span>
+                                        <select
+                                            value=${uiLang}
+                                            onChange=${(e) => setUiLang(e.target.value)}
+                                            className="bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-gray-300 rounded px-2 py-1 outline-none border border-gray-300 dark:border-slate-600"
+                                        >
+                                            ${langOptions.map(opt => html`
+                                                <option key=${opt.value} value=${opt.value}>${opt.label}</option>
+                                            `)}
                                         </select>
                                     </div>
                                     <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
-                                        <div>
-                                            <span className="text-sm font-medium text-slate-700 dark:text-slate-200 block">${strings.ai_target_lang_label}</span>
-                                            <span className="text-[10px] text-gray-400">${strings.ai_target_lang_hint}</span>
+                                        <span className="text-sm text-slate-700 dark:text-slate-200">${strings.auto_translate}</span>
+                                        <div className="flex items-center gap-2">
+                                            <span className="text-[10px] text-gray-500">${autoTranslate ? strings.auto_translate_on : strings.auto_translate_off}</span>
+                                            <${ToggleSwitch}
+                                                checked=${autoTranslate}
+                                                onChange=${() => setAutoTranslate(!autoTranslate)}
+                                            />
                                         </div>
-                                        <select value=${aiTargetLang} onChange=${(e) => setAiTargetLang(e.target.value)}
-                                            className="bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-gray-300 rounded px-2 py-1 outline-none border border-gray-300 dark:border-slate-600">
-                                            <option value="zh-CN">简体中文</option>
-                                            <option value="zh-TW">繁體中文</option>
-                                            <option value="en">English</option>
-                                            <option value="ja">日本語</option>
-                                            <option value="ko">한국어</option>
-                                            <option value="fr">Français</option>
-                                            <option value="de">Deutsch</option>
-                                            <option value="es">Español</option>
+                                    </div>
+                                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
+                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.ai_provider}</span>
+                                        <select
+                                            value=${aiProvider}
+                                            onChange=${(e) => setAiProvider(e.target.value)}
+                                            className="bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-gray-300 rounded px-2 py-1 outline-none border border-gray-300 dark:border-slate-600"
+                                        >
+                                            <option value="glm-4-flash">GLM-4-flash</option>
+                                            <option value="gemini-2.0-flash">Gemini-2.0-flash</option>
+                                        </select>
+                                    </div>
+                                    <div className="p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
+                                        <div className="flex items-center justify-between mb-1.5">
+                                            <span className="text-sm text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
+                                                <span className="text-amber-500"><${IconKey} /></span>
+                                                ${strings.ai_apikey}
+                                            </span>
+                                            <button
+                                                onClick=${() => setShowApiKey(!showApiKey)}
+                                                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                            >
+                                                ${showApiKey ? html`<${IconEyeOff} />` : html`<${IconEye} />`}
+                                            </button>
+                                        </div>
+                                        <input
+                                            type=${showApiKey ? 'text' : 'password'}
+                                            value=${aiApiKey}
+                                            onChange=${(e) => setAiApiKey(e.target.value)}
+                                            placeholder=${strings.ai_apikey}
+                                            className="w-full text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500 font-mono"
+                                        />
+                                    </div>
+                                    <div className="p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
+                                        <span className="text-sm text-slate-700 dark:text-slate-200 block mb-1.5">${strings.ai_endpoint}</span>
+                                        <input
+                                            type="text"
+                                            value=${aiEndpoint}
+                                            onChange=${(e) => setAiEndpoint(e.target.value)}
+                                            placeholder=${strings.ai_endpoint_placeholder}
+                                            className="w-full text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500 font-mono"
+                                        />
+                                    </div>
+                                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
+                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.cache_limit}</span>
+                                        <select
+                                            value=${aiCacheLimit}
+                                            onChange=${(e) => setAiCacheLimit(e.target.value)}
+                                            className="bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-gray-300 rounded px-2 py-1 outline-none border border-gray-300 dark:border-slate-600"
+                                        >
+                                            <option value="100">${strings.cache_100}</option>
+                                            <option value="500">${strings.cache_500}</option>
+                                            <option value="1000">${strings.cache_1000}</option>
+                                            <option value="all">${strings.cache_all}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -1058,256 +1299,88 @@
                                             <div>
                                                 <p><strong>Global Wire</strong> 是一个轻量级的全球突发新闻聚合器，无需后端服务器，纯前端运行。</p>
                                                 <p>它从全球 40+ 个 RSS 新闻源实时抓取新闻，通过 CORS 代理访问，支持中国内地、香港、台湾、日本、韩国、新加坡、欧洲、美国等地区的主流媒体。</p>
-                                                <p>v2.0 新增 AI 助手功能：支持翻译和摘要，使用 GLM-4-Flash 或 Gemini Flash 模型，目标语言可在设置中配置。</p>
                                                 <p>所有数据存储在浏览器 localStorage 中，无需注册、无追踪、无服务端。可作为静态页面部署在 GitHub Pages 或 Cloudflare Workers 上。</p>
+                                                <p>v2.1 新增 AI 助手设置面板，支持自动翻译和自动摘要；主界面标题栏新增摘要开关；翻译/摘要失败时可重试；更新 API Key 后自动重试所有失败条目；本地存储可配置条目上限。</p>
                                             </div>
                                         ` : uiLang === 'zh-TW' ? html`
                                             <div>
                                                 <p><strong>Global Wire</strong> 是一個輕量級的全球突發新聞聚合器，無需後端伺服器，純前端運行。</p>
-                                                <p>它從全球 40+ 個 RSS 新聞來源即時抓取新聞，透過 CORS 代理存取，支援中國內地、香港、台灣、日本、韓國、新加坡、歐洲、美國等地區的主流媒體。</p>
-                                                <p>v2.0 新增 AI 助手功能：支援翻譯和摘要，使用 GLM-4-Flash 或 Gemini Flash 模型，目標語言可在設定中配置。</p>
+                                                <p>它從全球 40+ 個 RSS 新聞源即時抓取新聞，透過 CORS 代理存取，支援中國內地、香港、台灣、日本、韓國、新加坡、歐洲、美國等地區的主流媒體。</p>
                                                 <p>所有資料儲存在瀏覽器 localStorage 中，無需註冊、無追蹤、無伺服器端。可作為靜態頁面部署在 GitHub Pages 或 Cloudflare Workers 上。</p>
+                                                <p>v2.1 新增 AI 助手設定面板，支援自動翻譯和自動摘要；主介面標題欄新增摘要開關；翻譯/摘要失敗時可重試；更新 API Key 後自動重試所有失敗條目；本地儲存可設定條目上限。</p>
                                             </div>
                                         ` : html`
                                             <div>
                                                 <p><strong>Global Wire</strong> is a lightweight global breaking news aggregator that runs entirely in the browser with no backend server.</p>
                                                 <p>It fetches news in real-time from 40+ RSS sources worldwide via CORS proxies, covering mainstream media from Mainland China, Hong Kong, Taiwan, Japan, South Korea, Singapore, Europe, and the US.</p>
-                                                <p>v2.0 adds AI Assistant: translation and summarization using GLM-4-Flash or Gemini Flash models, with configurable target language in settings.</p>
                                                 <p>All data is stored in browser localStorage. No registration, no tracking, no server side. Can be deployed as a static page on GitHub Pages or Cloudflare Workers.</p>
-                                            </div>
-                                        `}
-                                    <//>
-                                    <${ReadmeSection} title=${uiLang === 'zh-CN' ? '使用指南' : uiLang === 'zh-TW' ? '使用指南' : 'Usage Guide'}>
-                                        ${uiLang === 'zh-CN' ? html`
-                                            <div>
-                                                <p><strong>浏览新闻：</strong>打开页面即自动抓取所有已启用的新闻源，按时间倒序排列。</p>
-                                                <p><strong>分类筛选：</strong>使用顶部分类标签栏按地区/类别筛选新闻。</p>
-                                                <p><strong>手动刷新：</strong>点击右上角刷新按钮立即更新所有新闻源。</p>
-                                                <p><strong>AI 翻译：</strong>点击条目下方的"翻译"按钮，将标题翻译为目标语言（在设置 → AI 助手中配置）。</p>
-                                                <p><strong>AI 摘要：</strong>点击条目下方的"摘要"按钮，生成该新闻的简短摘要。</p>
-                                                <p><strong>添加/管理新闻源：</strong>在设置 → 新闻源中添加自定义 RSS 链接，或导入/导出配置。</p>
-                                                <p><strong>界面定制：</strong>在设置 → 通用中切换语言（简体/繁体/英文）、深色模式、桌面通知。</p>
-                                                <p><strong>桌面通知：</strong>开启后，当页面在后台时有新新闻会发送浏览器桌面通知。</p>
-                                                <p><strong>更新提示：</strong>刷新时时间线区域顶部显示居中 toast 提示，显示进度。若有新内容且页面在前台，需手动点击展开。</p>
-                                                <p><strong>重要新闻标记：</strong>标题含"Breaking"、"突发"、"Urgent"、"重磅"的新闻会以红色醒目显示。</p>
-                                            </div>
-                                        ` : uiLang === 'zh-TW' ? html`
-                                            <div>
-                                                <p><strong>瀏覽新聞：</strong>打開頁面即自動抓取所有已啟用的新聞來源，按時間倒序排列。</p>
-                                                <p><strong>分類篩選：</strong>使用頂部分類標籤欄按地區/類別篩選新聞。</p>
-                                                <p><strong>手動重新整理：</strong>點擊右上角重新整理按鈕立即更新所有新聞來源。</p>
-                                                <p><strong>AI 翻譯：</strong>點擊條目下方的「翻譯」按鈕，將標題翻譯為目標語言（在設定 → AI 助手中配置）。</p>
-                                                <p><strong>AI 摘要：</strong>點擊條目下方的「摘要」按鈕，生成該新聞的簡短摘要。</p>
-                                                <p><strong>新增/管理新聞來源：</strong>在設定 → 新聞來源中新增自訂 RSS 連結，或匯入/匯出設定。</p>
-                                                <p><strong>介面定制：</strong>在設定 → 一般中切換語言（簡體/繁體/英文）、深色模式、桌面通知。</p>
-                                                <p><strong>桌面通知：</strong>開啟後，當頁面在背景時有新新聞會發送瀏覽器桌面通知。</p>
-                                                <p><strong>更新提示：</strong>重新整理時時間線區域頂部顯示居中 toast 提示，顯示進度。若有新內容且頁面在前景，需手動點擊展開。</p>
-                                                <p><strong>重要新聞標記：</strong>標題含「Breaking」、「突發」、「Urgent」、「重磅」的新聞會以紅色醒目顯示。</p>
-                                            </div>
-                                        ` : html`
-                                            <div>
-                                                <p><strong>Browsing News:</strong> Opening the page automatically fetches all enabled news sources, sorted by time in reverse order.</p>
-                                                <p><strong>Category Filter:</strong> Use the top category tabs to filter news by region/category.</p>
-                                                <p><strong>Manual Refresh:</strong> Click the refresh button in the top right to update all sources immediately.</p>
-                                                <p><strong>AI Translation:</strong> Click the "Translate" button below an item to translate the title to your target language (configured in Settings → AI Assistant).</p>
-                                                <p><strong>AI Summary:</strong> Click the "Summary" button below an item to generate a brief summary of the news article.</p>
-                                                <p><strong>Add/Manage Feeds:</strong> In Settings → Feeds, add custom RSS links, or import/export configuration.</p>
-                                                <p><strong>UI Customization:</strong> In Settings → General, switch language (Simplified/Traditional Chinese, English), dark mode, and desktop notifications.</p>
-                                                <p><strong>Desktop Notifications:</strong> When enabled, new articles will trigger browser notifications when the page is in the background.</p>
-                                                <p><strong>Update Toast:</strong> A centered toast appears at the top of the timeline area during refreshes showing progress. If new content arrives while on the page, click to expand.</p>
-                                                <p><strong>Breaking News Markers:</strong> Articles with "Breaking", "Urgent", or similar keywords are highlighted in red.</p>
-                                            </div>
-                                        `}
-                                    <//>
-                                    <${ReadmeSection} title=${uiLang === 'zh-CN' ? 'AI Agent 调试笔记' : uiLang === 'zh-TW' ? 'AI Agent 除錯筆記' : 'AI Agent Debug Notes'}>
-                                        ${uiLang === 'zh-CN' ? html`
-                                            <div>
-                                                <p><strong>v2.0 Agent 笔记：</strong></p>
-                                                <p>- 修复 htm 库 CDN 被浏览器 Tracking Prevention 阻断的问题：改为内联 htm 库</p>
-                                                <p>- 修复设置图标显示为太阳而非齿轮的问题：替换为正确的齿轮 SVG 图标</p>
-                                                <p>- 蓝色更新提示从页面最顶部移至 header 下方、时间线区域顶端的居中 toast</p>
-                                                <p>- 修复浏览器桌面通知无法正常触发的问题</p>
-                                                <p>- 新增 AI 助手功能：翻译（标题翻译）和摘要（新闻摘要生成）</p>
-                                                <p>- 支持 GLM-4-Flash 和 Gemini Flash 模型</p>
-                                                <p>- API Key、模型、目标语言可在设置 → AI 助手中配置</p>
-                                                <p>- 新增繁體中文 (zh-TW) i18n 支持</p>
-                                                <p>- 翻译和摘要的目标语言默认为简体中文</p>
-                                                <p>- 配置导出现在包含 AI 设置（API Key、模型、目标语言）</p>
-                                                <p>- localStorage 新增 keys: ai_api_key, ai_model, ai_target_lang</p>
-                                                <p>- 版本号从 v1.3 升级至 v2.0</p>
-                                            </div>
-                                        ` : uiLang === 'zh-TW' ? html`
-                                            <div>
-                                                <p><strong>v2.0 Agent 筆記：</strong></p>
-                                                <p>- 修復 htm 庫 CDN 被瀏覽器 Tracking Prevention 阻斷的問題：改為內聯 htm 庫</p>
-                                                <p>- 修復設定圖示顯示為太陽而非齒輪的問題：替換為正確的齒輪 SVG 圖示</p>
-                                                <p>- 藍色更新提示從頁面最頂部移至 header 下方、時間線區域頂端的居中 toast</p>
-                                                <p>- 修復瀏覽器桌面通知無法正常觸發的問題</p>
-                                                <p>- 新增 AI 助手功能：翻譯（標題翻譯）和摘要（新聞摘要生成）</p>
-                                                <p>- 支援 GLM-4-Flash 和 Gemini Flash 模型</p>
-                                                <p>- API Key、模型、目標語言可在設定 → AI 助手中配置</p>
-                                                <p>- 新增繁體中文 (zh-TW) i18n 支援</p>
-                                                <p>- 翻譯和摘要的目標語言預設為簡體中文</p>
-                                                <p>- 設定匯出現在包含 AI 設定（API Key、模型、目標語言）</p>
-                                                <p>- localStorage 新增 keys: ai_api_key, ai_model, ai_target_lang</p>
-                                                <p>- 版本號從 v1.3 升級至 v2.0</p>
-                                            </div>
-                                        ` : html`
-                                            <div>
-                                                <p><strong>v2.0 Agent Notes:</strong></p>
-                                                <p>- Fixed htm CDN being blocked by browser Tracking Prevention: inlined the htm library</p>
-                                                <p>- Fixed settings icon showing sun instead of gear: replaced with proper gear SVG icon</p>
-                                                <p>- Blue update banner moved from page top to centered toast below header, at top of timeline area</p>
-                                                <p>- Fixed browser desktop notifications not triggering properly</p>
-                                                <p>- Added AI Assistant: translation (title translation) and summarization (news summary generation)</p>
-                                                <p>- Supports GLM-4-Flash and Gemini Flash models</p>
-                                                <p>- API Key, model, and target language configurable in Settings → AI Assistant</p>
-                                                <p>- Added Traditional Chinese (zh-TW) i18n support</p>
-                                                <p>- Translation/summary target language defaults to Simplified Chinese</p>
-                                                <p>- Config export now includes AI settings (API Key, model, target language)</p>
-                                                <p>- New localStorage keys: ai_api_key, ai_model, ai_target_lang</p>
-                                                <p>- Version bumped from v1.3 to v2.0</p>
+                                                <p>v2.1 adds AI Assistant settings panel with auto-translate and auto-summary; summary toggle in header; retry on translation/summary failure; auto-retry all failed entries after updating API Key; configurable local storage limit.</p>
                                             </div>
                                         `}
                                     <//>
                                     <${ReadmeSection} title=${uiLang === 'zh-CN' ? '更新日志' : uiLang === 'zh-TW' ? '更新日誌' : 'Changelog'}>
                                         ${uiLang === 'zh-CN' ? html`
                                             <div>
-                                                <p><strong>v1.0 (基线版本)</strong></p>
-                                                <ul className="list-disc pl-4 space-y-1">
-                                                    <li>全球 RSS 新闻聚合器，40+ 新闻源</li>
-                                                    <li>双 CORS 代理回退系统</li>
-                                                    <li>分类筛选、深色模式、双语界面</li>
-                                                    <li>桌面通知（基础版）</li>
-                                                    <li>配置导入/导出</li>
-                                                    <li>localStorage 缓存</li>
-                                                </ul>
-                                                <p className="mt-2"><strong>v1.1</strong></p>
-                                                <ul className="list-disc pl-4 space-y-1">
-                                                    <li>更新横幅系统、智能内容更新</li>
-                                                    <li>桌面通知增强</li>
-                                                    <li>设置新增说明标签页</li>
-                                                </ul>
-                                                <p className="mt-2"><strong>v1.2</strong></p>
-                                                <ul className="list-disc pl-4 space-y-1">
-                                                    <li>移除 Babel (~800KB) 和 Lucide (~100KB)</li>
-                                                    <li>渐进式渲染、RSS 竞速</li>
-                                                    <li>实时进度指示器</li>
-                                                    <li>首次加载 JS 减少 ~1MB+</li>
-                                                </ul>
-                                                <p className="mt-2"><strong>v1.3</strong></p>
-                                                <ul className="list-disc pl-4 space-y-1">
-                                                    <li>修复浅色模式切换导致内容消失</li>
-                                                    <li>三态主题选择器：浅色/深色/跟随系统</li>
-                                                </ul>
-                                                <p className="mt-2"><strong>v2.0 (当前版本)</strong></p>
-                                                <ul className="list-disc pl-4 space-y-1">
-                                                    <li>修复 htm CDN 被 Tracking Prevention 阻断：内联 htm 库</li>
-                                                    <li>修复设置图标：从太阳改为齿轮</li>
-                                                    <li>蓝色更新提示移至 header 下方居中 toast</li>
-                                                    <li>修复浏览器桌面通知无法触发</li>
-                                                    <li>新增 AI 助手：翻译和摘要功能</li>
-                                                    <li>支持 GLM-4-Flash 和 Gemini Flash 模型</li>
-                                                    <li>新增繁體中文 (zh-TW) 界面语言</li>
-                                                    <li>AI 设置：API Key、模型、目标语言</li>
-                                                    <li>配置导出包含 AI 设置</li>
-                                                </ul>
+                                                <p><strong>v2.1</strong> - AI助手设置面板；自动翻译开关（替换原标题/显示原文）；主界面标题栏摘要开关；翻译/摘要失败重试链接；更新API Key后自动重试失败条目；本地存储条目上限设置（100/500/1000/全部）</p>
+                                                <p><strong>v2.0</strong> - AI翻译和摘要功能（GLM-4-flash/Gemini-2.0-flash）；i18n（简体中文/English/繁体中文）；更新banner移至时间线区域；修复浏览器通知；设置图标改回齿轮</p>
+                                                <p><strong>v1.3</strong> - 修复浅色模式崩溃；三态主题；修复htm兼容性（HTML注释和Fragment简写）</p>
+                                                <p><strong>v1.2</strong> - 移除Babel(省800KB)改用htm；移除Lucide改用内联SVG；RSS竞速；并发获取+渐进渲染</p>
+                                                <p><strong>v1.1</strong> - 更新banner；桌面通知；设置页README/changelog</p>
+                                                <p><strong>v1.0</strong> - 初始版本，全球突发新闻聚合器</p>
                                             </div>
                                         ` : uiLang === 'zh-TW' ? html`
                                             <div>
-                                                <p><strong>v1.0 (基線版本)</strong></p>
-                                                <ul className="list-disc pl-4 space-y-1">
-                                                    <li>全球 RSS 新聞聚合器，40+ 新聞來源</li>
-                                                    <li>雙 CORS 代理回退系統</li>
-                                                    <li>分類篩選、深色模式、雙語介面</li>
-                                                    <li>桌面通知（基礎版）</li>
-                                                    <li>設定匯入/匯出</li>
-                                                    <li>localStorage 快取</li>
-                                                </ul>
-                                                <p className="mt-2"><strong>v1.1</strong></p>
-                                                <ul className="list-disc pl-4 space-y-1">
-                                                    <li>更新橫幅系統、智慧內容更新</li>
-                                                    <li>桌面通知增強</li>
-                                                    <li>設定新增說明標籤頁</li>
-                                                </ul>
-                                                <p className="mt-2"><strong>v1.2</strong></p>
-                                                <ul className="list-disc pl-4 space-y-1">
-                                                    <li>移除 Babel (~800KB) 和 Lucide (~100KB)</li>
-                                                    <li>漸進式渲染、RSS 競速</li>
-                                                    <li>即時進度指示器</li>
-                                                    <li>首次載入 JS 減少 ~1MB+</li>
-                                                </ul>
-                                                <p className="mt-2"><strong>v1.3</strong></p>
-                                                <ul className="list-disc pl-4 space-y-1">
-                                                    <li>修復淺色模式切換導致內容消失</li>
-                                                    <li>三態主題選擇器：淺色/深色/跟隨系統</li>
-                                                </ul>
-                                                <p className="mt-2"><strong>v2.0 (目前版本)</strong></p>
-                                                <ul className="list-disc pl-4 space-y-1">
-                                                    <li>修復 htm CDN 被 Tracking Prevention 阻斷：內聯 htm 庫</li>
-                                                    <li>修復設定圖示：從太陽改為齒輪</li>
-                                                    <li>藍色更新提示移至 header 下方居中 toast</li>
-                                                    <li>修復瀏覽器桌面通知無法觸發</li>
-                                                    <li>新增 AI 助手：翻譯和摘要功能</li>
-                                                    <li>支援 GLM-4-Flash 和 Gemini Flash 模型</li>
-                                                    <li>新增繁體中文 (zh-TW) 介面語言</li>
-                                                    <li>AI 設定：API Key、模型、目標語言</li>
-                                                    <li>設定匯出包含 AI 設定</li>
-                                                </ul>
+                                                <p><strong>v2.1</strong> - AI助手設定面板；自動翻譯開關（替換原標題/顯示原文）；主介面標題欄摘要開關；翻譯/摘要失敗重試連結；更新API Key後自動重試失敗條目；本地儲存條目上限設定</p>
+                                                <p><strong>v2.0</strong> - AI翻譯和摘要功能；i18n；更新banner移至時間線區域；修復瀏覽器通知</p>
+                                                <p><strong>v1.3</strong> - 修復淺色模式崩潰；三態主題；修復htm相容性</p>
+                                                <p><strong>v1.2</strong> - 移除Babel改用htm；RSS競速；併發獲取</p>
+                                                <p><strong>v1.1</strong> - 更新banner；桌面通知；設定頁</p>
+                                                <p><strong>v1.0</strong> - 初始版本</p>
                                             </div>
                                         ` : html`
                                             <div>
-                                                <p><strong>v1.0 (Baseline)</strong></p>
-                                                <ul className="list-disc pl-4 space-y-1">
-                                                    <li>Global RSS news aggregator with 40+ sources</li>
-                                                    <li>Dual CORS proxy fallback system</li>
-                                                    <li>Category filtering, dark mode, bilingual UI</li>
-                                                    <li>Desktop notifications (basic)</li>
-                                                    <li>Config import/export</li>
-                                                    <li>localStorage caching</li>
-                                                </ul>
-                                                <p className="mt-2"><strong>v1.1</strong></p>
-                                                <ul className="list-disc pl-4 space-y-1">
-                                                    <li>Update banner system, smart content updates</li>
-                                                    <li>Enhanced desktop notifications</li>
-                                                    <li>Settings Readme tab</li>
-                                                </ul>
-                                                <p className="mt-2"><strong>v1.2</strong></p>
-                                                <ul className="list-disc pl-4 space-y-1">
-                                                    <li>Removed Babel (~800KB) and Lucide (~100KB)</li>
-                                                    <li>Progressive rendering, RSS racing</li>
-                                                    <li>Live progress indicator</li>
-                                                    <li>~1MB+ JS reduction on first load</li>
-                                                </ul>
-                                                <p className="mt-2"><strong>v1.3</strong></p>
-                                                <ul className="list-disc pl-4 space-y-1">
-                                                    <li>Fixed light mode toggle causing content to disappear</li>
-                                                    <li>3-state theme selector: Light/Dark/System</li>
-                                                </ul>
-                                                <p className="mt-2"><strong>v2.0 (Current)</strong></p>
-                                                <ul className="list-disc pl-4 space-y-1">
-                                                    <li>Fixed htm CDN blocked by Tracking Prevention: inlined htm library</li>
-                                                    <li>Fixed settings icon: sun replaced with gear</li>
-                                                    <li>Blue update toast moved below header, centered in timeline</li>
-                                                    <li>Fixed browser desktop notifications not triggering</li>
-                                                    <li>Added AI Assistant: translation and summarization</li>
-                                                    <li>Supports GLM-4-Flash and Gemini Flash models</li>
-                                                    <li>Added Traditional Chinese (zh-TW) UI language</li>
-                                                    <li>AI settings: API Key, model, target language</li>
-                                                    <li>Config export includes AI settings</li>
-                                                </ul>
+                                                <p><strong>v2.1</strong> - AI Assistant settings panel; auto-translate toggle; summary toggle in header; retry on failure; auto-retry failed entries after API Key update; configurable local storage limit</p>
+                                                <p><strong>v2.0</strong> - AI translate/summary; i18n; banner moved to timeline; fixed notifications</p>
+                                                <p><strong>v1.3</strong> - Fixed light mode crash; three-state theme; htm compatibility fixes</p>
+                                                <p><strong>v1.2</strong> - Removed Babel (htm); RSS racing; concurrent fetch</p>
+                                                <p><strong>v1.1</strong> - Update banner; desktop notifications; settings page</p>
+                                                <p><strong>v1.0</strong> - Initial release</p>
+                                            </div>
+                                        `}
+                                    <//>
+                                    <${ReadmeSection} title=${uiLang === 'zh-CN' ? 'AI Agent 调试笔记' : uiLang === 'zh-TW' ? 'AI Agent 偵錯筆記' : 'AI Agent Debug Notes'}>
+                                        ${uiLang === 'zh-CN' ? html`
+                                            <div>
+                                                <p><strong>htm 限制：</strong>不支持 HTML 注释 (-- 语法)，不支持 Fragment 简写 (尖括号语法)，否则 InvalidCharacterError 崩溃白屏。</p>
+                                                <p><strong>部署流程：</strong>push 到 GitHub + 调用 Cloudflare Worker API 更新。两者缺一不可。</p>
+                                                <p><strong>localStorage keys：</strong>theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v1</p>
+                                                <p><strong>v2.1 架构：</strong>翻译/摘要结果存储在 localStorage（ai_translations_v1, ai_summaries_v1），格式为 {id: {text, ts}}。错误以 __ERROR__ 前缀标记。关闭设置时检测 API Key 变更，自动重试失败条目。</p>
+                                            </div>
+                                        ` : uiLang === 'zh-TW' ? html`
+                                            <div>
+                                                <p><strong>htm 限制：</strong>不支援 HTML 註解、Fragment 簡寫，否則 InvalidCharacterError 崩潰白畫面。</p>
+                                                <p><strong>部署流程：</strong>push 到 GitHub + 呼叫 Cloudflare Worker API 更新。</p>
+                                                <p><strong>localStorage keys：</strong>theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v1</p>
+                                                <p><strong>v2.1 架構：</strong>翻譯/摘要結果存儲在 localStorage，格式為 {id: {text, ts}}。錯誤以 __ERROR__ 前綴標記。關閉設定時檢測 API Key 變更，自動重試失敗條目。</p>
+                                            </div>
+                                        ` : html`
+                                            <div>
+                                                <p><strong>htm limitations:</strong> No HTML comments, no Fragment shorthand, otherwise InvalidCharacterError crash.</p>
+                                                <p><strong>Deploy flow:</strong> push to GitHub + update Cloudflare Worker API.</p>
+                                                <p><strong>localStorage keys:</strong> theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v1</p>
+                                                <p><strong>v2.1 architecture:</strong> Translation/summary results stored in localStorage as {id: {text, ts}}. Errors prefixed with __ERROR__. On settings close, detect API Key change and auto-retry failed entries.</p>
                                             </div>
                                         `}
                                     <//>
                                 </div>
                             `}
-
                         </div>
                     </div>
                 </div>
             `;
         };
 
+        // --- Main App ---
         const App = () => {
             const [feeds, setFeeds] = useState([]);
             const [news, setNews] = useState([]);
@@ -1324,68 +1397,34 @@
             const [updateCount, setUpdateCount] = useState(0);
             const [bannerProgress, setBannerProgress] = useState({ completed: 0, total: 0 });
 
-            // v2.0: AI settings
+            // v2.1: AI settings
+            const [aiProvider, setAiProvider] = useState('glm-4-flash');
             const [aiApiKey, setAiApiKey] = useState('');
-            const [aiModel, setAiModel] = useState('glm-4-flash');
-            const [aiTargetLang, setAiTargetLang] = useState('zh-CN');
-            // AI results state - managed at App level to prevent NewsCard re-render issues
-            const [aiResults, setAiResults] = useState({});
-            const [aiLoadingMap, setAiLoadingMap] = useState({});
-            const [aiErrorMap, setAiErrorMap] = useState({});
+            const [aiEndpoint, setAiEndpoint] = useState('');
+            const [autoTranslate, setAutoTranslate] = useState(false);
+            const [showSummary, setShowSummary] = useState(false);
+            const [aiCacheLimit, setAiCacheLimit] = useState('100');
 
-            const handleAITranslate = useCallback(async (item) => {
-                const strings = STRINGS[uiLang];
-                if (!aiApiKey) {
-                    setAiErrorMap(prev => ({...prev, [item.id]: strings.ai_no_key}));
-                    setTimeout(() => setAiErrorMap(prev => { const next = {...prev}; delete next[item.id]; return next; }), 3000);
-                    return;
-                }
-                // Set loading
-                setAiLoadingMap(prev => ({...prev, [item.id]: 'translate'}));
-                setAiErrorMap(prev => { const next = {...prev}; delete next[item.id]; return next; });
-                // Use setTimeout to defer state updates out of the current render cycle
-                setTimeout(async () => {
-                    try {
-                        const langName = LANG_NAMES[aiTargetLang] || aiTargetLang;
-                        const prompt = 'Translate the following text to ' + langName + '. Only return the translation, nothing else:\n\n' + item.content;
-                        const result = await callAI(aiApiKey, aiModel, prompt);
-                        setAiResults(prev => ({...prev, [item.id + '_translate']: result}));
-                    } catch (e) {
-                        console.error('Translate error:', e);
-                        setAiErrorMap(prev => ({...prev, [item.id]: strings.ai_error + ': ' + e.message}));
-                    } finally {
-                        setAiLoadingMap(prev => { const next = {...prev}; delete next[item.id]; return next; });
-                    }
-                }, 0);
-            }, [aiApiKey, aiModel, aiTargetLang, uiLang]);
+            // v2.1: AI caches with localStorage persistence
+            const translationsRef = useRef(loadAiCache('ai_translations_v1'));
+            const summariesRef = useRef(loadAiCache('ai_summaries_v1'));
+            const aiStatesRef = useRef({});
 
-            const handleAISummarize = useCallback(async (item) => {
-                const strings = STRINGS[uiLang];
-                if (!aiApiKey) {
-                    setAiErrorMap(prev => ({...prev, [item.id]: strings.ai_no_key}));
-                    setTimeout(() => setAiErrorMap(prev => { const next = {...prev}; delete next[item.id]; return next; }), 3000);
-                    return;
-                }
-                setAiLoadingMap(prev => ({...prev, [item.id]: 'summarize'}));
-                setAiErrorMap(prev => { const next = {...prev}; delete next[item.id]; return next; });
-                setTimeout(async () => {
-                    try {
-                        const langName = LANG_NAMES[aiTargetLang] || aiTargetLang;
-                        const prompt = 'Provide a concise summary (2-3 sentences) of this news article in ' + langName + ':\nTitle: ' + item.content + '\nSource: ' + item.source;
-                        const result = await callAI(aiApiKey, aiModel, prompt);
-                        setAiResults(prev => ({...prev, [item.id + '_summary']: result}));
-                    } catch (e) {
-                        console.error('Summarize error:', e);
-                        setAiErrorMap(prev => ({...prev, [item.id]: strings.ai_error + ': ' + e.message}));
-                    } finally {
-                        setAiLoadingMap(prev => { const next = {...prev}; delete next[item.id]; return next; });
-                    }
-                }, 0);
-            }, [aiApiKey, aiModel, aiTargetLang, uiLang]);
+            // Track previous API key for auto-retry
+            const prevApiKeyRef = useRef('');
+
+            const [, setAiTick] = useState(0);
+            const triggerAiRerender = useCallback(() => {
+                setAiTick(t => t + 1);
+            }, []);
 
             const bannerDismissTimerRef = useRef(null);
             const prevFeedsStrRef = useRef('');
             const initialFetchDoneRef = useRef(false);
+
+            // AI processing queue to avoid parallel API calls
+            const aiQueueRef = useRef([]);
+            const aiProcessingRef = useRef(false);
 
             const categories = useMemo(() => {
                 const cats = new Set(feeds.filter(f => f.enabled).map(f => f.category || 'General'));
@@ -1405,22 +1444,30 @@
                 const savedLang = localStorage.getItem('ui_lang');
                 if (savedLang) setUiLang(savedLang);
 
-                // v2.0: Load AI settings
-                const savedApiKey = localStorage.getItem('ai_api_key');
-                if (savedApiKey) setAiApiKey(savedApiKey);
-                const savedModel = localStorage.getItem('ai_model');
-                if (savedModel) setAiModel(savedModel);
-                const savedTargetLang = localStorage.getItem('ai_target_lang');
-                if (savedTargetLang) setAiTargetLang(savedTargetLang);
+                if (Notification.permission === 'granted') setNotifications(true);
 
-                // v2.0: Fix notification permission check
-                if ('Notification' in window && Notification.permission === 'granted') {
-                    setNotifications(true);
-                }
+                const savedAiProvider = localStorage.getItem('ai_provider');
+                if (savedAiProvider) setAiProvider(savedAiProvider);
 
-                // Load Feeds Config
+                const savedAiApiKey = localStorage.getItem('ai_api_key');
+                if (savedAiApiKey) setAiApiKey(savedAiApiKey);
+                prevApiKeyRef.current = savedAiApiKey || '';
+
+                const savedAiEndpoint = localStorage.getItem('ai_endpoint');
+                if (savedAiEndpoint) setAiEndpoint(savedAiEndpoint);
+
+                const savedAutoTranslate = localStorage.getItem('ai_auto_translate');
+                if (savedAutoTranslate === 'true') setAutoTranslate(true);
+
+                const savedShowSummary = localStorage.getItem('ai_show_summary');
+                if (savedShowSummary === 'true') setShowSummary(true);
+
+                const savedAiCacheLimit = localStorage.getItem('ai_cache_limit');
+                if (savedAiCacheLimit) setAiCacheLimit(savedAiCacheLimit);
+
                 const savedFeeds = localStorage.getItem('news_feeds_config');
                 const defaultFeeds = getLazyDefaultFeeds();
+
                 if (savedFeeds) {
                     try {
                         const parsed = JSON.parse(savedFeeds);
@@ -1436,7 +1483,6 @@
                     setFeeds(defaultFeeds);
                 }
 
-                // Load News Cache
                 const cached = localStorage.getItem('news_cache_v3');
                 if (cached) {
                     try {
@@ -1462,29 +1508,13 @@
                 }
             }, [feeds]);
 
-            // Save UI Lang
-            useEffect(() => {
-                localStorage.setItem('ui_lang', uiLang);
-            }, [uiLang]);
-
-            // v2.0: Save AI settings (skip on first render when initial value is empty)
-            const aiApiKeyInitRef = useRef(false);
-            useEffect(() => {
-                if (!aiApiKeyInitRef.current) {
-                    aiApiKeyInitRef.current = true;
-                    return; // Skip the initial save that would clear localStorage
-                }
-                if (aiApiKey) localStorage.setItem('ai_api_key', aiApiKey);
-                else localStorage.removeItem('ai_api_key');
-            }, [aiApiKey]);
-
-            useEffect(() => {
-                localStorage.setItem('ai_model', aiModel);
-            }, [aiModel]);
-
-            useEffect(() => {
-                localStorage.setItem('ai_target_lang', aiTargetLang);
-            }, [aiTargetLang]);
+            useEffect(() => { localStorage.setItem('ui_lang', uiLang); }, [uiLang]);
+            useEffect(() => { localStorage.setItem('ai_provider', aiProvider); }, [aiProvider]);
+            useEffect(() => { localStorage.setItem('ai_api_key', aiApiKey); }, [aiApiKey]);
+            useEffect(() => { localStorage.setItem('ai_endpoint', aiEndpoint); }, [aiEndpoint]);
+            useEffect(() => { localStorage.setItem('ai_auto_translate', String(autoTranslate)); }, [autoTranslate]);
+            useEffect(() => { localStorage.setItem('ai_show_summary', String(showSummary)); }, [showSummary]);
+            useEffect(() => { localStorage.setItem('ai_cache_limit', aiCacheLimit); }, [aiCacheLimit]);
 
             // Theme Management
             useEffect(() => {
@@ -1495,7 +1525,6 @@
                         document.documentElement.classList.remove('dark');
                     }
                 };
-
                 if (theme === 'system') {
                     const mq = window.matchMedia('(prefers-color-scheme: dark)');
                     applyTheme(mq.matches);
@@ -1509,30 +1538,162 @@
                 }
             }, [theme]);
 
-            // v2.0: Enhanced notification with proper permission handling
+            // Notifications
             const sendNotification = useCallback((count) => {
                 if (!notifications || document.visibilityState === 'visible' || count === 0) return;
                 const strings = STRINGS[uiLang];
                 try {
-                    if ('Notification' in window && Notification.permission === 'granted') {
-                        new Notification(strings.notif_new_updates_title, {
-                            body: strings.notif_new_updates_body.replace('{count}', count),
-                            icon: 'https://cdn-icons-png.flaticon.com/512/2965/2965879.png'
-                        });
-                    }
+                    const notif = new Notification(strings.notif_new_updates_title, {
+                        body: strings.notif_new_updates_body.replace('{count}', count),
+                        icon: 'https://cdn-icons-png.flaticon.com/512/2965/2965879.png'
+                    });
+                    notif.onclick = () => { window.focus(); notif.close(); };
                 } catch(e) {
                     console.warn('Notification failed:', e);
                 }
             }, [notifications, uiLang]);
 
-            // Handle banner expand
             const handleBannerExpand = useCallback(() => {
                 setBannerState('updated');
                 if (bannerDismissTimerRef.current) clearTimeout(bannerDismissTimerRef.current);
-                bannerDismissTimerRef.current = setTimeout(() => {
-                    setBannerState('hidden');
-                }, 2000);
+                bannerDismissTimerRef.current = setTimeout(() => { setBannerState('hidden'); }, 2000);
             }, []);
+
+            // v2.1: AI processing queue
+            const processAiQueue = useCallback(async () => {
+                if (aiProcessingRef.current || aiQueueRef.current.length === 0) return;
+                aiProcessingRef.current = true;
+
+                while (aiQueueRef.current.length > 0) {
+                    const task = aiQueueRef.current.shift();
+                    try {
+                        await task();
+                    } catch(e) {
+                        console.error('AI queue task error:', e);
+                    }
+                }
+
+                aiProcessingRef.current = false;
+            }, []);
+
+            const enqueueAiTask = useCallback((task) => {
+                aiQueueRef.current.push(task);
+                processAiQueue();
+            }, [processAiQueue]);
+
+            // v2.1: Translate handler with localStorage cache
+            const handleTranslate = useCallback((item, isRetry) => {
+                if (!aiApiKey) return;
+                const existing = translationsRef.current[item.id];
+                if (!isRetry && existing && !existing.startsWith(AI_ERROR_PREFIX)) return;
+                if (aiStatesRef.current[item.id] === 'translating') return;
+
+                aiStatesRef.current[item.id] = 'translating';
+                triggerAiRerender();
+
+                enqueueAiTask(async () => {
+                    try {
+                        const result = await callAI(aiProvider, aiApiKey, aiEndpoint, [
+                            { role: 'system', content: 'You are a translator. Translate the following news title to ' + uiLang + '. Output only the translation, nothing else.' },
+                            { role: 'user', content: item.content }
+                        ]);
+                        translationsRef.current[item.id] = result.trim();
+                    } catch(e) {
+                        console.error('Translation failed:', e);
+                        translationsRef.current[item.id] = AI_ERROR_PREFIX + (e.message || 'Unknown error');
+                    } finally {
+                        aiStatesRef.current[item.id] = null;
+                        saveAiCache('ai_translations_v1', translationsRef.current, aiCacheLimit);
+                        triggerAiRerender();
+                    }
+                });
+            }, [aiProvider, aiApiKey, aiEndpoint, uiLang, aiCacheLimit, triggerAiRerender, enqueueAiTask]);
+
+            // v2.1: Summary handler with localStorage cache
+            const handleSummary = useCallback((item, isRetry) => {
+                if (!aiApiKey) return;
+                const existing = summariesRef.current[item.id];
+                if (!isRetry && existing && !existing.startsWith(AI_ERROR_PREFIX)) return;
+                if (aiStatesRef.current[item.id] === 'summarizing') return;
+
+                aiStatesRef.current[item.id] = 'summarizing';
+                triggerAiRerender();
+
+                enqueueAiTask(async () => {
+                    try {
+                        let articleContent = '';
+                        try {
+                            for (const proxy of PROXY_LIST) {
+                                try {
+                                    const controller = new AbortController();
+                                    const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+                                    const response = await fetch(proxy + encodeURIComponent(item.url), { signal: controller.signal });
+                                    clearTimeout(timeoutId);
+                                    if (response.ok) {
+                                        const text = await response.text();
+                                        const doc = new DOMParser().parseFromString(text, 'text/html');
+                                        const bodyText = doc.body ? doc.body.innerText || doc.body.textContent : '';
+                                        articleContent = bodyText.replace(/\s+/g, ' ').trim().substring(0, 3000);
+                                        if (articleContent.length > 100) break;
+                                    }
+                                } catch(e) {}
+                            }
+                        } catch(e) {}
+
+                        let messages;
+                        if (articleContent && articleContent.length > 100) {
+                            messages = [
+                                { role: 'system', content: 'Summarize this news article in approximately 140 characters in ' + uiLang + '. Focus on the key facts: who, what, when, where, why. Keep key numbers.' },
+                                { role: 'user', content: 'Title: ' + item.content + '\n\nContent: ' + articleContent }
+                            ];
+                        } else {
+                            messages = [
+                                { role: 'system', content: 'Provide a brief context summary for this news headline in approximately 140 characters in ' + uiLang + '. Focus on likely key facts.' },
+                                { role: 'user', content: item.content }
+                            ];
+                        }
+
+                        const result = await callAI(aiProvider, aiApiKey, aiEndpoint, messages, 300);
+                        summariesRef.current[item.id] = result.trim();
+                    } catch(e) {
+                        console.error('Summary failed:', e);
+                        summariesRef.current[item.id] = AI_ERROR_PREFIX + (e.message || 'Unknown error');
+                    } finally {
+                        aiStatesRef.current[item.id] = null;
+                        saveAiCache('ai_summaries_v1', summariesRef.current, aiCacheLimit);
+                        triggerAiRerender();
+                    }
+                });
+            }, [aiProvider, aiApiKey, aiEndpoint, uiLang, aiCacheLimit, triggerAiRerender, enqueueAiTask]);
+
+            // v2.1: Auto-translate and auto-summary when news items arrive
+            useEffect(() => {
+                if (!aiApiKey || news.length === 0) return;
+
+                news.forEach(item => {
+                    if (autoTranslate) {
+                        const existing = translationsRef.current[item.id];
+                        if (!existing) {
+                            handleTranslate(item, false);
+                        }
+                    }
+                    if (showSummary) {
+                        const existing = summariesRef.current[item.id];
+                        if (!existing) {
+                            handleSummary(item, false);
+                        }
+                    }
+                });
+            }, [news, autoTranslate, showSummary, aiApiKey, handleTranslate, handleSummary]);
+
+            // v2.1: Retry failed items
+            const handleRetryTranslate = useCallback((item) => {
+                handleTranslate(item, true);
+            }, [handleTranslate]);
+
+            const handleRetrySummary = useCallback((item) => {
+                handleSummary(item, true);
+            }, [handleSummary]);
 
             // RSS Racing
             const fetchData = async () => {
@@ -1600,19 +1761,10 @@
                 }
             };
 
-            // v2.0: Fix notification toggle with proper permission request
             const toggleNotifications = async () => {
                 if (!notifications) {
-                    if (!('Notification' in window)) {
-                        alert(STRINGS[uiLang].ai_notif_permission);
-                        return;
-                    }
                     const permission = await Notification.requestPermission();
-                    if (permission === 'granted') {
-                        setNotifications(true);
-                    } else {
-                        setNotifications(false);
-                    }
+                    if (permission === 'granted') setNotifications(true);
                 } else {
                     setNotifications(false);
                 }
@@ -1620,11 +1772,29 @@
 
             const handleOpenSettings = () => {
                 prevFeedsStrRef.current = JSON.stringify(feeds);
+                prevApiKeyRef.current = aiApiKey;
                 setIsSettingsOpen(true);
             };
 
             const handleCloseSettings = () => {
                 setIsSettingsOpen(false);
+
+                // v2.1: If API key changed, retry all failed translations and summaries
+                if (aiApiKey && aiApiKey !== prevApiKeyRef.current) {
+                    const failedTransKeys = Object.keys(translationsRef.current).filter(k => translationsRef.current[k].startsWith(AI_ERROR_PREFIX));
+                    const failedSummKeys = Object.keys(summariesRef.current).filter(k => summariesRef.current[k].startsWith(AI_ERROR_PREFIX));
+
+                    // Find matching news items for failed entries
+                    news.forEach(item => {
+                        if (failedTransKeys.includes(item.id)) {
+                            handleRetryTranslate(item);
+                        }
+                        if (failedSummKeys.includes(item.id)) {
+                            handleRetrySummary(item);
+                        }
+                    });
+                }
+
                 const currentFeedsStr = JSON.stringify(feeds);
                 if (prevFeedsStrRef.current !== currentFeedsStr) {
                     setNews([]);
@@ -1635,11 +1805,20 @@
                 }
             };
 
-            const handleManualRefresh = () => {
-                fetchData();
-            };
+            const handleManualRefresh = () => { fetchData(); };
 
             const hasError = status === 'error' || (status === 'idle' && fetchStats.total > 0 && fetchStats.success === 0);
+            const uiStrings = STRINGS[uiLang];
+
+            // Get translation/summary for display
+            const getTranslation = (id) => {
+                const entry = translationsRef.current[id];
+                return entry || null;
+            };
+            const getSummary = (id) => {
+                const entry = summariesRef.current[id];
+                return entry || null;
+            };
 
             return html`
                 <div className="min-h-screen flex flex-col max-w-4xl mx-auto border-x border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900">
@@ -1647,30 +1826,32 @@
                         status=${status}
                         onOpenSettings=${handleOpenSettings}
                         onRefresh=${handleManualRefresh}
-                        uiStrings=${STRINGS[uiLang]}
+                        uiStrings=${uiStrings}
                         hasError=${hasError}
+                        showSummary=${showSummary}
+                        setShowSummary=${setShowSummary}
                     />
                     <${FilterBar}
                         categories=${categories}
                         activeCategory=${activeCategory}
                         onSelectCategory=${setActiveCategory}
-                        uiStrings=${STRINGS[uiLang]}
+                        uiStrings=${uiStrings}
                     />
 
                     <main className="flex-1 relative p-4 sm:p-6 overflow-x-hidden">
                         <div className="timeline-line"></div>
 
-                        <${UpdateToast}
+                        <${UpdateBanner}
                             bannerState=${bannerState}
                             updateCount=${updateCount}
                             bannerProgress=${bannerProgress}
                             onExpand=${handleBannerExpand}
-                            uiStrings=${STRINGS[uiLang]}
+                            uiStrings=${uiStrings}
                         />
 
                         ${filteredNews.length === 0 && status !== 'fetching' && html`
                             <div className="pl-10 pt-10 text-gray-400">
-                                <p>${hasError ? STRINGS[uiLang].error_fetch : STRINGS[uiLang].no_items}</p>
+                                <p>${hasError ? uiStrings.error_fetch : uiStrings.no_items}</p>
                             </div>
                         `}
 
@@ -1679,12 +1860,16 @@
                                 <${NewsCard}
                                     key=${item.id}
                                     item=${item}
-                                    aiResults=${aiResults}
-                                    aiLoadingMap=${aiLoadingMap}
-                                    aiErrorMap=${aiErrorMap}
-                                    onTranslate=${handleAITranslate}
-                                    onSummarize=${handleAISummarize}
-                                    uiStrings=${STRINGS[uiLang]}
+                                    translation=${getTranslation(item.id)}
+                                    summaryText=${getSummary(item.id)}
+                                    aiState=${aiStatesRef.current[item.id]}
+                                    onTranslate=${handleTranslate}
+                                    onSummary=${handleSummary}
+                                    onRetryTranslate=${handleRetryTranslate}
+                                    onRetrySummary=${handleRetrySummary}
+                                    autoTranslate=${autoTranslate}
+                                    showSummary=${showSummary}
+                                    uiStrings=${uiStrings}
                                 />
                             `)}
                         </div>
@@ -1696,17 +1881,17 @@
                                     onClick=${handleManualRefresh}
                                     className=${`text-xs font-mono ${hasError ? 'text-red-500 font-bold' : 'text-gray-400 hover:text-blue-500'}`}
                                 >
-                                    ${status === 'fetching' ? STRINGS[uiLang].updating :
-                                     hasError ? STRINGS[uiLang].error_fetch :
-                                     STRINGS[uiLang].last_updated + ' ' + formatTime(lastUpdated)}
+                                    ${status === 'fetching' ? uiStrings.updating :
+                                     hasError ? uiStrings.error_fetch :
+                                     uiStrings.last_updated + ' ' + formatTime(lastUpdated)}
                                 </button>
                                 ${fetchStats.total > 0 && html`
                                     <span className=${`text-[10px] font-mono ${fetchStats.success < fetchStats.total ? 'text-yellow-600 dark:text-yellow-500' : 'text-gray-300 dark:text-slate-700'}`}>
-                                        ${STRINGS[uiLang].success_rate} ${fetchStats.success}/${fetchStats.total}
+                                        ${uiStrings.success_rate} ${fetchStats.success}/${fetchStats.total}
                                     </span>
                                 `}
                                 <p className="text-[10px] text-gray-300 dark:text-slate-700 mt-1">
-                                    ${STRINGS[uiLang].sources_via} Global RSS Feeds (Proxy)
+                                    ${uiStrings.sources_via} Global RSS Feeds (Proxy)
                                 </p>
                                 <p className="text-[10px] text-gray-300 dark:text-slate-700">
                                     Global Wire ${APP_VERSION}
@@ -1726,12 +1911,18 @@
                         setTheme=${setTheme}
                         notifications=${notifications}
                         toggleNotifications=${toggleNotifications}
+                        aiProvider=${aiProvider}
+                        setAiProvider=${setAiProvider}
                         aiApiKey=${aiApiKey}
                         setAiApiKey=${setAiApiKey}
-                        aiModel=${aiModel}
-                        setAiModel=${setAiModel}
-                        aiTargetLang=${aiTargetLang}
-                        setAiTargetLang=${setAiTargetLang}
+                        aiEndpoint=${aiEndpoint}
+                        setAiEndpoint=${setAiEndpoint}
+                        autoTranslate=${autoTranslate}
+                        setAutoTranslate=${setAutoTranslate}
+                        showSummary=${showSummary}
+                        setShowSummary=${setShowSummary}
+                        aiCacheLimit=${aiCacheLimit}
+                        setAiCacheLimit=${setAiCacheLimit}
                     />
                 </div>
             `;
@@ -1740,4 +1931,5 @@
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(html`<${App} />`);
     </script>
-</body></html>
+</body>
+</html>

@@ -1600,9 +1600,9 @@
                 }
 
                 aiProcessingRef.current = false;
-                // After queue drains, check if more summary tasks should be scheduled
-                if (showSummary) scheduleSummaryBatch();
-            }, [showSummary]);
+                // After queue drains, schedule next summary batch via setTimeout
+                setTimeout(() => { runScheduleSummaryBatch(); }, 100);
+            }, []);
 
             const enqueueAiTask = useCallback((task) => {
                 aiQueueRef.current.push(task);
@@ -1613,22 +1613,25 @@
             const summaryInFlightRef = useRef(0);
             const MAX_SUMMARY_INFLIGHT = 10;
 
-            // Schedule a batch of summary tasks (newest first, max 10 in-flight)
-            const scheduleSummaryBatch = useCallback(() => {
+            // Ref-based pattern to break circular dependency between handleSummary and scheduleSummaryBatch
+            const handleSummaryRef = useRef(null);
+
+            // Imperative function to schedule a batch (called from processAiQueue and useEffect)
+            const runScheduleSummaryBatch = () => {
                 if (!showSummary || !aiApiKey) return;
+                if (!handleSummaryRef.current) return;
                 const needed = news.filter(item => {
                     const existing = summariesRef.current[item.id];
                     return !existing || existing.startsWith(AI_ERROR_PREFIX);
                 });
-                // Only schedule up to the in-flight limit
                 const available = MAX_SUMMARY_INFLIGHT - summaryInFlightRef.current;
                 const toSchedule = needed.slice(0, Math.max(0, available));
                 toSchedule.forEach(item => {
                     if (aiStatesRef.current[item.id] !== 'summarizing') {
-                        handleSummary(item, !!summariesRef.current[item.id]);
+                        handleSummaryRef.current(item, !!summariesRef.current[item.id]);
                     }
                 });
-            }, [showSummary, aiApiKey, news, handleSummary]);
+            };
 
             // v2.1: Translate handler with localStorage cache
             const handleTranslate = useCallback((item, isRetry) => {
@@ -1757,6 +1760,9 @@
                 });
             }, [aiProvider, aiApiKey, aiEndpoint, uiLang, aiCacheLimit, triggerAiRerender, enqueueAiTask]);
 
+            // Keep handleSummaryRef in sync
+            handleSummaryRef.current = handleSummary;
+
             // v2.3: Auto-translate when news items arrive (no batch limit for translate)
             useEffect(() => {
                 if (!aiApiKey || news.length === 0) return;
@@ -1770,11 +1776,11 @@
                 }
             }, [news, autoTranslate, aiApiKey, handleTranslate]);
 
-            // v2.3: Auto-summary — initial batch (newest 10), scroll-triggered via IntersectionObserver
+            // v2.3: Auto-summary — initial batch (newest 10), then scroll-triggered
             useEffect(() => {
                 if (!showSummary || !aiApiKey || news.length === 0) return;
-                scheduleSummaryBatch();
-            }, [news, showSummary, aiApiKey, scheduleSummaryBatch]);
+                runScheduleSummaryBatch();
+            }, [news, showSummary, aiApiKey]);
 
             // v2.3: IntersectionObserver — trigger summary for entries visible on scroll
             const summaryObserverRef = useRef(null);
@@ -1782,7 +1788,6 @@
 
             useEffect(() => {
                 if (!showSummary) {
-                    // Clean up observer when summary is off
                     if (summaryObserverRef.current) {
                         summaryObserverRef.current.disconnect();
                         summaryObserverRef.current = null;
@@ -1792,29 +1797,26 @@
                 }
                 if (!aiApiKey) return;
 
-                // Create observer that triggers summary for entries that become visible
                 if (!summaryObserverRef.current) {
                     summaryObserverRef.current = new IntersectionObserver((entries) => {
                         entries.forEach(entry => {
                             if (entry.isIntersecting) {
                                 const itemId = entry.target.getAttribute('data-item-id');
-                                if (itemId && showSummary) {
+                                if (itemId && showSummary && handleSummaryRef.current) {
                                     const existing = summariesRef.current[itemId];
                                     if (!existing || existing.startsWith(AI_ERROR_PREFIX)) {
                                         const newsItem = news.find(n => n.id === itemId);
                                         if (newsItem && summaryInFlightRef.current < MAX_SUMMARY_INFLIGHT) {
-                                            handleSummary(newsItem, !!existing);
+                                            handleSummaryRef.current(newsItem, !!existing);
                                         }
                                     }
                                 }
-                                // Stop observing once triggered
                                 summaryObserverRef.current.unobserve(entry.target);
                             }
                         });
                     }, { rootMargin: '200px' });
                 }
 
-                // Observe all entry elements that haven't been observed yet
                 const elements = document.querySelectorAll('[data-item-id]');
                 elements.forEach(el => {
                     const itemId = el.getAttribute('data-item-id');
@@ -1831,7 +1833,7 @@
                     }
                     observedEntriesRef.current.clear();
                 };
-            }, [showSummary, aiApiKey, news, handleSummary]);
+            }, [showSummary, aiApiKey, news]);
 
             // v2.1: Retry failed items
             const handleRetryTranslate = useCallback((item) => {

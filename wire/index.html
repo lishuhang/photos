@@ -169,7 +169,7 @@
         const MAX_ITEMS = 150;
         const UPDATE_INTERVAL = 30000;
         const FETCH_TIMEOUT = 8000; // v1.2: Reduced from 12s to 8s
-        const APP_VERSION = 'v1.2';
+        const APP_VERSION = 'v1.3';
 
         // Proxy Fallback System
         const PROXY_LIST = [
@@ -190,6 +190,9 @@
         const IconDownload = () => html`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
         const IconUpload = () => html`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>`;
         const IconBookOpen = () => html`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`;
+        const IconSun = () => html`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`;
+        const IconMoon = () => html`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`;
+        const IconMonitor = () => html`<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`;
 
         // --- Localization ---
         const STRINGS = {
@@ -202,10 +205,11 @@
                 tab_general: '通用',
                 tab_readme: '说明',
                 lang_label: '界面语言',
-                theme_label: '深色模式',
+                theme_label: '外观模式',
                 notif_label: '桌面通知',
-                theme_dark: '开启',
-                theme_light: '关闭',
+                theme_dark: '深色',
+                theme_light: '浅色',
+                theme_system: '跟随系统',
                 notif_on: '已开启',
                 notif_off: '已关闭',
                 add_feed: '添加 RSS 源',
@@ -241,10 +245,11 @@
                 tab_general: 'General',
                 tab_readme: 'Readme',
                 lang_label: 'Interface Language',
-                theme_label: 'Dark Mode',
+                theme_label: 'Appearance',
                 notif_label: 'Notifications',
-                theme_dark: 'On',
-                theme_light: 'Off',
+                theme_dark: 'Dark',
+                theme_light: 'Light',
+                theme_system: 'System',
                 notif_on: 'On',
                 notif_off: 'Off',
                 add_feed: 'Add RSS Feed',
@@ -598,7 +603,7 @@
             uiLang,
             setUiLang,
             theme,
-            toggleTheme,
+            setTheme,
             notifications,
             toggleNotifications
         }) => {
@@ -854,15 +859,40 @@
                                         </select>
                                     </div>
 
-                                    <!-- Theme -->
-                                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
-                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.theme_label}</span>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-xs text-gray-500">${theme === 'dark' ? strings.theme_dark : strings.theme_light}</span>
-                                            <${ToggleSwitch}
-                                                checked=${theme === 'dark'}
-                                                onChange=${toggleTheme}
-                                            />
+                                    <!-- Theme - v1.3: 3-state selector -->
+                                    <div className="p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
+                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200 block mb-2">${strings.theme_label}</span>
+                                        <div className="flex gap-2">
+                                            <button
+                                                onClick=${() => setTheme('light')}
+                                                className=${`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border ${
+                                                    theme === 'light'
+                                                        ? 'bg-blue-600 text-white border-blue-600'
+                                                        : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700'
+                                                }`}
+                                            >
+                                                <${IconSun} /> ${strings.theme_light}
+                                            </button>
+                                            <button
+                                                onClick=${() => setTheme('dark')}
+                                                className=${`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border ${
+                                                    theme === 'dark'
+                                                        ? 'bg-blue-600 text-white border-blue-600'
+                                                        : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700'
+                                                }`}
+                                            >
+                                                <${IconMoon} /> ${strings.theme_dark}
+                                            </button>
+                                            <button
+                                                onClick=${() => setTheme('system')}
+                                                className=${`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border ${
+                                                    theme === 'system'
+                                                        ? 'bg-blue-600 text-white border-blue-600'
+                                                        : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700'
+                                                }`}
+                                            >
+                                                <${IconMonitor} /> ${strings.theme_system}
+                                            </button>
                                         </div>
                                     </div>
 
@@ -952,6 +982,13 @@
                                                 <p>- FETCH_TIMEOUT 从 12s 降至 8s</p>
                                                 <p>- 版本号从 v1.1 升级至 v1.2</p>
                                                 <p>- localStorage keys 未变更: theme, ui_lang, news_feeds_config, news_cache_v3</p>
+                                                <p><strong>v1.3 Agent 笔记：</strong></p>
+                                                <p>- 修复浅色模式切换导致页面内容消失的 bug</p>
+                                                <p>- 主题切换从二值开关改为三态选择器：浅色/深色/跟随系统</p>
+                                                <p>- 跟随系统模式会监听系统主题变化实时切换</p>
+                                                <p>- 主题设置收纳到设置 > 通用中</p>
+                                                <p>- 确保设置入口（齿轮图标）始终可见</p>
+                                                <p>- 版本号从 v1.2 升级至 v1.3</p>
                                                 <p>- 首次加载 JS 总减少: ~1MB+（移除 Babel+Lucide）</p>
                                             </>
                                         ` : html`
@@ -968,6 +1005,13 @@
                                                 <p>- FETCH_TIMEOUT reduced from 12s to 8s</p>
                                                 <p>- Version bumped from v1.1 to v1.2</p>
                                                 <p>- localStorage keys unchanged: theme, ui_lang, news_feeds_config, news_cache_v3</p>
+                                                <p><strong>v1.3 Agent Notes:</strong></p>
+                                                <p>- Fixed light mode toggle causing page content to disappear</p>
+                                                <p>- Theme toggle changed from binary switch to 3-state selector: Light/Dark/System</p>
+                                                <p>- System mode listens to OS theme changes in real-time</p>
+                                                <p>- Theme settings moved to Settings > General</p>
+                                                <p>- Ensured settings entry (gear icon) is always visible</p>
+                                                <p>- Version bumped from v1.2 to v1.3</p>
                                                 <p>- Total first-load JS reduction: ~1MB+ (Babel+Lucide removed)</p>
                                             </>
                                         `}
@@ -998,7 +1042,7 @@
                                                     <li>版本号显示在 header 和 footer</li>
                                                     <li>页面加载始终触发抓取，不再仅依赖缓存为空</li>
                                                 </ul>
-                                                <p className="mt-2"><strong>v1.2 (当前版本)</strong></p>
+                                                <p className="mt-2"><strong>v1.2</strong></p>
                                                 <ul className="list-disc pl-4 space-y-1">
                                                     <li>移除 Babel standalone (~800KB)，使用 htm (~1KB) 实现零编译 JSX</li>
                                                     <li>移除 Lucide 图标 (~100KB)，使用内联 SVG</li>
@@ -1010,6 +1054,14 @@
                                                     <li>实时进度指示器：横幅显示"正在更新 X/Y 源..."</li>
                                                     <li>超时优化：12s → 8s</li>
                                                     <li>首次加载 JavaScript 总减少 ~1MB+</li>
+                                                </ul>
+                                                <p className="mt-2"><strong>v1.3 (当前版本)</strong></p>
+                                                <ul className="list-disc pl-4 space-y-1">
+                                                    <li>修复浅色模式切换导致页面内容消失的问题</li>
+                                                    <li>主题切换从二值开关改为三态选择器：浅色、深色、跟随系统</li>
+                                                    <li>跟随系统模式自动响应操作系统主题变化</li>
+                                                    <li>主题设置收纳到设置 → 通用标签页</li>
+                                                    <li>确保设置入口始终可见可访问</li>
                                                 </ul>
                                             </>
                                         ` : html`
@@ -1035,7 +1087,7 @@
                                                     <li>Version number displayed in header and footer</li>
                                                     <li>Always fetch on page load, not only when cache is empty</li>
                                                 </ul>
-                                                <p className="mt-2"><strong>v1.2 (Current)</strong></p>
+                                                <p className="mt-2"><strong>v1.2</strong></p>
                                                 <ul className="list-disc pl-4 space-y-1">
                                                     <li>Removed Babel standalone (~800KB), using htm (~1KB) for zero-transpile JSX</li>
                                                     <li>Removed Lucide icons (~100KB), using inline SVGs</li>
@@ -1047,6 +1099,14 @@
                                                     <li>Live progress indicator: "Updating X/Y sources..." banner</li>
                                                     <li>Fetch timeout reduced: 12s → 8s</li>
                                                     <li>~1MB+ total JavaScript reduction on first load</li>
+                                                </ul>
+                                                <p className="mt-2"><strong>v1.3 (Current)</strong></p>
+                                                <ul className="list-disc pl-4 space-y-1">
+                                                    <li>Fixed light mode toggle causing page content to disappear</li>
+                                                    <li>Theme toggle changed from binary to 3-state: Light, Dark, Follow System</li>
+                                                    <li>System mode auto-responds to OS theme changes</li>
+                                                    <li>Theme settings consolidated into Settings → General tab</li>
+                                                    <li>Ensured settings entry is always visible and accessible</li>
                                                 </ul>
                                             </>
                                         `}
@@ -1063,7 +1123,7 @@
         const App = () => {
             const [feeds, setFeeds] = useState([]);
             const [news, setNews] = useState([]);
-            const [theme, setTheme] = useState('light');
+            const [theme, setTheme] = useState('system');
             const [uiLang, setUiLang] = useState('zh-CN');
             const [notifications, setNotifications] = useState(false);
             const [status, setStatus] = useState('idle');
@@ -1100,7 +1160,7 @@
             useEffect(() => {
                 const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
                 const savedTheme = localStorage.getItem('theme');
-                setTheme(savedTheme || (systemDark ? 'dark' : 'light'));
+                setTheme(savedTheme || 'system');
 
                 const savedLang = localStorage.getItem('ui_lang');
                 if (savedLang) setUiLang(savedLang);
@@ -1158,11 +1218,27 @@
                 localStorage.setItem('ui_lang', uiLang);
             }, [uiLang]);
 
-            // Theme Management
+            // Theme Management - v1.3: 3-state theme (light/dark/system)
             useEffect(() => {
-                if (theme === 'dark') document.documentElement.classList.add('dark');
-                else document.documentElement.classList.remove('dark');
-                localStorage.setItem('theme', theme);
+                const applyTheme = (isDark) => {
+                    if (isDark) {
+                        document.documentElement.classList.add('dark');
+                    } else {
+                        document.documentElement.classList.remove('dark');
+                    }
+                };
+
+                if (theme === 'system') {
+                    const mq = window.matchMedia('(prefers-color-scheme: dark)');
+                    applyTheme(mq.matches);
+                    const handler = (e) => applyTheme(e.matches);
+                    mq.addEventListener('change', handler);
+                    localStorage.setItem('theme', 'system');
+                    return () => mq.removeEventListener('change', handler);
+                } else {
+                    applyTheme(theme === 'dark');
+                    localStorage.setItem('theme', theme);
+                }
             }, [theme]);
 
             // Handle page visibility changes
@@ -1276,9 +1352,7 @@
                 }
             };
 
-            const toggleTheme = () => {
-                setTheme(prev => prev === 'dark' ? 'light' : 'dark');
-            };
+
 
             const handleOpenSettings = () => {
                 prevFeedsStrRef.current = JSON.stringify(feeds);
@@ -1382,7 +1456,7 @@
                         uiLang=${uiLang}
                         setUiLang=${setUiLang}
                         theme=${theme}
-                        toggleTheme=${toggleTheme}
+                        setTheme=${setTheme}
                         notifications=${notifications}
                         toggleNotifications=${toggleNotifications}
                     />

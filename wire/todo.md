@@ -1,4 +1,4 @@
-# Global Wire v2.1 开发进度追踪
+# Global Wire v2.2 开发进度追踪
 
 ## 历史背景（来自上一个任务记录摘要）
 
@@ -26,6 +26,14 @@
 - i18n支持（简体中文/English/繁体中文）
 - 版本号升级到v2.0
 
+### v2.0 → v2.1
+- AI助手设置面板（语言/自动翻译/摘要/存储上限）
+- 主界面标题栏摘要复选框
+- 自动翻译开关（替换原标题/显示原文）
+- 翻译/摘要失败重试
+- 更新API Key后自动重试失败条目
+- 本地存储条目上限（100/500/1000/全部）
+
 ### 技术约束
 - 单HTML文件，React 18 + htm（不用Babel）
 - **htm限制**：不支持HTML注释 `<!-- -->`，不支持Fragment简写 `<>`，否则会InvalidCharacterError崩溃白屏
@@ -33,61 +41,56 @@
 
 ---
 
-## v2.1 当前开发进度
+## v2.2 当前开发进度
 
-### 用户需求
-1. **设置-AI助手tab**：界面及AI助手语言下拉；自动翻译复选框；本地存储保存量下拉（100/500/1000/全部，默认100）
-2. **主界面标题条v2.1右侧**：摘要复选框
-3. **自动翻译**：选中时隐藏单个条目翻译按钮，自动替换原标题，刷新一个翻译一个
-4. **自动摘要**：选中时在条目下显示摘要文本，刷新一个摘要一个
-5. **失败重试**：标题后附重试小链接，摘要区附重试小链接
-6. **智能重试**：设置中更新API key后关闭设置，自动重试所有失败条目（不重复已成功的）
-7. **todo.md**：摘要初始prompt，忠实记录每步做法，每次做完更新并同步到GitHub
+### 用户需求（4项修复 + 版本号更新）
+1. **Toast动画修复**：更新新闻源toast会在页面停留，刷出新内容时从时间轴顶端向下漂移淡出
+2. **自动翻译修复**：勾选自动翻译后，新刷出的内容应第一时间翻译标题（之前有缓存错误条目不会重试的问题）
+3. **UI简化**：移除"摘"小按钮（摘要由开关统一控制）；自动翻译时不附带原文标题，关闭翻译时直接显示原文
+4. **摘要逻辑重写**：摘要不应把标题当原文发给AI，应先抓取文章原文，用turndown转为markdown，再交AI总结
+5. **版本号升级**：v2.1 → v2.2
 
 ### 开发日志
 
-#### Step 1: 读取源文件和Chrome插件参考
-- 读取了 `/home/z/my-project/download/index.html`（2026行，v2.0）
-- 解压并读取了 `chrome_140word.zip`（sidebar.js, background.js, manifest.json）
-- Chrome插件关键参考：
-  - DEFAULT_PROMPT：简化文章为200字以内一句话总结，保留关键数字，输出中文
-  - 支持zhipu/gemini/deepseek模型
-  - 文章内容提取：DOMParser解析HTML，提取main/article/body文本，截取12000字
-  - 队列式处理，避免并发API调用
+#### Step 1: 读取v2.1源码
+- 读取了 `/home/z/my-project/download/index.html`（1934行，v2.1）
+- 分析了4个需要修复的问题
 
-#### Step 2: 创建todo.md
+#### Step 2: 添加turndown.js CDN
+- 在head中添加 `<script src="https://unpkg.com/turndown/dist/turndown.js"></script>`
+- 版本号从v2.1更新为v2.2
 
-#### Step 3: 编写v2.1完整代码
-- 版本号升级为v2.1
-- 新增设置-AI助手tab（4个标签页：新闻源/通用/AI助手/说明）
-- AI助手tab包含：界面及AI助手语言下拉、自动翻译复选框、AI模型选择、API Key输入、API端点、本地存储条目上限（100/500/1000/全部，默认100）
-- 主界面Header中v2.1标签旁新增摘要复选框
-- NewsCard组件重构：
-  - autoTranslate=true时隐藏"译"按钮，显示翻译后的标题，原文显示为小字斜体
-  - autoTranslate=false时显示"译"按钮和翻译结果
-  - showSummary=true时隐藏"摘"按钮，自动显示摘要
-  - showSummary=false时显示"摘"按钮，点击展开摘要
-  - 翻译失败：标题后附"重试翻译"小链接
-  - 摘要失败：摘要区附"重试摘要"小链接
-- AI缓存持久化到localStorage（ai_translations_v1, ai_summaries_v1）
-  - 格式：{id: {text: string, ts: number}}
-  - 错误以__ERROR__前缀标记
-  - 保存时按时间戳排序，超出limit时截断
-- AI处理队列：避免并行API调用，按顺序处理
-- 关闭设置时检测API Key变更，自动重试所有失败条目
-- 新增i18n字符串：auto_translate, show_summary_label, cache_limit, retry_translate, retry_summary等
-- 新增localStorage keys: ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v1
-- README/Changelog更新为v2.1
+#### Step 3: Toast动画优化
+- 添加CSS动画 `toast-drift-down`（从原位向下漂移60px并淡出，1.2s）
+- 添加CSS动画 `toast-fade-in`（从上方淡入，0.3s）
+- UpdateBanner组件：
+  - updating状态：使用toast-fade-in动画
+  - available/updated状态：使用toast-drift-out动画（漂移淡出）
+  - 移除了sticky定位，改为相对定位
 
-#### Step 4: 浏览器自测
-- 使用agent-browser测试
-- 页面正常渲染，无JS错误
-- 设置弹窗4个标签页正常显示
-- 摘要复选框在Header中正确显示
-- API Key配置后，翻译功能正常：测试GLM-4-flash，"Japan's corporate real estate sales hit 18-year high on strong demand"翻译为"日本企业房地产销售需求强劲创18年新高"
-- 摘要功能正常：生成"日本企业地产销售18年最高，需求强劲"
-- 自动翻译：开启后，英文标题自动替换为中文翻译
-- 自动摘要：开启后，条目下方自动显示摘要
-- 无控制台错误
+#### Step 4: 修复自动翻译
+- 原bug：useEffect中只检查 `!existing`，导致localStorage中缓存了错误条目（`__ERROR__:...`）时不会重试
+- 修复：改为 `!existing || existing.startsWith(AI_ERROR_PREFIX)`，同时传递 `!!existing` 作为isRetry参数，确保错误条目也会被重试
 
-#### Step 5: 部署到GitHub和Cloudflare Worker（进行中）
+#### Step 5: 移除"摘"按钮和原文附带显示
+- NewsCard组件：移除onSummary prop，移除"摘"按钮（之前在 `!showSummary` 时显示）
+- 移除自动翻译时原文标题的显示（之前会以小字斜体显示原文）
+- 现在逻辑：autoTranslate=true → 只显示翻译标题；autoTranslate=false → 只显示原文+翻译按钮+翻译结果
+
+#### Step 6: 重写摘要逻辑（核心修复）
+- 原问题：摘要只发标题给AI，导致AI只能复述标题
+- 新方案：
+  1. 使用Turndown.js将抓取到的HTML转为Markdown
+  2. 移除噪音元素（script/style/nav/footer/header/iframe/ad/sidebar/comments等）
+  3. 智能定位正文：优先找article/[role="article"]/.article-content/.post-content/.entry-content/.content/body
+  4. Markdown截取上限4000字符（比之前3000字符的纯文本更有信息量）
+  5. 如果无法获取正文（< 200字符），不生成摘要而是标记错误
+  6. 不再回退到只用标题的模式
+
+#### Step 7: 更新README和Changelog
+- 三语言README更新：产品用途段落更新为v2.2说明
+- 三语言Changelog更新：添加v2.2条目
+- 三语言AI Agent调试笔记更新：v2.2架构说明
+
+#### Step 8: 部署（进行中）
+- 需要GitHub token和Cloudflare API token

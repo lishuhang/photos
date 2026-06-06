@@ -1600,8 +1600,6 @@
                 }
 
                 aiProcessingRef.current = false;
-                // After queue drains, schedule next summary batch via setTimeout
-                setTimeout(() => { runScheduleSummaryBatch(); }, 100);
             }, []);
 
             const enqueueAiTask = useCallback((task) => {
@@ -1612,26 +1610,6 @@
             // v2.3: Summary batch tracking — max 10 in-flight summaries
             const summaryInFlightRef = useRef(0);
             const MAX_SUMMARY_INFLIGHT = 10;
-
-            // Ref-based pattern to break circular dependency between handleSummary and scheduleSummaryBatch
-            const handleSummaryRef = useRef(null);
-
-            // Imperative function to schedule a batch (called from processAiQueue and useEffect)
-            const runScheduleSummaryBatch = () => {
-                if (!showSummary || !aiApiKey) return;
-                if (!handleSummaryRef.current) return;
-                const needed = news.filter(item => {
-                    const existing = summariesRef.current[item.id];
-                    return !existing || existing.startsWith(AI_ERROR_PREFIX);
-                });
-                const available = MAX_SUMMARY_INFLIGHT - summaryInFlightRef.current;
-                const toSchedule = needed.slice(0, Math.max(0, available));
-                toSchedule.forEach(item => {
-                    if (aiStatesRef.current[item.id] !== 'summarizing') {
-                        handleSummaryRef.current(item, !!summariesRef.current[item.id]);
-                    }
-                });
-            };
 
             // v2.1: Translate handler with localStorage cache
             const handleTranslate = useCallback((item, isRetry) => {
@@ -1756,12 +1734,32 @@
                         summaryInFlightRef.current--;
                         saveAiCache('ai_summaries_v1', summariesRef.current, aiCacheLimit);
                         triggerAiRerender();
+                        // After each summary completes, try to schedule more via ref
+                        setTimeout(() => { if (scheduleNextBatchRef.current) scheduleNextBatchRef.current(); }, 50);
                     }
                 });
             }, [aiProvider, aiApiKey, aiEndpoint, uiLang, aiCacheLimit, triggerAiRerender, enqueueAiTask]);
 
-            // Keep handleSummaryRef in sync
-            handleSummaryRef.current = handleSummary;
+            // Ref to break circular dep: handleSummary -> scheduleNextBatch -> handleSummary
+            const scheduleNextBatchRef = useRef(null);
+
+            // Schedule next batch of summaries (called after each summary completes via ref)
+            const scheduleNextSummaryBatch = useCallback(() => {
+                if (!showSummary || !aiApiKey) return;
+                const needed = news.filter(item => {
+                    const existing = summariesRef.current[item.id];
+                    return !existing || existing.startsWith(AI_ERROR_PREFIX);
+                });
+                const available = MAX_SUMMARY_INFLIGHT - summaryInFlightRef.current;
+                const toSchedule = needed.slice(0, Math.max(0, available));
+                toSchedule.forEach(item => {
+                    if (aiStatesRef.current[item.id] !== 'summarizing') {
+                        handleSummary(item, !!summariesRef.current[item.id]);
+                    }
+                });
+            }, [showSummary, aiApiKey, news, handleSummary]);
+
+            scheduleNextBatchRef.current = scheduleNextSummaryBatch;
 
             // v2.3: Auto-translate when news items arrive (no batch limit for translate)
             useEffect(() => {
@@ -1776,10 +1774,11 @@
                 }
             }, [news, autoTranslate, aiApiKey, handleTranslate]);
 
-            // v2.3: Auto-summary — initial batch (newest 10), then scroll-triggered
+            // v2.3: Auto-summary — initial batch (newest 10)
             useEffect(() => {
                 if (!showSummary || !aiApiKey || news.length === 0) return;
-                runScheduleSummaryBatch();
+                // Use setTimeout to ensure scheduleNextSummaryBatch is initialized
+                setTimeout(() => { if (scheduleNextBatchRef.current) scheduleNextBatchRef.current(); }, 200);
             }, [news, showSummary, aiApiKey]);
 
             // v2.3: IntersectionObserver — trigger summary for entries visible on scroll
@@ -1802,12 +1801,15 @@
                         entries.forEach(entry => {
                             if (entry.isIntersecting) {
                                 const itemId = entry.target.getAttribute('data-item-id');
-                                if (itemId && showSummary && handleSummaryRef.current) {
+                                if (itemId && showSummary) {
                                     const existing = summariesRef.current[itemId];
                                     if (!existing || existing.startsWith(AI_ERROR_PREFIX)) {
                                         const newsItem = news.find(n => n.id === itemId);
-                                        if (newsItem && summaryInFlightRef.current < MAX_SUMMARY_INFLIGHT) {
-                                            handleSummaryRef.current(newsItem, !!existing);
+                                        if (newsItem && summaryInFlightRef.current < MAX_SUMMARY_INFLIGHT && scheduleNextBatchRef.current) {
+                                            // Directly call handleSummary via scheduleNextBatchRef
+                                            // But we need to call handleSummary for this single item
+                                            // Use the same handleSummary from scheduleNextSummaryBatch
+                                            scheduleNextBatchRef.current();
                                         }
                                     }
                                 }

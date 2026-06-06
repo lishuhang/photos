@@ -701,15 +701,12 @@
             return html`
                 <div className="fixed inset-0 z-[100] flex items-center justify-center modal-overlay p-4">
                     <div className="bg-white dark:bg-slate-800 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col border border-gray-200 dark:border-slate-700">
-                        <!-- Modal Header -->
                         <div className="p-4 border-b border-gray-200 dark:border-slate-700 flex justify-between items-center">
                             <h2 className="text-lg font-bold text-slate-800 dark:text-white">${strings.settings}</h2>
                             <button onClick=${onClose} className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
                                 <${IconClose} />
                             </button>
                         </div>
-
-                        <!-- Tabs -->
                         <div className="flex border-b border-gray-200 dark:border-slate-700">
                             <button
                                 onClick=${() => setActiveTab('feeds')}
@@ -734,8 +731,7 @@
                         <div className="p-4 overflow-y-auto flex-1 space-y-6 scrollbar-thin">
 
                             ${activeTab === 'feeds' && html`
-                                <>
-                                    <!-- Add New -->
+                                <div>
                                     <div className="bg-gray-50 dark:bg-slate-900 p-3 rounded border border-gray-200 dark:border-slate-700">
                                         <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">${strings.add_feed}</h3>
                                         <div className="flex flex-col gap-2">
@@ -775,8 +771,6 @@
                                             ${strings.parser_note}
                                         </p>
                                     </div>
-
-                                    <!-- Import/Export -->
                                     <div className="grid grid-cols-2 gap-3 pt-2 pb-2">
                                         <input
                                             type="file"
@@ -798,22 +792,17 @@
                                             <${IconDownload} /> ${strings.export_btn}
                                         </button>
                                     </div>
-
-                                    <!-- Manage List -->
                                     <div>
                                         <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">${strings.active_sources} (${feeds.length})</h3>
                                         <div className="border border-gray-200 dark:border-slate-700 rounded overflow-hidden">
                                             ${feeds.map((feed, index) => html`
                                                 <div key=${feed.id} className=${`flex items-center p-2 bg-white dark:bg-slate-900 gap-3 ${index !== feeds.length - 1 ? 'border-b border-gray-100 dark:border-slate-800' : ''}`}>
-                                                    <!-- Toggle Switch -->
                                                     <div className="flex-shrink-0 pt-1 scale-75 origin-left">
                                                         <${ToggleSwitch}
                                                             checked=${feed.enabled}
                                                             onChange=${() => toggleFeed(feed.id)}
                                                         />
                                                     </div>
-
-                                                    <!-- Info -->
                                                     <div className=${`flex-1 min-w-0 ${!feed.enabled ? 'opacity-50 grayscale' : ''}`}>
                                                         <div className="flex items-center gap-2">
                                                             <div className="font-medium text-sm text-slate-700 dark:text-slate-200 truncate">
@@ -829,8 +818,6 @@
                                                             ${feed.url}
                                                         </div>
                                                     </div>
-
-                                                    <!-- Delete Action -->
                                                     <button
                                                         onClick=${() => handleDelete(feed.id)}
                                                         className="p-1.5 text-gray-400 hover:text-red-500"
@@ -841,12 +828,11 @@
                                             `)}
                                         </div>
                                     </div>
-                                </>
+                                </div>
                             `}
 
                             ${activeTab === 'general' && html`
                                 <div className="space-y-4">
-                                    <!-- Language -->
                                     <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
                                         <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.lang_label}</span>
                                         <select
@@ -858,8 +844,6 @@
                                             <option value="en">English</option>
                                         </select>
                                     </div>
-
-                                    <!-- Theme - v1.3: 3-state selector -->
                                     <div className="p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
                                         <span className="text-sm font-medium text-slate-700 dark:text-slate-200 block mb-2">${strings.theme_label}</span>
                                         <div className="flex gap-2">
@@ -895,8 +879,6 @@
                                             </button>
                                         </div>
                                     </div>
-
-                                    <!-- Notifications -->
                                     <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
                                         <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.notif_label}</span>
                                         <div className="flex items-center gap-2">
@@ -909,36 +891,30 @@
                                     </div>
                                 </div>
                             `}
-
-                            <!-- v1.2: Readme Tab -->
                             ${activeTab === 'readme' && html`
                                 <div className="space-y-3">
                                     <div className="flex items-center gap-2 mb-2">
                                         <span className="text-blue-500"><${IconBookOpen} /></span>
                                         <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">Global Wire ${APP_VERSION}</h3>
                                     </div>
-
-                                    <!-- Product Purpose -->
                                     <${ReadmeSection} title=${uiLang === 'zh-CN' ? '产品用途' : 'Product Purpose'} defaultOpen=${true}>
                                         ${uiLang === 'zh-CN' ? html`
-                                            <>
+                                            <div>
                                                 <p><strong>Global Wire</strong> 是一个轻量级的全球突发新闻聚合器，无需后端服务器，纯前端运行。</p>
                                                 <p>它从全球 40+ 个 RSS 新闻源实时抓取新闻，通过 CORS 代理访问，支持中国内地、香港、台湾、日本、韩国、新加坡、欧洲、美国等地区的主流媒体。</p>
                                                 <p>所有数据存储在浏览器 localStorage 中，无需注册、无追踪、无服务端。可作为静态页面部署在 GitHub Pages 或 Cloudflare Workers 上。</p>
-                                            </>
+                                            </div>
                                         ` : html`
-                                            <>
+                                            <div>
                                                 <p><strong>Global Wire</strong> is a lightweight global breaking news aggregator that runs entirely in the browser with no backend server.</p>
                                                 <p>It fetches news in real-time from 40+ RSS sources worldwide via CORS proxies, covering mainstream media from Mainland China, Hong Kong, Taiwan, Japan, South Korea, Singapore, Europe, and the US.</p>
                                                 <p>All data is stored in browser localStorage. No registration, no tracking, no server side. Can be deployed as a static page on GitHub Pages or Cloudflare Workers.</p>
-                                            </>
+                                            </div>
                                         `}
                                     <//>
-
-                                    <!-- Usage Guide -->
                                     <${ReadmeSection} title=${uiLang === 'zh-CN' ? '使用指南' : 'Usage Guide'}>
                                         ${uiLang === 'zh-CN' ? html`
-                                            <>
+                                            <div>
                                                 <p><strong>浏览新闻：</strong>打开页面即自动抓取所有已启用的新闻源，按时间倒序排列。</p>
                                                 <p><strong>分类筛选：</strong>使用顶部分类标签栏按地区/类别筛选新闻。</p>
                                                 <p><strong>手动刷新：</strong>点击右上角刷新按钮立即更新所有新闻源。</p>
@@ -949,9 +925,9 @@
                                                 <p><strong>渐进式渲染：</strong>v1.2 新增，新闻条目在各源返回时即时显示，无需等待所有源完成。</p>
                                                 <p><strong>重要新闻标记：</strong>标题含"Breaking"、"突发"、"Urgent"、"重磅"的新闻会以红色醒目显示。</p>
                                                 <p><strong>数据存储：</strong>所有配置和缓存存储在浏览器 localStorage 中，清除浏览器数据会重置应用。</p>
-                                            </>
+                                            </div>
                                         ` : html`
-                                            <>
+                                            <div>
                                                 <p><strong>Browsing News:</strong> Opening the page automatically fetches all enabled news sources, sorted by time in reverse order.</p>
                                                 <p><strong>Category Filter:</strong> Use the top category tabs to filter news by region/category.</p>
                                                 <p><strong>Manual Refresh:</strong> Click the refresh button in the top right to update all sources immediately.</p>
@@ -962,14 +938,12 @@
                                                 <p><strong>Progressive Rendering:</strong> New in v1.2, news items appear as each source returns, without waiting for all sources to complete.</p>
                                                 <p><strong>Breaking News Markers:</strong> Articles with "Breaking", "Urgent", or similar keywords are highlighted in red.</p>
                                                 <p><strong>Data Storage:</strong> All configuration and cache are stored in browser localStorage. Clearing browser data resets the app.</p>
-                                            </>
+                                            </div>
                                         `}
                                     <//>
-
-                                    <!-- AI Agent Debug Notes -->
                                     <${ReadmeSection} title=${uiLang === 'zh-CN' ? 'AI Agent 调试笔记' : 'AI Agent Debug Notes'}>
                                         ${uiLang === 'zh-CN' ? html`
-                                            <>
+                                            <div>
                                                 <p><strong>v1.2 Agent 笔记：</strong></p>
                                                 <p>- 移除 Babel (~800KB)，使用 htm (~1KB) 实现类 JSX 模板字面量</p>
                                                 <p>- 移除 Lucide 图标 (~100KB)，使用内联 SVG 替代</p>
@@ -990,9 +964,9 @@
                                                 <p>- 确保设置入口（齿轮图标）始终可见</p>
                                                 <p>- 版本号从 v1.2 升级至 v1.3</p>
                                                 <p>- 首次加载 JS 总减少: ~1MB+（移除 Babel+Lucide）</p>
-                                            </>
+                                            </div>
                                         ` : html`
-                                            <>
+                                            <div>
                                                 <p><strong>v1.2 Agent Notes:</strong></p>
                                                 <p>- Removed Babel (~800KB), replaced with htm (~1KB) for JSX-like template literals</p>
                                                 <p>- Removed Lucide icons (~100KB), replaced with inline SVGs</p>
@@ -1013,14 +987,12 @@
                                                 <p>- Ensured settings entry (gear icon) is always visible</p>
                                                 <p>- Version bumped from v1.2 to v1.3</p>
                                                 <p>- Total first-load JS reduction: ~1MB+ (Babel+Lucide removed)</p>
-                                            </>
+                                            </div>
                                         `}
                                     <//>
-
-                                    <!-- Changelog -->
                                     <${ReadmeSection} title=${uiLang === 'zh-CN' ? '更新日志' : 'Changelog'}>
                                         ${uiLang === 'zh-CN' ? html`
-                                            <>
+                                            <div>
                                                 <p><strong>v1.0 (基线版本)</strong></p>
                                                 <ul className="list-disc pl-4 space-y-1">
                                                     <li>全球 RSS 新闻聚合器，40+ 新闻源</li>
@@ -1063,9 +1035,9 @@
                                                     <li>主题设置收纳到设置 → 通用标签页</li>
                                                     <li>确保设置入口始终可见可访问</li>
                                                 </ul>
-                                            </>
+                                            </div>
                                         ` : html`
-                                            <>
+                                            <div>
                                                 <p><strong>v1.0 (Baseline)</strong></p>
                                                 <ul className="list-disc pl-4 space-y-1">
                                                     <li>Global RSS news aggregator with 40+ sources</li>
@@ -1108,7 +1080,7 @@
                                                     <li>Theme settings consolidated into Settings → General tab</li>
                                                     <li>Ensured settings entry is always visible and accessible</li>
                                                 </ul>
-                                            </>
+                                            </div>
                                         `}
                                     <//>
                                 </div>
@@ -1379,7 +1351,6 @@
 
             return html`
                 <div className="min-h-screen flex flex-col max-w-4xl mx-auto border-x border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900">
-                    <!-- v1.2: Update Banner with Progress -->
                     <${UpdateBanner}
                         bannerState=${bannerState}
                         updateCount=${updateCount}
@@ -1395,8 +1366,6 @@
                         uiStrings=${STRINGS[uiLang]}
                         hasError=${hasError}
                     />
-
-                    <!-- Category Filter Bar -->
                     <${FilterBar}
                         categories=${categories}
                         activeCategory=${activeCategory}

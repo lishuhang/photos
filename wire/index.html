@@ -298,7 +298,7 @@
                 banner_updates_available: '有 {count} 条新消息，点击更新',
                 banner_updated: '内容已更新',
                 notif_new_updates_title: 'Global Wire 有新消息',
-                notif_new_updates_body: '已获取 {count} 条新闻更新',
+                notif_new_updates_body: '等 {count} 条新消息',
                 translate: '翻译',
                 summary: '摘要',
                 ai_settings: 'AI 助手',
@@ -369,7 +369,7 @@
                 banner_updates_available: '{count} new updates, click to load',
                 banner_updated: 'Content updated',
                 notif_new_updates_title: 'Global Wire Updates',
-                notif_new_updates_body: '{count} new articles fetched',
+                notif_new_updates_body: 'and {count} more updates',
                 translate: 'Translate',
                 summary: 'Summary',
                 ai_settings: 'AI Assistant',
@@ -440,7 +440,7 @@
                 banner_updates_available: '有 {count} 條新消息，點擊更新',
                 banner_updated: '內容已更新',
                 notif_new_updates_title: 'Global Wire 有新消息',
-                notif_new_updates_body: '已取得 {count} 條新聞更新',
+                notif_new_updates_body: '等 {count} 條新消息',
                 translate: '翻譯',
                 summary: '摘要',
                 ai_settings: 'AI 助手',
@@ -703,19 +703,29 @@
                 throw new Error('Gemini API error: ' + JSON.stringify(data));
             }
             const glmEndpoint = endpoint || 'https://open.bigmodel.cn/api/paas/v4/chat/completions';
-            const response = await fetch(glmEndpoint, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + apiKey
-                },
-                body: JSON.stringify({
-                    model: 'glm-4-flash',
-                    messages: messages,
-                    temperature: 0.1,
-                    max_tokens: maxTokens || 200
-                })
-            });
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 15000);
+            let response;
+            try {
+                response = await fetch(glmEndpoint, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + apiKey
+                    },
+                    body: JSON.stringify({
+                        model: 'glm-4-flash',
+                        messages: messages,
+                        temperature: 0.1,
+                        max_tokens: maxTokens || 200
+                    }),
+                    signal: controller.signal
+                });
+            } catch(e) {
+                clearTimeout(timeoutId);
+                throw new Error('API timeout or network error');
+            }
+            clearTimeout(timeoutId);
             const data = await response.json();
             if (data.choices && data.choices[0]) {
                 return data.choices[0].message.content;
@@ -757,16 +767,16 @@
 
         const UpdateBanner = ({ bannerState, updateCount, bannerProgress, onExpand, uiStrings }) => {
             if (bannerState === 'hidden') return null;
-            const baseClass = 'mx-auto max-w-sm toast-fade-in';
+            const baseClass = 'fixed top-[105px] left-0 right-0 z-30 flex justify-center pointer-events-none';
             if (bannerState === 'updating') {
                 const progressText = bannerProgress.total > 0
                     ? uiStrings.banner_progress.replace('{done}', bannerProgress.completed).replace('{total}', bannerProgress.total)
                     : uiStrings.banner_updating;
                 return html`
                     <div className=${baseClass}>
-                        <div className="bg-blue-600 dark:bg-blue-700 px-4 py-2 rounded-lg shadow-lg text-center flex items-center justify-center gap-2">
-                            <div className="banner-spinner"></div>
-                            <span className="text-sm font-medium text-white">${progressText}</span>
+                        <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-md text-center flex items-center justify-center gap-2 border border-gray-200/50 dark:border-slate-700/50 pointer-events-auto">
+                            <div className="banner-spinner" style=${{ borderColor: 'rgba(0,0,0,0.15)', borderTopColor: 'rgba(0,0,0,0.6)' }}></div>
+                            <span className="text-sm font-medium text-black/70 dark:text-white/70">${progressText}</span>
                         </div>
                     </div>
                 `;
@@ -775,10 +785,10 @@
                 const text = uiStrings.banner_updates_available.replace('{count}', updateCount);
                 return html`
                     <div className=${baseClass}>
-                        <div className="bg-blue-600 dark:bg-blue-700 px-4 py-2.5 rounded-lg shadow-lg text-center flex items-center justify-center gap-2 cursor-pointer banner-pulse hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors" onClick=${onExpand}>
-                            <${IconBell} />
-                            <span className="text-sm font-semibold text-white">${text}</span>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" className="text-white/80"><polyline points="6 9 12 15 18 9"/></svg>
+                        <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm px-4 py-2.5 rounded-lg shadow-md text-center flex items-center justify-center gap-2 cursor-pointer border border-gray-200/50 dark:border-slate-700/50 pointer-events-auto hover:bg-white dark:hover:bg-slate-800 transition-colors" onClick=${onExpand}>
+                            <${IconBell} style=${{ color: 'rgba(0,0,0,0.5)' }} />
+                            <span className="text-sm font-semibold text-black/80 dark:text-white/80">${text}</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" className="text-black/40 dark:text-white/40"><polyline points="6 9 12 15 18 9"/></svg>
                         </div>
                     </div>
                 `;
@@ -786,9 +796,9 @@
             if (bannerState === 'updated') {
                 return html`
                     <div className=${baseClass + ' toast-drift-out'}>
-                        <div className="bg-green-600 dark:bg-green-700 px-4 py-2 rounded-lg shadow-lg text-center flex items-center justify-center gap-2">
-                            <${IconCheckCircle} />
-                            <span className="text-sm font-medium text-white">${uiStrings.banner_updated}</span>
+                        <div className="bg-white/90 dark:bg-slate-800/90 backdrop-blur-sm px-4 py-2 rounded-lg shadow-md text-center flex items-center justify-center gap-2 border border-gray-200/50 dark:border-slate-700/50">
+                            <${IconCheckCircle} style=${{ color: 'rgba(0,0,0,0.4)' }} />
+                            <span className="text-sm font-medium text-black/60 dark:text-white/60">${uiStrings.banner_updated}</span>
                         </div>
                     </div>
                 `;
@@ -1569,16 +1579,34 @@
                 }
             }, [theme]);
 
-            // Notifications
-            const sendNotification = useCallback((count) => {
-                if (!notifications || document.visibilityState === 'visible' || count === 0) return;
+            // Notifications - v2.6: show article title instead of generic count
+            const sendNotification = useCallback((newItems) => {
+                if (!notifications || document.visibilityState === 'visible') return;
                 const strings = STRINGS[uiLang];
                 try {
-                    const notif = new Notification(strings.notif_new_updates_title, {
-                        body: strings.notif_new_updates_body.replace('{count}', count),
-                        icon: 'https://cdn-icons-png.flaticon.com/512/2965/2965879.png'
-                    });
-                    notif.onclick = () => { window.focus(); notif.close(); };
+                    if (newItems.length < 6) {
+                        // Send individual notifications for each article
+                        newItems.forEach((item, idx) => {
+                            setTimeout(() => {
+                                try {
+                                    const notif = new Notification(item.content.substring(0, 60), {
+                                        body: item.source + ' · ' + formatTime(item.timestamp),
+                                        icon: 'https://cdn-icons-png.flaticon.com/512/2965/2965879.png'
+                                    });
+                                    notif.onclick = () => { window.focus(); notif.close(); };
+                                } catch(e) {}
+                            }, idx * 300);
+                        });
+                    } else {
+                        // Show last article title + count
+                        const lastItem = newItems[0]; // sorted by time desc, first is newest
+                        const body = strings.notif_new_updates_body.replace('{count}', newItems.length);
+                        const notif = new Notification(lastItem.content.substring(0, 60), {
+                            body: body,
+                            icon: 'https://cdn-icons-png.flaticon.com/512/2965/2965879.png'
+                        });
+                        notif.onclick = () => { window.focus(); notif.close(); };
+                    }
                 } catch(e) {
                     console.warn('Notification failed:', e);
                 }
@@ -1621,18 +1649,19 @@
                 bannerDismissTimerRef.current = setTimeout(() => { setBannerState('hidden'); }, 2000);
             }, [showSummary, aiApiKey]);
 
-            // v2.3: AI processing queue
+            // v2.6: AI processing queue - parallel with concurrency limit
+            const AI_CONCURRENCY = 3;
             const processAiQueue = useCallback(async () => {
-                if (aiProcessingRef.current || aiQueueRef.current.length === 0) return;
+                if (aiProcessingRef.current) return;
                 aiProcessingRef.current = true;
 
                 while (aiQueueRef.current.length > 0) {
-                    const task = aiQueueRef.current.shift();
-                    try {
-                        await task();
-                    } catch(e) {
-                        console.error('AI queue task error:', e);
+                    // Take up to AI_CONCURRENCY tasks and run them in parallel
+                    const batch = [];
+                    while (batch.length < AI_CONCURRENCY && aiQueueRef.current.length > 0) {
+                        batch.push(aiQueueRef.current.shift());
                     }
+                    await Promise.allSettled(batch.map(task => task()));
                 }
 
                 aiProcessingRef.current = false;
@@ -2045,7 +2074,7 @@
                             setBannerState('hidden');
                         } else {
                             setBannerState('hidden');
-                            sendNotification(allNewItems.length);
+                            sendNotification(allNewItems);
                         }
                     }
                 } else {
@@ -2122,6 +2151,13 @@
 
             return html`
                 <div className="min-h-screen flex flex-col max-w-4xl mx-auto border-x border-gray-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+                    <${UpdateBanner}
+                        bannerState=${bannerState}
+                        updateCount=${updateCount}
+                        bannerProgress=${bannerProgress}
+                        onExpand=${handleBannerExpand}
+                        uiStrings=${uiStrings}
+                    />
                     <${Header}
                         status=${status}
                         onOpenSettings=${handleOpenSettings}
@@ -2140,14 +2176,6 @@
 
                     <main className="flex-1 relative p-4 sm:p-6 overflow-x-hidden">
                         <div className="timeline-line"></div>
-
-                        <${UpdateBanner}
-                            bannerState=${bannerState}
-                            updateCount=${updateCount}
-                            bannerProgress=${bannerProgress}
-                            onExpand=${handleBannerExpand}
-                            uiStrings=${uiStrings}
-                        />
 
                         ${filteredNews.length === 0 && status !== 'fetching' && html`
                             <div className="pl-10 pt-10 text-gray-400">

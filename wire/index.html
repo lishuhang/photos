@@ -678,7 +678,9 @@
         };
 
         const callAI = async (provider, apiKey, endpoint, messages, maxTokens) => {
-            if (provider === 'gemini-2.0-flash') {
+            // Auto-detect: if API key contains a dot (GLM format), always use GLM even if provider says gemini
+            const isGlmKey = apiKey && apiKey.includes('.');
+            if (provider === 'gemini-2.0-flash' && !isGlmKey) {
                 const geminiEndpoint = endpoint || 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
                 const url = geminiEndpoint + '?key=' + apiKey;
                 const geminiContents = [];
@@ -730,7 +732,11 @@
             if (data.choices && data.choices[0]) {
                 return data.choices[0].message.content;
             }
-            throw new Error('GLM API error: ' + JSON.stringify(data));
+            // Check for content filter
+            if (data.contentFilter) {
+                throw new Error('内容被安全过滤');
+            }
+            throw new Error('GLM API error: ' + JSON.stringify(data).substring(0, 100));
         };
 
         // --- AI Cache Management ---

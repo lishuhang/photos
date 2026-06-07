@@ -1680,7 +1680,7 @@
 
             // v2.3: Summary batch tracking
             const summaryInFlightRef = useRef(0);
-            const MAX_SUMMARY_INFLIGHT = 10;
+            const MAX_SUMMARY_INFLIGHT = 15;
 
             // v2.1: Translate handler with localStorage cache
             const handleTranslate = useCallback((item, isRetry) => {
@@ -1906,10 +1906,14 @@
                 }
             }, [news, autoTranslate, aiApiKey, handleTranslate]);
 
-            // Auto-summary
+            // Auto-summary - schedule batches continuously
             useEffect(() => {
                 if (!showSummary || !aiApiKey || news.length === 0) return;
-                setTimeout(() => { if (scheduleNextBatchRef.current) scheduleNextBatchRef.current(); }, 200);
+                // Initial schedule
+                const initialTimer = setTimeout(() => { if (scheduleNextBatchRef.current) scheduleNextBatchRef.current(); }, 200);
+                // Periodic reschedule to pick up items that weren't covered in the initial batch
+                const periodicTimer = setInterval(() => { if (scheduleNextBatchRef.current) scheduleNextBatchRef.current(); }, 2000);
+                return () => { clearTimeout(initialTimer); clearInterval(periodicTimer); };
             }, [news, showSummary, aiApiKey]);
 
             // When summary is toggled OFF, cancel all in-progress summaries

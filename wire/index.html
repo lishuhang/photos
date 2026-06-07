@@ -1763,7 +1763,7 @@
                             }
                         }
 
-                        // Step 2: If RSS content is insufficient, try fetching article via proxy
+                        // Step 2: If RSS content is insufficient, try fetching article via proxy (fast: 3s timeout, 1 proxy only)
                         if (articleMarkdown.length < 80) {
                             let fetchLog = '';
                             try {
@@ -1774,8 +1774,10 @@
                                 });
                                 turndownService.remove(['script', 'style', 'nav', 'footer', 'header', 'iframe', 'noscript', 'aside', '.ad', '.advertisement', '.sidebar', '.comments', '.social-share', '.related', '#comments']);
 
-                                const ARTICLE_TIMEOUT = 10000;
-                                for (const proxyConfig of ARTICLE_PROXY_LIST) {
+                                const ARTICLE_TIMEOUT = 3000;
+                                // Only try the first proxy that works (allorigins json)
+                                for (let i = 0; i < Math.min(2, ARTICLE_PROXY_LIST.length); i++) {
+                                    const proxyConfig = ARTICLE_PROXY_LIST[i];
                                     try {
                                         const controller = new AbortController();
                                         const timeoutId = setTimeout(() => controller.abort(), ARTICLE_TIMEOUT);

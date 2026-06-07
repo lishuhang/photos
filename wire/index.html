@@ -1371,6 +1371,7 @@
             const bannerDismissTimerRef = useRef(null);
             const prevFeedsStrRef = useRef('');
             const initialFetchDoneRef = useRef(false);
+            const isFirstFetchRef = useRef(true);
 
             // AI processing queue to avoid parallel API calls
             const aiQueueRef = useRef([]);
@@ -1912,9 +1913,15 @@
                 if (allNewItems.length > 0) {
                     allNewItems.sort((a, b) => b.timestamp - a.timestamp);
 
+                    // First fetch always auto-merges so user sees content immediately
+                    const isFirstFetch = isFirstFetchRef.current;
+                    if (isFirstFetch) {
+                        isFirstFetchRef.current = false;
+                    }
+
                     const isVisible = document.visibilityState === 'visible';
-                    if (isVisible) {
-                        // v2.6: Buffer new items, don't merge yet
+                    if (isVisible && !isFirstFetch) {
+                        // v2.6: Buffer new items, don't merge yet (tab is active and not first load)
                         pendingItemsRef.current = [...allNewItems, ...pendingItemsRef.current]
                             .sort((a, b) => b.timestamp - a.timestamp);
                         // Remove duplicates in pending buffer
@@ -1929,7 +1936,7 @@
                         setBannerState('available');
                         setPendingTick(t => t + 1);
                     } else {
-                        // Tab is not visible - auto-merge and send notification
+                        // Auto-merge: first load OR tab is not visible
                         setNews(prev => {
                             const prevIds = new Set(prev.map(n => n.id));
                             const unique = allNewItems.filter(item => !prevIds.has(item.id));
@@ -1942,8 +1949,12 @@
                             }
                             return prev;
                         });
-                        setBannerState('hidden');
-                        sendNotification(allNewItems.length);
+                        if (isVisible) {
+                            setBannerState('hidden');
+                        } else {
+                            setBannerState('hidden');
+                            sendNotification(allNewItems.length);
+                        }
                     }
                 } else {
                     // No new items, but still check if we had pending from before

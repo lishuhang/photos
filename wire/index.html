@@ -200,11 +200,19 @@
         const MAX_ITEMS = 150;
         const UPDATE_INTERVAL = 30000;
         const FETCH_TIMEOUT = 8000;
-        const APP_VERSION = 'v2.3';
+        const APP_VERSION = 'v2.4';
 
         const PROXY_LIST = [
             "https://corsproxy.io/?",
             "https://api.allorigins.win/raw?url="
+        ];
+
+        // Separate proxy list for article content fetching (longer timeout, more options)
+        const ARTICLE_PROXY_LIST = [
+            { url: "https://api.allorigins.win/get?url=", type: "json" },
+            { url: "https://corsproxy.io/?", type: "raw" },
+            { url: "https://api.allorigins.win/raw?url=", type: "raw" },
+            { url: "https://api.codetabs.com/v1/proxy/?quest=", type: "raw" }
         ];
 
         // --- Inline SVG Icons ---
@@ -527,6 +535,14 @@
                             const parsedTs = new Date(pubDate.trim()).getTime();
                             if (!isNaN(parsedTs)) ts = parsedTs;
                         }
+
+                        // Extract RSS description and content:encoded for summary fallback
+                        const descEl = item.querySelector("description");
+                        const rssDescription = descEl ? descEl.textContent.trim() : "";
+                        let contentEncoded = "";
+                        const contentNodes = item.getElementsByTagNameNS("*", "encoded");
+                        if (contentNodes.length > 0) contentEncoded = contentNodes[0].textContent.trim();
+
                         newsItems.push({
                             id: link,
                             timestamp: ts,
@@ -535,7 +551,9 @@
                             url: link,
                             important: isImportant,
                             type: feedInfo.type,
-                            category: feedInfo.category || 'General'
+                            category: feedInfo.category || 'General',
+                            rssDescription: rssDescription,
+                            contentEncoded: contentEncoded
                         });
                     }
                 });
@@ -1379,22 +1397,22 @@
                                             <div>
                                                 <p><strong>htm 限制：</strong>不支持 HTML 注释 (-- 语法)，不支持 Fragment 简写 (尖括号语法)，否则 InvalidCharacterError 崩溃白屏。</p>
                                                 <p><strong>部署流程：</strong>push 到 GitHub + 调用 Cloudflare Worker API 更新。两者缺一不可。</p>
-                                                <p><strong>localStorage keys：</strong>theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v1</p>
-                                                <p><strong>v2.3 架构：</strong>摘要限流：最多10条同时处理（summaryInFlightRef），逐条排队（aiQueueRef），滚动触发（IntersectionObserver + data-item-id）。取消摘要时所有摘要立即隐藏。设置中可清空摘要缓存。文章正文抓取增加更多CSS选择器和诊断日志。</p>
+                                                <p><strong>localStorage keys：</strong>theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v2</p>
+                                                <p><strong>v2.4 架构：</strong>摘要限流：最多10条同时处理（summaryInFlightRef），逐条排队（aiQueueRef），滚动触发（IntersectionObserver + data-item-id）。取消摘要时所有摘要立即隐藏。设置中可清空摘要缓存。文章正文抓取增加更多CSS选择器和诊断日志。</p>
                                             </div>
                                         ` : uiLang === 'zh-TW' ? html`
                                             <div>
                                                 <p><strong>htm 限制：</strong>不支援 HTML 註解、Fragment 簡寫，否則 InvalidCharacterError 崩潰白畫面。</p>
                                                 <p><strong>部署流程：</strong>push 到 GitHub + 呼叫 Cloudflare Worker API 更新。</p>
-                                                <p><strong>localStorage keys：</strong>theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v1</p>
-                                                <p><strong>v2.3 架構：</strong>摘要限流：最多10條同時處理，逐條排隊，滾動觸發（IntersectionObserver）。取消摘要時立即隱藏。設定中可清空摘要快取。</p>
+                                                <p><strong>localStorage keys：</strong>theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v2</p>
+                                                <p><strong>v2.4 架構：</strong>摘要限流：最多10條同時處理，逐條排隊，滾動觸發（IntersectionObserver）。取消摘要時立即隱藏。設定中可清空摘要快取。</p>
                                             </div>
                                         ` : html`
                                             <div>
                                                 <p><strong>htm limitations:</strong> No HTML comments, no Fragment shorthand, otherwise InvalidCharacterError crash.</p>
                                                 <p><strong>Deploy flow:</strong> push to GitHub + update Cloudflare Worker API.</p>
-                                                <p><strong>localStorage keys:</strong> theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v1</p>
-                                                <p><strong>v2.3 architecture:</strong> Summary throttling: max 10 in-flight (summaryInFlightRef), one-at-a-time queue (aiQueueRef), scroll-triggered (IntersectionObserver + data-item-id). Summary collapses on toggle-off. Clear summary cache button in settings. Article content fetching uses more CSS selectors and diagnostic logging.</p>
+                                                <p><strong>localStorage keys:</strong> theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v2</p>
+                                                <p><strong>v2.4 architecture:</strong> Summary throttling: max 10 in-flight (summaryInFlightRef), one-at-a-time queue (aiQueueRef), scroll-triggered (IntersectionObserver + data-item-id). Summary collapses on toggle-off. Clear summary cache button in settings. Article content fetching uses more CSS selectors and diagnostic logging.</p>
                                             </div>
                                         `}
                                     <//>
@@ -1433,7 +1451,7 @@
 
             // v2.1: AI caches with localStorage persistence
             const translationsRef = useRef(loadAiCache('ai_translations_v1'));
-            const summariesRef = useRef(loadAiCache('ai_summaries_v1'));
+            const summariesRef = useRef(loadAiCache('ai_summaries_v2'));
             const aiStatesRef = useRef({});
 
             // Track previous API key for auto-retry
@@ -1639,7 +1657,7 @@
                 });
             }, [aiProvider, aiApiKey, aiEndpoint, uiLang, aiCacheLimit, triggerAiRerender, enqueueAiTask]);
 
-            // v2.3: Summary handler — fetch article content, turndown to markdown, then AI summarize
+            // v2.4: Summary handler — use RSS content first, then fetch article as fallback
             const handleSummary = useCallback((item, isRetry) => {
                 if (!aiApiKey) return;
                 const existing = summariesRef.current[item.id];
@@ -1655,71 +1673,136 @@
                 enqueueAiTask(async () => {
                     try {
                         let articleMarkdown = '';
-                        let fetchLog = '';
-                        try {
-                            const turndownService = new TurndownService({
-                                headingStyle: 'atx',
-                                codeBlockStyle: 'fenced',
-                                bulletListMarker: '-'
-                            });
-                            turndownService.remove(['script', 'style', 'nav', 'footer', 'header', 'iframe', 'noscript', 'aside', '.ad', '.advertisement', '.sidebar', '.comments', '.social-share', '.related', '#comments']);
+                        let contentSource = 'none';
 
-                            // Try each CORS proxy with extended timeout for article fetch
-                            const ARTICLE_TIMEOUT = 12000;
-                            for (const proxy of PROXY_LIST) {
-                                try {
-                                    const controller = new AbortController();
-                                    const timeoutId = setTimeout(() => controller.abort(), ARTICLE_TIMEOUT);
-                                    const response = await fetch(proxy + encodeURIComponent(item.url), { signal: controller.signal });
-                                    clearTimeout(timeoutId);
-                                    fetchLog += proxy.includes('corsproxy') ? 'corsproxy:' : 'allorigins:';
-                                    fetchLog += response.status + ' ';
-                                    if (response.ok) {
-                                        const htmlText = await response.text();
-                                        fetchLog += 'len=' + htmlText.length + ' ';
-                                        const doc = new DOMParser().parseFromString(htmlText, 'text/html');
+                        // === Step 1: Try RSS feed's own content (most reliable) ===
+                        const rssContent = item.contentEncoded || item.rssDescription || '';
 
-                                        // Smart article element detection — try many selectors
-                                        const selectors = ['article', '[role="article"]', '.article-content', '.post-content', '.entry-content', '.article_body', '.news-content', '.story-body', '.article__body', '.post-body', '.content-body', '#article-body', '.main-content', '#content', '.content'];
-                                        let articleEl = null;
-                                        for (const sel of selectors) {
-                                            articleEl = doc.querySelector(sel);
-                                            if (articleEl && articleEl.textContent.trim().length > 300) break;
-                                            articleEl = null;
-                                        }
-                                        if (!articleEl) articleEl = doc.body;
+                        if (rssContent) {
+                            try {
+                                const turndownService = new TurndownService({
+                                    headingStyle: 'atx',
+                                    codeBlockStyle: 'fenced',
+                                    bulletListMarker: '-'
+                                });
+                                turndownService.remove(['script', 'style', 'nav', 'footer', 'header', 'iframe', 'noscript', 'aside', '.ad', '.advertisement', '.sidebar', '.comments', '.social-share', '.related', '#comments']);
 
-                                        if (articleEl) {
-                                            articleMarkdown = turndownService.turndown(articleEl);
-                                            articleMarkdown = articleMarkdown.replace(/\n{3,}/g, '\n\n').trim();
-                                            if (articleMarkdown.length > 4000) {
-                                                articleMarkdown = articleMarkdown.substring(0, 4000);
-                                            }
-                                        }
-                                        if (articleMarkdown.length > 200) break;
-                                    }
-                                } catch(e) {
-                                    fetchLog += 'err:' + (e.message || 'timeout') + ' ';
+                                // Check if it's HTML content (contains tags)
+                                if (rssContent.includes('<') && rssContent.includes('>')) {
+                                    const doc = new DOMParser().parseFromString(rssContent, 'text/html');
+                                    articleMarkdown = turndownService.turndown(doc.body);
+                                } else {
+                                    // Plain text — use directly
+                                    articleMarkdown = rssContent;
                                 }
+                                articleMarkdown = articleMarkdown.replace(/\n{3,}/g, '\n\n').trim();
+
+                                // Skip if RSS description is just a duplicate of the title
+                                const titleNorm = item.content.trim().toLowerCase().replace(/\s+/g, ' ');
+                                const mdNorm = articleMarkdown.trim().toLowerCase().replace(/\s+/g, ' ');
+                                if (mdNorm.length > 0 && (titleNorm === mdNorm || titleNorm.includes(mdNorm) || mdNorm.includes(titleNorm))) {
+                                    // Description is just a repeat of the title — not useful
+                                    articleMarkdown = '';
+                                    contentSource = 'rss:dup-title';
+                                } else if (articleMarkdown.length > 4000) {
+                                    articleMarkdown = articleMarkdown.substring(0, 4000);
+                                    contentSource = 'rss:' + (item.contentEncoded ? 'encoded' : 'desc') + '(' + articleMarkdown.length + ')';
+                                } else {
+                                    contentSource = 'rss:' + (item.contentEncoded ? 'encoded' : 'desc') + '(' + articleMarkdown.length + ')';
+                                }
+                            } catch(e) {
+                                console.warn('RSS content turndown failed:', e);
+                                // Fall through to article fetch
                             }
-                        } catch(e) {
-                            console.warn('Turndown conversion failed:', e);
                         }
 
-                        console.log('[Summary] ' + item.content.substring(0, 40) + ' | fetch: ' + fetchLog + '| mdLen: ' + articleMarkdown.length);
+                        // === Step 2: If RSS content is insufficient, try fetching article via proxy ===
+                        if (articleMarkdown.length < 80) {
+                            let fetchLog = '';
+                            try {
+                                const turndownService = new TurndownService({
+                                    headingStyle: 'atx',
+                                    codeBlockStyle: 'fenced',
+                                    bulletListMarker: '-'
+                                });
+                                turndownService.remove(['script', 'style', 'nav', 'footer', 'header', 'iframe', 'noscript', 'aside', '.ad', '.advertisement', '.sidebar', '.comments', '.social-share', '.related', '#comments']);
+
+                                const ARTICLE_TIMEOUT = 10000;
+                                for (const proxyConfig of ARTICLE_PROXY_LIST) {
+                                    try {
+                                        const controller = new AbortController();
+                                        const timeoutId = setTimeout(() => controller.abort(), ARTICLE_TIMEOUT);
+                                        const targetUrl = proxyConfig.url + encodeURIComponent(item.url);
+                                        const response = await fetch(targetUrl, { signal: controller.signal });
+                                        clearTimeout(timeoutId);
+                                        fetchLog += proxyConfig.url.split('/')[2] + ':' + response.status + ' ';
+
+                                        if (response.ok) {
+                                            let htmlText = '';
+                                            if (proxyConfig.type === 'json') {
+                                                // allorigins /get endpoint returns JSON wrapper
+                                                const jsonData = await response.json();
+                                                htmlText = jsonData.contents || '';
+                                            } else {
+                                                htmlText = await response.text();
+                                            }
+
+                                            if (!htmlText) { fetchLog += 'empty '; continue; }
+                                            fetchLog += 'len=' + htmlText.length + ' ';
+
+                                            const doc = new DOMParser().parseFromString(htmlText, 'text/html');
+
+                                            // Smart article element detection
+                                            const selectors = ['article', '[role="article"]', '.article-content', '.post-content', '.entry-content', '.article_body', '.news-content', '.story-body', '.article__body', '.post-body', '.content-body', '#article-body', '.main-content', '#content', '.content'];
+                                            let articleEl = null;
+                                            for (const sel of selectors) {
+                                                articleEl = doc.querySelector(sel);
+                                                if (articleEl && articleEl.textContent.trim().length > 300) break;
+                                                articleEl = null;
+                                            }
+                                            if (!articleEl) articleEl = doc.body;
+
+                                            if (articleEl) {
+                                                const fetchedMd = turndownService.turndown(articleEl);
+                                                const trimmedMd = fetchedMd.replace(/\n{3,}/g, '\n\n').trim().substring(0, 4000);
+                                                // Only use fetched content if it's better than what we have
+                                                if (trimmedMd.length > articleMarkdown.length) {
+                                                    articleMarkdown = trimmedMd;
+                                                    contentSource = 'fetch:' + fetchLog.trim() + '(' + articleMarkdown.length + ')';
+                                                }
+                                            }
+                                            if (articleMarkdown.length > 80) break;
+                                        }
+                                    } catch(e) {
+                                        fetchLog += 'err:' + (e.message || 'timeout') + ' ';
+                                    }
+                                }
+                            } catch(e) {
+                                console.warn('Article fetch failed:', e);
+                            }
+                            if (contentSource.startsWith('rss')) {
+                                contentSource += ' | fetch:' + fetchLog.trim();
+                            }
+                        }
+
+                        console.log('[Summary] ' + item.content.substring(0, 40) + ' | source: ' + contentSource + ' | mdLen: ' + articleMarkdown.length);
 
                         let messages;
-                        if (articleMarkdown && articleMarkdown.length > 200) {
+                        if (articleMarkdown && articleMarkdown.length > 30) {
+                            // Use different prompt based on content length
+                            const promptTemplate = articleMarkdown.length > 200
+                                ? 'Summarize this news article in approximately 140 characters in {lang}. Focus on the key facts: who, what, when, where, why. Keep key numbers. Output only the summary.'
+                                : 'Based on the limited content available, write a brief summary in approximately 100 characters in {lang}. Focus on the key point. Output only the summary.';
                             messages = [
-                                { role: 'system', content: 'Summarize this news article in approximately 140 characters in ' + uiLang + '. Focus on the key facts: who, what, when, where, why. Keep key numbers. Output only the summary.' },
+                                { role: 'system', content: promptTemplate.replace('{lang}', uiLang) },
                                 { role: 'user', content: articleMarkdown }
                             ];
                         } else {
-                            // Cannot get article content — mark as error with diagnostic info
+                            // Absolutely no content available — mark as error
                             summariesRef.current[item.id] = AI_ERROR_PREFIX + 'Unable to fetch article content (mdLen=' + articleMarkdown.length + ')';
                             aiStatesRef.current[item.id] = null;
                             summaryInFlightRef.current--;
-                            saveAiCache('ai_summaries_v1', summariesRef.current, aiCacheLimit);
+                            saveAiCache('ai_summaries_v2', summariesRef.current, aiCacheLimit);
                             triggerAiRerender();
                             return;
                         }
@@ -1732,7 +1815,7 @@
                     } finally {
                         aiStatesRef.current[item.id] = null;
                         summaryInFlightRef.current--;
-                        saveAiCache('ai_summaries_v1', summariesRef.current, aiCacheLimit);
+                        saveAiCache('ai_summaries_v2', summariesRef.current, aiCacheLimit);
                         triggerAiRerender();
                         // After each summary completes, try to schedule more via ref
                         setTimeout(() => { if (scheduleNextBatchRef.current) scheduleNextBatchRef.current(); }, 50);
@@ -1850,6 +1933,7 @@
             const handleClearSummaryCache = useCallback(() => {
                 summariesRef.current = {};
                 localStorage.removeItem('ai_summaries_v1');
+                localStorage.removeItem('ai_summaries_v2');
                 triggerAiRerender();
             }, [triggerAiRerender]);
 

@@ -200,7 +200,7 @@
         const MAX_ITEMS = 150;
         const UPDATE_INTERVAL = 30000;
         const FETCH_TIMEOUT = 8000;
-        const APP_VERSION = 'v2.4';
+        const APP_VERSION = 'v2.5';
 
         const PROXY_LIST = [
             "https://corsproxy.io/?",
@@ -1398,21 +1398,21 @@
                                                 <p><strong>htm 限制：</strong>不支持 HTML 注释 (-- 语法)，不支持 Fragment 简写 (尖括号语法)，否则 InvalidCharacterError 崩溃白屏。</p>
                                                 <p><strong>部署流程：</strong>push 到 GitHub + 调用 Cloudflare Worker API 更新。两者缺一不可。</p>
                                                 <p><strong>localStorage keys：</strong>theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v2</p>
-                                                <p><strong>v2.4 架构：</strong>摘要限流：最多10条同时处理（summaryInFlightRef），逐条排队（aiQueueRef），滚动触发（IntersectionObserver + data-item-id）。取消摘要时所有摘要立即隐藏。设置中可清空摘要缓存。文章正文抓取增加更多CSS选择器和诊断日志。</p>
+                                                <p><strong>v2.5 架构：</strong>摘要限流：最多10条同时处理（summaryInFlightRef），逐条排队（aiQueueRef），滚动触发（IntersectionObserver + data-item-id）。取消摘要时所有摘要立即隐藏。设置中可清空摘要缓存。文章正文抓取增加更多CSS选择器和诊断日志。</p>
                                             </div>
                                         ` : uiLang === 'zh-TW' ? html`
                                             <div>
                                                 <p><strong>htm 限制：</strong>不支援 HTML 註解、Fragment 簡寫，否則 InvalidCharacterError 崩潰白畫面。</p>
                                                 <p><strong>部署流程：</strong>push 到 GitHub + 呼叫 Cloudflare Worker API 更新。</p>
                                                 <p><strong>localStorage keys：</strong>theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v2</p>
-                                                <p><strong>v2.4 架構：</strong>摘要限流：最多10條同時處理，逐條排隊，滾動觸發（IntersectionObserver）。取消摘要時立即隱藏。設定中可清空摘要快取。</p>
+                                                <p><strong>v2.5 架構：</strong>摘要限流：最多10條同時處理，逐條排隊，滾動觸發（IntersectionObserver）。取消摘要時立即隱藏。設定中可清空摘要快取。</p>
                                             </div>
                                         ` : html`
                                             <div>
                                                 <p><strong>htm limitations:</strong> No HTML comments, no Fragment shorthand, otherwise InvalidCharacterError crash.</p>
                                                 <p><strong>Deploy flow:</strong> push to GitHub + update Cloudflare Worker API.</p>
                                                 <p><strong>localStorage keys:</strong> theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v2</p>
-                                                <p><strong>v2.4 architecture:</strong> Summary throttling: max 10 in-flight (summaryInFlightRef), one-at-a-time queue (aiQueueRef), scroll-triggered (IntersectionObserver + data-item-id). Summary collapses on toggle-off. Clear summary cache button in settings. Article content fetching uses more CSS selectors and diagnostic logging.</p>
+                                                <p><strong>v2.5 architecture:</strong> Summary throttling: max 10 in-flight (summaryInFlightRef), one-at-a-time queue (aiQueueRef), scroll-triggered (IntersectionObserver + data-item-id). Summary collapses on toggle-off. Clear summary cache button in settings. Article content fetching uses more CSS selectors and diagnostic logging.</p>
                                             </div>
                                         `}
                                     <//>
@@ -1700,7 +1700,8 @@
                                 // Skip if RSS description is just a duplicate of the title
                                 const titleNorm = item.content.trim().toLowerCase().replace(/\s+/g, ' ');
                                 const mdNorm = articleMarkdown.trim().toLowerCase().replace(/\s+/g, ' ');
-                                if (mdNorm.length > 0 && (titleNorm === mdNorm || titleNorm.includes(mdNorm) || mdNorm.includes(titleNorm))) {
+                                // Only skip if description is very short AND matches title closely
+                                if (mdNorm.length > 0 && mdNorm.length < titleNorm.length + 20 && (titleNorm === mdNorm || titleNorm.includes(mdNorm))) {
                                     // Description is just a repeat of the title — not useful
                                     articleMarkdown = '';
                                     contentSource = 'rss:dup-title';
@@ -1798,10 +1799,8 @@
                                 { role: 'user', content: articleMarkdown }
                             ];
                         } else {
-                            // Absolutely no content available — mark as error
+                            // Absolutely no content available — mark as error (let finally block handle cleanup)
                             summariesRef.current[item.id] = AI_ERROR_PREFIX + 'Unable to fetch article content (mdLen=' + articleMarkdown.length + ')';
-                            aiStatesRef.current[item.id] = null;
-                            summaryInFlightRef.current--;
                             saveAiCache('ai_summaries_v2', summariesRef.current, aiCacheLimit);
                             triggerAiRerender();
                             return;
@@ -1829,16 +1828,27 @@
             // Schedule next batch of summaries (called after each summary completes via ref)
             const scheduleNextSummaryBatch = useCallback(() => {
                 if (!showSummary || !aiApiKey) return;
+                // Only schedule items that are NOT currently in-progress and NOT already completed
                 const needed = news.filter(item => {
                     const existing = summariesRef.current[item.id];
-                    return !existing || existing.startsWith(AI_ERROR_PREFIX);
+                    const state = aiStatesRef.current[item.id];
+                    // Skip if already has a valid summary
+                    if (existing && !existing.startsWith(AI_ERROR_PREFIX)) return false;
+                    // Skip if currently being processed
+                    if (state === 'summarizing') return false;
+                    // Needs summary: no result or error result
+                    return true;
                 });
-                const available = MAX_SUMMARY_INFLIGHT - summaryInFlightRef.current;
-                const toSchedule = needed.slice(0, Math.max(0, available));
+                // Sort: prioritize items without errors (never tried) over error items
+                needed.sort((a, b) => {
+                    const aErr = summariesRef.current[a.id]?.startsWith(AI_ERROR_PREFIX) ? 1 : 0;
+                    const bErr = summariesRef.current[b.id]?.startsWith(AI_ERROR_PREFIX) ? 1 : 0;
+                    return aErr - bErr;
+                });
+                const available = Math.max(0, MAX_SUMMARY_INFLIGHT - summaryInFlightRef.current);
+                const toSchedule = needed.slice(0, available);
                 toSchedule.forEach(item => {
-                    if (aiStatesRef.current[item.id] !== 'summarizing') {
-                        handleSummary(item, !!summariesRef.current[item.id]);
-                    }
+                    handleSummary(item, !!summariesRef.current[item.id]);
                 });
             }, [showSummary, aiApiKey, news, handleSummary]);
 
@@ -1857,14 +1867,29 @@
                 }
             }, [news, autoTranslate, aiApiKey, handleTranslate]);
 
-            // v2.3: Auto-summary — initial batch (newest 10)
+            // v2.5: Auto-summary — schedule when news arrives or summary toggled on
             useEffect(() => {
                 if (!showSummary || !aiApiKey || news.length === 0) return;
                 // Use setTimeout to ensure scheduleNextSummaryBatch is initialized
                 setTimeout(() => { if (scheduleNextBatchRef.current) scheduleNextBatchRef.current(); }, 200);
             }, [news, showSummary, aiApiKey]);
 
-            // v2.3: IntersectionObserver — trigger summary for entries visible on scroll
+            // v2.5: When summary is toggled OFF, cancel all in-progress summaries
+            useEffect(() => {
+                if (showSummary) return;
+                // Reset all summarizing states — the in-flight tasks will still complete
+                // but their results won't be visible until summary is toggled on again
+                Object.keys(aiStatesRef.current).forEach(key => {
+                    if (aiStatesRef.current[key] === 'summarizing') {
+                        aiStatesRef.current[key] = null;
+                    }
+                });
+                summaryInFlightRef.current = 0;
+                triggerAiRerender();
+            }, [showSummary, triggerAiRerender]);
+
+            // v2.5: IntersectionObserver — trigger summary for entries visible on scroll
+            // Only create/destroy observer when showSummary or aiApiKey changes, NOT on every news update
             const summaryObserverRef = useRef(null);
             const observedEntriesRef = useRef(new Set());
 
@@ -1884,14 +1909,10 @@
                         entries.forEach(entry => {
                             if (entry.isIntersecting) {
                                 const itemId = entry.target.getAttribute('data-item-id');
-                                if (itemId && showSummary) {
+                                if (itemId) {
                                     const existing = summariesRef.current[itemId];
                                     if (!existing || existing.startsWith(AI_ERROR_PREFIX)) {
-                                        const newsItem = news.find(n => n.id === itemId);
-                                        if (newsItem && summaryInFlightRef.current < MAX_SUMMARY_INFLIGHT && scheduleNextBatchRef.current) {
-                                            // Directly call handleSummary via scheduleNextBatchRef
-                                            // But we need to call handleSummary for this single item
-                                            // Use the same handleSummary from scheduleNextSummaryBatch
+                                        if (summaryInFlightRef.current < MAX_SUMMARY_INFLIGHT && scheduleNextBatchRef.current) {
                                             scheduleNextBatchRef.current();
                                         }
                                     }
@@ -1902,6 +1923,7 @@
                     }, { rootMargin: '200px' });
                 }
 
+                // Observe new elements that haven't been observed yet
                 const elements = document.querySelectorAll('[data-item-id]');
                 elements.forEach(el => {
                     const itemId = el.getAttribute('data-item-id');
@@ -1911,13 +1933,7 @@
                     }
                 });
 
-                return () => {
-                    if (summaryObserverRef.current) {
-                        summaryObserverRef.current.disconnect();
-                        summaryObserverRef.current = null;
-                    }
-                    observedEntriesRef.current.clear();
-                };
+                // No cleanup function — observer persists across news updates
             }, [showSummary, aiApiKey, news]);
 
             // v2.1: Retry failed items

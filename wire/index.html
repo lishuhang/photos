@@ -221,16 +221,19 @@
         const APP_VERSION = 'v2.6';
 
         const PROXY_LIST = [
-            "https://corsproxy.io/?",
-            "https://api.allorigins.win/raw?url="
+            "https://api.allorigins.win/raw?url=",
+            "https://corsproxy.io/?"
         ];
 
         const ARTICLE_PROXY_LIST = [
             { url: "https://api.allorigins.win/get?url=", type: "json" },
-            { url: "https://corsproxy.io/?", type: "raw" },
             { url: "https://api.allorigins.win/raw?url=", type: "raw" },
+            { url: "https://corsproxy.io/?", type: "raw" },
             { url: "https://api.codetabs.com/v1/proxy/?quest=", type: "raw" }
         ];
+
+        // rss2json.com - reliable CORS-friendly RSS parser
+        const RSS2JSON_ENDPOINT = 'https://api.rss2json.com/v1/api.json';
 
         // --- Inline SVG Icons ---
         const IconRefresh = () => html`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>`;
@@ -511,6 +514,78 @@
             throw lastError || new Error("All proxies failed");
         };
 
+        // v2.6: Fetch RSS via rss2json.com API (CORS-friendly, returns parsed JSON)
+        const fetchFeedViaRss2Json = async (url) => {
+            try {
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+                const response = await fetch(RSS2JSON_ENDPOINT + '?rss_url=' + encodeURIComponent(url), { signal: controller.signal });
+                clearTimeout(timeoutId);
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+                const data = await response.json();
+                if (data.status !== 'ok' || !data.items || data.items.length === 0) {
+                    throw new Error('rss2json: ' + (data.status || 'no items'));
+                }
+                return data;
+            } catch (e) {
+                throw e;
+            }
+        };
+
+        // v2.6: Parse rss2json response into our standard news item format
+        const parseRss2Json = (data, feedInfo) => {
+            try {
+                const newsItems = data.items.map(entry => {
+                    const title = entry.title || '';
+                    const link = entry.link || entry.guid || '';
+                    const pubDate = entry.pubDate || '';
+                    const description = entry.description || entry.content || '';
+                    const contentEncoded = entry.content || entry.description || '';
+
+                    if (!title || !link) return null;
+
+                    let sourceName = feedInfo.name;
+                    let cleanTitle = title;
+                    if (title.includes(" - ")) {
+                        const parts = title.split(" - ");
+                        if (parts[parts.length - 1].length < 20) {
+                            sourceName = parts[parts.length - 1];
+                        }
+                        cleanTitle = parts.slice(0, -1).join(" - ");
+                    }
+                    const isImportant =
+                        title.includes("Urgent") ||
+                        title.includes("Breaking") ||
+                        title.includes("\u7a81\u53d1") ||
+                        title.includes("\u91cd\u78c5");
+                    let ts = Date.now();
+                    if (pubDate) {
+                        const parsedTs = new Date(pubDate.trim()).getTime();
+                        if (!isNaN(parsedTs)) ts = parsedTs;
+                    }
+
+                    return {
+                        id: link,
+                        timestamp: ts,
+                        source: sourceName,
+                        content: cleanTitle,
+                        url: link,
+                        important: isImportant,
+                        type: feedInfo.type,
+                        category: feedInfo.category || 'General',
+                        rssDescription: description.replace(/<[^>]*>/g, '').trim().substring(0, 2000),
+                        contentEncoded: contentEncoded.trim().substring(0, 8000)
+                    };
+                }).filter(Boolean);
+
+                newsItems.sort((a, b) => b.timestamp - a.timestamp);
+                return newsItems.slice(0, 3);
+            } catch (e) {
+                console.warn('rss2json parse error for ' + feedInfo.name, e);
+                return [];
+            }
+        };
+
         const parseRSS = (xmlText, feedInfo) => {
             try {
                 const parser = new DOMParser();
@@ -773,12 +848,13 @@
             `;
         };
 
-        const NewsCard = ({ item, translation, summaryText, aiState, onTranslate, onRetryTranslate, onRetrySummary, autoTranslate, showSummary, uiStrings }) => {
+        const NewsCard = ({ item, translation, summaryText, aiState, onTranslate, onRetryTranslate, onRetrySummary, autoTranslate, showSummary, hasApiKey, uiStrings }) => {
             const hasTranslation = translation && !translation.startsWith(AI_ERROR_PREFIX);
             const hasTranslationError = translation && translation.startsWith(AI_ERROR_PREFIX);
             const hasSummaryError = summaryText && summaryText.startsWith(AI_ERROR_PREFIX);
             const hasSummary = summaryText && !summaryText.startsWith(AI_ERROR_PREFIX);
             const isTranslating = aiState === 'translating';
+            const isSummarizing = aiState === 'summarizing';
 
             // Display title: if auto-translate is on and we have a valid translation, show it; otherwise original
             const displayTitle = (autoTranslate && hasTranslation) ? translation : item.content;
@@ -827,7 +903,10 @@
                     </div>
                     ${showSummary && html`
                         <div className="mt-1.5 ml-0 sm:ml-0">
-                            ${aiState === 'summarizing' && html`
+                            ${!hasApiKey && html`
+                                <div className="text-[10px] text-gray-400 dark:text-slate-500 italic">${uiStrings.ai_no_key}</div>
+                            `}
+                            ${hasApiKey && isSummarizing && !hasSummary && !hasSummaryError && html`
                                 <div className="flex items-center gap-1.5 text-[10px] text-amber-600 dark:text-amber-400">
                                     <${IconLoader} /> ${uiStrings.ai_summarizing}
                                 </div>
@@ -1349,7 +1428,8 @@
 
             // v2.1: AI settings
             const [aiProvider, setAiProvider] = useState('glm-4-flash');
-            const [aiApiKey, setAiApiKey] = useState('');
+            const DEFAULT_API_KEY = '0b3a84dc7afc4196a442717f297dfd43.4Y2f136IIg4BtxQD';
+            const [aiApiKey, setAiApiKey] = useState(DEFAULT_API_KEY);
             const [aiEndpoint, setAiEndpoint] = useState('');
             const [autoTranslate, setAutoTranslate] = useState(false);
             const [showSummary, setShowSummary] = useState(false);
@@ -1401,8 +1481,8 @@
                 if (savedAiProvider) setAiProvider(savedAiProvider);
 
                 const savedAiApiKey = localStorage.getItem('ai_api_key');
-                if (savedAiApiKey) setAiApiKey(savedAiApiKey);
-                prevApiKeyRef.current = savedAiApiKey || '';
+                if (savedAiApiKey && savedAiApiKey !== 'undefined') setAiApiKey(savedAiApiKey);
+                prevApiKeyRef.current = (savedAiApiKey && savedAiApiKey !== 'undefined') ? savedAiApiKey : DEFAULT_API_KEY;
 
                 const savedAiEndpoint = localStorage.getItem('ai_endpoint');
                 if (savedAiEndpoint) setAiEndpoint(savedAiEndpoint);
@@ -1889,10 +1969,22 @@
 
                 const promises = active.map(async (feed) => {
                     try {
-                        const xml = await fetchFeedContent(feed.url);
-                        const items = parseRSS(xml, feed);
-                        successCount++;
+                        // v2.6: Try proxy first, then rss2json as fallback
+                        let items = [];
+                        try {
+                            const xml = await fetchFeedContent(feed.url);
+                            items = parseRSS(xml, feed);
+                        } catch(proxyErr) {
+                            // Proxy failed, try rss2json.com
+                            try {
+                                const r2jData = await fetchFeedViaRss2Json(feed.url);
+                                items = parseRss2Json(r2jData, feed);
+                            } catch(r2jErr) {
+                                // Both failed
+                            }
+                        }
                         if (items.length > 0) {
+                            successCount++;
                             const unique = items.filter(item => !currentIds.has(item.id));
                             if (unique.length > 0) {
                                 allNewItems.push(...unique);
@@ -2076,6 +2168,7 @@
                                     onRetrySummary=${handleRetrySummary}
                                     autoTranslate=${autoTranslate}
                                     showSummary=${showSummary}
+                                    hasApiKey=${!!aiApiKey}
                                     uiStrings=${uiStrings}
                                 />
                             `)}

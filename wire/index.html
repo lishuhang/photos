@@ -113,6 +113,17 @@
             border-radius: 50%;
             animation: ai-spin 0.6s linear infinite;
         }
+        .title-loader {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border: 1.5px solid rgba(139,92,246,0.3);
+            border-top-color: #8b5cf6;
+            border-radius: 50%;
+            animation: ai-spin 0.6s linear infinite;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
         .retry-link {
             cursor: pointer;
             color: #3b82f6;
@@ -137,6 +148,13 @@
         }
         .toast-fade-in {
             animation: toast-fade-in 0.3s ease-out forwards;
+        }
+        @keyframes banner-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(59,130,246,0.4); }
+            50% { box-shadow: 0 0 0 6px rgba(59,130,246,0); }
+        }
+        .banner-pulse {
+            animation: banner-pulse 2s ease-in-out infinite;
         }
     </style>
 </head>
@@ -200,14 +218,13 @@
         const MAX_ITEMS = 150;
         const UPDATE_INTERVAL = 30000;
         const FETCH_TIMEOUT = 8000;
-        const APP_VERSION = 'v2.5';
+        const APP_VERSION = 'v2.6';
 
         const PROXY_LIST = [
             "https://corsproxy.io/?",
             "https://api.allorigins.win/raw?url="
         ];
 
-        // Separate proxy list for article content fetching (longer timeout, more options)
         const ARTICLE_PROXY_LIST = [
             { url: "https://api.allorigins.win/get?url=", type: "json" },
             { url: "https://corsproxy.io/?", type: "raw" },
@@ -275,7 +292,7 @@
                 filter_all: '全部',
                 banner_updating: '正在更新所有新闻源...',
                 banner_progress: '正在更新 {done}/{total}...',
-                banner_updates_available: '已获取 {count} 条更新，点击展开',
+                banner_updates_available: '有 {count} 条新消息，点击更新',
                 banner_updated: '内容已更新',
                 notif_new_updates_title: 'Global Wire 有新消息',
                 notif_new_updates_body: '已获取 {count} 条新闻更新',
@@ -346,7 +363,7 @@
                 filter_all: 'All',
                 banner_updating: 'Updating all sources...',
                 banner_progress: 'Updating {done}/{total}...',
-                banner_updates_available: '{count} updates fetched, click to expand',
+                banner_updates_available: '{count} new updates, click to load',
                 banner_updated: 'Content updated',
                 notif_new_updates_title: 'Global Wire Updates',
                 notif_new_updates_body: '{count} new articles fetched',
@@ -417,7 +434,7 @@
                 filter_all: '全部',
                 banner_updating: '正在更新所有新聞源...',
                 banner_progress: '正在更新 {done}/{total}...',
-                banner_updates_available: '已取得 {count} 條更新，點擊展開',
+                banner_updates_available: '有 {count} 條新消息，點擊更新',
                 banner_updated: '內容已更新',
                 notif_new_updates_title: 'Global Wire 有新消息',
                 notif_new_updates_body: '已取得 {count} 條新聞更新',
@@ -536,7 +553,6 @@
                             if (!isNaN(parsedTs)) ts = parsedTs;
                         }
 
-                        // Extract RSS description and content:encoded for summary fallback
                         const descEl = item.querySelector("description");
                         const rssDescription = descEl ? descEl.textContent.trim() : "";
                         let contentEncoded = "";
@@ -683,11 +699,11 @@
             if (bannerState === 'available') {
                 const text = uiStrings.banner_updates_available.replace('{count}', updateCount);
                 return html`
-                    <div className=${baseClass + ' toast-drift-out'}>
-                        <div className="bg-blue-600 dark:bg-blue-700 px-4 py-2 rounded-lg shadow-lg text-center flex items-center justify-center gap-2 cursor-pointer" onClick=${onExpand}>
+                    <div className=${baseClass}>
+                        <div className="bg-blue-600 dark:bg-blue-700 px-4 py-2.5 rounded-lg shadow-lg text-center flex items-center justify-center gap-2 cursor-pointer banner-pulse hover:bg-blue-700 dark:hover:bg-blue-600 transition-colors" onClick=${onExpand}>
                             <${IconBell} />
-                            <span className="text-sm font-medium text-white">${text}</span>
-                            <span className="text-white/70"><${IconChevronDown} /></span>
+                            <span className="text-sm font-semibold text-white">${text}</span>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" className="text-white/80"><polyline points="6 9 12 15 18 9"/></svg>
                         </div>
                     </div>
                 `;
@@ -706,50 +722,27 @@
         };
 
         const Header = ({ status, onOpenSettings, onRefresh, uiStrings, hasError, showSummary, setShowSummary }) => {
-            let statusColor = 'bg-green-500';
-            if (status === 'fetching') statusColor = 'bg-yellow-500';
-            else if (status === 'error') statusColor = 'bg-red-600';
-            else if (hasError) statusColor = 'bg-yellow-600';
-
             return html`
-                <header className="sticky top-0 z-50 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 px-4 py-3 flex justify-between items-center relative">
-                    <div className="flex items-center space-x-3">
-                        <div className="relative flex h-3 w-3">
-                            <span className=${`relative inline-flex rounded-full h-3 w-3 ${statusColor}`}></span>
+                <header className="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur border-b border-gray-200 dark:border-slate-800">
+                    <div className="flex items-center justify-between px-4 py-3">
+                        <div className="flex items-center gap-2">
+                            <h1 className="text-xl font-black tracking-tighter text-slate-900 dark:text-white">${uiStrings.title}</h1>
+                            <span className="text-[10px] font-mono text-gray-400 dark:text-slate-500 mt-1">${uiStrings.subtitle}</span>
                         </div>
-                        <h1 className="text-lg font-bold tracking-tight text-slate-800 dark:text-white flex flex-col sm:flex-row sm:items-center leading-none">
-                            ${uiStrings.title}
-                            <span className="hidden sm:inline mx-2 text-gray-300 dark:text-slate-700">|</span>
-                            <span className="text-xs font-normal text-gray-500 dark:text-slate-400 mt-1 sm:mt-0">
-                                ${uiStrings.subtitle}
-                            </span>
-                            <span className="ml-2 text-[10px] font-mono text-gray-400 dark:text-slate-600 bg-gray-100 dark:bg-slate-800 px-1.5 py-0.5 rounded">${APP_VERSION}</span>
-                            <label className="ml-2 flex items-center gap-1 cursor-pointer select-none">
-                                <input
-                                    type="checkbox"
-                                    checked=${showSummary}
-                                    onChange=${(e) => setShowSummary(e.target.checked)}
-                                    className="w-3 h-3 rounded border-gray-300 text-amber-500 focus:ring-amber-400 cursor-pointer"
-                                />
-                                <span className="text-[10px] font-medium text-amber-600 dark:text-amber-400">${uiStrings.show_summary_label}</span>
-                            </label>
-                        </h1>
-                    </div>
-                    <div className="flex items-center space-x-3 sm:space-x-4">
-                        <button
-                            onClick=${onRefresh}
-                            className="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-slate-800"
-                            title=${uiStrings.refresh}
-                        >
-                            <${IconRefresh} />
-                        </button>
-                        <button
-                            onClick=${onOpenSettings}
-                            className="p-2 rounded-full text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-slate-800"
-                            title=${uiStrings.settings}
-                        >
-                            <${IconSettings} />
-                        </button>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick=${() => setShowSummary(!showSummary)}
+                                className=${`text-xs px-2 py-1 rounded border transition-colors ${showSummary ? 'bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-900/20 dark:border-amber-800 dark:text-amber-400' : 'bg-gray-50 border-gray-200 text-gray-500 dark:bg-slate-800 dark:border-slate-700 dark:text-slate-400 hover:bg-amber-50 hover:border-amber-200 hover:text-amber-700 dark:hover:bg-amber-900/20 dark:hover:border-amber-800 dark:hover:text-amber-400'}`}
+                            >
+                                ${uiStrings.show_summary_label}
+                            </button>
+                            <button onClick=${onRefresh} className=${`p-2 rounded-lg transition-colors ${status === 'fetching' ? 'animate-spin text-blue-500' : hasError ? 'text-red-500 hover:text-red-700' : 'text-gray-500 hover:text-blue-500 dark:text-slate-400 dark:hover:text-blue-400'}`}>
+                                <${IconRefresh} />
+                            </button>
+                            <button onClick=${onOpenSettings} className="p-2 rounded-lg text-gray-500 hover:text-blue-500 dark:text-slate-400 dark:hover:text-blue-400 transition-colors">
+                                <${IconSettings} />
+                            </button>
+                        </div>
                     </div>
                     ${status === 'fetching' && html`<div className="loading-bar"></div>`}
                 </header>
@@ -758,40 +751,34 @@
 
         const FilterBar = ({ categories, activeCategory, onSelectCategory, uiStrings }) => {
             return html`
-                <div className="sticky top-[53px] z-40 bg-white dark:bg-slate-900 border-b border-gray-100 dark:border-slate-800 py-2 px-4 flex gap-2 overflow-x-auto hide-scrollbar">
-                    <button
-                        onClick=${() => onSelectCategory('ALL')}
-                        className=${`whitespace-nowrap px-3 py-1 rounded text-xs font-medium ${
-                            activeCategory === 'ALL'
-                            ? 'bg-blue-600 text-white'
-                            : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700'
-                        }`}
-                    >
-                        ${uiStrings.filter_all}
-                    </button>
-                    ${categories.map(cat => html`
+                <div className="sticky top-[57px] z-40 bg-white/90 dark:bg-slate-900/90 backdrop-blur border-b border-gray-100 dark:border-slate-800">
+                    <div className="flex gap-1 px-4 py-2 overflow-x-auto hide-scrollbar">
                         <button
-                            key=${cat}
-                            onClick=${() => onSelectCategory(cat)}
-                            className=${`whitespace-nowrap px-3 py-1 rounded text-xs font-medium ${
-                                activeCategory === cat
-                                ? 'bg-blue-600 text-white'
-                                : 'bg-gray-100 dark:bg-slate-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-slate-700'
-                            }`}
+                            onClick=${() => onSelectCategory('ALL')}
+                            className=${`shrink-0 text-xs px-3 py-1 rounded-full transition-colors ${activeCategory === 'ALL' ? 'bg-blue-600 text-white font-medium' : 'bg-gray-100 text-gray-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700'}`}
                         >
-                            ${cat}
+                            ${uiStrings.filter_all}
                         </button>
-                    `)}
+                        ${categories.map(cat => html`
+                            <button
+                                key=${cat}
+                                onClick=${() => onSelectCategory(cat)}
+                                className=${`shrink-0 text-xs px-3 py-1 rounded-full transition-colors ${activeCategory === cat ? 'bg-blue-600 text-white font-medium' : 'bg-gray-100 text-gray-600 dark:bg-slate-800 dark:text-slate-400 hover:bg-gray-200 dark:hover:bg-slate-700'}`}
+                            >
+                                ${cat}
+                            </button>
+                        `)}
+                    </div>
                 </div>
             `;
         };
 
-        // v2.2: NewsCard with auto-translate and auto-summary support
         const NewsCard = ({ item, translation, summaryText, aiState, onTranslate, onRetryTranslate, onRetrySummary, autoTranslate, showSummary, uiStrings }) => {
             const hasTranslation = translation && !translation.startsWith(AI_ERROR_PREFIX);
             const hasTranslationError = translation && translation.startsWith(AI_ERROR_PREFIX);
             const hasSummaryError = summaryText && summaryText.startsWith(AI_ERROR_PREFIX);
             const hasSummary = summaryText && !summaryText.startsWith(AI_ERROR_PREFIX);
+            const isTranslating = aiState === 'translating';
 
             // Display title: if auto-translate is on and we have a valid translation, show it; otherwise original
             const displayTitle = (autoTranslate && hasTranslation) ? translation : item.content;
@@ -818,15 +805,18 @@
                                     className="text-[10px] px-1.5 py-0.5 rounded bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400 border border-purple-100 dark:border-purple-900/50 hover:bg-purple-100 dark:hover:bg-purple-900/40 shrink-0"
                                     title=${uiStrings.translate}
                                 >
-                                    ${aiState === 'translating' ? html`<${IconLoader} />` : uiStrings.translate_btn}
+                                    ${isTranslating ? html`<${IconLoader} />` : uiStrings.translate_btn}
                                 </button>
                             `}
                         </div>
                         <a href=${item.url} target="_blank" rel="noopener noreferrer" className="no-underline">
-                            <h2 className=${`text-base leading-snug font-medium
+                            <h2 className=${`text-base leading-snug font-medium inline
                                 ${item.important ? 'text-red-700 dark:text-red-400 font-bold' : 'text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-400'}`}>
                                 ${displayTitle}
                             </h2>
+                            ${autoTranslate && isTranslating && html`
+                                <span className="title-loader"></span>
+                            `}
                         </a>
                         ${hasTranslationError && html`
                             <span className="retry-link" onClick=${(e) => { e.preventDefault(); e.stopPropagation(); onRetryTranslate(item); }}>${uiStrings.retry_translate}</span>
@@ -967,8 +957,7 @@
                     theme: theme,
                     autoTranslate: autoTranslate,
                     showSummary: showSummary,
-                    aiCacheLimit: aiCacheLimit,
-                    translations: translationsRef.current
+                    aiCacheLimit: aiCacheLimit
                 };
                 const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportData, null, 2));
                 const downloadAnchorNode = document.createElement('a');
@@ -1197,31 +1186,19 @@
                                         <div className="flex gap-2">
                                             <button
                                                 onClick=${() => setTheme('light')}
-                                                className=${`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border ${
-                                                    theme === 'light'
-                                                        ? 'bg-blue-600 text-white border-blue-600'
-                                                        : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700'
-                                                }`}
+                                                className=${`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border ${theme === 'light' ? 'bg-blue-50 border-blue-300 text-blue-700 dark:bg-blue-900/20 dark:border-blue-700 dark:text-blue-400' : 'bg-white border-gray-300 text-gray-600 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400'}`}
                                             >
                                                 <${IconSun} /> ${strings.theme_light}
                                             </button>
                                             <button
                                                 onClick=${() => setTheme('dark')}
-                                                className=${`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border ${
-                                                    theme === 'dark'
-                                                        ? 'bg-blue-600 text-white border-blue-600'
-                                                        : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700'
-                                                }`}
+                                                className=${`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border ${theme === 'dark' ? 'bg-blue-50 border-blue-300 text-blue-700 dark:bg-blue-900/20 dark:border-blue-700 dark:text-blue-400' : 'bg-white border-gray-300 text-gray-600 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400'}`}
                                             >
                                                 <${IconMoon} /> ${strings.theme_dark}
                                             </button>
                                             <button
                                                 onClick=${() => setTheme('system')}
-                                                className=${`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border ${
-                                                    theme === 'system'
-                                                        ? 'bg-blue-600 text-white border-blue-600'
-                                                        : 'bg-white dark:bg-slate-800 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-slate-600 hover:bg-gray-50 dark:hover:bg-slate-700'
-                                                }`}
+                                                className=${`flex items-center gap-1.5 px-3 py-1.5 rounded text-xs font-medium border ${theme === 'system' ? 'bg-blue-50 border-blue-300 text-blue-700 dark:bg-blue-900/20 dark:border-blue-700 dark:text-blue-400' : 'bg-white border-gray-300 text-gray-600 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400'}`}
                                             >
                                                 <${IconMonitor} /> ${strings.theme_system}
                                             </button>
@@ -1229,193 +1206,118 @@
                                     </div>
                                     <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
                                         <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.notif_label}</span>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-xs text-gray-500">${notifications ? strings.notif_on : strings.notif_off}</span>
-                                            <${ToggleSwitch}
-                                                checked=${notifications}
-                                                onChange=${toggleNotifications}
-                                            />
-                                        </div>
+                                        <button
+                                            onClick=${toggleNotifications}
+                                            className=${`text-xs font-medium px-3 py-1 rounded border ${notifications ? 'bg-green-50 border-green-300 text-green-700 dark:bg-green-900/20 dark:border-green-700 dark:text-green-400' : 'bg-gray-100 border-gray-300 text-gray-600 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400'}`}
+                                        >
+                                            ${notifications ? strings.notif_on : strings.notif_off}
+                                        </button>
                                     </div>
                                 </div>
                             `}
 
                             ${activeTab === 'ai' && html`
                                 <div className="space-y-4">
-                                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
-                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.ai_lang_and_target}</span>
-                                        <select
-                                            value=${uiLang}
-                                            onChange=${(e) => setUiLang(e.target.value)}
-                                            className="bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-gray-300 rounded px-2 py-1 outline-none border border-gray-300 dark:border-slate-600"
-                                        >
-                                            ${langOptions.map(opt => html`
-                                                <option key=${opt.value} value=${opt.value}>${opt.label}</option>
+                                    <div className="p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
+                                        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">${strings.ai_settings}</h3>
+                                        <div className="space-y-3">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-sm text-slate-700 dark:text-slate-200">${strings.ai_provider}</span>
+                                                <select
+                                                    value=${aiProvider}
+                                                    onChange=${(e) => setAiProvider(e.target.value)}
+                                                    className="bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-gray-300 rounded px-2 py-1 outline-none border border-gray-300 dark:border-slate-600"
+                                                >
+                                                    <option value="glm-4-flash">GLM-4 Flash</option>
+                                                    <option value="gemini-2.0-flash">Gemini 2.0 Flash</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="text-sm text-slate-700 dark:text-slate-200 flex items-center gap-1.5 mb-1">
+                                                    <${IconKey} /> ${strings.ai_apikey}
+                                                </label>
+                                                <div className="flex gap-1">
+                                                    <input
+                                                        type=${showApiKey ? 'text' : 'password'}
+                                                        value=${aiApiKey}
+                                                        onChange=${(e) => setAiApiKey(e.target.value)}
+                                                        placeholder="sk-..."
+                                                        className="flex-1 text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500"
+                                                    />
+                                                    <button
+                                                        onClick=${() => setShowApiKey(!showApiKey)}
+                                                        className="p-2 text-gray-400 hover:text-gray-600"
+                                                    >
+                                                        ${showApiKey ? html`<${IconEyeOff} />` : html`<${IconEye} />`}
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label className="text-sm text-slate-700 dark:text-slate-200 flex items-center gap-1.5 mb-1">
+                                                    <${IconTranslate} /> ${strings.ai_endpoint}
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    value=${aiEndpoint}
+                                                    onChange=${(e) => setAiEndpoint(e.target.value)}
+                                                    placeholder=${strings.ai_endpoint_placeholder}
+                                                    className="w-full text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500"
+                                                />
+                                            </div>
+                                            <div className="flex items-center justify-between">
+                                                <div>
+                                                    <span className="text-sm text-slate-700 dark:text-slate-200">${strings.auto_translate}</span>
+                                                    <span className="text-[10px] text-gray-500 block">${autoTranslate ? strings.auto_translate_on : strings.auto_translate_off}</span>
+                                                </div>
+                                                <${ToggleSwitch}
+                                                    checked=${autoTranslate}
+                                                    onChange=${() => setAutoTranslate(!autoTranslate)}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
+                                        <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-3 uppercase tracking-wider">${strings.cache_limit}</h3>
+                                        <div className="flex gap-2 flex-wrap">
+                                            ${['100', '500', '1000', 'all'].map(val => html`
+                                                <button
+                                                    key=${val}
+                                                    onClick=${() => setAiCacheLimit(val)}
+                                                    className=${`text-xs px-3 py-1.5 rounded border ${aiCacheLimit === val ? 'bg-blue-50 border-blue-300 text-blue-700 dark:bg-blue-900/20 dark:border-blue-700 dark:text-blue-400' : 'bg-white border-gray-300 text-gray-600 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-400'}`}
+                                                >
+                                                    ${strings['cache_' + (val === 'all' ? 'all' : val)]}
+                                                </button>
                                             `)}
-                                        </select>
-                                    </div>
-                                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
-                                        <span className="text-sm text-slate-700 dark:text-slate-200">${strings.auto_translate}</span>
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-[10px] text-gray-500">${autoTranslate ? strings.auto_translate_on : strings.auto_translate_off}</span>
-                                            <${ToggleSwitch}
-                                                checked=${autoTranslate}
-                                                onChange=${() => setAutoTranslate(!autoTranslate)}
-                                            />
                                         </div>
-                                    </div>
-                                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
-                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.ai_provider}</span>
-                                        <select
-                                            value=${aiProvider}
-                                            onChange=${(e) => setAiProvider(e.target.value)}
-                                            className="bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-gray-300 rounded px-2 py-1 outline-none border border-gray-300 dark:border-slate-600"
-                                        >
-                                            <option value="glm-4-flash">GLM-4-flash</option>
-                                            <option value="gemini-2.0-flash">Gemini-2.0-flash</option>
-                                        </select>
-                                    </div>
-                                    <div className="p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
-                                        <div className="flex items-center justify-between mb-1.5">
-                                            <span className="text-sm text-slate-700 dark:text-slate-200 flex items-center gap-1.5">
-                                                <span className="text-amber-500"><${IconKey} /></span>
-                                                ${strings.ai_apikey}
-                                            </span>
-                                            <button
-                                                onClick=${() => setShowApiKey(!showApiKey)}
-                                                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
-                                            >
-                                                ${showApiKey ? html`<${IconEyeOff} />` : html`<${IconEye} />`}
-                                            </button>
-                                        </div>
-                                        <input
-                                            type=${showApiKey ? 'text' : 'password'}
-                                            value=${aiApiKey}
-                                            onChange=${(e) => setAiApiKey(e.target.value)}
-                                            placeholder=${strings.ai_apikey}
-                                            className="w-full text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500 font-mono"
-                                        />
-                                    </div>
-                                    <div className="p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
-                                        <span className="text-sm text-slate-700 dark:text-slate-200 block mb-1.5">${strings.ai_endpoint}</span>
-                                        <input
-                                            type="text"
-                                            value=${aiEndpoint}
-                                            onChange=${(e) => setAiEndpoint(e.target.value)}
-                                            placeholder=${strings.ai_endpoint_placeholder}
-                                            className="w-full text-xs p-2 rounded border dark:bg-slate-800 dark:border-slate-600 dark:text-white focus:outline-none focus:border-blue-500 font-mono"
-                                        />
-                                    </div>
-                                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
-                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.cache_limit}</span>
-                                        <select
-                                            value=${aiCacheLimit}
-                                            onChange=${(e) => setAiCacheLimit(e.target.value)}
-                                            className="bg-white dark:bg-slate-800 text-xs text-slate-700 dark:text-gray-300 rounded px-2 py-1 outline-none border border-gray-300 dark:border-slate-600"
-                                        >
-                                            <option value="100">${strings.cache_100}</option>
-                                            <option value="500">${strings.cache_500}</option>
-                                            <option value="1000">${strings.cache_1000}</option>
-                                            <option value="all">${strings.cache_all}</option>
-                                        </select>
-                                    </div>
-                                    <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-slate-900 rounded border border-gray-200 dark:border-slate-700">
-                                        <span className="text-sm font-medium text-slate-700 dark:text-slate-200">${strings.clear_summary_cache}</span>
                                         <button
-                                            onClick=${() => { if (confirm(strings.clear_summary_cache_confirm)) onClearSummaryCache(); }}
-                                            className="text-xs px-3 py-1 rounded bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50 hover:bg-red-100 dark:hover:bg-red-900/40"
-                                        >${strings.clear_summary_cache}</button>
+                                            onClick=${() => {
+                                                if (window.confirm(strings.clear_summary_cache_confirm)) {
+                                                    onClearSummaryCache();
+                                                }
+                                            }}
+                                            className="mt-3 text-xs px-3 py-1.5 rounded border border-red-200 bg-red-50 text-red-600 dark:bg-red-900/20 dark:border-red-900/50 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30"
+                                        >
+                                            ${strings.clear_summary_cache}
+                                        </button>
                                     </div>
                                 </div>
                             `}
 
                             ${activeTab === 'readme' && html`
                                 <div className="space-y-3">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <span className="text-blue-500"><${IconBookOpen} /></span>
-                                        <h3 className="text-sm font-bold text-slate-700 dark:text-slate-200">Global Wire ${APP_VERSION}</h3>
-                                    </div>
-                                    <${ReadmeSection} title=${uiLang === 'zh-CN' ? '产品用途' : uiLang === 'zh-TW' ? '產品用途' : 'Product Purpose'} defaultOpen=${true}>
-                                        ${uiLang === 'zh-CN' ? html`
-                                            <div>
-                                                <p><strong>Global Wire</strong> 是一个轻量级的全球突发新闻聚合器，无需后端服务器，纯前端运行。</p>
-                                                <p>它从全球 40+ 个 RSS 新闻源实时抓取新闻，通过 CORS 代理访问，支持中国内地、香港、台湾、日本、韩国、新加坡、欧洲、美国等地区的主流媒体。</p>
-                                                <p>所有数据存储在浏览器 localStorage 中，无需注册、无追踪、无服务端。可作为静态页面部署在 GitHub Pages 或 Cloudflare Workers 上。</p>
-                                                <p>v2.3 取消摘要时自动收起；摘要限流（每批10条，滚动触发，逐条处理）；清空摘要缓存按钮；改进文章正文抓取（更多CSS选择器+诊断日志）。</p>
-                                            </div>
-                                        ` : uiLang === 'zh-TW' ? html`
-                                            <div>
-                                                <p><strong>Global Wire</strong> 是一個輕量級的全球突發新聞聚合器，無需後端伺服器，純前端運行。</p>
-                                                <p>它從全球 40+ 個 RSS 新聞源即時抓取新聞，透過 CORS 代理存取，支援中國內地、香港、台灣、日本、韓國、新加坡、歐洲、美國等地區的主流媒體。</p>
-                                                <p>所有資料儲存在瀏覽器 localStorage 中，無需註冊、無追蹤、無伺服器端。可作為靜態頁面部署在 GitHub Pages 或 Cloudflare Workers 上。</p>
-                                                <p>v2.3 取消摘要時自動收起；摘要限流（每批10條，滾動觸發，逐條處理）；清空摘要快取按鈕；改進文章正文抓取。</p>
-                                            </div>
-                                        ` : html`
-                                            <div>
-                                                <p><strong>Global Wire</strong> is a lightweight global breaking news aggregator that runs entirely in the browser with no backend server.</p>
-                                                <p>It fetches news in real-time from 40+ RSS sources worldwide via CORS proxies, covering mainstream media from Mainland China, Hong Kong, Taiwan, Japan, South Korea, Singapore, Europe, and the US.</p>
-                                                <p>All data is stored in browser localStorage. No registration, no tracking, no server side. Can be deployed as a static page on GitHub Pages or Cloudflare Workers.</p>
-                                                <p>v2.3 adds summary collapse on toggle-off; summary throttling (max 10 batch, scroll-triggered, one-at-a-time); clear summary cache button; improved article content fetching with more selectors and diagnostic logging.</p>
-                                            </div>
-                                        `}
-                                    <//>
-                                    <${ReadmeSection} title=${uiLang === 'zh-CN' ? '更新日志' : uiLang === 'zh-TW' ? '更新日誌' : 'Changelog'}>
-                                        ${uiLang === 'zh-CN' ? html`
-                                            <div>
-                                                <p><strong>v2.3</strong> - 取消摘要时自动收起；摘要限流（10条/批，滚动触发，逐条处理）；清空摘要缓存按钮；改进正文抓取</p>
-                                                <p><strong>v2.2</strong> - 摘要改用turndown转markdown后AI总结；移除"摘"按钮；自动翻译不附带原文；修复新条目自动翻译；toast漂移淡出动画</p>
-                                                <p><strong>v2.0</strong> - AI翻译和摘要功能（GLM-4-flash/Gemini-2.0-flash）；i18n（简体中文/English/繁体中文）；更新banner移至时间线区域；修复浏览器通知；设置图标改回齿轮</p>
-                                                <p><strong>v1.3</strong> - 修复浅色模式崩溃；三态主题；修复htm兼容性（HTML注释和Fragment简写）</p>
-                                                <p><strong>v1.2</strong> - 移除Babel(省800KB)改用htm；移除Lucide改用内联SVG；RSS竞速；并发获取+渐进渲染</p>
-                                                <p><strong>v1.1</strong> - 更新banner；桌面通知；设置页README/changelog</p>
-                                                <p><strong>v1.0</strong> - 初始版本，全球突发新闻聚合器</p>
-                                            </div>
-                                        ` : uiLang === 'zh-TW' ? html`
-                                            <div>
-                                                <p><strong>v2.3</strong> - 取消摘要時自動收起；摘要限流（10條/批，滾動觸發，逐條處理）；清空摘要快取按鈕；改進正文抓取</p>
-                                                <p><strong>v2.2</strong> - 摘要改用turndown轉markdown後AI總結；移除「摘」按鈕；自動翻譯不附帶原文；修復新條目自動翻譯；toast漂移淡出動畫</p>
-                                                <p><strong>v2.0</strong> - AI翻譯和摘要功能；i18n；更新banner移至時間線區域；修復瀏覽器通知</p>
-                                                <p><strong>v1.3</strong> - 修復淺色模式崩潰；三態主題；修復htm相容性</p>
-                                                <p><strong>v1.2</strong> - 移除Babel改用htm；RSS競速；併發獲取</p>
-                                                <p><strong>v1.1</strong> - 更新banner；桌面通知；設定頁</p>
-                                                <p><strong>v1.0</strong> - 初始版本</p>
-                                            </div>
-                                        ` : html`
-                                            <div>
-                                                <p><strong>v2.3</strong> - Summary collapse on toggle-off; summary throttling (10/batch, scroll-triggered, sequential); clear cache button; improved article fetching</p>
-                                                <p><strong>v2.2</strong> - Summary uses turndown for HTML-to-markdown before AI; removed per-entry summary button; auto-translate no longer shows original; fixed auto-translate for new entries; toast drift-out animation</p>
-                                                <p><strong>v2.0</strong> - AI translate/summary; i18n; banner moved to timeline; fixed notifications</p>
-                                                <p><strong>v1.3</strong> - Fixed light mode crash; three-state theme; htm compatibility fixes</p>
-                                                <p><strong>v1.2</strong> - Removed Babel (htm); RSS racing; concurrent fetch</p>
-                                                <p><strong>v1.1</strong> - Update banner; desktop notifications; settings page</p>
-                                                <p><strong>v1.0</strong> - Initial release</p>
-                                            </div>
-                                        `}
-                                    <//>
-                                    <${ReadmeSection} title=${uiLang === 'zh-CN' ? 'AI Agent 调试笔记' : uiLang === 'zh-TW' ? 'AI Agent 偵錯筆記' : 'AI Agent Debug Notes'}>
-                                        ${uiLang === 'zh-CN' ? html`
-                                            <div>
-                                                <p><strong>htm 限制：</strong>不支持 HTML 注释 (-- 语法)，不支持 Fragment 简写 (尖括号语法)，否则 InvalidCharacterError 崩溃白屏。</p>
-                                                <p><strong>部署流程：</strong>push 到 GitHub + 调用 Cloudflare Worker API 更新。两者缺一不可。</p>
-                                                <p><strong>localStorage keys：</strong>theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v2</p>
-                                                <p><strong>v2.5 架构：</strong>摘要限流：最多10条同时处理（summaryInFlightRef），逐条排队（aiQueueRef），滚动触发（IntersectionObserver + data-item-id）。取消摘要时所有摘要立即隐藏。设置中可清空摘要缓存。文章正文抓取增加更多CSS选择器和诊断日志。</p>
-                                            </div>
-                                        ` : uiLang === 'zh-TW' ? html`
-                                            <div>
-                                                <p><strong>htm 限制：</strong>不支援 HTML 註解、Fragment 簡寫，否則 InvalidCharacterError 崩潰白畫面。</p>
-                                                <p><strong>部署流程：</strong>push 到 GitHub + 呼叫 Cloudflare Worker API 更新。</p>
-                                                <p><strong>localStorage keys：</strong>theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v2</p>
-                                                <p><strong>v2.5 架構：</strong>摘要限流：最多10條同時處理，逐條排隊，滾動觸發（IntersectionObserver）。取消摘要時立即隱藏。設定中可清空摘要快取。</p>
-                                            </div>
-                                        ` : html`
-                                            <div>
-                                                <p><strong>htm limitations:</strong> No HTML comments, no Fragment shorthand, otherwise InvalidCharacterError crash.</p>
-                                                <p><strong>Deploy flow:</strong> push to GitHub + update Cloudflare Worker API.</p>
-                                                <p><strong>localStorage keys:</strong> theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v2</p>
-                                                <p><strong>v2.5 architecture:</strong> Summary throttling: max 10 in-flight (summaryInFlightRef), one-at-a-time queue (aiQueueRef), scroll-triggered (IntersectionObserver + data-item-id). Summary collapses on toggle-off. Clear summary cache button in settings. Article content fetching uses more CSS selectors and diagnostic logging.</p>
-                                            </div>
-                                        `}
-                                    <//>
+                                    <${ReadmeSection} title="Global Wire ${APP_VERSION}" defaultOpen=${true}>
+                                        <p>7x24 全球突发新闻聚合器，通过 RSS 源实时聚合来自中国大陆、香港、台湾、日本、韩国、新加坡、欧洲、美国的最新资讯。</p>
+                                    </${ReadmeSection}>
+                                    <${ReadmeSection} title="AI 功能">
+                                        <p>支持 GLM-4 Flash 和 Gemini 2.0 Flash。配置 API Key 后可使用自动翻译标题和 AI 摘要功能。翻译和摘要结果缓存在 localStorage 中，避免重复请求。</p>
+                                    </${ReadmeSection}>
+                                    <${ReadmeSection} title="v2.6 更新">
+                                        <p>更新机制：标签页活跃时，新内容不自动汇入时间线，改为显示"有x条新消息，点击更新"提示，点击后汇入并开始摘要前10条。自动翻译标题时显示加载动画。</p>
+                                    </${ReadmeSection}>
+                                    <${ReadmeSection} title="技术说明">
+                                        <p>使用 React 18 + htm 构建，Tailwind CSS 样式，Turndown.js 将 HTML 转 Markdown。通过 CORS 代理获取 RSS 源。单文件架构，部署于 GitHub Pages + Cloudflare Workers。</p>
+                                        <p><strong>localStorage keys:</strong> theme, ui_lang, news_feeds_config, news_cache_v3, ai_provider, ai_api_key, ai_endpoint, ai_auto_translate, ai_show_summary, ai_cache_limit, ai_translations_v1, ai_summaries_v2</p>
+                                    </${ReadmeSection}>
                                 </div>
                             `}
                         </div>
@@ -1440,6 +1342,10 @@
             const [bannerState, setBannerState] = useState('hidden');
             const [updateCount, setUpdateCount] = useState(0);
             const [bannerProgress, setBannerProgress] = useState({ completed: 0, total: 0 });
+
+            // v2.6: Pending items buffer - holds new items until user clicks to merge
+            const pendingItemsRef = useRef([]);
+            const [, setPendingTick] = useState(0);
 
             // v2.1: AI settings
             const [aiProvider, setAiProvider] = useState('glm-4-flash');
@@ -1597,13 +1503,44 @@
                 }
             }, [notifications, uiLang]);
 
+            // v2.6: handleBannerExpand - merge pending items and trigger summary for first 10
             const handleBannerExpand = useCallback(() => {
+                const items = pendingItemsRef.current;
+                if (items.length > 0) {
+                    setNews(prev => {
+                        const currentIds = new Set(prev.map(n => n.id));
+                        const unique = items.filter(item => !currentIds.has(item.id));
+                        if (unique.length > 0) {
+                            const combined = [...unique, ...prev]
+                                .sort((a, b) => b.timestamp - a.timestamp)
+                                .slice(0, MAX_ITEMS);
+                            localStorage.setItem('news_cache_v3', JSON.stringify(combined));
+                            return combined;
+                        }
+                        return prev;
+                    });
+
+                    // Trigger summary for first 10 new items (will be picked up by the news useEffect)
+                    if (showSummary && aiApiKey) {
+                        const itemsToSummarize = items.slice(0, 10);
+                        // Small delay to ensure news state is updated before scheduling
+                        setTimeout(() => {
+                            itemsToSummarize.forEach(item => {
+                                handleSummaryRef.current(item, !!summariesRef.current[item.id]);
+                            });
+                        }, 300);
+                    }
+
+                    pendingItemsRef.current = [];
+                    setPendingTick(t => t + 1);
+                }
+
                 setBannerState('updated');
                 if (bannerDismissTimerRef.current) clearTimeout(bannerDismissTimerRef.current);
                 bannerDismissTimerRef.current = setTimeout(() => { setBannerState('hidden'); }, 2000);
-            }, []);
+            }, [showSummary, aiApiKey]);
 
-            // v2.3: AI processing queue — one-at-a-time sequential processing
+            // v2.3: AI processing queue
             const processAiQueue = useCallback(async () => {
                 if (aiProcessingRef.current || aiQueueRef.current.length === 0) return;
                 aiProcessingRef.current = true;
@@ -1625,7 +1562,7 @@
                 processAiQueue();
             }, [processAiQueue]);
 
-            // v2.3: Summary batch tracking — max 10 in-flight summaries
+            // v2.3: Summary batch tracking
             const summaryInFlightRef = useRef(0);
             const MAX_SUMMARY_INFLIGHT = 10;
 
@@ -1657,13 +1594,12 @@
                 });
             }, [aiProvider, aiApiKey, aiEndpoint, uiLang, aiCacheLimit, triggerAiRerender, enqueueAiTask]);
 
-            // v2.4: Summary handler — use RSS content first, then fetch article as fallback
+            // v2.4: Summary handler
             const handleSummary = useCallback((item, isRetry) => {
                 if (!aiApiKey) return;
                 const existing = summariesRef.current[item.id];
                 if (!isRetry && existing && !existing.startsWith(AI_ERROR_PREFIX)) return;
                 if (aiStatesRef.current[item.id] === 'summarizing') return;
-                // Throttle: max 10 in-flight summary requests
                 if (summaryInFlightRef.current >= MAX_SUMMARY_INFLIGHT) return;
 
                 summaryInFlightRef.current++;
@@ -1675,7 +1611,7 @@
                         let articleMarkdown = '';
                         let contentSource = 'none';
 
-                        // === Step 1: Try RSS feed's own content (most reliable) ===
+                        // Step 1: Try RSS feed's own content
                         const rssContent = item.contentEncoded || item.rssDescription || '';
 
                         if (rssContent) {
@@ -1687,22 +1623,17 @@
                                 });
                                 turndownService.remove(['script', 'style', 'nav', 'footer', 'header', 'iframe', 'noscript', 'aside', '.ad', '.advertisement', '.sidebar', '.comments', '.social-share', '.related', '#comments']);
 
-                                // Check if it's HTML content (contains tags)
                                 if (rssContent.includes('<') && rssContent.includes('>')) {
                                     const doc = new DOMParser().parseFromString(rssContent, 'text/html');
                                     articleMarkdown = turndownService.turndown(doc.body);
                                 } else {
-                                    // Plain text — use directly
                                     articleMarkdown = rssContent;
                                 }
                                 articleMarkdown = articleMarkdown.replace(/\n{3,}/g, '\n\n').trim();
 
-                                // Skip if RSS description is just a duplicate of the title
                                 const titleNorm = item.content.trim().toLowerCase().replace(/\s+/g, ' ');
                                 const mdNorm = articleMarkdown.trim().toLowerCase().replace(/\s+/g, ' ');
-                                // Only skip if description is very short AND matches title closely
                                 if (mdNorm.length > 0 && mdNorm.length < titleNorm.length + 20 && (titleNorm === mdNorm || titleNorm.includes(mdNorm))) {
-                                    // Description is just a repeat of the title — not useful
                                     articleMarkdown = '';
                                     contentSource = 'rss:dup-title';
                                 } else if (articleMarkdown.length > 4000) {
@@ -1713,11 +1644,10 @@
                                 }
                             } catch(e) {
                                 console.warn('RSS content turndown failed:', e);
-                                // Fall through to article fetch
                             }
                         }
 
-                        // === Step 2: If RSS content is insufficient, try fetching article via proxy ===
+                        // Step 2: If RSS content is insufficient, try fetching article via proxy
                         if (articleMarkdown.length < 80) {
                             let fetchLog = '';
                             try {
@@ -1741,7 +1671,6 @@
                                         if (response.ok) {
                                             let htmlText = '';
                                             if (proxyConfig.type === 'json') {
-                                                // allorigins /get endpoint returns JSON wrapper
                                                 const jsonData = await response.json();
                                                 htmlText = jsonData.contents || '';
                                             } else {
@@ -1753,7 +1682,6 @@
 
                                             const doc = new DOMParser().parseFromString(htmlText, 'text/html');
 
-                                            // Smart article element detection
                                             const selectors = ['article', '[role="article"]', '.article-content', '.post-content', '.entry-content', '.article_body', '.news-content', '.story-body', '.article__body', '.post-body', '.content-body', '#article-body', '.main-content', '#content', '.content'];
                                             let articleEl = null;
                                             for (const sel of selectors) {
@@ -1766,7 +1694,6 @@
                                             if (articleEl) {
                                                 const fetchedMd = turndownService.turndown(articleEl);
                                                 const trimmedMd = fetchedMd.replace(/\n{3,}/g, '\n\n').trim().substring(0, 4000);
-                                                // Only use fetched content if it's better than what we have
                                                 if (trimmedMd.length > articleMarkdown.length) {
                                                     articleMarkdown = trimmedMd;
                                                     contentSource = 'fetch:' + fetchLog.trim() + '(' + articleMarkdown.length + ')';
@@ -1790,7 +1717,6 @@
 
                         let messages;
                         if (articleMarkdown && articleMarkdown.length > 30) {
-                            // Use different prompt based on content length
                             const promptTemplate = articleMarkdown.length > 200
                                 ? 'Summarize this news article in approximately 140 characters in {lang}. Focus on the key facts: who, what, when, where, why. Keep key numbers. Output only the summary.'
                                 : 'Based on the limited content available, write a brief summary in approximately 100 characters in {lang}. Focus on the key point. Output only the summary.';
@@ -1799,7 +1725,6 @@
                                 { role: 'user', content: articleMarkdown }
                             ];
                         } else {
-                            // Absolutely no content available — mark as error (let finally block handle cleanup)
                             summariesRef.current[item.id] = AI_ERROR_PREFIX + 'Unable to fetch article content (mdLen=' + articleMarkdown.length + ')';
                             saveAiCache('ai_summaries_v2', summariesRef.current, aiCacheLimit);
                             triggerAiRerender();
@@ -1816,30 +1741,26 @@
                         summaryInFlightRef.current--;
                         saveAiCache('ai_summaries_v2', summariesRef.current, aiCacheLimit);
                         triggerAiRerender();
-                        // After each summary completes, try to schedule more via ref
                         setTimeout(() => { if (scheduleNextBatchRef.current) scheduleNextBatchRef.current(); }, 50);
                     }
                 });
             }, [aiProvider, aiApiKey, aiEndpoint, uiLang, aiCacheLimit, triggerAiRerender, enqueueAiTask]);
 
-            // Ref to break circular dep: handleSummary -> scheduleNextBatch -> handleSummary
+            // Ref to break circular dep
             const scheduleNextBatchRef = useRef(null);
+            const handleSummaryRef = useRef(null);
+            handleSummaryRef.current = handleSummary;
 
-            // Schedule next batch of summaries (called after each summary completes via ref)
+            // Schedule next batch of summaries
             const scheduleNextSummaryBatch = useCallback(() => {
                 if (!showSummary || !aiApiKey) return;
-                // Only schedule items that are NOT currently in-progress and NOT already completed
                 const needed = news.filter(item => {
                     const existing = summariesRef.current[item.id];
                     const state = aiStatesRef.current[item.id];
-                    // Skip if already has a valid summary
                     if (existing && !existing.startsWith(AI_ERROR_PREFIX)) return false;
-                    // Skip if currently being processed
                     if (state === 'summarizing') return false;
-                    // Needs summary: no result or error result
                     return true;
                 });
-                // Sort: prioritize items without errors (never tried) over error items
                 needed.sort((a, b) => {
                     const aErr = summariesRef.current[a.id]?.startsWith(AI_ERROR_PREFIX) ? 1 : 0;
                     const bErr = summariesRef.current[b.id]?.startsWith(AI_ERROR_PREFIX) ? 1 : 0;
@@ -1854,7 +1775,7 @@
 
             scheduleNextBatchRef.current = scheduleNextSummaryBatch;
 
-            // v2.3: Auto-translate when news items arrive (no batch limit for translate)
+            // Auto-translate when news items arrive
             useEffect(() => {
                 if (!aiApiKey || news.length === 0) return;
                 if (autoTranslate) {
@@ -1867,18 +1788,15 @@
                 }
             }, [news, autoTranslate, aiApiKey, handleTranslate]);
 
-            // v2.5: Auto-summary — schedule when news arrives or summary toggled on
+            // Auto-summary
             useEffect(() => {
                 if (!showSummary || !aiApiKey || news.length === 0) return;
-                // Use setTimeout to ensure scheduleNextSummaryBatch is initialized
                 setTimeout(() => { if (scheduleNextBatchRef.current) scheduleNextBatchRef.current(); }, 200);
             }, [news, showSummary, aiApiKey]);
 
-            // v2.5: When summary is toggled OFF, cancel all in-progress summaries
+            // When summary is toggled OFF, cancel all in-progress summaries
             useEffect(() => {
                 if (showSummary) return;
-                // Reset all summarizing states — the in-flight tasks will still complete
-                // but their results won't be visible until summary is toggled on again
                 Object.keys(aiStatesRef.current).forEach(key => {
                     if (aiStatesRef.current[key] === 'summarizing') {
                         aiStatesRef.current[key] = null;
@@ -1888,8 +1806,7 @@
                 triggerAiRerender();
             }, [showSummary, triggerAiRerender]);
 
-            // v2.5: IntersectionObserver — trigger summary for entries visible on scroll
-            // Only create/destroy observer when showSummary or aiApiKey changes, NOT on every news update
+            // IntersectionObserver for lazy summary loading
             const summaryObserverRef = useRef(null);
             const observedEntriesRef = useRef(new Set());
 
@@ -1923,7 +1840,6 @@
                     }, { rootMargin: '200px' });
                 }
 
-                // Observe new elements that haven't been observed yet
                 const elements = document.querySelectorAll('[data-item-id]');
                 elements.forEach(el => {
                     const itemId = el.getAttribute('data-item-id');
@@ -1932,11 +1848,9 @@
                         summaryObserverRef.current.observe(el);
                     }
                 });
-
-                // No cleanup function — observer persists across news updates
             }, [showSummary, aiApiKey, news]);
 
-            // v2.1: Retry failed items
+            // Retry handlers
             const handleRetryTranslate = useCallback((item) => {
                 handleTranslate(item, true);
             }, [handleTranslate]);
@@ -1945,7 +1859,7 @@
                 handleSummary(item, true);
             }, [handleSummary]);
 
-            // v2.3: Clear summary cache
+            // Clear summary cache
             const handleClearSummaryCache = useCallback(() => {
                 summariesRef.current = {};
                 localStorage.removeItem('ai_summaries_v1');
@@ -1953,7 +1867,7 @@
                 triggerAiRerender();
             }, [triggerAiRerender]);
 
-            // RSS Racing
+            // v2.6: RSS Racing with pending buffer
             const fetchData = async () => {
                 if (feeds.length === 0) return;
                 setStatus('fetching');
@@ -1964,8 +1878,13 @@
                 const totalFeeds = active.length;
                 let completedCount = 0;
                 let successCount = 0;
-                const prevIds = new Set(news.map(n => n.id));
-                let newItemsCount = 0;
+
+                // Track current IDs (from both displayed news and pending items)
+                const currentIds = new Set(news.map(n => n.id));
+                pendingItemsRef.current.forEach(item => currentIds.add(item.id));
+                const pendingIds = new Set(pendingItemsRef.current.map(n => n.id));
+
+                let allNewItems = [];
 
                 const promises = active.map(async (feed) => {
                     try {
@@ -1973,18 +1892,11 @@
                         const items = parseRSS(xml, feed);
                         successCount++;
                         if (items.length > 0) {
-                            setNews(prev => {
-                                const currentIds = new Set(prev.map(n => n.id));
-                                const unique = items.filter(item => !currentIds.has(item.id));
-                                if (unique.length > 0) {
-                                    const combined = [...unique, ...prev]
-                                        .sort((a, b) => b.timestamp - a.timestamp)
-                                        .slice(0, MAX_ITEMS);
-                                    localStorage.setItem('news_cache_v3', JSON.stringify(combined));
-                                    return combined;
-                                }
-                                return prev;
-                            });
+                            const unique = items.filter(item => !currentIds.has(item.id));
+                            if (unique.length > 0) {
+                                allNewItems.push(...unique);
+                                unique.forEach(item => currentIds.add(item.id));
+                            }
                         }
                     } catch(e) {}
                     completedCount++;
@@ -1993,26 +1905,54 @@
 
                 await Promise.allSettled(promises);
 
-                setNews(currentNews => {
-                    newItemsCount = currentNews.filter(n => !prevIds.has(n.id)).length;
-                    return currentNews;
-                });
-
                 setFetchStats({ total: totalFeeds, success: successCount });
                 setLastUpdated(Date.now());
                 setStatus(successCount > 0 ? 'idle' : 'error');
 
-                if (newItemsCount > 0) {
+                if (allNewItems.length > 0) {
+                    allNewItems.sort((a, b) => b.timestamp - a.timestamp);
+
                     const isVisible = document.visibilityState === 'visible';
                     if (isVisible) {
-                        setUpdateCount(newItemsCount);
+                        // v2.6: Buffer new items, don't merge yet
+                        pendingItemsRef.current = [...allNewItems, ...pendingItemsRef.current]
+                            .sort((a, b) => b.timestamp - a.timestamp);
+                        // Remove duplicates in pending buffer
+                        const seenIds = new Set();
+                        pendingItemsRef.current = pendingItemsRef.current.filter(item => {
+                            if (seenIds.has(item.id)) return false;
+                            seenIds.add(item.id);
+                            return true;
+                        });
+
+                        setUpdateCount(pendingItemsRef.current.length);
+                        setBannerState('available');
+                        setPendingTick(t => t + 1);
+                    } else {
+                        // Tab is not visible - auto-merge and send notification
+                        setNews(prev => {
+                            const prevIds = new Set(prev.map(n => n.id));
+                            const unique = allNewItems.filter(item => !prevIds.has(item.id));
+                            if (unique.length > 0) {
+                                const combined = [...unique, ...prev]
+                                    .sort((a, b) => b.timestamp - a.timestamp)
+                                    .slice(0, MAX_ITEMS);
+                                localStorage.setItem('news_cache_v3', JSON.stringify(combined));
+                                return combined;
+                            }
+                            return prev;
+                        });
+                        setBannerState('hidden');
+                        sendNotification(allNewItems.length);
+                    }
+                } else {
+                    // No new items, but still check if we had pending from before
+                    if (pendingItemsRef.current.length > 0) {
+                        setUpdateCount(pendingItemsRef.current.length);
                         setBannerState('available');
                     } else {
                         setBannerState('hidden');
-                        sendNotification(newItemsCount);
                     }
-                } else {
-                    setBannerState('hidden');
                     if (successCount === 0 && retryCount < 2) {
                         setStatus('error');
                     }
@@ -2037,12 +1977,11 @@
             const handleCloseSettings = () => {
                 setIsSettingsOpen(false);
 
-                // v2.1: If API key changed, retry all failed translations and summaries
+                // If API key changed, retry all failed translations and summaries
                 if (aiApiKey && aiApiKey !== prevApiKeyRef.current) {
                     const failedTransKeys = Object.keys(translationsRef.current).filter(k => translationsRef.current[k].startsWith(AI_ERROR_PREFIX));
                     const failedSummKeys = Object.keys(summariesRef.current).filter(k => summariesRef.current[k].startsWith(AI_ERROR_PREFIX));
 
-                    // Find matching news items for failed entries
                     news.forEach(item => {
                         if (failedTransKeys.includes(item.id)) {
                             handleRetryTranslate(item);
@@ -2189,5 +2128,4 @@
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(html`<${App} />`);
     </script>
-</body>
-</html>
+</body></html>

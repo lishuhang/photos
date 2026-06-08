@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>试水还是All in</title>
+<style>
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-35-Thin.woff') format('woff'); font-weight:100; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-55-Regular.woff') format('woff'); font-weight:400; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-65-Medium.woff') format('woff'); font-weight:500; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-85-Bold.woff') format('woff'); font-weight:700; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-115-Black.woff') format('woff'); font-weight:900; }
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: #050816;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'AlibabaPuHuiTi', sans-serif;
+}
+
+.canvas-wrap {
+  position: relative;
+  width: 450px;
+  height: 800px;
+  background: #0a0e27;
+  overflow: hidden;
+  margin: auto;
+}
+
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  height: 400px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  margin-bottom: 4px;
+  letter-spacing: 1px;
+}
+.subtitle {
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.bubble-chart {
+  position: relative;
+  width: 380px;
+  height: 260px;
+  margin: 0 auto;
+}
+
+/* Axis labels */
+.x-axis-label {
+  position: absolute;
+  bottom: -24px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: 9px;
+  color: rgba(255,255,255,0.4);
+}
+.x-label-left { color: #FF6B6B; font-weight: 500; }
+.x-label-right { color: #4ECDC4; font-weight: 500; }
+
+.y-axis-markers {
+  position: absolute;
+  left: -6px;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 8px;
+  color: rgba(255,255,255,0.3);
+}
+
+.bubble-track {
+  position: absolute;
+  left: 30px;
+  right: 10px;
+  top: 30px;
+  bottom: 30px;
+}
+
+/* Horizontal reference line */
+.bubble-track::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(255,255,255,0.08);
+}
+
+/* Vertical grid lines */
+.grid-v {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255,255,255,0.04);
+}
+
+.bubble {
+  position: absolute;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: bubblePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  cursor: default;
+  transition: transform 0.2s;
+}
+.bubble:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.bubble-name {
+  font-size: 8px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.bubble-val {
+  font-size: 7px;
+  color: rgba(255,255,255,0.7);
+  text-align: center;
+}
+
+@keyframes bubblePop {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+  60% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* Color based on commitment level */
+.bubble-low {
+  background: radial-gradient(circle at 35% 35%, rgba(255,107,107,0.35), rgba(255,107,107,0.12));
+  border: 1.5px solid rgba(255,107,107,0.5);
+}
+.bubble-mid {
+  background: radial-gradient(circle at 35% 35%, rgba(255,179,71,0.35), rgba(255,179,71,0.12));
+  border: 1.5px solid rgba(255,179,71,0.5);
+}
+.bubble-high {
+  background: radial-gradient(circle at 35% 35%, rgba(78,205,196,0.35), rgba(78,205,196,0.12));
+  border: 1.5px solid rgba(78,205,196,0.5);
+}
+
+/* Legend row */
+.bubble-legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 40px;
+}
+.bubble-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.6);
+}
+.size-demo {
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+}
+
+/* FIX 6: Merged note into footer, no separate .note div */
+.footer {
+  position: absolute;
+  bottom: 16px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+  font-weight: 400;
+}
+
+#loopBtn {
+  position: absolute;
+  top: 50%;
+  right: -90px;
+  transform: translateY(-50%);
+  padding: 10px 18px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-family: 'AlibabaPuHuiTi';
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+  display: none;
+}
+#loopBtn:hover { background: rgba(255,255,255,0.2); }
+#loopBtn.active { background: rgba(0,212,170,0.2); border-color: rgba(0,212,170,0.4); color: #00D4AA; }
+
+@media (max-width: 500px) {
+  .canvas-wrap { width: 100vw; height: 177.78vw; }
+  .content { width: 88vw; height: 88vw; }
+  #loopBtn { right: 10px; top: auto; bottom: 10px; transform: none; }
+}
+</style>
+</head>
+<body>
+<div class="canvas-wrap">
+  <div class="content" id="content">
+    <div class="title">试水还是All in？</div>
+    <div class="subtitle">影视公司AI投入程度 vs 岗位数量</div>
+
+    <div class="bubble-chart">
+      <div class="y-axis-markers">
+        <span>高</span>
+        <span>低</span>
+      </div>
+
+      <div class="bubble-track">
+        <!-- Vertical grid lines -->
+        <div class="grid-v" style="left:25%;"></div>
+        <div class="grid-v" style="left:50%;"></div>
+        <div class="grid-v" style="left:75%;"></div>
+
+        <!-- Bubbles: x = commitment%, y = vertical spread for readability, size = AI headcount -->
+        <!-- 博纳影业: high commitment (85%), 5 AI jobs, small -->
+        <div class="bubble bubble-high" style="left:85%;top:25%;width:50px;height:50px;animation-delay:0.3s;">
+          <span class="bubble-name">博纳影业</span>
+          <span class="bubble-val">5岗</span>
+        </div>
+
+        <!-- 恒星引力: high commitment (70%), 4 AI jobs, small -->
+        <div class="bubble bubble-high" style="left:70%;top:55%;width:46px;height:46px;animation-delay:0.5s;">
+          <span class="bubble-name">恒星引力</span>
+          <span class="bubble-val">4岗</span>
+        </div>
+
+        <!-- 欢娱影视: mid commitment (50%), 3 AI jobs, small -->
+        <div class="bubble bubble-mid" style="left:50%;top:35%;width:42px;height:42px;animation-delay:0.7s;">
+          <span class="bubble-name">欢娱影视</span>
+          <span class="bubble-val">3岗</span>
+        </div>
+
+        <!-- 正午阳光: mid commitment (45%), 4 AI jobs, small -->
+        <div class="bubble bubble-mid" style="left:45%;top:65%;width:46px;height:46px;animation-delay:0.9s;">
+          <span class="bubble-name">正午阳光</span>
+          <span class="bubble-val">4岗</span>
+        </div>
+
+        <!-- 耀客文化: low-mid (35%), 4 AI jobs, small -->
+        <div class="bubble bubble-mid" style="left:35%;top:40%;width:46px;height:46px;animation-delay:1.1s;">
+          <span class="bubble-name">耀客文化</span>
+          <span class="bubble-val">4岗</span>
+        </div>
+
+        <!-- 柠萌影视: low (20%), 1 AI job, very small -->
+        <div class="bubble bubble-low" style="left:20%;top:60%;width:34px;height:34px;animation-delay:1.3s;">
+          <span class="bubble-name">柠萌影视</span>
+          <span class="bubble-val">1岗</span>
+        </div>
+
+        <!-- 华策影视: low commitment (25%), 5 AI jobs, medium (big company) -->
+        <div class="bubble bubble-low" style="left:25%;top:28%;width:56px;height:56px;animation-delay:1.5s;">
+          <span class="bubble-name">华策影视</span>
+          <span class="bubble-val">5岗</span>
+        </div>
+      </div>
+
+      <div class="x-axis-label">
+        <span class="x-label-left">← 试水</span>
+        <span class="x-label-right">All in →</span>
+      </div>
+    </div>
+
+    <div class="bubble-legend">
+      <div class="bubble-legend-item">
+        <div class="size-demo" style="width:12px;height:12px;"></div>
+        <span>1-3岗</span>
+      </div>
+      <div class="bubble-legend-item">
+        <div class="size-demo" style="width:20px;height:20px;"></div>
+        <span>4-5岗</span>
+      </div>
+      <div class="bubble-legend-item">
+        <div class="size-demo" style="width:28px;height:28px;"></div>
+        <span>6+岗</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIX 6: Merged note into footer -->
+  <div class="footer">气泡大小=AI岗位数 | 数据来源：娱乐资本论统计</div>
+
+  <button id="loopBtn" onclick="toggleLoop()">🔄 Loop</button>
+</div>
+
+<script>
+let looping = false;
+let loopTimer = null;
+const ANIM_DURATION = 2500;
+
+function showLoopBtn() {
+  document.getElementById('loopBtn').style.display = 'block';
+}
+
+function toggleLoop() {
+  looping = !looping;
+  const btn = document.getElementById('loopBtn');
+  btn.classList.toggle('active', looping);
+  if (looping) {
+    startLoop();
+  } else {
+    clearTimeout(loopTimer);
+  }
+}
+
+function startLoop() {
+  if (!looping) return;
+  const content = document.getElementById('content');
+  content.style.transition = 'opacity 0.8s';
+  content.style.opacity = '0';
+  loopTimer = setTimeout(() => {
+    resetAnimations();
+    content.style.opacity = '1';
+    loopTimer = setTimeout(() => {
+      if (looping) startLoop();
+    }, ANIM_DURATION + 3000);
+  }, 1300);
+}
+
+function resetAnimations() {
+  const content = document.getElementById('content');
+  const bubbles = content.querySelectorAll('.bubble');
+  bubbles.forEach(b => {
+    b.style.animation = 'none';
+    b.offsetHeight;
+    b.style.animation = '';
+  });
+}
+
+setTimeout(showLoopBtn, ANIM_DURATION);
+</script>
+</body>
+</html>

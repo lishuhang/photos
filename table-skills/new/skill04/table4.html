@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>经纪/MCN公司AI应用方向</title>
+<style>
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-35-Thin.woff') format('woff'); font-weight:100; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-55-Regular.woff') format('woff'); font-weight:400; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-65-Medium.woff') format('woff'); font-weight:500; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-85-Bold.woff') format('woff'); font-weight:700; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-115-Black.woff') format('woff'); font-weight:900; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0a0e27; display:flex; justify-content:center; align-items:center; min-height:100vh; font-family:'AlibabaPuHuiTi',sans-serif; }
+.portrait-wrapper { position:relative; width:450px; height:800px; background:#0a0e27; overflow:hidden; }
+.content-area { position:absolute; top:40px; left:30px; right:30px; bottom:60px; display:flex; flex-direction:column; }
+.title { color:#fff; font-size:20px; font-weight:700; text-align:center; margin-bottom:10px; opacity:0; }
+.chart-svg { flex:1; }
+.legend { display:flex; justify-content:center; gap:18px; margin-top:8px; flex-wrap:wrap; }
+.legend-item { display:flex; align-items:center; gap:5px; font-size:12px; color:rgba(255,255,255,0.7); opacity:0; }
+.legend-dot { width:10px; height:10px; border-radius:50%; }
+.footer { position:absolute; bottom:15px; left:0; right:0; text-align:center; color:rgba(255,255,255,0.35); font-size:11px; }
+#replayBtn { display:none; position:absolute; bottom:20px; right:-80px; padding:10px 20px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:8px; color:#fff; font-family:'AlibabaPuHuiTi'; cursor:pointer; font-size:14px; transition:all 0.3s; }
+#replayBtn:hover { background:rgba(255,255,255,0.2); }
+@media (max-width:500px) { #replayBtn { right:20px; bottom:20px; } }
+</style>
+</head>
+<body>
+<div class="portrait-wrapper">
+  <div class="content-area">
+    <div class="title" id="title">经纪/MCN公司AI应用方向</div>
+    <div class="chart-svg" id="chart"></div>
+    <div class="legend" id="legend">
+      <div class="legend-item" id="leg-0"><div class="legend-dot" style="background:#FF6B6B"></div>乐华</div>
+      <div class="legend-item" id="leg-1"><div class="legend-dot" style="background:#FFA940"></div>哇唧唧哇</div>
+      <div class="legend-item" id="leg-2"><div class="legend-dot" style="background:#00D4AA"></div>无忧</div>
+      <div class="legend-item" id="leg-3"><div class="legend-dot" style="background:#7B68EE"></div>遥望</div>
+    </div>
+  </div>
+  <div class="footer">数据来源：娱乐资本论统计</div>
+  <button id="replayBtn" onclick="replay()">▶ Replay</button>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script>
+const dims = ['AI内容生产','虚拟偶像','粉丝运营','直播替代','AI短剧','人才招聘力度'];
+const datasets = [
+  {name:'乐华', values:[9,9,5,2,6,5], color:'#FF6B6B'},
+  {name:'哇唧唧哇', values:[4,7,8,2,2,3], color:'#FFA940'},
+  {name:'无忧', values:[5,2,4,9,3,3], color:'#00D4AA'},
+  {name:'遥望', values:[8,3,4,7,9,8], color:'#7B68EE'}
+];
+const n = dims.length;
+const angleSlice = (2 * Math.PI) / n;
+const maxVal = 10;
+
+let animTimer = null;
+
+function run() {
+  document.getElementById('replayBtn').style.display = 'none';
+  const chartEl = document.getElementById('chart');
+  chartEl.innerHTML = '';
+  const title = document.getElementById('title');
+  title.style.opacity = '0';
+  datasets.forEach((_, i) => {
+    document.getElementById(`leg-${i}`).style.opacity = '0';
+  });
+
+  d3.select(title).transition().duration(800).style('opacity', 1);
+
+  const rect = chartEl.getBoundingClientRect();
+  const w = rect.width || 390;
+  const h = rect.height || 540;
+  const cx = w / 2;
+  const cy = h / 2;
+  const radius = Math.min(w, h) / 2 - 50;
+
+  const svg = d3.select(chartEl).append('svg')
+    .attr('width', w).attr('height', h)
+    .append('g').attr('transform', `translate(${cx},${cy})`);
+
+  const rScale = d3.scaleLinear().domain([0, maxVal]).range([0, radius]);
+
+  // Grid circles - animate from center outward
+  const gridLevels = 5;
+  for (let i = 1; i <= gridLevels; i++) {
+    const r = (radius / gridLevels) * i;
+    svg.append('circle')
+      .attr('r', 0)
+      .attr('fill', 'none')
+      .attr('stroke', 'rgba(255,255,255,0.08)')
+      .attr('stroke-dasharray', '3,3')
+      .transition()
+      .delay(i * 100 + 300)
+      .duration(600)
+      .ease(d3.easeCubicOut)
+      .attr('r', r);
+  }
+
+  // Axis lines + labels
+  dims.forEach((dim, i) => {
+    const angle = angleSlice * i - Math.PI / 2;
+    const x2 = Math.cos(angle) * radius;
+    const y2 = Math.sin(angle) * radius;
+
+    svg.append('line')
+      .attr('x1', 0).attr('y1', 0)
+      .attr('x2', 0).attr('y2', 0)
+      .attr('stroke', 'rgba(255,255,255,0.12)')
+      .transition()
+      .delay(800)
+      .duration(400)
+      .attr('x2', x2)
+      .attr('y2', y2);
+
+    const labelR = radius + 22;
+    const lx = Math.cos(angle) * labelR;
+    const ly = Math.sin(angle) * labelR;
+
+    svg.append('text')
+      .attr('x', lx)
+      .attr('y', ly)
+      .attr('text-anchor', 'middle')
+      .attr('dominant-baseline', 'middle')
+      .attr('fill', 'rgba(255,255,255,0.65)')
+      .style('font-size', '11px')
+      .style('font-family', 'AlibabaPuHuiTi')
+      .style('opacity', 0)
+      .text(dim)
+      .transition()
+      .delay(1000)
+      .duration(400)
+      .style('opacity', 1);
+  });
+
+  // Polygons - expand from center
+  function getPoints(values) {
+    return values.map((v, i) => {
+      const angle = angleSlice * i - Math.PI / 2;
+      return [Math.cos(angle) * rScale(v), Math.sin(angle) * rScale(v)];
+    });
+  }
+
+  function getZeroPoints() {
+    return dims.map((_, i) => {
+      const angle = angleSlice * i - Math.PI / 2;
+      return [0, 0];
+    });
+  }
+
+  const line = d3.line();
+
+  datasets.forEach((ds, di) => {
+    const points = getPoints(ds.values);
+    const zeroPoints = getZeroPoints();
+
+    // Polygon path
+    svg.append('path')
+      .attr('d', line(zeroPoints) + 'Z')
+      .attr('fill', ds.color + '20')
+      .attr('stroke', ds.color)
+      .attr('stroke-width', 2)
+      .attr('opacity', 0.8)
+      .transition()
+      .delay(di * 400 + 1200)
+      .duration(1000)
+      .ease(d3.easeCubicOut)
+      .attrTween('d', function() {
+        return function(t) {
+          const interp = zeroPoints.map((z, i) => [
+            z[0] + (points[i][0] - z[0]) * t,
+            z[1] + (points[i][1] - z[1]) * t
+          ]);
+          return line(interp) + 'Z';
+        };
+      });
+
+    // Dots at vertices
+    points.forEach((p, pi) => {
+      svg.append('circle')
+        .attr('cx', 0).attr('cy', 0).attr('r', 3)
+        .attr('fill', ds.color)
+        .style('opacity', 0)
+        .transition()
+        .delay(di * 400 + 1800 + pi * 50)
+        .duration(300)
+        .style('opacity', 1)
+        .attr('cx', p[0])
+        .attr('cy', p[1]);
+    });
+
+    // Legend fade in
+    d3.select(`#leg-${di}`)
+      .transition()
+      .delay(di * 400 + 1300)
+      .duration(400)
+      .style('opacity', 1);
+  });
+
+  const totalTime = datasets.length * 400 + 2500;
+  animTimer = setTimeout(() => {
+    document.getElementById('replayBtn').style.display = 'block';
+  }, totalTime);
+}
+
+function replay() {
+  if (animTimer) clearTimeout(animTimer);
+  d3.selectAll('#chart svg').remove();
+  run();
+}
+
+setTimeout(run, 100);
+</script>
+</body>
+</html>

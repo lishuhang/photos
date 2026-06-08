@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>试水还是All in</title>
+<style>
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-35-Thin.woff') format('woff'); font-weight:100; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-55-Regular.woff') format('woff'); font-weight:400; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-65-Medium.woff') format('woff'); font-weight:500; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-85-Bold.woff') format('woff'); font-weight:700; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-115-Black.woff') format('woff'); font-weight:900; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0a0e27; display:flex; justify-content:center; align-items:center; min-height:100vh; font-family:'AlibabaPuHuiTi',sans-serif; }
+.portrait-wrapper { position:relative; width:450px; height:800px; background:#0a0e27; overflow:hidden; }
+.content-area { position:absolute; top:50px; left:30px; right:30px; bottom:60px; display:flex; flex-direction:column; }
+.title { color:#fff; font-size:20px; font-weight:700; text-align:center; margin-bottom:15px; opacity:0; }
+.subtitle { color:rgba(255,255,255,0.4); font-size:12px; text-align:center; margin-bottom:20px; opacity:0; }
+.chart-svg { flex:1; }
+.footer { position:absolute; bottom:15px; left:0; right:0; text-align:center; color:rgba(255,255,255,0.35); font-size:11px; }
+#replayBtn { display:none; position:absolute; bottom:20px; right:-80px; padding:10px 20px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:8px; color:#fff; font-family:'AlibabaPuHuiTi'; cursor:pointer; font-size:14px; transition:all 0.3s; }
+#replayBtn:hover { background:rgba(255,255,255,0.2); }
+@media (max-width:500px) { #replayBtn { right:20px; bottom:20px; } }
+</style>
+</head>
+<body>
+<div class="portrait-wrapper">
+  <div class="content-area">
+    <div class="title" id="title">试水还是All in？</div>
+    <div class="subtitle" id="subtitle">气泡大小 = AI岗位数量</div>
+    <div class="chart-svg" id="chart"></div>
+  </div>
+  <div class="footer">数据来源：娱乐资本论统计</div>
+  <button id="replayBtn" onclick="replay()">▶ Replay</button>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script>
+const data = [
+  {company:'正午阳光', level:2, aiJobs:4, type:'降本/试水'},
+  {company:'柠萌影视', level:3, aiJobs:1, type:'出海'},
+  {company:'华策影视', level:6, aiJobs:5, type:'降本+漫剧'},
+  {company:'耀客文化', level:6, aiJobs:4, type:'增效/仿真人'},
+  {company:'欢娱影视', level:7, aiJobs:3, type:'增效/漫剧'},
+  {company:'恒星引力', level:9, aiJobs:4, type:'增效/全梭哈'},
+  {company:'博纳影业', level:10, aiJobs:5, type:'增效/技术路线'}
+];
+
+const colorScale = d3.scaleLinear()
+  .domain([2, 10])
+  .range(['#7B68EE', '#FF6B6B']);
+
+let animTimer = null;
+
+function run() {
+  document.getElementById('replayBtn').style.display = 'none';
+  const chartEl = document.getElementById('chart');
+  chartEl.innerHTML = '';
+  const title = document.getElementById('title');
+  const subtitle = document.getElementById('subtitle');
+  title.style.opacity = '0';
+  subtitle.style.opacity = '0';
+
+  d3.select(title).transition().duration(800).style('opacity', 1);
+  d3.select(subtitle).transition().delay(400).duration(600).style('opacity', 1);
+
+  const rect = chartEl.getBoundingClientRect();
+  const w = rect.width || 390;
+  const h = rect.height || 560;
+  const margin = {top:30, right:30, bottom:80, left:40};
+  const width = w - margin.left - margin.right;
+  const height = h - margin.top - margin.bottom;
+
+  const svg = d3.select(chartEl).append('svg')
+    .attr('width', w).attr('height', h)
+    .append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const x = d3.scaleLinear().domain([0, 11]).range([0, width]);
+  const rScale = d3.scaleSqrt().domain([0, 6]).range([0, 35]);
+
+  // Sort data by level for positioning (avoid overlap with y spread)
+  const sorted = [...data].sort((a, b) => a.level - b.level);
+
+  // Assign y positions to avoid overlap - spread them in the middle
+  const yCenter = height / 2;
+  const ySpread = height * 0.6;
+
+  // X axis line
+  svg.append('line')
+    .attr('x1', 0).attr('y1', height + 10)
+    .attr('x2', 0).attr('y2', height + 10)
+    .attr('stroke', 'rgba(255,255,255,0.15)')
+    .attr('stroke-width', 1)
+    .transition()
+    .delay(600)
+    .duration(800)
+    .attr('x2', width);
+
+  // Axis labels: 试水 on left, All in on right
+  svg.append('text')
+    .attr('x', 0).attr('y', height + 35)
+    .attr('text-anchor', 'start')
+    .attr('fill', '#7B68EE')
+    .style('font-size', '14px')
+    .style('font-weight', '700')
+    .style('font-family', 'AlibabaPuHuiTi')
+    .style('opacity', 0)
+    .text('← 试水')
+    .transition().delay(1000).duration(400).style('opacity', 1);
+
+  svg.append('text')
+    .attr('x', width).attr('y', height + 35)
+    .attr('text-anchor', 'end')
+    .attr('fill', '#FF6B6B')
+    .style('font-size', '14px')
+    .style('font-weight', '700')
+    .style('font-family', 'AlibabaPuHuiTi')
+    .style('opacity', 0)
+    .text('All in →')
+    .transition().delay(1000).duration(400).style('opacity', 1);
+
+  // Tick marks
+  for (let i = 1; i <= 10; i++) {
+    svg.append('text')
+      .attr('x', x(i)).attr('y', height + 22)
+      .attr('text-anchor', 'middle')
+      .attr('fill', 'rgba(255,255,255,0.25)')
+      .style('font-size', '9px')
+      .style('font-family', 'AlibabaPuHuiTi')
+      .text(i);
+  }
+
+  // Compute y positions to avoid overlap using a simple force-like approach
+  // Place bubbles at varying y offsets around center
+  const yPositions = [];
+  const offsets = [-0.3, 0.25, -0.15, 0.3, -0.25, 0.1, 0.0];
+  sorted.forEach((d, i) => {
+    const baseY = yCenter + offsets[i % offsets.length] * ySpread;
+    yPositions.push(baseY);
+  });
+
+  // Draw bubbles
+  sorted.forEach((d, i) => {
+    const bx = x(d.level);
+    const by = yPositions[i];
+    const br = rScale(d.aiJobs);
+    const color = colorScale(d.level);
+
+    const g = svg.append('g').attr('transform', `translate(${bx},${by})`);
+
+    // Glow
+    g.append('circle')
+      .attr('r', 0)
+      .attr('fill', color + '30')
+      .transition()
+      .delay(i * 200 + 1200)
+      .duration(800)
+      .ease(d3.easeElastic.period(0.5))
+      .attr('r', br + 6);
+
+    // Main bubble
+    g.append('circle')
+      .attr('r', 0)
+      .attr('fill', color + '50')
+      .attr('stroke', color)
+      .attr('stroke-width', 2)
+      .transition()
+      .delay(i * 200 + 1200)
+      .duration(800)
+      .ease(d3.easeElastic.period(0.5))
+      .attr('r', br);
+
+    // Company name
+    g.append('text')
+      .attr('text-anchor', 'middle')
+      .attr('y', -br - 10)
+      .attr('fill', '#fff')
+      .style('font-size', '12px')
+      .style('font-weight', '500')
+      .style('font-family', 'AlibabaPuHuiTi')
+      .style('opacity', 0)
+      .text(d.company)
+      .transition()
+      .delay(i * 200 + 1800)
+      .duration(400)
+      .style('opacity', 1);
+
+    // Type label
+    g.append('text')
+      .attr('text-anchor', 'middle')
+      .attr('y', 4)
+      .attr('fill', 'rgba(255,255,255,0.8)')
+      .style('font-size', '9px')
+      .style('font-family', 'AlibabaPuHuiTi')
+      .style('opacity', 0)
+      .text(d.type)
+      .transition()
+      .delay(i * 200 + 2000)
+      .duration(400)
+      .style('opacity', 1);
+
+    // AI jobs count inside bubble
+    if (br > 18) {
+      g.append('text')
+        .attr('text-anchor', 'middle')
+        .attr('y', -4)
+        .attr('fill', '#fff')
+        .style('font-size', '14px')
+        .style('font-weight', '700')
+        .style('font-family', 'AlibabaPuHuiTi')
+        .style('opacity', 0)
+        .text(d.aiJobs)
+        .transition()
+        .delay(i * 200 + 2000)
+        .duration(400)
+        .style('opacity', 1);
+
+      g.append('text')
+        .attr('text-anchor', 'middle')
+        .attr('y', 10)
+        .attr('fill', 'rgba(255,255,255,0.6)')
+        .style('font-size', '8px')
+        .style('font-family', 'AlibabaPuHuiTi')
+        .style('opacity', 0)
+        .text('AI岗')
+        .transition()
+        .delay(i * 200 + 2000)
+        .duration(400)
+        .style('opacity', 1);
+    }
+  });
+
+  const totalTime = sorted.length * 200 + 2800;
+  animTimer = setTimeout(() => {
+    document.getElementById('replayBtn').style.display = 'block';
+  }, totalTime);
+}
+
+function replay() {
+  if (animTimer) clearTimeout(animTimer);
+  d3.selectAll('#chart svg').remove();
+  run();
+}
+
+setTimeout(run, 100);
+</script>
+</body>
+</html>

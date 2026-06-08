@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=450,initial-scale=1">
+<title>传统影视公司AI岗位占比</title>
+<style>
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-35-Thin.woff') format('woff'); font-weight:100; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-55-Regular.woff') format('woff'); font-weight:400; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-65-Medium.woff') format('woff'); font-weight:500; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-85-Bold.woff') format('woff'); font-weight:700; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-115-Black.woff') format('woff'); font-weight:900; }
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: #0a0e27;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'AlibabaPuHuiTi', sans-serif;
+  color: #fff;
+}
+
+.canvas-wrap {
+  position: relative;
+  width: 450px;
+  height: 800px;
+  background: #0a0e27;
+  overflow: hidden;
+}
+
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(450px * 0.75);
+  height: calc(800px * 0.75);
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 6px;
+  animation: fadeIn 0.8s ease-out both;
+}
+
+.subtitle {
+  font-size: 13px;
+  font-weight: 400;
+  text-align: center;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 24px;
+  animation: fadeIn 0.8s ease-out 0.2s both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.bar-group {
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  animation: fadeIn 0.5s ease-out both;
+}
+
+.bar-group:nth-child(1) { animation-delay: 0.4s; }
+.bar-group:nth-child(2) { animation-delay: 0.5s; }
+.bar-group:nth-child(3) { animation-delay: 0.6s; }
+.bar-group:nth-child(4) { animation-delay: 0.7s; }
+.bar-group:nth-child(5) { animation-delay: 0.8s; }
+.bar-group:nth-child(6) { animation-delay: 0.9s; }
+.bar-group:nth-child(7) { animation-delay: 1.0s; }
+
+.bar-label {
+  width: 72px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: right;
+  padding-right: 10px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.bar-track {
+  flex: 1;
+  height: 28px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 6px;
+  position: relative;
+  animation: barGrow 1s ease-out both;
+  transform-origin: left;
+}
+
+.bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0; bottom: 0;
+  width: 30%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15));
+  border-radius: 0 6px 6px 0;
+}
+
+@keyframes barGrow {
+  from { width: 0; }
+  to { width: var(--target); }
+}
+
+.bar-info {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  opacity: 0;
+  animation: fadeInBar 0.5s ease-out both;
+}
+
+.bar-pct {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.bar-frac {
+  font-size: 11px;
+  font-weight: 400;
+  opacity: 0.7;
+}
+
+@keyframes fadeInBar {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.bar-fill.bar1 { --target: 85%; --color: #FF6B6B; background: linear-gradient(90deg, #FF6B6B, #FF8E8E); animation-delay: 0.6s; }
+.bar-fill.bar1 .bar-info { animation-delay: 1.6s; }
+.bar-fill.bar2 { --target: 68%; --color: #FF8564; background: linear-gradient(90deg, #FF8564, #FFA088); animation-delay: 0.75s; }
+.bar-fill.bar2 .bar-info { animation-delay: 1.75s; }
+.bar-fill.bar3 { --target: 45%; --color: #FFA940; background: linear-gradient(90deg, #FFA940, #FFC069); animation-delay: 0.9s; }
+.bar-fill.bar3 .bar-info { animation-delay: 1.9s; }
+.bar-fill.bar4 { --target: 34%; --color: #C4B45A; background: linear-gradient(90deg, #C4B45A, #D4C87A); animation-delay: 1.05s; }
+.bar-fill.bar4 .bar-info { animation-delay: 2.05s; }
+.bar-fill.bar5 { --target: 25%; --color: #7BC67E; background: linear-gradient(90deg, #7BC67E, #9DD69F); animation-delay: 1.2s; }
+.bar-fill.bar5 .bar-info { animation-delay: 2.2s; }
+.bar-fill.bar6 { --target: 20%; --color: #5DADE2; background: linear-gradient(90deg, #5DADE2, #85C1E9); animation-delay: 1.35s; }
+.bar-fill.bar6 .bar-info { animation-delay: 2.35s; }
+.bar-fill.bar7 { --target: 15%; --color: #7B68EE; background: linear-gradient(90deg, #7B68EE, #9B8FF5); animation-delay: 1.5s; }
+.bar-fill.bar7 .bar-info { animation-delay: 2.5s; }
+
+.footer {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: rgba(255,255,255,0.3);
+  white-space: nowrap;
+}
+
+@media (max-width: 500px) {
+  .canvas-wrap { width: 100vw; height: 177.78vw; }
+  .content { width: 75vw; height: 75vw * (4/3); }
+}
+
+#replayBtn {
+  display: none;
+  position: absolute;
+  bottom: 20px;
+  right: -80px;
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-family: 'AlibabaPuHuiTi';
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+#replayBtn:hover { background: rgba(255,255,255,0.2); }
+
+@media (max-width: 500px) { #replayBtn { right: 20px; bottom: 20px; } }
+</style>
+</head>
+<body>
+<div class="canvas-wrap" id="main">
+  <div class="content">
+    <div class="title">传统影视公司AI岗位占比</div>
+    <div class="subtitle">AI岗位数 / 总招聘岗位数</div>
+
+    <div class="bar-group">
+      <div class="bar-label">博纳影业</div>
+      <div class="bar-track"><div class="bar-fill bar1"><div class="bar-info"><span class="bar-pct" data-target="71.43">0</span><span class="bar-frac">5/7</span></div></div></div>
+    </div>
+    <div class="bar-group">
+      <div class="bar-label">恒星引力</div>
+      <div class="bar-track"><div class="bar-fill bar2"><div class="bar-info"><span class="bar-pct" data-target="57.14">0</span><span class="bar-frac">4/7</span></div></div></div>
+    </div>
+    <div class="bar-group">
+      <div class="bar-label">欢娱影视</div>
+      <div class="bar-track"><div class="bar-fill bar3"><div class="bar-info"><span class="bar-pct" data-target="37.50">0</span><span class="bar-frac">3/8</span></div></div></div>
+    </div>
+    <div class="bar-group">
+      <div class="bar-label">正午阳光</div>
+      <div class="bar-track"><div class="bar-fill bar4"><div class="bar-info"><span class="bar-pct" data-target="28.57">0</span><span class="bar-frac">4/14</span></div></div></div>
+    </div>
+    <div class="bar-group">
+      <div class="bar-label">耀客文化</div>
+      <div class="bar-track"><div class="bar-fill bar5"><div class="bar-info"><span class="bar-pct" data-target="21.05">0</span><span class="bar-frac">4/19</span></div></div></div>
+    </div>
+    <div class="bar-group">
+      <div class="bar-label">柠萌影视</div>
+      <div class="bar-track"><div class="bar-fill bar6"><div class="bar-info"><span class="bar-pct" data-target="16.67">0</span><span class="bar-frac">1/6</span></div></div></div>
+    </div>
+    <div class="bar-group">
+      <div class="bar-label">华策影视</div>
+      <div class="bar-track"><div class="bar-fill bar7"><div class="bar-info"><span class="bar-pct" data-target="12.82">0</span><span class="bar-frac">5/39</span></div></div></div>
+    </div>
+  </div>
+  <div class="footer">数据来源：娱乐资本论统计</div>
+  <button id="replayBtn" onclick="replay()">▶ Replay</button>
+</div>
+
+<script>
+function countUp(el, target, duration) {
+  const start = performance.now();
+  const isInt = Number.isInteger(target);
+  function update(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    const val = eased * target;
+    el.textContent = isInt ? Math.round(val) : val.toFixed(2) + '%';
+    if (p < 1) requestAnimationFrame(update);
+    else el.textContent = isInt ? target : target.toFixed(2) + '%';
+  }
+  requestAnimationFrame(update);
+}
+
+setTimeout(() => {
+  document.querySelectorAll('.bar-pct').forEach((el, i) => {
+    const t = parseFloat(el.dataset.target);
+    setTimeout(() => countUp(el, t, 800), 1600 + i * 150);
+  });
+}, 100);
+
+setTimeout(() => {
+  document.getElementById('replayBtn').style.display = 'block';
+}, 3500);
+
+function replay() {
+  const main = document.getElementById('main');
+  const content = main.querySelector('.content');
+  content.classList.remove('animate');
+  void content.offsetWidth;
+  content.classList.add('animate');
+  document.querySelectorAll('.bar-pct').forEach(el => el.textContent = '0');
+  document.getElementById('replayBtn').style.display = 'none';
+  setTimeout(() => {
+    document.querySelectorAll('.bar-pct').forEach((el, i) => {
+      const t = parseFloat(el.dataset.target);
+      setTimeout(() => countUp(el, t, 800), 1600 + i * 150);
+    });
+  }, 100);
+  setTimeout(() => {
+    document.getElementById('replayBtn').style.display = 'block';
+  }, 3500);
+}
+</script>
+</body>
+</html>

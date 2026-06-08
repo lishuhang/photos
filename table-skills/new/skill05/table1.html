@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>传统影视公司AI岗位占比</title>
+<style>
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-35-Thin.woff') format('woff'); font-weight:100; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-55-Regular.woff') format('woff'); font-weight:400; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-65-Medium.woff') format('woff'); font-weight:500; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-85-Bold.woff') format('woff'); font-weight:700; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-115-Black.woff') format('woff'); font-weight:900; }
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:#0a0e27;
+  display:flex; justify-content:center; align-items:center;
+  min-height:100vh;
+  font-family:'AlibabaPuHuiTi',sans-serif;
+  color:#fff;
+  overflow:hidden;
+}
+.canvas-wrap {
+  position:relative;
+  width:450px; height:800px;
+  background:#0a0e27;
+  overflow:hidden;
+}
+.content {
+  position:absolute;
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  width:375px; height:600px;
+}
+.title {
+  font-size:22px; font-weight:700;
+  text-align:center;
+  margin-bottom:30px;
+  opacity:0;
+  transform:translateY(-20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.title.show { opacity:1; transform:translateY(0); }
+.title span { 
+  background: linear-gradient(90deg,#FF6B6B,#7B68EE);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.chart-area { position:relative; }
+
+.bar-row {
+  display:flex; align-items:center;
+  margin-bottom:14px;
+  position:relative;
+  height:42px;
+}
+.bar-label {
+  width:80px; font-size:13px; font-weight:500;
+  text-align:right; padding-right:12px;
+  white-space:nowrap; flex-shrink:0;
+  opacity:0; transform:translateX(-20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.bar-label.show { opacity:1; transform:translateX(0); }
+
+.bar-track {
+  flex:1; height:32px;
+  background:rgba(255,255,255,0.05);
+  border-radius:6px;
+  position:relative;
+  overflow:hidden;
+}
+.bar-fill {
+  height:100%;
+  border-radius:6px;
+  width:0%;
+  transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
+  position:relative;
+  box-shadow: 0 0 20px rgba(255,107,107,0.3);
+}
+.bar-fill::after {
+  content:'';
+  position:absolute; right:0; top:0; bottom:0; width:4px;
+  background:rgba(255,255,255,0.5);
+  border-radius:0 6px 6px 0;
+}
+
+.bar-info {
+  position:absolute;
+  right:-5px; top:50%; transform:translateY(-50%);
+  display:flex; align-items:center; gap:8px;
+  opacity:0;
+  transition: opacity 0.5s ease 0.3s;
+}
+.bar-info.show { opacity:1; }
+.bar-pct {
+  font-size:16px; font-weight:700;
+  text-shadow: 0 0 10px rgba(0,0,0,0.8);
+}
+.bar-fraction {
+  font-size:11px; font-weight:400;
+  opacity:0;
+  transition: opacity 0.5s ease;
+  color:rgba(255,255,255,0.7);
+}
+.bar-fraction.show { opacity:1; }
+
+.footer {
+  position:absolute;
+  bottom:20px; left:0; right:0;
+  text-align:center;
+  font-size:11px;
+  color:rgba(255,255,255,0.35);
+  font-weight:100;
+}
+
+#replayBtn {
+  display:none; position:absolute; bottom:20px; right:-80px;
+  padding:10px 20px; background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.2); border-radius:8px;
+  color:#fff; font-family:'AlibabaPuHuiTi'; cursor:pointer;
+  font-size:14px; transition:all 0.3s;
+}
+#replayBtn:hover { background:rgba(255,255,255,0.2); }
+@media (max-width:500px) {
+  #replayBtn { right:20px; bottom:20px; }
+}
+</style>
+</head>
+<body>
+<div class="canvas-wrap">
+  <div class="content">
+    <div class="title" id="title"><span>传统影视公司AI岗位占比</span></div>
+    <div class="chart-area" id="chartArea"></div>
+  </div>
+  <div class="footer">数据来源：娱乐资本论统计</div>
+  <button id="replayBtn" onclick="replay()">▶ Replay</button>
+</div>
+
+<script>
+const data = [
+  {company:'博纳影业', ai:5, total:7, pct:71.43},
+  {company:'恒星引力', ai:4, total:7, pct:57.14},
+  {company:'欢娱影视', ai:3, total:8, pct:37.50},
+  {company:'正午阳光', ai:4, total:14, pct:28.57},
+  {company:'耀客文化', ai:4, total:19, pct:21.05},
+  {company:'柠萌影视', ai:1, total:6, pct:16.67},
+  {company:'华策影视', ai:5, total:39, pct:12.82}
+];
+
+const colors = [
+  '#FF6B6B','#FF8A65','#FFA940','#FFD93D','#A8E063','#6DD5A0','#7B68EE'
+];
+
+function getGradient(i) {
+  const t = i / (data.length - 1);
+  const r = Math.round(255 * (1 - t) + 123 * t);
+  const g = Math.round(107 * (1 - t) + 104 * t);
+  const b = Math.round(107 * (1 - t) + 238 * t);
+  return `rgb(${r},${g},${b})`;
+}
+
+let animTimer = [];
+
+function buildChart() {
+  const area = document.getElementById('chartArea');
+  area.innerHTML = '';
+  animTimer.forEach(t => clearTimeout(t));
+  animTimer = [];
+
+  data.forEach((d, i) => {
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+
+    const label = document.createElement('div');
+    label.className = 'bar-label';
+    label.textContent = d.company;
+
+    const track = document.createElement('div');
+    track.className = 'bar-track';
+
+    const fill = document.createElement('div');
+    fill.className = 'bar-fill';
+    fill.style.background = `linear-gradient(90deg, ${getGradient(i)}, ${getGradient(i)}dd)`;
+    fill.style.transitionDelay = `${i * 150}ms`;
+    fill.dataset.target = d.pct;
+
+    const info = document.createElement('div');
+    info.className = 'bar-info';
+
+    const pct = document.createElement('span');
+    pct.className = 'bar-pct';
+    pct.style.color = getGradient(i);
+
+    const frac = document.createElement('span');
+    frac.className = 'bar-fraction';
+    frac.textContent = `${d.ai}/${d.total}`;
+
+    info.appendChild(pct);
+    info.appendChild(frac);
+    fill.appendChild(info);
+    track.appendChild(fill);
+    row.appendChild(label);
+    row.appendChild(track);
+    area.appendChild(row);
+  });
+
+  // Start animation
+  animTimer.push(setTimeout(() => {
+    document.getElementById('title').classList.add('show');
+  }, 200));
+
+  animTimer.push(setTimeout(() => {
+    document.querySelectorAll('.bar-label').forEach((l, i) => {
+      setTimeout(() => l.classList.add('show'), i * 80);
+    });
+  }, 500));
+
+  animTimer.push(setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(fill => {
+      fill.style.width = fill.dataset.target + '%';
+    });
+  }, 800));
+
+  // Count up numbers after bars finish
+  animTimer.push(setTimeout(() => {
+    document.querySelectorAll('.bar-info').forEach((info, i) => {
+      setTimeout(() => {
+        info.classList.add('show');
+        const pctEl = info.querySelector('.bar-pct');
+        countUp(pctEl, data[i].pct);
+        setTimeout(() => {
+          info.querySelector('.bar-fraction').classList.add('show');
+        }, 600);
+      }, i * 150 + 200);
+    });
+  }, 1800));
+
+  // Show replay
+  animTimer.push(setTimeout(() => {
+    document.getElementById('replayBtn').style.display = 'block';
+  }, 4500));
+}
+
+function countUp(el, target) {
+  const dur = 800;
+  const start = performance.now();
+  function tick(now) {
+    const p = Math.min((now - start) / dur, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = (target * eased).toFixed(1) + '%';
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+function replay() {
+  document.getElementById('replayBtn').style.display = 'none';
+  document.getElementById('title').classList.remove('show');
+  buildChart();
+}
+
+window.addEventListener('DOMContentLoaded', buildChart);
+</script>
+</body>
+</html>

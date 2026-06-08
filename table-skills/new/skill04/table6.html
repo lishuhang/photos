@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>核心洞察汇总</title>
+<style>
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-35-Thin.woff') format('woff'); font-weight:100; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-55-Regular.woff') format('woff'); font-weight:400; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-65-Medium.woff') format('woff'); font-weight:500; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-85-Bold.woff') format('woff'); font-weight:700; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-115-Black.woff') format('woff'); font-weight:900; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0a0e27; display:flex; justify-content:center; align-items:center; min-height:100vh; font-family:'AlibabaPuHuiTi',sans-serif; }
+.portrait-wrapper { position:relative; width:450px; height:800px; background:#0a0e27; overflow:hidden; }
+.content-area { position:absolute; top:50px; left:30px; right:30px; bottom:80px; display:flex; flex-direction:column; }
+.title { color:#fff; font-size:20px; font-weight:700; text-align:center; margin-bottom:20px; opacity:0; }
+.card-stage { flex:1; position:relative; overflow:hidden; }
+.insight-card {
+  position:absolute;
+  top:0; left:0; right:0; bottom:0;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:30px 24px;
+  background:rgba(255,255,255,0.04);
+  border-radius:16px;
+  border-left:5px solid;
+  opacity:0;
+  transform:translateX(100%);
+}
+.card-watermark {
+  position:absolute;
+  top:-10px; right:10px;
+  font-size:140px;
+  font-weight:900;
+  line-height:1;
+  opacity:0.04;
+  color:#fff;
+}
+.card-num-row { display:flex; align-items:baseline; gap:6px; margin-bottom:12px; }
+.card-num { font-size:56px; font-weight:900; line-height:1; }
+.card-unit { font-size:16px; font-weight:500; color:rgba(255,255,255,0.6); }
+.card-title { font-size:20px; font-weight:700; color:#fff; margin-bottom:8px; line-height:1.3; }
+.card-detail { font-size:14px; color:rgba(255,255,255,0.5); line-height:1.5; }
+.progress-dots { display:flex; justify-content:center; gap:8px; position:absolute; bottom:25px; left:0; right:0; }
+.dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,0.2); transition:all 0.3s; }
+.dot.active { width:24px; border-radius:4px; }
+.footer { position:absolute; bottom:15px; left:0; right:0; text-align:center; color:rgba(255,255,255,0.35); font-size:11px; }
+#replayBtn { display:none; position:absolute; bottom:20px; right:-80px; padding:10px 20px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:8px; color:#fff; font-family:'AlibabaPuHuiTi'; cursor:pointer; font-size:14px; transition:all 0.3s; }
+#replayBtn:hover { background:rgba(255,255,255,0.2); }
+@media (max-width:500px) { #replayBtn { right:20px; bottom:20px; } }
+</style>
+</head>
+<body>
+<div class="portrait-wrapper">
+  <div class="content-area">
+    <div class="title" id="title">核心洞察汇总</div>
+    <div class="card-stage" id="stage"></div>
+    <div class="progress-dots" id="dots"></div>
+  </div>
+  <div class="footer">数据来源：娱乐资本论统计</div>
+  <button id="replayBtn" onclick="replay()">▶ Replay</button>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script>
+const insights = [
+  {id:1, title:'半数岗位点名要AI', detail:'13家公司41个AI岗，传统影视30个', num:'41', unit:'个AI岗', color:'#FF6B6B'},
+  {id:2, title:'华策让人用AI，博纳让技术做AI', detail:'两种截然不同的路径', num:'2', unit:'种路径', color:'#FFA940'},
+  {id:3, title:'恒星引力卡985学历', detail:'梭哈AIGC姿态', num:'985', unit:'学历门槛', color:'#FFD93D'},
+  {id:4, title:'乐华"纯AI生成、无真人演员"', detail:'AI改造偶像的最激进尝试', num:'0', unit:'真人演员', color:'#00D4AA'},
+  {id:5, title:'耀客签约AI数字演员', detail:'仿真人短剧分成系数高达60', num:'60', unit:'分成系数', color:'#7B68EE'},
+  {id:6, title:'遥望为AI短剧专招HRBP', detail:'兵马未动粮草先行', num:'1', unit:'位AI HRBP', color:'#E040FB'}
+];
+
+let currentIdx = -1;
+let cycleTimer = null;
+let isPlaying = true;
+
+function initCards() {
+  const stage = document.getElementById('stage');
+  const dots = document.getElementById('dots');
+  stage.innerHTML = '';
+  dots.innerHTML = '';
+
+  insights.forEach((ins, i) => {
+    const card = document.createElement('div');
+    card.className = 'insight-card';
+    card.id = `card-${i}`;
+    card.style.borderLeftColor = ins.color;
+    card.innerHTML = `
+      <div class="card-watermark">${ins.id}</div>
+      <div class="card-num-row">
+        <span class="card-num" id="num-${i}" style="color:${ins.color}">0</span>
+        <span class="card-unit">${ins.unit}</span>
+      </div>
+      <div class="card-title" id="ctitle-${i}" style="opacity:0">${ins.title}</div>
+      <div class="card-detail" id="cdetail-${i}" style="opacity:0">${ins.detail}</div>
+    `;
+    stage.appendChild(card);
+
+    const dot = document.createElement('div');
+    dot.className = 'dot';
+    dot.id = `dot-${i}`;
+    dot.style.background = i === 0 ? ins.color : 'rgba(255,255,255,0.2)';
+    dots.appendChild(dot);
+  });
+}
+
+function showCard(idx) {
+  const prevIdx = currentIdx;
+  currentIdx = idx;
+  const ins = insights[idx];
+
+  // Update dots
+  insights.forEach((d, i) => {
+    const dot = document.getElementById(`dot-${i}`);
+    dot.className = i === idx ? 'dot active' : 'dot';
+    dot.style.background = i === idx ? d.color : 'rgba(255,255,255,0.2)';
+  });
+
+  // Slide out previous
+  if (prevIdx >= 0) {
+    const prevCard = document.getElementById(`card-${prevIdx}`);
+    d3.select(prevCard)
+      .interrupt()
+      .transition()
+      .duration(400)
+      .ease(d3.easeCubicIn)
+      .style('opacity', 0)
+      .style('transform', 'translateX(-100%)')
+      .on('end', function() {
+        prevCard.style.transform = 'translateX(100%)';
+        prevCard.style.opacity = '0';
+      });
+  }
+
+  // Slide in current
+  const card = document.getElementById(`card-${idx}`);
+  card.style.transform = 'translateX(100%)';
+  card.style.opacity = '0';
+
+  d3.select(card)
+    .interrupt()
+    .transition()
+    .delay(prevIdx >= 0 ? 300 : 0)
+    .duration(500)
+    .ease(d3.easeCubicOut)
+    .style('opacity', 1)
+    .style('transform', 'translateX(0)')
+    .on('end', function() {
+      // Countup animation for number
+      const numEl = document.getElementById(`num-${idx}`);
+      const numericVal = parseInt(ins.num);
+      if (!isNaN(numericVal)) {
+        let counter = {v: 0};
+        d3.select(counter)
+          .transition()
+          .duration(800)
+          .tween('text', function() {
+            const interp = d3.interpolateNumber(0, numericVal);
+            return function(t) {
+              numEl.textContent = Math.round(interp(t));
+            };
+          });
+      } else {
+        numEl.textContent = ins.num;
+        d3.select(numEl)
+          .style('opacity', '0')
+          .transition().duration(400)
+          .style('opacity', '1');
+      }
+
+      // Fade in title and detail
+      d3.select(`#ctitle-${idx}`)
+        .transition().delay(400).duration(500)
+        .style('opacity', 1);
+
+      d3.select(`#cdetail-${idx}`)
+        .transition().delay(600).duration(500)
+        .style('opacity', 1);
+    });
+}
+
+function nextCard() {
+  const nextIdx = (currentIdx + 1) % insights.length;
+  showCard(nextIdx);
+
+  if (nextIdx < insights.length - 1) {
+    cycleTimer = setTimeout(nextCard, 2500);
+  } else {
+    // Last card - show replay after delay
+    cycleTimer = setTimeout(() => {
+      document.getElementById('replayBtn').style.display = 'block';
+      isPlaying = false;
+    }, 2500);
+  }
+}
+
+function run() {
+  document.getElementById('replayBtn').style.display = 'none';
+  isPlaying = true;
+  currentIdx = -1;
+  if (cycleTimer) clearTimeout(cycleTimer);
+
+  const title = document.getElementById('title');
+  title.style.opacity = '0';
+  d3.select(title).transition().duration(800).style('opacity', 1);
+
+  initCards();
+
+  // Start cycling after title
+  setTimeout(nextCard, 600);
+}
+
+function replay() {
+  // Reset all card positions
+  insights.forEach((_, i) => {
+    const card = document.getElementById(`card-${i}`);
+    if (card) {
+      d3.select(card).interrupt();
+      card.style.transform = 'translateX(100%)';
+      card.style.opacity = '0';
+    }
+  });
+  run();
+}
+
+run();
+</script>
+</body>
+</html>

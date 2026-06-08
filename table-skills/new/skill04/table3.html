@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>传统影视公司AI路径对比</title>
+<style>
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-35-Thin.woff') format('woff'); font-weight:100; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-55-Regular.woff') format('woff'); font-weight:400; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-65-Medium.woff') format('woff'); font-weight:500; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-85-Bold.woff') format('woff'); font-weight:700; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-115-Black.woff') format('woff'); font-weight:900; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#0a0e27; display:flex; justify-content:center; align-items:center; min-height:100vh; font-family:'AlibabaPuHuiTi',sans-serif; }
+.portrait-wrapper { position:relative; width:450px; height:800px; background:#0a0e27; overflow:hidden; }
+.content-area { position:absolute; top:40px; left:30px; right:30px; bottom:60px; display:flex; flex-direction:column; }
+.title { color:#fff; font-size:20px; font-weight:700; text-align:center; margin-bottom:10px; opacity:0; }
+.legend { display:flex; justify-content:flex-end; gap:14px; margin-bottom:8px; opacity:0; }
+.legend-item { display:flex; align-items:center; gap:5px; font-size:11px; color:rgba(255,255,255,0.7); }
+.legend-dot { width:10px; height:10px; border-radius:3px; }
+.chart-svg { flex:1; }
+.footer { position:absolute; bottom:15px; left:0; right:0; text-align:center; color:rgba(255,255,255,0.35); font-size:11px; }
+#replayBtn { display:none; position:absolute; bottom:20px; right:-80px; padding:10px 20px; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:8px; color:#fff; font-family:'AlibabaPuHuiTi'; cursor:pointer; font-size:14px; transition:all 0.3s; }
+#replayBtn:hover { background:rgba(255,255,255,0.2); }
+@media (max-width:500px) { #replayBtn { right:20px; bottom:20px; } }
+</style>
+</head>
+<body>
+<div class="portrait-wrapper">
+  <div class="content-area">
+    <div class="title" id="title">传统影视公司AI路径对比</div>
+    <div class="legend" id="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#FF6B6B"></div>降本型</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FFA940"></div>增效型</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#00D4AA"></div>出海型</div>
+    </div>
+    <div class="chart-svg" id="chart"></div>
+  </div>
+  <div class="footer">数据来源：娱乐资本论统计</div>
+  <button id="replayBtn" onclick="replay()">▶ Replay</button>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+<script>
+const dims = ['分镜/概念设计','AI漫剧/虚拟偶像','多语种/海外运营','技术产品研发','内容创作工具化'];
+const costReduce = [9,5,2,3,8];
+const efficiency = [4,9,3,8,5];
+const overseas = [3,2,9,2,4];
+const colors = ['#FF6B6B','#FFA940','#00D4AA'];
+const labels = ['降本型','增效型','出海型'];
+
+let animTimer = null;
+
+function run() {
+  document.getElementById('replayBtn').style.display = 'none';
+  const chartEl = document.getElementById('chart');
+  chartEl.innerHTML = '';
+  const title = document.getElementById('title');
+  const legend = document.getElementById('legend');
+  title.style.opacity = '0';
+  legend.style.opacity = '0';
+
+  d3.select(title).transition().duration(800).style('opacity', 1);
+  d3.select(legend).transition().delay(400).duration(600).style('opacity', 1);
+
+  const rect = chartEl.getBoundingClientRect();
+  const w = rect.width || 390;
+  const h = rect.height || 600;
+  const margin = {top:10, right:15, bottom:60, left:55};
+  const width = w - margin.left - margin.right;
+  const height = h - margin.top - margin.bottom;
+
+  const svg = d3.select(chartEl).append('svg')
+    .attr('width', w).attr('height', h)
+    .append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+  const x0 = d3.scaleBand().domain(dims).range([0, width]).padding(0.25);
+  const x1 = d3.scaleBand().domain(labels).range([0, x0.bandwidth()]).padding(0.08);
+  const y = d3.scaleLinear().domain([0, 10]).range([height, 0]);
+
+  // X axis
+  svg.append('g')
+    .attr('transform', `translate(0,${height})`)
+    .call(d3.axisBottom(x0).tickSize(0))
+    .selectAll('text')
+    .attr('fill','rgba(255,255,255,0.6)')
+    .style('font-size','10px')
+    .style('font-family','AlibabaPuHuiTi')
+    .attr('transform','rotate(20)')
+    .attr('text-anchor','start');
+
+  svg.selectAll('.domain').attr('stroke','rgba(255,255,255,0.1)');
+  svg.selectAll('.tick line').attr('stroke','rgba(255,255,255,0.05)');
+
+  // Y axis
+  svg.append('g')
+    .call(d3.axisLeft(y).ticks(5).tickSize(-width))
+    .selectAll('text')
+    .attr('fill','rgba(255,255,255,0.5)')
+    .style('font-size','10px')
+    .style('font-family','AlibabaPuHuiTi');
+  svg.selectAll('.domain').attr('stroke','rgba(255,255,255,0.1)');
+  svg.selectAll('.tick line').attr('stroke','rgba(255,255,255,0.05)');
+
+  // Grid lines only
+  svg.selectAll('.tick line').attr('stroke','rgba(255,255,255,0.06)');
+
+  const series = [costReduce, efficiency, overseas];
+
+  dims.forEach((dim, gi) => {
+    labels.forEach((lbl, bi) => {
+      const val = series[bi][gi];
+      const barX = x0(dim) + x1(lbl);
+      const barW = x1.bandwidth();
+      const barH = height - y(val);
+      const barY = y(val);
+
+      svg.append('rect')
+        .attr('x', barX)
+        .attr('y', height)
+        .attr('width', barW)
+        .attr('height', 0)
+        .attr('fill', colors[bi])
+        .attr('rx', 3)
+        .attr('ry', 3)
+        .transition()
+        .delay(gi * 200 + bi * 80 + 500)
+        .duration(800)
+        .ease(d3.easeCubicOut)
+        .attr('y', barY)
+        .attr('height', barH);
+
+      // Value label
+      svg.append('text')
+        .attr('x', barX + barW / 2)
+        .attr('y', barY - 5)
+        .attr('text-anchor', 'middle')
+        .attr('fill', colors[bi])
+        .style('font-size', '10px')
+        .style('font-weight', '700')
+        .style('font-family', 'AlibabaPuHuiTi')
+        .style('opacity', 0)
+        .text(val)
+        .transition()
+        .delay(gi * 200 + bi * 80 + 1100)
+        .duration(400)
+        .style('opacity', 1);
+    });
+  });
+
+  const totalTime = dims.length * 200 + 1800;
+  animTimer = setTimeout(() => {
+    document.getElementById('replayBtn').style.display = 'block';
+  }, totalTime);
+}
+
+function replay() {
+  if (animTimer) clearTimeout(animTimer);
+  d3.selectAll('#chart svg').remove();
+  run();
+}
+
+// Wait for layout then run
+setTimeout(run, 100);
+</script>
+</body>
+</html>

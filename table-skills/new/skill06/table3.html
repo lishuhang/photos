@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=450,initial-scale=1">
+<title>三种影视公司AI路径对比</title>
+<style>
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-35-Thin.woff') format('woff'); font-weight:100; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-55-Regular.woff') format('woff'); font-weight:400; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-65-Medium.woff') format('woff'); font-weight:500; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-85-Bold.woff') format('woff'); font-weight:700; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-115-Black.woff') format('woff'); font-weight:900; }
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: #0a0e27;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'AlibabaPuHuiTi', sans-serif;
+  color: #fff;
+}
+
+.canvas-wrap {
+  position: relative;
+  width: 450px;
+  height: 800px;
+  background: #0a0e27;
+  overflow: hidden;
+}
+
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(450px * 0.85);
+  height: calc(800px * 0.78);
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 4px;
+  animation: fadeIn 0.8s ease-out both;
+}
+
+.subtitle {
+  font-size: 13px;
+  font-weight: 400;
+  text-align: center;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 16px;
+  animation: fadeIn 0.8s ease-out 0.2s both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.legend {
+  display: flex;
+  justify-content: center;
+  gap: 18px;
+  margin-bottom: 14px;
+  animation: fadeIn 0.6s ease-out 0.3s both;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.chart-area {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+  padding-bottom: 30px;
+  position: relative;
+}
+
+.chart-area::before {
+  content: '';
+  position: absolute;
+  left: 0; right: 0; bottom: 30px;
+  height: 1px;
+  background: rgba(255,255,255,0.1);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.group-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+}
+
+.bar {
+  width: 18px;
+  border-radius: 4px 4px 0 0;
+  animation: growUp 0.8s ease-out both;
+  position: relative;
+}
+
+.bar::after {
+  content: attr(data-val);
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 10px;
+  font-weight: 500;
+  opacity: 0;
+  animation: fadeInBar 0.4s ease-out both;
+}
+
+@keyframes growUp {
+  from { height: 0; }
+  to { height: var(--h); }
+}
+
+@keyframes fadeInBar {
+  from { opacity: 0; }
+  to { opacity: 0.8; }
+}
+
+.bar.cost { background: linear-gradient(180deg, #FF6B6B, #cc4444); }
+.bar.eff { background: linear-gradient(180deg, #FFA940, #cc8833); }
+.bar.overseas { background: linear-gradient(180deg, #00D4AA, #009977); }
+
+.group-label {
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  line-height: 1.3;
+  max-width: 60px;
+  margin-top: 6px;
+}
+
+.y-axis {
+  position: absolute;
+  left: -20px;
+  bottom: 30px;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  height: calc(100% - 80px);
+  font-size: 10px;
+  color: rgba(255,255,255,0.3);
+}
+
+.footer {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: rgba(255,255,255,0.3);
+  white-space: nowrap;
+}
+
+@media (max-width: 500px) {
+  .canvas-wrap { width: 100vw; height: 177.78vw; }
+  .content { width: 85vw; height: 78vw; }
+}
+
+#replayBtn {
+  display: none;
+  position: absolute;
+  bottom: 20px;
+  right: -80px;
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-family: 'AlibabaPuHuiTi';
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+#replayBtn:hover { background: rgba(255,255,255,0.2); }
+
+@media (max-width: 500px) { #replayBtn { right: 20px; bottom: 20px; } }
+</style>
+</head>
+<body>
+<div class="canvas-wrap" id="main">
+  <div class="content" id="content">
+    <div class="title">三种影视公司AI路径对比</div>
+    <div class="subtitle">降本型 vs 增效型 vs 出海型</div>
+
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:#FF6B6B"></div>降本型</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#FFA940"></div>增效型</div>
+      <div class="legend-item"><div class="legend-dot" style="background:#00D4AA"></div>出海型</div>
+    </div>
+
+    <div class="chart-area" id="chartArea">
+      <!-- Groups generated by JS for animation control -->
+    </div>
+  </div>
+  <div class="footer">数据来源：娱乐资本论统计</div>
+  <button id="replayBtn" onclick="replay()">▶ Replay</button>
+</div>
+
+<script>
+const dims = ['分镜/概念设计','AI漫剧/虚拟偶像','多语种/海外运营','技术产品研发','内容创作工具化'];
+const costReduce = [9,5,2,3,8];
+const efficiency = [4,9,3,8,5];
+const overseas = [3,2,9,2,4];
+const maxVal = 10;
+const maxH = 320;
+
+function buildChart() {
+  const area = document.getElementById('chartArea');
+  area.innerHTML = '';
+  dims.forEach((dim, gi) => {
+    const group = document.createElement('div');
+    group.className = 'group';
+
+    const bars = document.createElement('div');
+    bars.className = 'group-bars';
+
+    const vals = [costReduce[gi], efficiency[gi], overseas[gi]];
+    const cls = ['cost', 'eff', 'overseas'];
+
+    vals.forEach((v, bi) => {
+      const bar = document.createElement('div');
+      bar.className = 'bar ' + cls[bi];
+      const h = (v / maxVal) * maxH;
+      bar.style.setProperty('--h', h + 'px');
+      bar.dataset.val = v;
+      bar.style.animationDelay = (0.5 + gi * 0.2 + bi * 0.1) + 's';
+      bar.style.height = '0px';
+      bars.appendChild(bar);
+    });
+
+    const label = document.createElement('div');
+    label.className = 'group-label';
+    label.textContent = dim;
+
+    group.appendChild(bars);
+    group.appendChild(label);
+    area.appendChild(group);
+  });
+
+  // Animate bars
+  requestAnimationFrame(() => {
+    document.querySelectorAll('.bar').forEach(bar => {
+      const targetH = bar.style.getPropertyValue('--h');
+      bar.style.animation = 'none';
+      bar.offsetHeight;
+      bar.style.animation = '';
+    });
+  });
+
+  // Show values after bars grow
+  setTimeout(() => {
+    document.querySelectorAll('.bar').forEach(bar => {
+      const delay = parseFloat(bar.style.animationDelay || '0');
+      bar.querySelector(':after')
+      bar.style.setProperty('--val-delay', (delay + 0.8) + 's');
+    });
+  }, 100);
+}
+
+buildChart();
+
+setTimeout(() => {
+  document.getElementById('replayBtn').style.display = 'block';
+}, 3500);
+
+function replay() {
+  document.getElementById('replayBtn').style.display = 'none';
+  buildChart();
+  setTimeout(() => {
+    document.getElementById('replayBtn').style.display = 'block';
+  }, 3500);
+}
+</script>
+</body>
+</html>

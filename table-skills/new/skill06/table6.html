@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=450,initial-scale=1">
+<title>核心洞察汇总</title>
+<style>
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-35-Thin.woff') format('woff'); font-weight:100; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-55-Regular.woff') format('woff'); font-weight:400; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-65-Medium.woff') format('woff'); font-weight:500; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-85-Bold.woff') format('woff'); font-weight:700; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-115-Black.woff') format('woff'); font-weight:900; }
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: #0a0e27;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'AlibabaPuHuiTi', sans-serif;
+  color: #fff;
+}
+
+.canvas-wrap {
+  position: relative;
+  width: 450px;
+  height: 800px;
+  background: #0a0e27;
+  overflow: hidden;
+}
+
+.content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(450px * 0.8);
+  height: calc(800px * 0.72);
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 4px;
+  animation: fadeIn 0.8s ease-out both;
+}
+
+.subtitle {
+  font-size: 13px;
+  font-weight: 400;
+  text-align: center;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 20px;
+  animation: fadeIn 0.8s ease-out 0.2s both;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(80px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideOutLeft {
+  from { transform: translateX(0); opacity: 1; }
+  to { transform: translateX(-80px); opacity: 0; }
+}
+
+.carousel {
+  position: relative;
+  width: 100%;
+  height: calc(100% - 70px);
+  overflow: hidden;
+}
+
+.card {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 30px 24px;
+  background: rgba(255,255,255,0.03);
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.card.active {
+  display: flex;
+  animation: slideInRight 0.5s ease-out both;
+}
+
+.card.leaving {
+  display: flex;
+  animation: slideOutLeft 0.4s ease-in both;
+}
+
+.card-watermark {
+  position: absolute;
+  top: -10px;
+  right: 10px;
+  font-size: 140px;
+  font-weight: 900;
+  opacity: 0.04;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.card-color-bar {
+  position: absolute;
+  left: 0;
+  top: 20px;
+  bottom: 20px;
+  width: 4px;
+  border-radius: 0 4px 4px 0;
+}
+
+.card-num {
+  font-size: 56px;
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 2px;
+}
+
+.card-unit {
+  font-size: 16px;
+  font-weight: 400;
+  opacity: 0.6;
+  margin-bottom: 16px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
+.card-detail {
+  font-size: 13px;
+  font-weight: 400;
+  text-align: center;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.5;
+}
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  transition: all 0.3s;
+}
+
+.dot.active {
+  width: 24px;
+  border-radius: 4px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 11px;
+  color: rgba(255,255,255,0.3);
+  white-space: nowrap;
+}
+
+@media (max-width: 500px) {
+  .canvas-wrap { width: 100vw; height: 177.78vw; }
+  .content { width: 80vw; height: 72vw; }
+}
+
+#replayBtn {
+  display: none;
+  position: absolute;
+  bottom: 20px;
+  right: -80px;
+  padding: 10px 20px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px;
+  color: #fff;
+  font-family: 'AlibabaPuHuiTi';
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+}
+
+#replayBtn:hover { background: rgba(255,255,255,0.2); }
+
+@media (max-width: 500px) { #replayBtn { right: 20px; bottom: 20px; } }
+</style>
+</head>
+<body>
+<div class="canvas-wrap" id="main">
+  <div class="content" id="content">
+    <div class="title">核心洞察汇总</div>
+    <div class="subtitle">影视行业AI招聘六大关键发现</div>
+
+    <div class="carousel" id="carousel"></div>
+
+    <div class="dots" id="dots"></div>
+  </div>
+  <div class="footer">数据来源：娱乐资本论统计</div>
+  <button id="replayBtn" onclick="replay()">▶ Replay</button>
+</div>
+
+<script>
+const insights = [
+  {id:1, title:'半数岗位点名要AI', detail:'13家公司41个AI岗，传统影视30个', num:'41', unit:'个AI岗', color:'#FF6B6B'},
+  {id:2, title:'华策让人用AI，博纳让技术做AI', detail:'两种截然不同的路径', num:'2', unit:'种路径', color:'#FFA940'},
+  {id:3, title:'恒星引力卡985学历', detail:'梭哈AIGC姿态', num:'985', unit:'学历门槛', color:'#FFD93D'},
+  {id:4, title:'乐华"纯AI生成、无真人演员"', detail:'AI改造偶像的最激进尝试', num:'0', unit:'真人演员', color:'#00D4AA'},
+  {id:5, title:'耀客签约AI数字演员', detail:'仿真人短剧分成系数高达60', num:'60', unit:'分成系数', color:'#7B68EE'},
+  {id:6, title:'遥望为AI短剧专招HRBP', detail:'兵马未动粮草先行', num:'1', unit:'位AI HRBP', color:'#E040FB'}
+];
+
+let currentIdx = 0;
+let timer = null;
+
+function countUp(el, target, duration) {
+  const start = performance.now();
+  const isNum = !isNaN(target);
+  if (!isNum) { el.textContent = target; return; }
+  const t = parseInt(target);
+  function update(now) {
+    const p = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - p, 3);
+    el.textContent = Math.round(eased * t);
+    if (p < 1) requestAnimationFrame(update);
+    else el.textContent = target;
+  }
+  requestAnimationFrame(update);
+}
+
+function buildCarousel() {
+  const carousel = document.getElementById('carousel');
+  const dots = document.getElementById('dots');
+  carousel.innerHTML = '';
+  dots.innerHTML = '';
+
+  insights.forEach((ins, i) => {
+    const card = document.createElement('div');
+    card.className = 'card' + (i === 0 ? ' active' : '');
+    card.dataset.index = i;
+    card.innerHTML = `
+      <div class="card-watermark">${ins.id}</div>
+      <div class="card-color-bar" style="background:${ins.color}"></div>
+      <div class="card-num" style="color:${ins.color}" data-countup="${ins.num}">${i === 0 ? '0' : ins.num}</div>
+      <div class="card-unit">${ins.unit}</div>
+      <div class="card-title">${ins.title}</div>
+      <div class="card-detail">${ins.detail}</div>
+    `;
+    carousel.appendChild(card);
+
+    const dot = document.createElement('div');
+    dot.className = 'dot' + (i === 0 ? ' active' : '');
+    dot.style.background = i === 0 ? ins.color : '';
+    dot.dataset.index = i;
+    dot.onclick = () => goTo(i);
+    dots.appendChild(dot);
+  });
+
+  // Countup for first card
+  const firstNum = carousel.querySelector('.card.active .card-num');
+  if (firstNum) countUp(firstNum, firstNum.dataset.countup, 600);
+}
+
+function goTo(idx) {
+  const cards = document.querySelectorAll('.card');
+  const dotsEls = document.querySelectorAll('.dot');
+  
+  if (idx === currentIdx) return;
+
+  const prev = cards[currentIdx];
+  prev.classList.remove('active');
+  prev.classList.add('leaving');
+  setTimeout(() => { prev.classList.remove('leaving'); prev.style.display = 'none'; }, 400);
+
+  const next = cards[idx];
+  next.style.display = '';
+  next.classList.add('active');
+  
+  // Countup for new card
+  const numEl = next.querySelector('.card-num');
+  if (numEl) { numEl.textContent = '0'; countUp(numEl, numEl.dataset.countup, 600); }
+
+  dotsEls.forEach((d, i) => {
+    d.classList.toggle('active', i === idx);
+    d.style.background = i === idx ? insights[idx].color : '';
+  });
+
+  currentIdx = idx;
+}
+
+function nextCard() {
+  const next = currentIdx + 1;
+  if (next >= insights.length) {
+    clearInterval(timer);
+    timer = null;
+    document.getElementById('replayBtn').style.display = 'block';
+    return;
+  }
+  goTo(next);
+}
+
+function startAutoPlay() {
+  if (timer) clearInterval(timer);
+  timer = setInterval(nextCard, 2500);
+}
+
+buildCarousel();
+startAutoPlay();
+
+function replay() {
+  currentIdx = 0;
+  document.getElementById('replayBtn').style.display = 'none';
+  buildCarousel();
+  startAutoPlay();
+}
+</script>
+</body>
+</html>

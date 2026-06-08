@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>试水还是All in？</title>
+<style>
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-35-Thin.woff') format('woff'); font-weight:100; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-55-Regular.woff') format('woff'); font-weight:400; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-65-Medium.woff') format('woff'); font-weight:500; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-85-Bold.woff') format('woff'); font-weight:700; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('../assets/AlibabaPuHuiTi-3-115-Black.woff') format('woff'); font-weight:900; }
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:#0a0e27;
+  display:flex; justify-content:center; align-items:center;
+  min-height:100vh;
+  font-family:'AlibabaPuHuiTi',sans-serif;
+  color:#fff;
+  overflow:hidden;
+}
+.canvas-wrap {
+  position:relative;
+  width:450px; height:800px;
+  background:#0a0e27;
+  overflow:hidden;
+}
+.content {
+  position:absolute;
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  width:390px; height:580px;
+}
+.title {
+  font-size:22px; font-weight:700;
+  text-align:center;
+  margin-bottom:20px;
+  opacity:0; transform:translateY(-20px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.title.show { opacity:1; transform:translateY(0); }
+.title span {
+  background:linear-gradient(90deg,#7B68EE,#FF6B6B);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.bubble-chart {
+  position:relative;
+  width:100%;
+  height:480px;
+}
+
+.axis-bar {
+  position:absolute;
+  left:30px; right:30px;
+  bottom:30px;
+  height:2px;
+  background:linear-gradient(90deg,#7B68EE,#FF6B6B);
+  border-radius:1px;
+  opacity:0;
+  transition:opacity 0.8s ease;
+}
+.axis-bar.show { opacity:1; }
+
+.axis-label {
+  position:absolute;
+  bottom:8px;
+  font-size:12px; font-weight:500;
+  opacity:0;
+  transition:opacity 0.6s ease;
+}
+.axis-label.show { opacity:1; }
+.axis-label.left { left:10px; color:#7B68EE; }
+.axis-label.right { right:10px; color:#FF6B6B; }
+.axis-label.center { left:50%; transform:translateX(-50%); color:rgba(255,255,255,0.3); }
+
+.tick-marks {
+  position:absolute;
+  left:30px; right:30px;
+  bottom:30px;
+  display:flex;
+  justify-content:space-between;
+}
+.tick {
+  width:1px; height:8px;
+  background:rgba(255,255,255,0.15);
+  margin-top:2px;
+}
+
+.bubble {
+  position:absolute;
+  border-radius:50%;
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  transform:scale(0);
+  transition: transform 0.7s cubic-bezier(0.34,1.56,0.64,1);
+  cursor:default;
+}
+.bubble.show { transform:scale(1); }
+
+.bubble-name {
+  font-size:10px; font-weight:700;
+  white-space:nowrap;
+  text-shadow:0 1px 4px rgba(0,0,0,0.5);
+}
+.bubble-type {
+  font-size:8px; font-weight:400;
+  opacity:0.7;
+  white-space:nowrap;
+}
+
+.footer {
+  position:absolute;
+  bottom:20px; left:0; right:0;
+  text-align:center;
+  font-size:11px; color:rgba(255,255,255,0.35);
+  font-weight:100;
+}
+
+#replayBtn {
+  display:none; position:absolute; bottom:20px; right:-80px;
+  padding:10px 20px; background:rgba(255,255,255,0.1);
+  border:1px solid rgba(255,255,255,0.2); border-radius:8px;
+  color:#fff; font-family:'AlibabaPuHuiTi'; cursor:pointer;
+  font-size:14px; transition:all 0.3s;
+}
+#replayBtn:hover { background:rgba(255,255,255,0.2); }
+@media (max-width:500px) {
+  #replayBtn { right:20px; bottom:20px; }
+}
+</style>
+</head>
+<body>
+<div class="canvas-wrap">
+  <div class="content">
+    <div class="title" id="title"><span>试水还是All in？</span></div>
+    <div class="bubble-chart" id="bubbleChart">
+      <div class="axis-bar" id="axisBar"></div>
+      <div class="axis-label left" id="axLeft">← 试水</div>
+      <div class="axis-label right" id="axRight">All in →</div>
+      <div class="axis-label center" id="axCenter">AI投入程度</div>
+    </div>
+  </div>
+  <div class="footer">数据来源：娱乐资本论统计</div>
+  <button id="replayBtn" onclick="replay()">▶ Replay</button>
+</div>
+
+<script>
+const data = [
+  {company:'正午阳光', level:2, aiJobs:4, type:'降本/试水'},
+  {company:'柠萌影视', level:3, aiJobs:1, type:'出海'},
+  {company:'华策影视', level:6, aiJobs:5, type:'降本+漫剧'},
+  {company:'耀客文化', level:6, aiJobs:4, type:'增效/仿真人'},
+  {company:'欢娱影视', level:7, aiJobs:3, type:'增效/漫剧'},
+  {company:'恒星引力', level:9, aiJobs:4, type:'增效/全梭哈'},
+  {company:'博纳影业', level:10, aiJobs:5, type:'增效/技术路线'}
+];
+
+const maxJobs = 5;
+const maxLevel = 10;
+const chartLeft = 30;
+const chartRight = 360;
+const chartTop = 20;
+const chartBottom = 440;
+
+function getColor(level) {
+  const t = (level - 1) / (maxLevel - 1);
+  const r = Math.round(123 * (1 - t) + 255 * t);
+  const g = Math.round(104 * (1 - t) + 107 * t);
+  const b = Math.round(238 * (1 - t) + 107 * t);
+  return `rgb(${r},${g},${b})`;
+}
+
+// Pre-defined Y positions to avoid overlap
+const ySlots = [80, 150, 220, 290, 340, 180, 380];
+
+let animTimers = [];
+
+function buildChart() {
+  const chart = document.getElementById('bubbleChart');
+  // Remove old bubbles
+  chart.querySelectorAll('.bubble').forEach(b => b.remove());
+  animTimers.forEach(t => clearTimeout(t));
+  animTimers = [];
+
+  // Axis animation
+  animTimers.push(setTimeout(() => {
+    document.getElementById('title').classList.add('show');
+  }, 200));
+
+  animTimers.push(setTimeout(() => {
+    document.getElementById('axisBar').classList.add('show');
+  }, 500));
+
+  animTimers.push(setTimeout(() => {
+    document.getElementById('axLeft').classList.add('show');
+    document.getElementById('axRight').classList.add('show');
+    document.getElementById('axCenter').classList.add('show');
+  }, 800));
+
+  // Sort by level for consistent Y layout
+  const sorted = [...data].sort((a, b) => a.level - b.level);
+
+  sorted.forEach((d, i) => {
+    const x = chartLeft + ((d.level - 1) / (maxLevel - 1)) * (chartRight - chartLeft);
+    const y = ySlots[i];
+    const radius = 18 + (d.aiJobs / maxJobs) * 22;
+    const color = getColor(d.level);
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.style.left = (x - radius) + 'px';
+    bubble.style.top = (y - radius) + 'px';
+    bubble.style.width = (radius * 2) + 'px';
+    bubble.style.height = (radius * 2) + 'px';
+    bubble.style.background = color + '33';
+    bubble.style.border = `2px solid ${color}`;
+    bubble.style.boxShadow = `0 0 20px ${color}44`;
+    bubble.style.transitionDelay = `${i * 200 + 1000}ms`;
+
+    bubble.innerHTML = `
+      <div class="bubble-name">${d.company}</div>
+      <div class="bubble-type">${d.type}</div>
+    `;
+
+    chart.appendChild(bubble);
+  });
+
+  animTimers.push(setTimeout(() => {
+    document.querySelectorAll('.bubble').forEach(b => b.classList.add('show'));
+  }, 1100));
+
+  animTimers.push(setTimeout(() => {
+    document.getElementById('replayBtn').style.display = 'block';
+  }, 4000));
+}
+
+function replay() {
+  document.getElementById('replayBtn').style.display = 'none';
+  document.getElementById('title').classList.remove('show');
+  document.getElementById('axisBar').classList.remove('show');
+  document.getElementById('axLeft').classList.remove('show');
+  document.getElementById('axRight').classList.remove('show');
+  document.getElementById('axCenter').classList.remove('show');
+  document.querySelectorAll('.bubble').forEach(b => b.classList.remove('show'));
+  animTimers.forEach(t => clearTimeout(t));
+  setTimeout(buildChart, 300);
+}
+
+window.addEventListener('DOMContentLoaded', buildChart);
+</script>
+</body>
+</html>

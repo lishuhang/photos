@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>爱优腾哔 AI招聘解读</title>
+<style>
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('./fonts/AlibabaPuHuiTi-3-35-Thin.woff') format('woff'); font-weight:100; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('./fonts/AlibabaPuHuiTi-3-55-Regular.woff') format('woff'); font-weight:400; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('./fonts/AlibabaPuHuiTi-3-65-Medium.woff') format('woff'); font-weight:500; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('./fonts/AlibabaPuHuiTi-3-85-Bold.woff') format('woff'); font-weight:700; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('./fonts/AlibabaPuHuiTi-3-115-Black.woff') format('woff'); font-weight:900; }
+
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:#050816;
+  display:flex; justify-content:center; align-items:center;
+  min-height:100vh;
+  font-family:'AlibabaPuHuiTi',sans-serif;
+  overflow:hidden;
+}
+
+#viewport {
+  width:450px; height:800px;
+  background:#0a0e27;
+  position:relative;
+  overflow:hidden;
+  border-radius:12px;
+  box-shadow:0 0 60px rgba(0,212,170,0.08), 0 0 120px rgba(123,104,238,0.06);
+}
+
+#viewport::before {
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:radial-gradient(ellipse at 30% 20%, rgba(0,212,170,0.04) 0%, transparent 50%),
+             radial-gradient(ellipse at 70% 80%, rgba(123,104,238,0.04) 0%, transparent 50%);
+  pointer-events:none;z-index:0;
+}
+
+.scene {
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  opacity:0;transition:opacity 0.8s ease;
+  pointer-events:none;z-index:1;
+}
+.scene.active { opacity:1; pointer-events:auto; z-index:2; }
+
+.top-bar {
+  position:absolute;top:0;left:0;right:0;
+  height:48px;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;
+  z-index:10;
+  background:linear-gradient(180deg, rgba(10,14,39,0.95) 0%, rgba(10,14,39,0) 100%);
+}
+.scene-indicator {
+  font-size:13px;font-weight:500;color:rgba(255,255,255,0.6);
+  letter-spacing:1px;
+}
+.scene-indicator span { color:#00D4AA;font-weight:700; }
+.scene-title-top {
+  font-size:12px;font-weight:400;color:rgba(255,255,255,0.35);
+  letter-spacing:0.5px;
+}
+
+.progress-track {
+  position:absolute;top:48px;left:0;right:0;height:2px;
+  background:rgba(255,255,255,0.06);z-index:10;
+}
+.progress-fill {
+  height:100%;width:0%;
+  background:linear-gradient(90deg,#00D4AA,#7B68EE);
+  transition:width 0.3s linear;
+  box-shadow:0 0 8px rgba(0,212,170,0.4);
+}
+
+.subtitle-bar {
+  position:absolute;bottom:40px;left:0;right:0;
+  text-align:center;z-index:10;
+  padding:0 24px;
+}
+.subtitle-text {
+  font-size:12px;font-weight:400;color:rgba(255,255,255,0.4);
+  letter-spacing:1.5px;
+}
+.source-text {
+  font-size:10px;font-weight:100;color:rgba(255,255,255,0.2);
+  margin-top:6px;letter-spacing:0.5px;
+}
+
+.dots-bar {
+  position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
+  display:flex;gap:6px;z-index:10;
+}
+.dot {
+  width:6px;height:6px;border-radius:3px;
+  background:rgba(255,255,255,0.15);
+  transition:all 0.4s ease;
+}
+.dot.active { width:20px;background:linear-gradient(90deg,#00D4AA,#7B68EE); }
+
+#final-frame {
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  opacity:0;transition:opacity 1s ease;
+  pointer-events:none;z-index:1;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+#final-frame.active { opacity:1; pointer-events:auto; z-index:5; }
+
+#final-particles {
+  position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;
+}
+
+.final-content {
+  position:relative;z-index:1;text-align:center;
+}
+.final-label {
+  font-size:14px;font-weight:400;color:rgba(255,255,255,0.5);
+  letter-spacing:4px;margin-bottom:12px;
+}
+.final-title {
+  font-size:28px;font-weight:900;color:#fff;
+  letter-spacing:3px;margin-bottom:36px;
+  text-shadow:0 0 30px rgba(0,212,170,0.3);
+}
+.final-pct {
+  font-size:72px;font-weight:900;
+  background:linear-gradient(135deg,#00D4AA,#7B68EE);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+  line-height:1;margin-bottom:8px;
+}
+.final-pct-label {
+  font-size:16px;font-weight:500;color:rgba(255,255,255,0.6);
+  letter-spacing:2px;margin-bottom:32px;
+}
+.final-companies {
+  display:flex;gap:20px;justify-content:center;
+}
+.final-co { text-align:center; }
+.final-co-dot {
+  width:8px;height:8px;border-radius:50%;margin:0 auto 6px;
+}
+.final-co-name {
+  font-size:11px;font-weight:400;color:rgba(255,255,255,0.45);
+}
+</style>
+</head>
+<body>
+
+<div id="viewport">
+  <div class="top-bar">
+    <div class="scene-indicator"><span id="scene-num">1</span> / 6</div>
+    <div class="scene-title-top">爱优腾哔 · AI招聘解读</div>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+
+  <div class="scene active" id="scene-1"><div id="chart1" style="width:450px;height:800px;"></div></div>
+  <div class="scene" id="scene-2"><div id="chart2" style="width:450px;height:800px;"></div></div>
+  <div class="scene" id="scene-3"><div id="chart3" style="width:450px;height:800px;"></div></div>
+  <div class="scene" id="scene-4"><div id="chart4" style="width:450px;height:800px;"></div></div>
+  <div class="scene" id="scene-5"><div id="chart5" style="width:450px;height:800px;"></div></div>
+  <div class="scene" id="scene-6"><div id="chart6" style="width:450px;height:800px;"></div></div>
+
+  <div id="final-frame">
+    <canvas id="final-particles"></canvas>
+    <div class="final-content">
+      <div class="final-label">2025招聘季</div>
+      <div class="final-title">爱优腾哔招聘解读</div>
+      <div class="final-pct" id="final-pct-num">0%</div>
+      <div class="final-pct-label">AI岗位占比</div>
+      <div class="final-companies">
+        <div class="final-co"><div class="final-co-dot" style="background:#00D4AA;"></div><div class="final-co-name">腾讯</div></div>
+        <div class="final-co"><div class="final-co-dot" style="background:#FF6B6B;"></div><div class="final-co-name">爱奇艺</div></div>
+        <div class="final-co"><div class="final-co-dot" style="background:#FFA940;"></div><div class="final-co-name">B站</div></div>
+        <div class="final-co"><div class="final-co-dot" style="background:#7B68EE;"></div><div class="final-co-name">优酷</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="subtitle-bar">
+    <div class="subtitle-text" id="subtitle-text">柱状图 · 各渠道AI岗位占比</div>
+    <div class="source-text">数据来源：各平台2025招聘公告整理</div>
+  </div>
+  <div class="dots-bar">
+    <div class="dot active" id="dot-1"></div>
+    <div class="dot" id="dot-2"></div>
+    <div class="dot" id="dot-3"></div>
+    <div class="dot" id="dot-4"></div>
+    <div class="dot" id="dot-5"></div>
+    <div class="dot" id="dot-6"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts-wordcloud@2/dist/echarts-wordcloud.min.js"></script>
+<script>
+const DATA = {
+  hiring: { cats:['社招','校招','实习'], total:[635,525,713], ai:[167,188,113], aiPct:[26.3,35.8,15.9], totalAi:468, totalAll:1873, overallPct:25.0 },
+  radar: { dims:['技术研发','商业化','社区生态','内容实战','出海能力','人才培养'], tencent:[9,4,3,6,2,8], iqiyi:[5,9,2,5,8,5], bilibili:[6,4,9,4,5,7], youku:[4,5,3,9,3,6] },
+  iqiyi: { period:['2025暑期','2026春季'], pct:[9.4,37.6] },
+  jobs: { types:['模型/算法','内容创作','产品/运营','销售/商务','设计/美术'], tencent:[8,5,3,1,2], iqiyi:[3,4,5,6,2], bilibili:[5,3,6,1,1], youku:[2,7,3,1,6] },
+  words: {
+    tencent:[{name:'模型',value:90},{name:'算法',value:85},{name:'AIGC',value:80},{name:'影视',value:75},{name:'3D',value:70},{name:'生成',value:65},{name:'可控',value:60},{name:'强化学习',value:55},{name:'视频',value:50},{name:'统一架构',value:45},{name:'多模态',value:40},{name:'研究',value:38},{name:'视觉',value:35},{name:'效率',value:32},{name:'工程',value:30},{name:'图像',value:28},{name:'动画',value:25},{name:'叙事',value:20},{name:'分镜',value:20},{name:'审美',value:18}],
+    iqiyi:[{name:'Agent',value:90},{name:'视觉',value:80},{name:'创作',value:75},{name:'影视',value:70},{name:'广告',value:65},{name:'销售',value:60},{name:'工业化',value:55},{name:'框架',value:50},{name:'模型',value:45},{name:'提示词',value:40},{name:'故事',value:38},{name:'风格',value:35},{name:'角色',value:32},{name:'镜头',value:30},{name:'工具',value:28},{name:'生成',value:25},{name:'动画',value:22},{name:'策划',value:20},{name:'市场',value:18}],
+    bilibili:[{name:'社区',value:90},{name:'UP主',value:85},{name:'弹幕',value:80},{name:'视频',value:75},{name:'翻译',value:70},{name:'Agent',value:65},{name:'剪辑',value:60},{name:'语音',value:55},{name:'音乐',value:50},{name:'搜索',value:45},{name:'推荐',value:40},{name:'创作',value:38},{name:'工具',value:35},{name:'阿拉伯语',value:32},{name:'梗文化',value:30},{name:'智能体',value:28},{name:'战略',value:22},{name:'增长',value:20}],
+    youku:[{name:'美术',value:90},{name:'角色',value:85},{name:'手绘',value:80},{name:'3D',value:75},{name:'动画',value:70},{name:'风格',value:65},{name:'剪辑',value:60},{name:'编剧',value:55},{name:'少儿',value:50},{name:'配音',value:45},{name:'色彩',value:40},{name:'修复',value:38},{name:'叙事',value:35},{name:'视觉',value:32},{name:'分镜',value:30},{name:'建模',value:28},{name:'导演',value:25},{name:'创意',value:22},{name:'对白',value:20}]
+  }
+};
+
+const COLORS = { tencent:'#00D4AA', iqiyi:'#FF6B6B', bilibili:'#FFA940', youku:'#7B68EE' };
+const FONT = "'AlibabaPuHuiTi', sans-serif";
+
+const subtitles = [
+  '柱状图 · 各渠道AI岗位占比',
+  '环形图 · AI岗位总占比',
+  '折线图 · 爱奇艺AI岗位占比变化',
+  '雷达图 · 四平台AI战略维度',
+  '分组柱状图 · 各公司AI岗位类型分布',
+  '词云 · 四平台AI关键词'
+];
+
+let charts = [];
+let currentScene = 0;
+const SCENE_DURATION = 5000;
+const TOTAL_SCENES = 6;
+
+function makeTitle(text, sub) {
+  return {
+    text: text,
+    left:'center', top:70,
+    textStyle:{ fontSize:18, fontWeight:700, color:'#fff', fontFamily:FONT },
+    subtext: sub || '',
+    subtextStyle:{ fontSize:12, fontWeight:400, color:'rgba(255,255,255,0.4)', fontFamily:FONT }
+  };
+}
+
+// SCENE 1: Bar chart
+function initChart1() {
+  const c = echarts.init(document.getElementById('chart1'), null, {renderer:'canvas'});
+  const cats = DATA.hiring.cats;
+  const aiPct = DATA.hiring.aiPct;
+  const barColors = ['#00D4AA','#FF6B6B','#FFA940'];
+  c.setOption({
+    title: makeTitle('各渠道AI岗位占比', '社招 / 校招 / 实习'),
+    tooltip:{ trigger:'axis', backgroundColor:'rgba(10,14,39,0.9)', borderColor:'rgba(255,255,255,0.1)', textStyle:{color:'#fff',fontFamily:FONT} },
+    grid:{ left:60, right:40, top:140, bottom:100 },
+    xAxis:{
+      type:'category', data:cats,
+      axisLine:{lineStyle:{color:'rgba(255,255,255,0.1)'}},
+      axisLabel:{color:'rgba(255,255,255,0.7)',fontSize:13,fontFamily:FONT,fontWeight:500},
+      axisTick:{show:false}
+    },
+    yAxis:{
+      type:'value', max:45, name:'%', nameTextStyle:{color:'rgba(255,255,255,0.4)',fontFamily:FONT,fontSize:11},
+      axisLine:{show:false}, axisTick:{show:false},
+      splitLine:{lineStyle:{color:'rgba(255,255,255,0.05)'}},
+      axisLabel:{color:'rgba(255,255,255,0.4)',fontSize:11,fontFamily:FONT}
+    },
+    series:[{
+      type:'bar', data:aiPct.map((v,i)=>({value:v, itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:barColors[i]},{offset:1,color:barColors[i]+'33'}])}})),
+      barWidth:56,
+      label:{show:true,position:'top',formatter:'{c}%',fontSize:16,fontWeight:700,fontFamily:FONT,color:'#fff'},
+      animationDuration:1500, animationEasing:'elasticOut', animationDelay:function(idx){return idx*300;}
+    }]
+  });
+  return c;
+}
+
+// SCENE 2: Donut chart
+function initChart2() {
+  const c = echarts.init(document.getElementById('chart2'), null, {renderer:'canvas'});
+  c.setOption({
+    title: makeTitle('AI岗位总占比', '468 AI vs 1405 非AI'),
+    tooltip:{ trigger:'item', backgroundColor:'rgba(10,14,39,0.9)', borderColor:'rgba(255,255,255,0.1)', textStyle:{color:'#fff',fontFamily:FONT} },
+    series:[{
+      type:'pie', radius:['52%','72%'], center:['50%','52%'],
+      avoidLabelOverlap:false,
+      itemStyle:{ borderColor:'#0a0e27', borderWidth:4 },
+      label:{ show:false },
+      emphasis:{
+        scaleSize:8,
+        itemStyle:{ shadowBlur:20, shadowColor:'rgba(0,0,0,0.5)' }
+      },
+      data:[
+        {value:468, name:'AI岗位', itemStyle:{color:new echarts.graphic.LinearGradient(0,0,1,1,[{offset:0,color:'#00D4AA'},{offset:1,color:'#7B68EE'}])}},
+        {value:1405, name:'非AI岗位', itemStyle:{color:'rgba(255,255,255,0.06)'}}
+      ],
+      animationType:'scale', animationDuration:1800, animationEasing:'cubicOut'
+    },
+    {
+      type:'pie', radius:['0%','48%'], center:['50%','52%'],
+      silent:true,
+      label:{show:false},
+      data:[{value:1, itemStyle:{color:'transparent'}}],
+      animationDuration:0
+    }],
+    graphic:[{
+      type:'text', left:'center', top:'46%',
+      style:{ text:'25%', textAlign:'center', fill:'#fff', fontSize:42, fontWeight:900, fontFamily:FONT }
+    },{
+      type:'text', left:'center', top:'56%',
+      style:{ text:'AI岗位占比', textAlign:'center', fill:'rgba(255,255,255,0.45)', fontSize:13, fontWeight:400, fontFamily:FONT }
+    }]
+  });
+  return c;
+}
+
+// SCENE 3: Line chart - iQiyi
+function initChart3() {
+  const c = echarts.init(document.getElementById('chart3'), null, {renderer:'canvas'});
+  c.setOption({
+    title: makeTitle('爱奇艺AI岗位占比变化', '2025暑期 → 2026春季'),
+    tooltip:{ trigger:'axis', backgroundColor:'rgba(10,14,39,0.9)', borderColor:'rgba(255,255,255,0.1)', textStyle:{color:'#fff',fontFamily:FONT} },
+    grid:{ left:65, right:40, top:150, bottom:100 },
+    xAxis:{
+      type:'category', data:DATA.iqiyi.period, boundaryGap:false,
+      axisLine:{lineStyle:{color:'rgba(255,255,255,0.1)'}},
+      axisLabel:{color:'rgba(255,255,255,0.7)',fontSize:12,fontFamily:FONT,fontWeight:500},
+      axisTick:{show:false}
+    },
+    yAxis:{
+      type:'value', max:50, name:'%', nameTextStyle:{color:'rgba(255,255,255,0.4)',fontFamily:FONT,fontSize:11},
+      axisLine:{show:false}, axisTick:{show:false},
+      splitLine:{lineStyle:{color:'rgba(255,255,255,0.05)'}},
+      axisLabel:{color:'rgba(255,255,255,0.4)',fontSize:11,fontFamily:FONT}
+    },
+    series:[{
+      type:'line', data:DATA.iqiyi.pct,
+      smooth:0.3,
+      symbol:'circle', symbolSize:10,
+      lineStyle:{ color:'#FF6B6B', width:3, shadowBlur:12, shadowColor:'rgba(255,107,107,0.3)' },
+      itemStyle:{ color:'#FF6B6B', borderWidth:3, borderColor:'#0a0e27' },
+      areaStyle:{
+        color:new echarts.graphic.LinearGradient(0,0,0,1,[
+          {offset:0,color:'rgba(255,107,107,0.35)'},
+          {offset:1,color:'rgba(255,107,107,0)'}
+        ])
+      },
+      label:{ show:true, position:'top', formatter:'{c}%', fontSize:14, fontWeight:700, fontFamily:FONT, color:'#FF6B6B' },
+      animationDuration:2000, animationEasing:'cubicInOut'
+    }],
+    graphic:[{
+      type:'text', right:50, top:155,
+      style:{ text:'↑ 4倍增长', textAlign:'right', fill:'#FF6B6B', fontSize:20, fontWeight:900, fontFamily:FONT,
+        shadowBlur:12, shadowColor:'rgba(255,107,107,0.4)' }
+    }]
+  });
+  return c;
+}
+
+// SCENE 4: Radar chart
+function initChart4() {
+  const c = echarts.init(document.getElementById('chart4'), null, {renderer:'canvas'});
+  const dims = DATA.radar.dims;
+  const indicators = dims.map(function(d){return {name:d,max:10};});
+  c.setOption({
+    title: makeTitle('四平台AI战略维度', '六维度对比分析'),
+    tooltip:{ backgroundColor:'rgba(10,14,39,0.9)', borderColor:'rgba(255,255,255,0.1)', textStyle:{color:'#fff',fontFamily:FONT} },
+    legend:{
+      bottom:65, left:'center',
+      textStyle:{color:'rgba(255,255,255,0.6)',fontSize:11,fontFamily:FONT},
+      itemWidth:14, itemHeight:8, itemGap:16,
+      data:['腾讯','爱奇艺','B站','优酷']
+    },
+    radar:{
+      center:['50%','52%'], radius:'55%',
+      indicator:indicators,
+      axisName:{ color:'rgba(255,255,255,0.55)', fontSize:10, fontFamily:FONT, fontWeight:500 },
+      splitArea:{ areaStyle:{ color:['rgba(255,255,255,0.02)','rgba(255,255,255,0.04)','rgba(255,255,255,0.02)','rgba(255,255,255,0.04)','rgba(255,255,255,0.02)'] } },
+      splitLine:{ lineStyle:{ color:'rgba(255,255,255,0.08)' } },
+      axisLine:{ lineStyle:{ color:'rgba(255,255,255,0.08)' } }
+    },
+    series:[{
+      type:'radar',
+      data:[
+        {value:DATA.radar.tencent, name:'腾讯', lineStyle:{color:COLORS.tencent,width:2}, itemStyle:{color:COLORS.tencent}, areaStyle:{color:COLORS.tencent+'22'}},
+        {value:DATA.radar.iqiyi, name:'爱奇艺', lineStyle:{color:COLORS.iqiyi,width:2}, itemStyle:{color:COLORS.iqiyi}, areaStyle:{color:COLORS.iqiyi+'22'}},
+        {value:DATA.radar.bilibili, name:'B站', lineStyle:{color:COLORS.bilibili,width:2}, itemStyle:{color:COLORS.bilibili}, areaStyle:{color:COLORS.bilibili+'22'}},
+        {value:DATA.radar.youku, name:'优酷', lineStyle:{color:COLORS.youku,width:2}, itemStyle:{color:COLORS.youku}, areaStyle:{color:COLORS.youku+'22'}}
+      ],
+      animationDuration:2000, animationEasing:'cubicOut'
+    }]
+  });
+  return c;
+}
+
+// SCENE 5: Grouped bar chart
+function initChart5() {
+  const c = echarts.init(document.getElementById('chart5'), null, {renderer:'canvas'});
+  const types = DATA.jobs.types;
+  const companies = [
+    {name:'腾讯',data:DATA.jobs.tencent,color:COLORS.tencent},
+    {name:'爱奇艺',data:DATA.jobs.iqiyi,color:COLORS.iqiyi},
+    {name:'B站',data:DATA.jobs.bilibili,color:COLORS.bilibili},
+    {name:'优酷',data:DATA.jobs.youku,color:COLORS.youku}
+  ];
+  c.setOption({
+    title: makeTitle('各公司AI岗位类型分布', '5大类型 × 4平台'),
+    tooltip:{ trigger:'axis', backgroundColor:'rgba(10,14,39,0.9)', borderColor:'rgba(255,255,255,0.1)', textStyle:{color:'#fff',fontFamily:FONT} },
+    legend:{
+      bottom:65, left:'center',
+      textStyle:{color:'rgba(255,255,255,0.6)',fontSize:11,fontFamily:FONT},
+      itemWidth:14, itemHeight:8, itemGap:14,
+      data:companies.map(function(c){return c.name;})
+    },
+    grid:{ left:50, right:30, top:145, bottom:100 },
+    xAxis:{
+      type:'category', data:types,
+      axisLine:{lineStyle:{color:'rgba(255,255,255,0.1)'}},
+      axisLabel:{color:'rgba(255,255,255,0.6)',fontSize:10,fontFamily:FONT,fontWeight:500,interval:0,rotate:12},
+      axisTick:{show:false}
+    },
+    yAxis:{
+      type:'value',
+      axisLine:{show:false}, axisTick:{show:false},
+      splitLine:{lineStyle:{color:'rgba(255,255,255,0.05)'}},
+      axisLabel:{color:'rgba(255,255,255,0.35)',fontSize:10,fontFamily:FONT}
+    },
+    series:companies.map(function(co,i){
+      return {
+        type:'bar', name:co.name, data:co.data,
+        barWidth:14, barGap:'25%',
+        itemStyle:{
+          color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:co.color},{offset:1,color:co.color+'44'}]),
+          borderRadius:[3,3,0,0]
+        },
+        animationDuration:1200, animationEasing:'cubicOut', animationDelay:function(idx){return idx*120+i*80;}
+      };
+    })
+  });
+  return c;
+}
+
+// SCENE 6: Word cloud
+function initChart6() {
+  const c = echarts.init(document.getElementById('chart6'), null, {renderer:'canvas'});
+  var allWords = [];
+  var companyKeys = ['tencent','iqiyi','bilibili','youku'];
+  companyKeys.forEach(function(key){
+    DATA.words[key].forEach(function(w){
+      allWords.push({
+        name:w.name, value:w.value,
+        textStyle:{ color:COLORS[key], shadowBlur:6, shadowColor:COLORS[key]+'55' }
+      });
+    });
+  });
+  var wordMap = new Map();
+  allWords.forEach(function(w){
+    if(!wordMap.has(w.name) || wordMap.get(w.name).value < w.value){
+      wordMap.set(w.name, w);
+    }
+  });
+  var finalWords = Array.from(wordMap.values());
+  finalWords.sort(function(a,b){return b.value-a.value;});
+
+  c.setOption({
+    title: makeTitle('四平台AI关键词', '词云 · 颜色代表所属平台'),
+    tooltip:{ show:true, backgroundColor:'rgba(10,14,39,0.9)', borderColor:'rgba(255,255,255,0.1)', textStyle:{color:'#fff',fontFamily:FONT},
+      formatter:function(p){ return p.name + ' (权重:' + p.value + ')'; }
+    },
+    series:[{
+      type:'wordCloud',
+      shape:'circle',
+      left:'center', top:'52%',
+      width:380, height:420,
+      sizeRange:[12,52],
+      rotationRange:[-30,30],
+      rotationStep:15,
+      gridSize:8,
+      drawOutOfBound:false,
+      layoutAnimation:true,
+      textStyle:{ fontFamily:FONT, fontWeight:700 },
+      emphasis:{
+        textStyle:{ shadowBlur:16, shadowColor:'rgba(255,255,255,0.3)' }
+      },
+      data:finalWords
+    }]
+  });
+  return c;
+}
+
+// Final frame particles
+var particleAnimId = null;
+function initParticles() {
+  var canvas = document.getElementById('final-particles');
+  canvas.width = 450; canvas.height = 800;
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var pColors = ['#00D4AA','#FF6B6B','#FFA940','#7B68EE'];
+
+  for(var i=0;i<80;i++){
+    particles.push({
+      x:Math.random()*450, y:Math.random()*800,
+      vx:(Math.random()-0.5)*0.3, vy:-Math.random()*0.4-0.1,
+      r:Math.random()*2+0.5,
+      color:pColors[Math.floor(Math.random()*4)],
+      alpha:Math.random()*0.5+0.1,
+      life:Math.random()
+    });
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,450,800);
+    for(var i=0;i<particles.length;i++){
+      var p = particles[i];
+      p.x+=p.vx; p.y+=p.vy; p.life+=0.003;
+      if(p.y<-10){ p.y=810; p.x=Math.random()*450; }
+      if(p.x<-10) p.x=460;
+      if(p.x>460) p.x=-10;
+      var a = p.alpha * (0.5+0.5*Math.sin(p.life*Math.PI*2));
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=p.color;
+      ctx.globalAlpha=a;
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r*3,0,Math.PI*2);
+      ctx.fillStyle=p.color;
+      ctx.globalAlpha=a*0.15;
+      ctx.fill();
+    }
+    ctx.globalAlpha=1;
+    particleAnimId = requestAnimationFrame(draw);
+  }
+  draw();
+}
+
+function countUp(target, duration) {
+  var el = document.getElementById('final-pct-num');
+  var start = performance.now();
+  function update(now) {
+    var progress = Math.min((now-start)/duration, 1);
+    var eased = 1 - Math.pow(1-progress, 3);
+    var val = (eased * target).toFixed(1);
+    el.textContent = val + '%';
+    if(progress<1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+function switchScene(idx) {
+  for(var i=1;i<=6;i++){
+    document.getElementById('scene-'+i).classList.remove('active');
+    var dot = document.getElementById('dot-'+i);
+    if(dot) dot.classList.remove('active');
+  }
+  document.getElementById('final-frame').classList.remove('active');
+
+  if(idx < 6){
+    var si = idx+1;
+    document.getElementById('scene-'+si).classList.add('active');
+    document.getElementById('dot-'+si).classList.add('active');
+    document.getElementById('scene-num').textContent = si;
+    document.getElementById('subtitle-text').textContent = subtitles[idx];
+    if(charts[idx]) charts[idx].resize();
+  } else if(idx === 6){
+    document.getElementById('final-frame').classList.add('active');
+    document.getElementById('scene-num').textContent = '\u2726';
+    document.getElementById('subtitle-text').textContent = '数据总结 \u00b7 2025招聘季';
+    countUp(25.0, 2000);
+    initParticles();
+  }
+}
+
+function startProgress(duration) {
+  var fill = document.getElementById('progress-fill');
+  fill.style.transition = 'none';
+  fill.style.width = '0%';
+  requestAnimationFrame(function(){
+    requestAnimationFrame(function(){
+      fill.style.transition = 'width '+duration+'ms linear';
+      fill.style.width = '100%';
+    });
+  });
+}
+
+function autoPlay() {
+  var scene = 0;
+  function next() {
+    switchScene(scene);
+    startProgress(SCENE_DURATION);
+    scene++;
+    if(scene <= 6){
+      setTimeout(next, SCENE_DURATION);
+    }
+  }
+  next();
+}
+
+function init() {
+  charts[0] = initChart1();
+  charts[1] = initChart2();
+  charts[2] = initChart3();
+  charts[3] = initChart4();
+  charts[4] = initChart5();
+  charts[5] = initChart6();
+
+  setTimeout(autoPlay, 800);
+}
+
+window.addEventListener('resize', function(){
+  charts.forEach(function(c){ if(c) c.resize(); });
+});
+
+window.addEventListener('load', init);
+</script>
+</body>
+</html>

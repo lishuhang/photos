@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Hiring - Vizzu Animated Chart Transitions</title>
+<style>
+  @font-face { font-family:'AlibabaPuHuiTi'; src:url('./fonts/AlibabaPuHuiTi-3-35-Thin.woff') format('woff'); font-weight:100; }
+  @font-face { font-family:'AlibabaPuHuiTi'; src:url('./fonts/AlibabaPuHuiTi-3-55-Regular.woff') format('woff'); font-weight:400; }
+  @font-face { font-family:'AlibabaPuHuiTi'; src:url('./fonts/AlibabaPuHuiTi-3-65-Medium.woff') format('woff'); font-weight:500; }
+  @font-face { font-family:'AlibabaPuHuiTi'; src:url('./fonts/AlibabaPuHuiTi-3-85-Bold.woff') format('woff'); font-weight:700; }
+  @font-face { font-family:'AlibabaPuHuiTi'; src:url('./fonts/AlibabaPuHuiTi-3-115-Black.woff') format('woff'); font-weight:900; }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #050816;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    font-family: 'AlibabaPuHuiTi', sans-serif;
+    overflow: hidden;
+  }
+
+  .phone-frame {
+    width: 450px;
+    height: 800px;
+    background: #0a0e27;
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+    box-shadow: 0 0 60px rgba(0,212,170,0.08), 0 0 120px rgba(123,104,238,0.06);
+  }
+
+  /* Loading overlay */
+  .loading-overlay {
+    position: absolute;
+    inset: 0;
+    background: #0a0e27;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  .loading-overlay.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+  .spinner {
+    width: 48px;
+    height: 48px;
+    border: 3px solid rgba(0,212,170,0.15);
+    border-top-color: #00D4AA;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text {
+    margin-top: 20px;
+    color: #8892b0;
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 2px;
+  }
+
+  /* Progress bar */
+  .progress-bar-container {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.06);
+    z-index: 50;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #00D4AA, #7B68EE);
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  /* Scene indicator */
+  .scene-indicator {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 50;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+  .scene-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    transition: all 0.4s ease;
+  }
+  .scene-dot.active {
+    background: #00D4AA;
+    box-shadow: 0 0 8px rgba(0,212,170,0.5);
+    transform: scale(1.3);
+  }
+  .scene-dot.completed {
+    background: rgba(0,212,170,0.4);
+  }
+
+  /* Transition label */
+  .transition-label {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    z-index: 50;
+    font-size: 11px;
+    color: #00D4AA;
+    font-weight: 500;
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    background: rgba(0,212,170,0.08);
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid rgba(0,212,170,0.15);
+  }
+  .transition-label.visible {
+    opacity: 1;
+  }
+
+  /* Scene title */
+  .scene-title {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    right: 0;
+    text-align: center;
+    z-index: 50;
+    font-size: 18px;
+    font-weight: 700;
+    color: #e6f1ff;
+    letter-spacing: 1px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.5);
+  }
+  .scene-title.visible {
+    opacity: 1;
+  }
+
+  /* Vizzu container */
+  #vizzu-container {
+    width: 450px;
+    height: 800px;
+    position: relative;
+  }
+
+  /* Donut center label */
+  .donut-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: 40;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+  .donut-center.visible {
+    opacity: 1;
+  }
+  .donut-pct {
+    font-size: 48px;
+    font-weight: 900;
+    color: #00D4AA;
+    line-height: 1;
+    text-shadow: 0 0 30px rgba(0,212,170,0.3);
+  }
+  .donut-label {
+    font-size: 13px;
+    color: #8892b0;
+    margin-top: 4px;
+    font-weight: 400;
+  }
+
+  /* Company legend */
+  .company-legend {
+    position: absolute;
+    bottom: 40px;
+    left: 20px;
+    right: 20px;
+    z-index: 50;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .company-legend.visible {
+    opacity: 1;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    color: #a8b2d1;
+    font-weight: 400;
+  }
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+  }
+
+  /* Final frame */
+  .final-frame {
+    position: absolute;
+    inset: 0;
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 1s ease, visibility 1s ease;
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1040 25%, #0a0e27 50%, #0d1a2a 75%, #0a0e27 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 8s ease infinite;
+  }
+  .final-frame.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+  @keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    25% { background-position: 100% 0%; }
+    50% { background-position: 100% 100%; }
+    75% { background-position: 0% 100%; }
+    100% { background-position: 0% 50%; }
+  }
+  .final-glow {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,212,170,0.12) 0%, transparent 70%);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 3s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+  }
+  .final-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: #e6f1ff;
+    z-index: 1;
+    letter-spacing: 3px;
+    text-shadow: 0 2px 20px rgba(0,212,170,0.3);
+  }
+  .final-pct {
+    font-size: 72px;
+    font-weight: 900;
+    color: #00D4AA;
+    z-index: 1;
+    margin-top: 16px;
+    line-height: 1;
+    text-shadow: 0 0 40px rgba(0,212,170,0.4);
+  }
+  .final-pct-label {
+    font-size: 16px;
+    color: #8892b0;
+    z-index: 1;
+    margin-top: 8px;
+    font-weight: 400;
+    letter-spacing: 2px;
+  }
+  .final-subtitle {
+    font-size: 13px;
+    color: #4a5568;
+    z-index: 1;
+    margin-top: 32px;
+    font-weight: 100;
+    letter-spacing: 4px;
+  }
+  .final-line {
+    width: 60px;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00D4AA, transparent);
+    z-index: 1;
+    margin-top: 20px;
+  }
+  .final-company-row {
+    display: flex;
+    gap: 24px;
+    margin-top: 28px;
+    z-index: 1;
+  }
+  .final-company-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+  }
+  .final-company-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 3px;
+  }
+  .final-company-name {
+    font-size: 11px;
+    color: #6b7280;
+    font-weight: 400;
+  }
+
+  /* Iqiyi callout */
+  .iqiyi-callout {
+    position: absolute;
+    bottom: 100px;
+    left: 20px;
+    right: 20px;
+    z-index: 50;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .iqiyi-callout.visible {
+    opacity: 1;
+  }
+  .iqiyi-arrow {
+    font-size: 32px;
+    color: #FF6B6B;
+    font-weight: 900;
+  }
+  .iqiyi-text {
+    font-size: 14px;
+    color: #a8b2d1;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+  .iqiyi-highlight {
+    color: #FF6B6B;
+    font-weight: 700;
+    font-size: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="phone-frame">
+  <!-- Loading overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <div class="loading-text">LOADING DATA</div>
+  </div>
+
+  <!-- Scene indicator -->
+  <div class="scene-indicator" id="sceneIndicator">
+    <div class="scene-dot" data-scene="0"></div>
+    <div class="scene-dot" data-scene="1"></div>
+    <div class="scene-dot" data-scene="2"></div>
+    <div class="scene-dot" data-scene="3"></div>
+    <div class="scene-dot" data-scene="4"></div>
+    <div class="scene-dot" data-scene="5"></div>
+  </div>
+
+  <!-- Transition label -->
+  <div class="transition-label" id="transitionLabel"></div>
+
+  <!-- Scene title -->
+  <div class="scene-title" id="sceneTitle"></div>
+
+  <!-- Vizzu chart container -->
+  <div id="vizzu-container"></div>
+
+  <!-- Donut center overlay -->
+  <div class="donut-center" id="donutCenter">
+    <div class="donut-pct">25%</div>
+    <div class="donut-label">AI岗位占比</div>
+  </div>
+
+  <!-- Iqiyi callout -->
+  <div class="iqiyi-callout" id="iqiyiCallout">
+    <div class="iqiyi-arrow">9.4% → <span class="iqiyi-highlight">37.6%</span></div>
+    <div class="iqiyi-text">爱奇艺AI岗位占比增幅</div>
+  </div>
+
+  <!-- Company legend -->
+  <div class="company-legend" id="companyLegend">
+    <div class="legend-item"><div class="legend-dot" style="background:#00D4AA"></div>腾讯</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#FF6B6B"></div>爱奇艺</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#FFA940"></div>B站</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#7B68EE"></div>优酷</div>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-bar-container">
+    <div class="progress-bar-fill" id="progressBar"></div>
+  </div>
+
+  <!-- Final frame -->
+  <div class="final-frame" id="finalFrame">
+    <div class="final-glow"></div>
+    <div class="final-title">爱优腾哔招聘解读</div>
+    <div class="final-line"></div>
+    <div class="final-pct">25%</div>
+    <div class="final-pct-label">AI岗位占比</div>
+    <div class="final-company-row">
+      <div class="final-company-item">
+        <div class="final-company-dot" style="background:#00D4AA"></div>
+        <div class="final-company-name">腾讯</div>
+      </div>
+      <div class="final-company-item">
+        <div class="final-company-dot" style="background:#FF6B6B"></div>
+        <div class="final-company-name">爱奇艺</div>
+      </div>
+      <div class="final-company-item">
+        <div class="final-company-dot" style="background:#FFA940"></div>
+        <div class="final-company-name">B站</div>
+      </div>
+      <div class="final-company-item">
+        <div class="final-company-dot" style="background:#7B68EE"></div>
+        <div class="final-company-name">优酷</div>
+      </div>
+    </div>
+    <div class="final-subtitle">DATA VISUALIZATION BY VIZZU</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vizzu@0.9/dist/vizzu.min.js"></script>
+<script>
+(async function() {
+  // ── Data ──
+  const hiringData = {
+    categories: ['社招', '校招', '实习'],
+    ai: [167, 188, 113],
+    aiPct: [26.3, 35.8, 15.9]
+  };
+  const aiVsNon = { ai: 468, nonAi: 1405 };
+  const iqiyiChange = { from: 9.4, to: 37.6 };
+  const companyJobs = {
+    types: ['模型/算法', '内容创作', '产品/运营', '销售/商务', '设计/美术'],
+    tencent: [8,5,3,1,2], iqiyi: [3,4,5,6,2], bilibili: [5,3,6,1,1], youku: [2,7,3,1,6]
+  };
+
+  const companyColors = {
+    '腾讯': '#00D4AA',
+    '爱奇艺': '#FF6B6B',
+    'B站': '#FFA940',
+    '优酷': '#7B68EE'
+  };
+
+  // ── UI helpers ──
+  const loadingOverlay = document.getElementById('loadingOverlay');
+  const transitionLabel = document.getElementById('transitionLabel');
+  const sceneTitle = document.getElementById('sceneTitle');
+  const donutCenter = document.getElementById('donutCenter');
+  const iqiyiCallout = document.getElementById('iqiyiCallout');
+  const companyLegend = document.getElementById('companyLegend');
+  const progressBar = document.getElementById('progressBar');
+  const finalFrame = document.getElementById('finalFrame');
+  const sceneDots = document.querySelectorAll('.scene-dot');
+
+  let currentScene = -1;
+
+  function setScene(idx) {
+    currentScene = idx;
+    sceneDots.forEach((dot, i) => {
+      dot.classList.remove('active', 'completed');
+      if (i < idx) dot.classList.add('completed');
+      if (i === idx) dot.classList.add('active');
+    });
+    progressBar.style.width = ((idx + 1) / 6 * 100) + '%';
+  }
+
+  function showTransitionLabel(text) {
+    transitionLabel.textContent = text;
+    transitionLabel.classList.add('visible');
+    setTimeout(() => transitionLabel.classList.remove('visible'), 3000);
+  }
+
+  function showSceneTitle(text) {
+    sceneTitle.textContent = text;
+    sceneTitle.classList.add('visible');
+  }
+
+  function hideSceneTitle() {
+    sceneTitle.classList.remove('visible');
+  }
+
+  function hideOverlays() {
+    donutCenter.classList.remove('visible');
+    iqiyiCallout.classList.remove('visible');
+    companyLegend.classList.remove('visible');
+  }
+
+  function sleep(ms) {
+    return new Promise(r => setTimeout(r, ms));
+  }
+
+  // ── Build Vizzu data objects ──
+
+  // Scene 1: Bar chart - AI岗位数量 by channel
+  const barData = {
+    dimensions: [{ name: 'Channel', values: hiringData.categories }],
+    measures: [{ name: 'AI岗位数', values: hiringData.ai }]
+  };
+
+  // Scene 3: AI vs Non-AI donut
+  const donutData = {
+    dimensions: [{ name: 'Type', values: ['AI岗位', '非AI岗位'] }],
+    measures: [{ name: '数量', values: [aiVsNon.ai, aiVsNon.nonAi] }]
+  };
+
+  // Scene 4 & 5: Grouped bar - company job distribution
+  const companies = ['腾讯', '爱奇艺', 'B站', '优酷'];
+  const companyArrays = [companyJobs.tencent, companyJobs.iqiyi, companyJobs.bilibili, companyJobs.youku];
+
+  let groupedDim1 = [];
+  let groupedDim2 = [];
+  let groupedVals = [];
+  for (let ci = 0; ci < companies.length; ci++) {
+    for (let ti = 0; ti < companyJobs.types.length; ti++) {
+      groupedDim1.push(companies[ci]);
+      groupedDim2.push(companyJobs.types[ti]);
+      groupedVals.push(companyArrays[ci][ti]);
+    }
+  }
+
+  const groupedData = {
+    dimensions: [
+      { name: 'Company', values: groupedDim1 },
+      { name: 'JobType', values: groupedDim2 }
+    ],
+    measures: [{ name: '岗位倍数', values: groupedVals }]
+  };
+
+  // Filtered data for single company
+  function makeCompanyData(companyIdx) {
+    const company = companies[companyIdx];
+    const arr = companyArrays[companyIdx];
+    return {
+      dimensions: [
+        { name: 'Company', values: companyJobs.types.map(() => company) },
+        { name: 'JobType', values: [...companyJobs.types] }
+      ],
+      measures: [{ name: '岗位倍数', values: [...arr] }]
+    };
+  }
+
+  // ── Vizzu style ──
+  const darkStyle = {
+    plot: {
+      backgroundColor: '#0a0e27',
+      paddingLeft: 60,
+      paddingRight: 30,
+      paddingTop: 80,
+      paddingBottom: 50
+    },
+    legend: {
+      label: { color: '#8892b0', fontSize: '11px' },
+      marker: { size: 8 }
+    },
+    xAxis: {
+      label: { color: '#8892b0', fontSize: '11px' },
+      line: { color: 'rgba(255,255,255,0.08)' },
+      ticks: { color: 'rgba(255,255,255,0.08)' },
+      title: { color: '#a8b2d1', fontSize: '12px' }
+    },
+    yAxis: {
+      label: { color: '#8892b0', fontSize: '11px' },
+      line: { color: 'rgba(255,255,255,0.08)' },
+      ticks: { color: 'rgba(255,255,255,0.08)' },
+      title: { color: '#a8b2d1', fontSize: '12px' }
+    },
+    marker: {
+      label: {
+        color: '#e6f1ff',
+        fontSize: '12px',
+        fontWeight: 500
+      }
+    },
+    title: {
+      color: '#e6f1ff',
+      fontSize: '16px',
+      fontWeight: 700
+    }
+  };
+
+  const colorPalette = Object.values(companyColors);
+
+  // ── Initialize Vizzu ──
+  let chart;
+  try {
+    chart = new Vizzu('vizzu-container');
+  } catch(e) {
+    console.error('Vizzu init error:', e);
+  }
+
+  // Wait for Vizzu to initialize
+  await chart.initializing;
+  console.log('Vizzu initialized');
+
+  // Hide loading
+  loadingOverlay.classList.add('hidden');
+  await sleep(600);
+
+  // ═══════════════════════════════════════
+  // SCENE 1: Bar chart - 各渠道AI岗位数量
+  // ═══════════════════════════════════════
+  setScene(0);
+  showSceneTitle('各渠道AI岗位数量');
+  await sleep(300);
+
+  await chart.animate({
+    data: barData,
+    config: {
+      channels: {
+        x: { set: ['Channel'] },
+        y: { set: ['AI岗位数'] },
+        color: { set: ['Channel'] }
+      },
+      geometry: 'rectangle',
+      title: '',
+      legend: null
+    },
+    style: {
+      ...darkStyle,
+      plot: {
+        ...darkStyle.plot,
+        marker: {
+          colorPalette: '#00D4AA #FF6B6B #FFA940'
+        }
+      }
+    }
+  }, 2000);
+
+  await sleep(3000);
+
+  // ═══════════════════════════════════════
+  // SCENE 2: MORPH Bar → Pie chart
+  // ═══════════════════════════════════════
+  hideSceneTitle();
+  showTransitionLabel('柱状图 → 饼图 | Bar → Pie');
+  setScene(1);
+  await sleep(400);
+
+  await chart.animate({
+    config: {
+      channels: {
+        x: { set: null },
+        y: { set: null },
+        angle: { set: ['AI岗位数'] },
+        color: { set: ['Channel'] }
+      },
+      geometry: 'area',
+      title: '',
+      legend: null,
+      coordSystem: 'polar'
+    },
+    style: {
+      ...darkStyle,
+      plot: {
+        ...darkStyle.plot,
+        marker: {
+          colorPalette: '#00D4AA #FF6B6B #FFA940'
+        }
+      }
+    }
+  }, 1800);
+
+  showSceneTitle('各渠道AI岗位占比');
+  await sleep(3500);
+
+  // ═══════════════════════════════════════
+  // SCENE 3: AI vs Non-AI donut
+  // ═══════════════════════════════════════
+  hideSceneTitle();
+  showTransitionLabel('饼图 → 环形图 | Pie → Donut');
+  setScene(2);
+  await sleep(400);
+
+  await chart.animate({
+    data: donutData,
+    config: {
+      channels: {
+        angle: { set: ['数量'] },
+        color: { set: ['Type'] }
+      },
+      geometry: 'area',
+      coordSystem: 'polar',
+      title: '',
+      legend: null,
+      innerRadius: 0.6
+    },
+    style: {
+      ...darkStyle,
+      plot: {
+        ...darkStyle.plot,
+        marker: {
+          colorPalette: '#00D4AA #2a3060'
+        }
+      }
+    }
+  }, 1500);
+
+  donutCenter.classList.add('visible');
+  showSceneTitle('AI vs 非AI岗位');
+  await sleep(4000);
+
+  // ═══════════════════════════════════════
+  // SCENE 4: MORPH Donut → Grouped bar
+  // ═══════════════════════════════════════
+  donutCenter.classList.remove('visible');
+  hideSceneTitle();
+  showTransitionLabel('环形图 → 分组柱状图 | Donut → Grouped Bar');
+  setScene(3);
+  await sleep(400);
+
+  await chart.animate({
+    data: groupedData,
+    config: {
+      channels: {
+        x: { set: ['Company', 'JobType'] },
+        y: { set: ['岗位倍数'] },
+        color: { set: ['Company'] },
+        angle: { set: null }
+      },
+      geometry: 'rectangle',
+      coordSystem: 'cartesian',
+      title: '',
+      legend: null,
+      innerRadius: null
+    },
+    style: {
+      ...darkStyle,
+      plot: {
+        ...darkStyle.plot,
+        marker: {
+          colorPalette: colorPalette.join(' ')
+        }
+      }
+    }
+  }, 2000);
+
+  companyLegend.classList.add('visible');
+  showSceneTitle('各公司AI岗位分布');
+  await sleep(3500);
+
+  // ═══════════════════════════════════════
+  // SCENE 5: Filter through companies
+  // ═══════════════════════════════════════
+  hideSceneTitle();
+  showTransitionLabel('筛选过渡 | Filter Transitions');
+  setScene(4);
+  await sleep(300);
+
+  // Show 腾讯
+  showSceneTitle('腾讯 AI岗位');
+  await chart.animate({
+    data: makeCompanyData(0),
+    config: {
+      channels: {
+        x: { set: ['JobType'] },
+        y: { set: ['岗位倍数'] },
+        color: { set: ['Company'] }
+      },
+      geometry: 'rectangle',
+      title: '',
+      legend: null
+    },
+    style: {
+      ...darkStyle,
+      plot: {
+        ...darkStyle.plot,
+        marker: {
+          colorPalette: '#00D4AA'
+        }
+      }
+    }
+  }, 1200);
+  await sleep(2000);
+
+  // Show 爱奇艺
+  hideSceneTitle();
+  showSceneTitle('爱奇艺 AI岗位');
+  iqiyiCallout.classList.add('visible');
+
+  await chart.animate({
+    data: makeCompanyData(1),
+    config: {
+      channels: {
+        x: { set: ['JobType'] },
+        y: { set: ['岗位倍数'] },
+        color: { set: ['Company'] }
+      },
+      geometry: 'rectangle',
+      title: '',
+      legend: null
+    },
+    style: {
+      ...darkStyle,
+      plot: {
+        ...darkStyle.plot,
+        marker: {
+          colorPalette: '#FF6B6B'
+        }
+      }
+    }
+  }, 1200);
+  await sleep(2500);
+
+  // Show B站
+  iqiyiCallout.classList.remove('visible');
+  hideSceneTitle();
+  showSceneTitle('B站 AI岗位');
+
+  await chart.animate({
+    data: makeCompanyData(2),
+    config: {
+      channels: {
+        x: { set: ['JobType'] },
+        y: { set: ['岗位倍数'] },
+        color: { set: ['Company'] }
+      },
+      geometry: 'rectangle',
+      title: '',
+      legend: null
+    },
+    style: {
+      ...darkStyle,
+      plot: {
+        ...darkStyle.plot,
+        marker: {
+          colorPalette: '#FFA940'
+        }
+      }
+    }
+  }, 1200);
+  await sleep(2000);
+
+  // Show 优酷
+  hideSceneTitle();
+  showSceneTitle('优酷 AI岗位');
+
+  await chart.animate({
+    data: makeCompanyData(3),
+    config: {
+      channels: {
+        x: { set: ['JobType'] },
+        y: { set: ['岗位倍数'] },
+        color: { set: ['Company'] }
+      },
+      geometry: 'rectangle',
+      title: '',
+      legend: null
+    },
+    style: {
+      ...darkStyle,
+      plot: {
+        ...darkStyle.plot,
+        marker: {
+          colorPalette: '#7B68EE'
+        }
+      }
+    }
+  }, 1200);
+  await sleep(2000);
+
+  // ═══════════════════════════════════════
+  // SCENE 6: MORPH back to summary
+  // ═══════════════════════════════════════
+  hideSceneTitle();
+  hideOverlays();
+  companyLegend.classList.remove('visible');
+  showTransitionLabel('柱状图 → 总结 | Bar → Summary');
+  setScene(5);
+
+  // Animate to donut before final frame
+  await chart.animate({
+    data: donutData,
+    config: {
+      channels: {
+        angle: { set: ['数量'] },
+        color: { set: ['Type'] },
+        x: { set: null },
+        y: { set: null }
+      },
+      geometry: 'area',
+      coordSystem: 'polar',
+      innerRadius: 0.65,
+      title: '',
+      legend: null
+    },
+    style: {
+      ...darkStyle,
+      plot: {
+        ...darkStyle.plot,
+        marker: {
+          colorPalette: '#00D4AA #1a1f3a',
+          label: {
+            color: 'transparent'
+          }
+        }
+      }
+    }
+  }, 1800);
+
+  await sleep(1500);
+
+  // Fade chart to transparent
+  await chart.animate({
+    style: {
+      plot: {
+        backgroundColor: 'transparent',
+        marker: {
+          colorPalette: 'transparent transparent'
+        }
+      }
+    }
+  }, 1500);
+
+  progressBar.style.width = '100%';
+  finalFrame.classList.add('visible');
+
+})();
+</script>
+</body>
+</html>

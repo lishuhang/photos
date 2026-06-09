@@ -1205,11 +1205,6 @@
       "date": "2023年07月19日 15:35",
       "file": "20230719【好利来、旺旺、特步，品牌接班人为何热衷做网红？】.md"
     },
-    "https://mp.weixin.qq.com/s/F0Nvh5KZskxrHc64NF4hGg": {
-      "title": "共套现108.5亿，传媒股借AIGC逢高减持上瘾了？",
-      "date": "2023年07月20日 14:59",
-      "file": "20230720【共套现108.5亿，传媒股借AIGC逢高减持上瘾了？】.md"
-    },
     "https://mp.weixin.qq.com/s/IIPJv-LlDwWEpN3C__2dKQ": {
       "title": "解码《芭比》粉色营销",
       "date": "2023年07月18日 15:27",
@@ -1240,11 +1235,6 @@
       "date": "2023年07月22日 13:00",
       "file": "20230722【60秒看透传媒股到底谁在逢高减持！】.md"
     },
-    "https://mp.weixin.qq.com/s/MjGNFLjTJsnz8nv8BFEDtA": {
-      "title": "1天吸引上万人！被迪士尼虐惨的中国乐园，终于熬出头了？",
-      "date": "2023年07月22日 13:00",
-      "file": "20230722【1天吸引上万人！被迪士尼虐惨的中国乐园，终于熬出头了？】.md"
-    },
     "https://mp.weixin.qq.com/s/PhjGiUn_UCvJTVcEFFwsIw": {
       "title": "从德扑到掼蛋，资本圈的“东升西落”",
       "date": "2023年07月23日 15:40",
@@ -1254,11 +1244,32 @@
       "title": "“秒鸭这种水平的AI项目，我也能干” | AI创业者调查②",
       "date": "2023年07月24日 14:21",
       "file": "20230724【“秒鸭这种水平的AI项目，我也能干” _ AI创业者调查②】.md"
+    },
+    "https://mp.weixin.qq.com/s/-AMRTDI4TN-2n6puKWKvxQ": {
+      "title": "AI版孟宴臣登热搜，AI营销卷到明星了吗？",
+      "date": "2023年07月21日 14:49",
+      "file": "20230721【AI版孟宴臣登热搜，AI营销卷到明星了吗？】.md"
+    },
+    "https://mp.weixin.qq.com/s/j6q7aYBEODDM6xmvAa2Orw": {
+      "title": "《封神第一部》封神背后：腾讯视频加码院线？",
+      "date": "2023年07月24日 14:21",
+      "file": "20230724【《封神第一部》封神背后：腾讯视频加码院线？】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [],
-  "last_update": "2026-06-09T09:48:05.149050",
+  "captcha_pending": [
+    {
+      "url": "https://mp.weixin.qq.com/s/F0Nvh5KZskxrHc64NF4hGg",
+      "title": "共套现108.5亿，传媒股借AIGC逢高减持上瘾了？",
+      "seq": 240
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/MjGNFLjTJsnz8nv8BFEDtA",
+      "title": "1天吸引上万人！被迪士尼虐惨的中国乐园，终于熬出头了？",
+      "seq": 249
+    }
+  ],
+  "last_update": "2026-06-09T09:48:27.442205",
   "total_completed": 251,
   "total_failed": 0
 }

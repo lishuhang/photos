@@ -2460,6 +2460,11 @@
       "date": "2023年10月19日 12:56",
       "file": "20231019【9块9大战，拖垮了我的咖啡店】.md"
     },
+    "https://mp.weixin.qq.com/s/-aXTAPfD7CDnjxhTnzD-Iw": {
+      "title": "探秘小程序百亿市场里的隐形冠军：为什么是这三家西安公司？",
+      "date": "2023年10月18日 15:00",
+      "file": "20231018【探秘小程序百亿市场里的隐形冠军：为什么是这三家西安公司？】.md"
+    },
     "https://mp.weixin.qq.com/s/mxJD817O9KiCgCRWyaQmmA": {
       "title": "爆款频出，口碑破圈，快手短剧如何成为暑期档“赢家”？",
       "date": "2023年10月17日 13:29",
@@ -2469,17 +2474,21 @@
       "title": "脉脉急了",
       "date": "2023年10月17日 13:29",
       "file": "20231017【脉脉急了】.md"
+    },
+    "https://mp.weixin.qq.com/s/qy7QocEHJneCZWWoBnqVhg": {
+      "title": "李彦宏和百度，跨过「中年危机」",
+      "date": "2023年10月23日 14:39",
+      "file": "20231023【李彦宏和百度，跨过「中年危机」】.md"
+    },
+    "https://mp.weixin.qq.com/s/AfC8TiCYwdBipmvvVpM9vw": {
+      "title": "潮玩未死：卷向IP、国风和线下店",
+      "date": "2023年10月24日 15:38",
+      "file": "20231024【潮玩未死：卷向IP、国风和线下店】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [
-    {
-      "url": "https://mp.weixin.qq.com/s/-aXTAPfD7CDnjxhTnzD-Iw",
-      "title": "探秘小程序百亿市场里的隐形冠军：为什么是这三家西安公司？",
-      "seq": 493
-    }
-  ],
-  "last_update": "2026-06-09T12:32:18.330841",
-  "total_completed": 494,
+  "captcha_pending": [],
+  "last_update": "2026-06-09T12:33:10.875167",
+  "total_completed": 497,
   "total_failed": 0
 }

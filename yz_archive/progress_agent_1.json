@@ -369,42 +369,47 @@
       "title": "互联网「35岁陷阱」：欲望、人性与灰色空间",
       "date": "2023年05月25日 14:00",
       "file": "20230525【互联网「35岁陷阱」：欲望、人性与灰色空间】.md"
+    },
+    "https://mp.weixin.qq.com/s/EoyeJwCgaYK-HNC43quJRg": {
+      "title": "《王国之泪》爆卖1000万，但为何没拉动《原神》玩家入坑",
+      "date": "2023年05月19日 14:17",
+      "file": "20230519【《王国之泪》爆卖1000万，但为何没拉动《原神》玩家入坑】.md"
+    },
+    "https://mp.weixin.qq.com/s/GufBkYnzbIMLl1DAsle_Kg": {
+      "title": "娱乐资本论夏季招聘全面开启",
+      "date": "2023年05月18日 15:11",
+      "file": "20230518【娱乐资本论夏季招聘全面开启】.md"
+    },
+    "https://mp.weixin.qq.com/s/BC8hVzeytB5SOKiCp5j1zQ": {
+      "title": "54档节目背后，户外真人秀又要热起来了？",
+      "date": "2023年05月25日 14:00",
+      "file": "20230525【54档节目背后，户外真人秀又要热起来了？】.md"
+    },
+    "https://mp.weixin.qq.com/s/9RKlxEDADfpDi87giKVbOw": {
+      "title": "罚款、封号，又一千万粉丝网红凉了",
+      "date": "2023年05月24日 14:40",
+      "file": "20230524【罚款、封号，又一千万粉丝网红凉了】.md"
+    },
+    "https://mp.weixin.qq.com/s/hKiZh88JWmA6J0KfDghplw": {
+      "title": "一名戏曲演员转正有多难？",
+      "date": "2023年05月22日 15:31",
+      "file": "20230522【一名戏曲演员转正有多难？】.md"
     }
   },
   "failed": {},
   "captcha_pending": [
-    {
-      "url": "https://mp.weixin.qq.com/s/EoyeJwCgaYK-HNC43quJRg",
-      "title": "《王国之泪》爆卖1000万，但为何没拉动《原神》玩家入坑",
-      "seq": 67
-    },
     {
       "url": "https://mp.weixin.qq.com/s/PMaRJLxG671HsKVf8Ejv1A",
       "title": "借着“抖音红利”，海洁娅爆红了，问题是，“白牌魔咒”也来了",
       "seq": 74
     },
     {
-      "url": "https://mp.weixin.qq.com/s/GufBkYnzbIMLl1DAsle_Kg",
-      "title": "娱乐资本论夏季招聘全面开启",
-      "seq": 75
-    },
-    {
       "url": "https://mp.weixin.qq.com/s/TLaCL-PYYUe2-1ssXKELgg",
       "title": "“五个女博士”收割年轻人",
       "seq": 76
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/BC8hVzeytB5SOKiCp5j1zQ",
-      "title": "54档节目背后，户外真人秀又要热起来了？",
-      "seq": 79
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/9RKlxEDADfpDi87giKVbOw",
-      "title": "罚款、封号，又一千万粉丝网红凉了",
-      "seq": 80
     }
   ],
-  "last_update": "2026-06-09T08:26:53.872905",
-  "total_completed": 74,
+  "last_update": "2026-06-09T08:28:00.963586",
+  "total_completed": 79,
   "total_failed": 0
 }

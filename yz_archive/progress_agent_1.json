@@ -875,6 +875,11 @@
       "date": "2023年06月25日 14:25",
       "file": "20230625【从微博电影之夜说起，热门IP的品牌赞助方法论】.md"
     },
+    "https://mp.weixin.qq.com/s/MTGTRNlYIffjfUaE2OLMhA": {
+      "title": "5G加持，行业生态迎来全新升级与创新",
+      "date": "2023年06月27日 15:30",
+      "file": "20230627【5G加持，行业生态迎来全新升级与创新】.md"
+    },
     "https://mp.weixin.qq.com/s/hQLaW6U0LQKaQ1oYCFiafw": {
       "title": "5月网剧备案：总数增长70%，《大奉打更人》《第八号当铺之霁月篇》备案",
       "date": "2023年06月28日 13:45",
@@ -895,6 +900,11 @@
       "date": "2023年06月27日 15:30",
       "file": "20230627【4380万签下戚薇，华夏视听能做成东方甄选2.0吗？】.md"
     },
+    "https://mp.weixin.qq.com/s/u3nn8iZdi8do0EYTODAgtw": {
+      "title": "低欲望的日本人，正在走出“失去的30年”",
+      "date": "2023年06月28日 13:45",
+      "file": "20230628【低欲望的日本人，正在走出“失去的30年”】.md"
+    },
     "https://mp.weixin.qq.com/s/AMvD6V5vjFo3Zv4N4G2xGg": {
       "title": "《中国好声音》入淘背后：灿星迈出电商直播第一步",
       "date": "2023年06月27日 15:30",
@@ -909,32 +919,11 @@
       "title": "“落地仙侠”《护心》用“高燃+轻喜”为青春仙侠赋新释义|对话好奇心影业刘璐",
       "date": "2023年06月29日 13:41",
       "file": "20230629【“落地仙侠”《护心》用“高燃+轻喜”为青春仙侠赋新释义_对话好奇心影业刘璐】.md"
-    },
-    "https://mp.weixin.qq.com/s/fsMjG56q2Ocm3XFnbfPDyg": {
-      "title": "好莱坞抵制AI“秘密入侵”，中国文娱业弯道超车的机会？",
-      "date": "2023年06月29日 13:41",
-      "file": "20230629【好莱坞抵制AI“秘密入侵”，中国文娱业弯道超车的机会？】.md"
-    },
-    "https://mp.weixin.qq.com/s/CH8Zs6dDXsWW-rBxO_DrEA": {
-      "title": "蔡徐坤翻不翻车，中国人都能买爆Prada",
-      "date": "2023年07月03日 14:29",
-      "file": "20230703【蔡徐坤翻不翻车，中国人都能买爆Prada】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [
-    {
-      "url": "https://mp.weixin.qq.com/s/MTGTRNlYIffjfUaE2OLMhA",
-      "title": "5G加持，行业生态迎来全新升级与创新",
-      "seq": 176
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/u3nn8iZdi8do0EYTODAgtw",
-      "title": "低欲望的日本人，正在走出“失去的30年”",
-      "seq": 181
-    }
-  ],
-  "last_update": "2026-06-09T09:14:04.420808",
+  "captcha_pending": [],
+  "last_update": "2026-06-09T09:15:05.223083",
   "total_completed": 184,
   "total_failed": 0
 }

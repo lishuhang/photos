@@ -408,12 +408,6 @@
       "file": "20231224-【2023年度垂类最佳，《我可以47》做对了哪些？】.md",
       "seq": "68"
     },
-    "https://mp.weixin.qq.com/s/7EKUTHbbVrk8zy2gEhdLGQ": {
-      "title": "二轮入围名单揭晓｜CEIS 2024 中国娱乐产业年会暨金河豚荣誉推选",
-      "date": "2023年12月25日 15:37",
-      "file": "20231225-【二轮入围名单揭晓｜CEIS 2024 中国娱乐产业年会暨金河豚荣誉推选】.md",
-      "seq": "69"
-    },
     "https://mp.weixin.qq.com/s/g2wktFf_x9qJc_UA104iLQ": {
       "title": "爱奇艺副总裁董轩羽：爱奇艺综艺正在一条没有参照物的路上探索｜特刊节选",
       "date": "2023年12月23日 12:03",
@@ -497,6 +491,12 @@
       "date": "2023年12月27日 14:57",
       "file": "20231227-【完美世界影视业务负责人曾映雪：在压力中坚持高质量输出】.md",
       "seq": "83"
+    },
+    "https://mp.weixin.qq.com/s/7EKUTHbbVrk8zy2gEhdLGQ": {
+      "title": "二轮入围名单揭晓｜CEIS 2024 中国娱乐产业年会暨金河豚荣誉推选",
+      "date": "2023年12月25日 15:37",
+      "file": "20231225-【二轮入围名单揭晓｜CEIS 2024 中国娱乐产业年会暨金河豚荣誉推选】.md",
+      "seq": "69"
     },
     "https://mp.weixin.qq.com/s/TODYngHwNkXdz1DVwBtmpQ": {
       "title": "巨星老矣，好莱坞的接班人在哪？",
@@ -659,7 +659,54 @@
       "date": "2024年1月7日 15:31",
       "file": "20240107-【复苏与新生｜CEIS 2024 完整议程发布，与50位嘉宾一起寻路2024】.md",
       "seq": "110"
+    },
+    "https://mp.weixin.qq.com/s/ULD-iQFytOHELCJbxpwaXg": {
+      "title": "始祖鸟母公司IPO：很能销售，仍然亏损",
+      "date": "2024年1月9日 13:21",
+      "file": "20240109-【始祖鸟母公司IPO：很能销售，仍然亏损】.md",
+      "seq": "112"
+    },
+    "https://mp.weixin.qq.com/s/VFD0CuJaPfnnZLbQ4S-vfg": {
+      "title": "鲜花“纽交所”，揭秘你从未见过的鲜花拍卖行",
+      "date": "2024年1月7日 15:31",
+      "file": "20240107-【鲜花“纽交所”，揭秘你从未见过的鲜花拍卖行】.md",
+      "seq": "113"
+    },
+    "https://mp.weixin.qq.com/s/SGIYOglYF_8K6fnQcC6SGg": {
+      "title": "完整入围揭晓｜CEIS 2024 中国娱乐产业年会暨金河豚荣誉推选",
+      "date": "2024年1月6日 13:33",
+      "file": "20240106-【完整入围揭晓｜CEIS 2024 中国娱乐产业年会暨金河豚荣誉推选】.md",
+      "seq": "115"
+    },
+    "https://mp.weixin.qq.com/s/WIKUQXbYfClQATjcJgjeuA": {
+      "title": "VAST AI让3D成为图文、视频之后的下一种内容形态丨专访宋亚宸",
+      "date": "2024年1月13日 15:35",
+      "file": "20240113-【VAST AI让3D成为图文、视频之后的下一种内容形态丨专访宋亚宸】.md",
+      "seq": "116"
+    },
+    "https://mp.weixin.qq.com/s/YE4h48y1QUI7ghrTbdkTAg": {
+      "title": "百度“悔婚”，监管趋严，抖快强势入局…泛娱乐直播未来在哪？",
+      "date": "2024年1月11日 15:02",
+      "file": "20240111-【百度“悔婚”，监管趋严，抖快强势入局…泛娱乐直播未来在哪？】.md",
+      "seq": "117"
+    },
+    "https://mp.weixin.qq.com/s/Mod9d2Vct-6JqN4hyAgEwA": {
+      "title": "复苏与新生｜CEIS 2024 完整议程发布，与50位嘉宾一起寻路2024",
+      "date": "2024年1月10日 11:56",
+      "file": "20240110-【复苏与新生｜CEIS 2024 完整议程发布，与50位嘉宾一起寻路2024】.md",
+      "seq": "118"
     }
   },
-  "failed": {}
+  "failed": {
+    "https://mp.weixin.qq.com/s/Bp0_djItUf3uPmOEm2dGVA": {
+      "title": "知乎盐言故事的想象，不止是网文",
+      "seq": "111",
+      "ts": "2026-06-09T08:50:43.087967"
+    },
+    "https://mp.weixin.qq.com/s/yi2ySbsEiJ51fCTXRW2CPQ": {
+      "title": "再见，2023；你好，2024｜小娱月报",
+      "seq": "114",
+      "ts": "2026-06-09T08:53:20.952503"
+    }
+  }
 }

@@ -875,11 +875,6 @@
       "date": "2023年06月25日 14:25",
       "file": "20230625【从微博电影之夜说起，热门IP的品牌赞助方法论】.md"
     },
-    "https://mp.weixin.qq.com/s/MTGTRNlYIffjfUaE2OLMhA": {
-      "title": "5G加持，行业生态迎来全新升级与创新",
-      "date": "2023年06月27日 15:30",
-      "file": "20230627【5G加持，行业生态迎来全新升级与创新】.md"
-    },
     "https://mp.weixin.qq.com/s/hQLaW6U0LQKaQ1oYCFiafw": {
       "title": "5月网剧备案：总数增长70%，《大奉打更人》《第八号当铺之霁月篇》备案",
       "date": "2023年06月28日 13:45",
@@ -894,11 +889,22 @@
       "title": "独家对话爱奇艺×蒙牛：说唱IP如何实现品效协同？",
       "date": "2023年06月28日 13:45",
       "file": "20230628【独家对话爱奇艺×蒙牛：说唱IP如何实现品效协同？】.md"
+    },
+    "https://mp.weixin.qq.com/s/bR8CgDXg3MfrDb99iSjtOg": {
+      "title": "4380万签下戚薇，华夏视听能做成东方甄选2.0吗？",
+      "date": "2023年06月27日 15:30",
+      "file": "20230627【4380万签下戚薇，华夏视听能做成东方甄选2.0吗？】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [],
-  "last_update": "2026-06-09T09:11:39.521850",
+  "captcha_pending": [
+    {
+      "url": "https://mp.weixin.qq.com/s/MTGTRNlYIffjfUaE2OLMhA",
+      "title": "5G加持，行业生态迎来全新升级与创新",
+      "seq": 176
+    }
+  ],
+  "last_update": "2026-06-09T09:12:12.661831",
   "total_completed": 179,
   "total_failed": 0
 }

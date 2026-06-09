@@ -2320,16 +2320,6 @@
       "date": "2023年10月10日 13:33",
       "file": "20231010【在这届亚运会，尽情感受体育的温度】.md"
     },
-    "https://mp.weixin.qq.com/s/D24btClEriXzEUgNHNMomQ": {
-      "title": "爱优腾芒2023专利纵览：技术视角下的储备战",
-      "date": "2023年10月09日 15:35",
-      "file": "20231009【爱优腾芒2023专利纵览：技术视角下的储备战】.md"
-    },
-    "https://mp.weixin.qq.com/s/P6XNGpFfeRuQ2UZqj5-ayw": {
-      "title": "谁能最早看见AIGC的未来？专访昆仑万维董事长兼CEO方汉丨文娱行业AI巡礼",
-      "date": "2023年10月11日 13:00",
-      "file": "20231011【谁能最早看见AIGC的未来？专访昆仑万维董事长兼CEO方汉丨文娱行业AI巡礼】.md"
-    },
     "https://mp.weixin.qq.com/s/FD6yaHsdC1UCoc_ytKhxvA": {
       "title": "AIGC+AIoT——打造AI智能语义+语音的新时代｜人本智汇李亚专访",
       "date": "2023年10月07日 14:36",
@@ -2355,6 +2345,11 @@
       "date": "2023年10月11日 13:00",
       "file": "20231011【霸王茶姬联名盗墓笔记大翻车：二次元难搞还是品牌不会玩？】.md"
     },
+    "https://mp.weixin.qq.com/s/D24btClEriXzEUgNHNMomQ": {
+      "title": "爱优腾芒2023专利纵览：技术视角下的储备战",
+      "date": "2023年10月09日 15:35",
+      "file": "20231009【爱优腾芒2023专利纵览：技术视角下的储备战】.md"
+    },
     "https://mp.weixin.qq.com/s/pUtx4hs9ZtwRNpXrh0skKw": {
       "title": "ChatGPT大大大升级，这回谁要慌了？",
       "date": "2023年10月12日 13:50",
@@ -2370,11 +2365,6 @@
       "date": "2023年10月09日 15:35",
       "file": "20231009【《现在就出发》：没有边界感的综艺能好看？】.md"
     },
-    "https://mp.weixin.qq.com/s/o-EEYSK5K1T-JejyrG0t9A": {
-      "title": "9月互联网专利盘点｜百度拓展视频知识点，联通识别元宇宙洗钱",
-      "date": "2023年10月12日 13:50",
-      "file": "20231012【9月互联网专利盘点｜百度拓展视频知识点，联通识别元宇宙洗钱】.md"
-    },
     "https://mp.weixin.qq.com/s/_GTK7Es-XMn1W6xvEpvPQw": {
       "title": "快递出海，风再起时",
       "date": "2023年10月13日 13:00",
@@ -2382,8 +2372,19 @@
     }
   },
   "failed": {},
-  "captcha_pending": [],
-  "last_update": "2026-06-09T12:22:02.618260",
-  "total_completed": 476,
+  "captcha_pending": [
+    {
+      "url": "https://mp.weixin.qq.com/s/P6XNGpFfeRuQ2UZqj5-ayw",
+      "title": "谁能最早看见AIGC的未来？专访昆仑万维董事长兼CEO方汉丨文娱行业AI巡礼",
+      "seq": 471
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/o-EEYSK5K1T-JejyrG0t9A",
+      "title": "9月互联网专利盘点｜百度拓展视频知识点，联通识别元宇宙洗钱",
+      "seq": 475
+    }
+  ],
+  "last_update": "2026-06-09T12:23:27.127787",
+  "total_completed": 474,
   "total_failed": 0
 }

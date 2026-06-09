@@ -1780,11 +1780,6 @@
       "date": "2023年09月02日 13:00",
       "file": "20230902【8亿票房，20万粉丝，诺兰凭什么“炸”】.md"
     },
-    "https://mp.weixin.qq.com/s/Cn6HYRKdX-3w2Ey03Wc2dw": {
-      "title": "滚烫生长、打破边界，腾讯视频动漫的进击之路",
-      "date": "2023年09月01日 15:55",
-      "file": "20230901【滚烫生长、打破边界，腾讯视频动漫的进击之路】.md"
-    },
     "https://mp.weixin.qq.com/s/369ilRC3UkIQsWoXw2laHQ": {
       "title": "影视行业加速复苏！华谊兄弟上半年业绩亏损收窄 下半年影视储备丰富",
       "date": "2023年08月31日 14:01",
@@ -1794,11 +1789,22 @@
       "title": "爱奇艺儿童成暑期“孩子王”，花式营销成就“IP聚能环”",
       "date": "2023年08月31日 14:01",
       "file": "20230831【爱奇艺儿童成暑期“孩子王”，花式营销成就“IP聚能环”】.md"
+    },
+    "https://mp.weixin.qq.com/s/BBnEnZ2456X3l9ypuOSqOg": {
+      "title": "流量时代，浪潮音乐大赏为什么还要做品质音乐奖项？｜专访",
+      "date": "2023年09月02日 13:00",
+      "file": "20230902【流量时代，浪潮音乐大赏为什么还要做品质音乐奖项？｜专访】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [],
-  "last_update": "2026-06-09T11:04:37.239422",
+  "captcha_pending": [
+    {
+      "url": "https://mp.weixin.qq.com/s/Cn6HYRKdX-3w2Ey03Wc2dw",
+      "title": "滚烫生长、打破边界，腾讯视频动漫的进击之路",
+      "seq": 357
+    }
+  ],
+  "last_update": "2026-06-09T11:04:50.307722",
   "total_completed": 359,
   "total_failed": 0
 }

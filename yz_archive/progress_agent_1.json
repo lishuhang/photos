@@ -2245,6 +2245,11 @@
       "date": "2023年10月03日 14:00",
       "file": "20231003【十一黄金周，泰国等急了】.md"
     },
+    "https://mp.weixin.qq.com/s/Ayl1ZO1kCghkKyTeJ3YD6A": {
+      "title": "赶超北上广，吊打年轻人，银发族成养宠主流！",
+      "date": "2023年10月02日 12:21",
+      "file": "20231002【赶超北上广，吊打年轻人，银发族成养宠主流！】.md"
+    },
     "https://mp.weixin.qq.com/s/bk9IIqoJfFyeGeTrDU6FKw": {
       "title": "让心智障碍人士演电影有多难？| 专访《热血沸腾》监制",
       "date": "2023年10月03日 14:00",
@@ -2265,26 +2270,35 @@
       "date": "2023年10月01日 15:05",
       "file": "20231001【“前任”IP如何走到第十年？ _ 专访导演田羽生】.md"
     },
+    "https://mp.weixin.qq.com/s/NeazY1tgNNEwUibnAxFVig": {
+      "title": "提前订票，肠子悔青？国庆机票价格突然跳水，有人退票重订省下5000多元！网友：心态崩了",
+      "date": "2023年09月30日 14:30",
+      "file": "20230930【提前订票，肠子悔青？国庆机票价格突然跳水，有人退票重订省下5000多元！网友：心态崩了】.md"
+    },
     "https://mp.weixin.qq.com/s/3EWf_m3EVmi503k6t2XyRA": {
       "title": "AIGC红与黑：有人召唤“课代表”，有人要养“AI女优”",
       "date": "2023年10月06日 14:25",
       "file": "20231006【AIGC红与黑：有人召唤“课代表”，有人要养“AI女优”】.md"
+    },
+    "https://mp.weixin.qq.com/s/QazOibAyRyRp9eqyXkyE4g": {
+      "title": "松茸、猕猴桃、大闸蟹，京东为什么总有“全网最低价”？",
+      "date": "2023年10月07日 14:36",
+      "file": "20231007【松茸、猕猴桃、大闸蟹，京东为什么总有“全网最低价”？】.md"
+    },
+    "https://mp.weixin.qq.com/s/q-4a5pFT3edO68p3T9rdWQ": {
+      "title": "“封神”之后再攻“磐石”，六公主如何成为电影营销生力军？",
+      "date": "2023年10月04日 13:52",
+      "file": "20231004【“封神”之后再攻“磐石”，六公主如何成为电影营销生力军？】.md"
+    },
+    "https://mp.weixin.qq.com/s/FD6yaHsdC1UCoc_ytKhxvA": {
+      "title": "AIGC+AIoT——打造AI智能语义+语音的新时代｜人本智汇李亚专访",
+      "date": "2023年10月07日 14:36",
+      "file": "20231007【AIGC+AIoT——打造AI智能语义+语音的新时代｜人本智汇李亚专访】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [
-    {
-      "url": "https://mp.weixin.qq.com/s/Ayl1ZO1kCghkKyTeJ3YD6A",
-      "title": "赶超北上广，吊打年轻人，银发族成养宠主流！",
-      "seq": 450
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/NeazY1tgNNEwUibnAxFVig",
-      "title": "提前订票，肠子悔青？国庆机票价格突然跳水，有人退票重订省下5000多元！网友：心态崩了",
-      "seq": 454
-    }
-  ],
-  "last_update": "2026-06-09T12:13:09.621407",
-  "total_completed": 454,
+  "captcha_pending": [],
+  "last_update": "2026-06-09T12:13:57.912318",
+  "total_completed": 459,
   "total_failed": 0
 }

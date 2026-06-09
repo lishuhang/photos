@@ -1315,10 +1315,25 @@
       "date": "2023年07月25日 14:56",
       "file": "20230725【蹭五月天热点，脑白金又来洗脑了？】.md"
     },
+    "https://mp.weixin.qq.com/s/r5_NU85NgsIRn66bi-KovQ": {
+      "title": "1000个算法工程师冲入罗永浩直播间",
+      "date": "2023年07月27日 13:55",
+      "file": "20230727【1000个算法工程师冲入罗永浩直播间】.md"
+    },
     "https://mp.weixin.qq.com/s/YcLm9tf_NXELEOw8D9iJjg": {
       "title": "《封神》的得与失：工业化标杆、IP计划流产、质子团贬值",
       "date": "2023年07月27日 13:55",
       "file": "20230727【《封神》的得与失：工业化标杆、IP计划流产、质子团贬值】.md"
+    },
+    "https://mp.weixin.qq.com/s/xpFUHUHnLILRVbYewb3f1A": {
+      "title": "剧集“空降”宣推苦了谁？",
+      "date": "2023年07月30日 13:05",
+      "file": "20230730【剧集“空降”宣推苦了谁？】.md"
+    },
+    "https://mp.weixin.qq.com/s/EJnWIeHmsilI4bWq2jjxnA": {
+      "title": "专访王小卤：四年了，为啥还在做凤爪？｜品牌深壹度",
+      "date": "2023年07月30日 13:05",
+      "file": "20230730【专访王小卤：四年了，为啥还在做凤爪？｜品牌深壹度】.md"
     },
     "https://mp.weixin.qq.com/s/5O73kYMZFEugWNON_RIg6Q": {
       "title": "游戏动漫角色占76%，Character.ai成了当代网友的“梦中情聊”",
@@ -1349,37 +1364,11 @@
       "title": "冯提莫罹患癌症后，她的粉和黑都向我发来了短信",
       "date": "2023年07月29日 14:00",
       "file": "20230729【冯提莫罹患癌症后，她的粉和黑都向我发来了短信】.md"
-    },
-    "https://mp.weixin.qq.com/s/w3b-6c0wucp3QL9NBudS1w": {
-      "title": "抖音直播间被停3天，东方甄选终局是做自己的“山姆”？",
-      "date": "2023年07月29日 14:00",
-      "file": "20230729【抖音直播间被停3天，东方甄选终局是做自己的“山姆”？】.md"
-    },
-    "https://mp.weixin.qq.com/s/1THt8FBnjYm9IOt8KH8Czw": {
-      "title": "Netflix的亚洲综艺战事：爱优腾看好了，我只表演一次",
-      "date": "2023年07月31日 14:55",
-      "file": "20230731【Netflix的亚洲综艺战事：爱优腾看好了，我只表演一次】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [
-    {
-      "url": "https://mp.weixin.qq.com/s/r5_NU85NgsIRn66bi-KovQ",
-      "title": "1000个算法工程师冲入罗永浩直播间",
-      "seq": 264
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/xpFUHUHnLILRVbYewb3f1A",
-      "title": "剧集“空降”宣推苦了谁？",
-      "seq": 266
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/EJnWIeHmsilI4bWq2jjxnA",
-      "title": "专访王小卤：四年了，为啥还在做凤爪？｜品牌深壹度",
-      "seq": 267
-    }
-  ],
-  "last_update": "2026-06-09T10:07:59.910809",
-  "total_completed": 272,
+  "captcha_pending": [],
+  "last_update": "2026-06-09T10:08:22.430519",
+  "total_completed": 273,
   "total_failed": 0
 }

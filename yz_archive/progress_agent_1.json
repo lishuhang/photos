@@ -1600,20 +1600,20 @@
       "date": "2023年08月16日 14:00",
       "file": "20230816【直播电商2023半年报：交个朋友赚4000万，遥望亏1.8亿】.md"
     },
-    "https://mp.weixin.qq.com/s/ool_1njjQugKBNPMQdeZYA": {
-      "title": "狂输二十万，Soul直播间里的“孤注一掷”",
-      "date": "2023年08月16日 14:00",
-      "file": "20230816【狂输二十万，Soul直播间里的“孤注一掷”】.md"
-    },
     "https://mp.weixin.qq.com/s/l9e6OK7cyDo2w2sHhJuG_g": {
       "title": "现实版《孤注一掷》性感荷官？娜扎代言翻车了！",
       "date": "2023年08月17日 15:16",
       "file": "20230817【现实版《孤注一掷》性感荷官？娜扎代言翻车了！】.md"
     },
-    "https://mp.weixin.qq.com/s/w_P5fGmJoZ0CXTLsE0Wxig": {
-      "title": "《长相思》暑期档领跑，腾讯视频古装剧进阶",
-      "date": "2023年08月17日 15:16",
-      "file": "20230817【《长相思》暑期档领跑，腾讯视频古装剧进阶】.md"
+    "https://mp.weixin.qq.com/s/a7h3Iiw0_VHepITkO_GjKw": {
+      "title": "新丽《潜行者》热播收官，阅文集团坚持影视多元精品布局",
+      "date": "2023年08月15日 14:38",
+      "file": "20230815【新丽《潜行者》热播收官，阅文集团坚持影视多元精品布局】.md"
+    },
+    "https://mp.weixin.qq.com/s/mhNewnqnAuhdApQIONSnGg": {
+      "title": "阿里大文娱CTO郑勇：妙鸭火了，我们还要继续发力影视工业化",
+      "date": "2023年08月18日 14:28",
+      "file": "20230818【阿里大文娱CTO郑勇：妙鸭火了，我们还要继续发力影视工业化】.md"
     },
     "https://mp.weixin.qq.com/s/27o5yJ9VvKVRXg-x0Cuafg": {
       "title": "连续两季度盈利，斗鱼如何造血增长？",
@@ -1629,17 +1629,17 @@
   "failed": {},
   "captcha_pending": [
     {
-      "url": "https://mp.weixin.qq.com/s/a7h3Iiw0_VHepITkO_GjKw",
-      "title": "新丽《潜行者》热播收官，阅文集团坚持影视多元精品布局",
-      "seq": 324
+      "url": "https://mp.weixin.qq.com/s/ool_1njjQugKBNPMQdeZYA",
+      "title": "狂输二十万，Soul直播间里的“孤注一掷”",
+      "seq": 320
     },
     {
-      "url": "https://mp.weixin.qq.com/s/mhNewnqnAuhdApQIONSnGg",
-      "title": "阿里大文娱CTO郑勇：妙鸭火了，我们还要继续发力影视工业化",
-      "seq": 325
+      "url": "https://mp.weixin.qq.com/s/w_P5fGmJoZ0CXTLsE0Wxig",
+      "title": "《长相思》暑期档领跑，腾讯视频古装剧进阶",
+      "seq": 323
     }
   ],
-  "last_update": "2026-06-09T10:47:22.371366",
+  "last_update": "2026-06-09T10:47:48.740983",
   "total_completed": 325,
   "total_failed": 0
 }

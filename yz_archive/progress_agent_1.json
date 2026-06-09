@@ -2640,20 +2640,26 @@
       "date": "2023年11月06日 14:51",
       "file": "20231106【10月互联网专利盘点｜优酷分析用户观影状态 腾讯实现AI识别游戏音乐风格】.md"
     },
-    "https://mp.weixin.qq.com/s/1pwnsaLzU8XkS9ubAVb7xw": {
-      "title": "从高精度采集到“3D生成”，AIGC怎样造福影视游戏业 | 专访影眸科技",
-      "date": "2023年11月05日 14:12",
-      "file": "20231105【从高精度采集到“3D生成”，AIGC怎样造福影视游戏业 _ 专访影眸科技】.md"
-    },
     "https://mp.weixin.qq.com/s/4MSY6we3cJ96g-xssxF-mg": {
       "title": "揭秘数字人困境：代理商亏钱、直播屡被封、刘润也不用了",
       "date": "2023年11月05日 14:12",
       "file": "20231105【揭秘数字人困境：代理商亏钱、直播屡被封、刘润也不用了】.md"
+    },
+    "https://mp.weixin.qq.com/s/hjEa_FxCnEcP4-QjFSGjOg": {
+      "title": "最强AI开年会了，跟内容创作者有什么关系？",
+      "date": "2023年11月07日 14:21",
+      "file": "20231107【最强AI开年会了，跟内容创作者有什么关系？】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [],
-  "last_update": "2026-06-09T12:49:17.664348",
+  "captcha_pending": [
+    {
+      "url": "https://mp.weixin.qq.com/s/1pwnsaLzU8XkS9ubAVb7xw",
+      "title": "从高精度采集到“3D生成”，AIGC怎样造福影视游戏业 | 专访影眸科技",
+      "seq": 529
+    }
+  ],
+  "last_update": "2026-06-09T12:50:59.785746",
   "total_completed": 530,
   "total_failed": 0
 }

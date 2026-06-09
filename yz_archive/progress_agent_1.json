@@ -935,16 +935,6 @@
       "date": "2023年07月01日 13:37",
       "file": "20230701【演唱会IN2023：不卖唱功卖仪式】.md"
     },
-    "https://mp.weixin.qq.com/s/AMvD6V5vjFo3Zv4N4G2xGg": {
-      "title": "《中国好声音》入淘背后：灿星迈出电商直播第一步",
-      "date": "2023年06月27日 15:30",
-      "file": "20230627【《中国好声音》入淘背后：灿星迈出电商直播第一步】.md"
-    },
-    "https://mp.weixin.qq.com/s/ghniIUF0Umz9ei6692Wbow": {
-      "title": "左手短剧，右手明星，快手如何打赢娱乐内容消费暑期战？",
-      "date": "2023年07月03日 14:29",
-      "file": "20230703【左手短剧，右手明星，快手如何打赢娱乐内容消费暑期战？】.md"
-    },
     "https://mp.weixin.qq.com/s/99qVah28I2lGbY4nt9I_fg": {
       "title": "雪藏20年，最强豪门大女主杀出来了",
       "date": "2023年06月30日 13:28",
@@ -969,6 +959,16 @@
       "title": "观夏瑞幸掰头？乐乐茶“发疯”！｜爆槽娱子酱",
       "date": "2023年06月30日 13:28",
       "file": "20230630【观夏瑞幸掰头？乐乐茶“发疯”！｜爆槽娱子酱】.md"
+    },
+    "https://mp.weixin.qq.com/s/AMvD6V5vjFo3Zv4N4G2xGg": {
+      "title": "《中国好声音》入淘背后：灿星迈出电商直播第一步",
+      "date": "2023年06月27日 15:30",
+      "file": "20230627【《中国好声音》入淘背后：灿星迈出电商直播第一步】.md"
+    },
+    "https://mp.weixin.qq.com/s/ghniIUF0Umz9ei6692Wbow": {
+      "title": "左手短剧，右手明星，快手如何打赢娱乐内容消费暑期战？",
+      "date": "2023年07月03日 14:29",
+      "file": "20230703【左手短剧，右手明星，快手如何打赢娱乐内容消费暑期战？】.md"
     },
     "https://mp.weixin.qq.com/s/GaUjGi5BBLZheAZ4J3i0xQ": {
       "title": "B站组织架构调整：发力电商，为商业化破局？",
@@ -1000,11 +1000,6 @@
       "date": "2023年07月05日 14:00",
       "file": "20230705【稻草熊娱乐董事长刘小枫：用高质量增长迎接行业新的上升期 _ 对话】.md"
     },
-    "https://mp.weixin.qq.com/s/7rqp2HyrgO5xNjO3n-d6vA": {
-      "title": "第一批转行做AI的文娱打工人：工资百万，不焦虑了",
-      "date": "2023年07月04日 14:38",
-      "file": "20230704【第一批转行做AI的文娱打工人：工资百万，不焦虑了】.md"
-    },
     "https://mp.weixin.qq.com/s/yCikQcyCa-y5_o9TNDDaXw": {
       "title": "暑期游井喷，日薪2500招不到导游",
       "date": "2023年07月06日 15:36",
@@ -1014,31 +1009,17 @@
       "title": "一场长安首映礼，如何开启电影营销的想象空间？",
       "date": "2023年07月04日 14:38",
       "file": "20230704【一场长安首映礼，如何开启电影营销的想象空间？】.md"
-    },
-    "https://mp.weixin.qq.com/s/NnP4OQn5aiBuJ7KMXdvtFA": {
-      "title": "文投控股“割肉”：地球家乡两项目利润收不回、关闭26家影城、成龙两项目搁浅",
-      "date": "2023年07月06日 15:36",
-      "file": "20230706【文投控股“割肉”：地球家乡两项目利润收不回、关闭26家影城、成龙两项目搁浅】.md"
-    },
-    "https://mp.weixin.qq.com/s/Woasl2BWQpXah5k_xJbYsg": {
-      "title": "多抓鱼北京门店关闭，二手书生意为什么难做",
-      "date": "2023年07月05日 14:00",
-      "file": "20230705【多抓鱼北京门店关闭，二手书生意为什么难做】.md"
-    },
-    "https://mp.weixin.qq.com/s/Tuex1z4QlKh3k6Yn-97Myw": {
-      "title": "“一次性采购上百个”，微商倒卖2D数字人",
-      "date": "2023年07月09日 14:00",
-      "file": "20230709【“一次性采购上百个”，微商倒卖2D数字人】.md"
-    },
-    "https://mp.weixin.qq.com/s/ACuGiOINVrDoajXgE1Z9SA": {
-      "title": "一路狂飙，新茶饮步入“万店时代”",
-      "date": "2023年07月08日 14:00",
-      "file": "20230708【一路狂飙，新茶饮步入“万店时代”】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [],
-  "last_update": "2026-06-09T09:30:27.347300",
-  "total_completed": 207,
+  "captcha_pending": [
+    {
+      "url": "https://mp.weixin.qq.com/s/7rqp2HyrgO5xNjO3n-d6vA",
+      "title": "第一批转行做AI的文娱打工人：工资百万，不焦虑了",
+      "seq": 201
+    }
+  ],
+  "last_update": "2026-06-09T09:30:36.494483",
+  "total_completed": 202,
   "total_failed": 0
 }

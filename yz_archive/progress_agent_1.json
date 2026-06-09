@@ -1364,17 +1364,36 @@
       "title": "抖音直播间被停3天，东方甄选终局是做自己的“山姆”？",
       "date": "2023年07月29日 14:00",
       "file": "20230729【抖音直播间被停3天，东方甄选终局是做自己的“山姆”？】.md"
+    },
+    "https://mp.weixin.qq.com/s/FqFVutt59pGh9SCjJuXACA": {
+      "title": "泛文娱再谈AIGC：这就是未来的水和电 | ChinaJoy 现场",
+      "date": "2023年07月29日 14:00",
+      "file": "20230729【泛文娱再谈AIGC：这就是未来的水和电 _ ChinaJoy 现场】.md"
+    },
+    "https://mp.weixin.qq.com/s/1THt8FBnjYm9IOt8KH8Czw": {
+      "title": "Netflix的亚洲综艺战事：爱优腾看好了，我只表演一次",
+      "date": "2023年07月31日 14:55",
+      "file": "20230731【Netflix的亚洲综艺战事：爱优腾看好了，我只表演一次】.md"
+    },
+    "https://mp.weixin.qq.com/s/bHYHG_L951OlB1DNrEYMjg": {
+      "title": "为什么亚运会是电竞营销的分水岭？",
+      "date": "2023年08月01日 14:04",
+      "file": "20230801【为什么亚运会是电竞营销的分水岭？】.md"
+    },
+    "https://mp.weixin.qq.com/s/cozNBYRO6iBf0qq5I2hcCg": {
+      "title": "6月下电影备案：同比增长50%，刘德华谢霆锋再度合作，王晶新作备案",
+      "date": "2023年08月03日 15:04",
+      "file": "20230803【6月下电影备案：同比增长50%，刘德华谢霆锋再度合作，王晶新作备案】.md"
+    },
+    "https://mp.weixin.qq.com/s/roALOEaZEVyPxBEhytEkgA": {
+      "title": "输球出局，穿Prada的女足商业化怎么办？",
+      "date": "2023年08月01日 14:04",
+      "file": "20230801【输球出局，穿Prada的女足商业化怎么办？】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [
-    {
-      "url": "https://mp.weixin.qq.com/s/FqFVutt59pGh9SCjJuXACA",
-      "title": "泛文娱再谈AIGC：这就是未来的水和电 | ChinaJoy 现场",
-      "seq": 270
-    }
-  ],
-  "last_update": "2026-06-09T10:11:23.829433",
-  "total_completed": 273,
+  "captcha_pending": [],
+  "last_update": "2026-06-09T10:12:15.743210",
+  "total_completed": 278,
   "total_failed": 0
 }

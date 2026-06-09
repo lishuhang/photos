@@ -409,22 +409,52 @@
       "title": "我们让五款AI回应“孙燕姿回应‘AI孙燕姿’”丨5款大模型横评",
       "date": "2023年05月23日 15:08",
       "file": "20230523【我们让五款AI回应“孙燕姿回应‘AI孙燕姿’”丨5款大模型横评】.md"
+    },
+    "https://mp.weixin.qq.com/s/PMaRJLxG671HsKVf8Ejv1A": {
+      "title": "借着“抖音红利”，海洁娅爆红了，问题是，“白牌魔咒”也来了",
+      "date": "2023年05月22日 15:31",
+      "file": "20230522【借着“抖音红利”，海洁娅爆红了，问题是，“白牌魔咒”也来了】.md"
+    },
+    "https://mp.weixin.qq.com/s/TLaCL-PYYUe2-1ssXKELgg": {
+      "title": "“五个女博士”收割年轻人",
+      "date": "2023年05月18日 15:11",
+      "file": "20230518【“五个女博士”收割年轻人】.md"
+    },
+    "https://mp.weixin.qq.com/s/u5A6YWoF7G0ImP_1ZwATvA": {
+      "title": "影视业仍在观望时，后期和动画公司已跑步进入AIGC时代？",
+      "date": "2023年05月28日 14:43",
+      "file": "20230528【影视业仍在观望时，后期和动画公司已跑步进入AIGC时代？】.md"
+    },
+    "https://mp.weixin.qq.com/s/vNWt6YOrJzfvgvMblqxCBg": {
+      "title": "在播客大时代下，影视类播客如何造浪",
+      "date": "2023年05月25日 14:00",
+      "file": "20230525【在播客大时代下，影视类播客如何造浪】.md"
+    },
+    "https://mp.weixin.qq.com/s/D8-EKd8wcXHLCVgncCIlsA": {
+      "title": "音乐圈三国战：AI疑似侵权，平台隔岸观火，版权方起义",
+      "date": "2023年05月26日 15:17",
+      "file": "20230526【音乐圈三国战：AI疑似侵权，平台隔岸观火，版权方起义】.md"
     }
   },
   "failed": {},
   "captcha_pending": [
     {
-      "url": "https://mp.weixin.qq.com/s/PMaRJLxG671HsKVf8Ejv1A",
-      "title": "借着“抖音红利”，海洁娅爆红了，问题是，“白牌魔咒”也来了",
-      "seq": 74
+      "url": "https://mp.weixin.qq.com/s/1QEikKyqz0Thior3lWR5fg",
+      "title": "18个问题，90个回答，国产大模型实用性横评",
+      "seq": 85
     },
     {
-      "url": "https://mp.weixin.qq.com/s/TLaCL-PYYUe2-1ssXKELgg",
-      "title": "“五个女博士”收割年轻人",
-      "seq": 76
+      "url": "https://mp.weixin.qq.com/s/JFqRgLo_rKZdx05FoF5-kw",
+      "title": "这档主播职场综艺，在直播间很“上头”",
+      "seq": 86
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/RoXKDAe6hVM9P02OEbuzuA",
+      "title": "平台直播大战：小红书派出香港传奇名媛",
+      "seq": 87
     }
   ],
-  "last_update": "2026-06-09T08:28:25.240376",
-  "total_completed": 82,
+  "last_update": "2026-06-09T08:30:29.606977",
+  "total_completed": 87,
   "total_failed": 0
 }

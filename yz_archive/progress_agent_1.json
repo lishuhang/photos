@@ -1240,16 +1240,6 @@
       "date": "2023年07月22日 13:00",
       "file": "20230722【60秒看透传媒股到底谁在逢高减持！】.md"
     },
-    "https://mp.weixin.qq.com/s/MjGNFLjTJsnz8nv8BFEDtA": {
-      "title": "1天吸引上万人！被迪士尼虐惨的中国乐园，终于熬出头了？",
-      "date": "2023年07月22日 13:00",
-      "file": "20230722【1天吸引上万人！被迪士尼虐惨的中国乐园，终于熬出头了？】.md"
-    },
-    "https://mp.weixin.qq.com/s/PhjGiUn_UCvJTVcEFFwsIw": {
-      "title": "从德扑到掼蛋，资本圈的“东升西落”",
-      "date": "2023年07月23日 15:40",
-      "file": "20230723【从德扑到掼蛋，资本圈的“东升西落”】.md"
-    },
     "https://mp.weixin.qq.com/s/RtsgMWUHxpMZMgqQUWx3BA": {
       "title": "“秒鸭这种水平的AI项目，我也能干” | AI创业者调查②",
       "date": "2023年07月24日 14:21",
@@ -1264,37 +1254,22 @@
       "title": "《封神第一部》封神背后：腾讯视频加码院线？",
       "date": "2023年07月24日 14:21",
       "file": "20230724【《封神第一部》封神背后：腾讯视频加码院线？】.md"
-    },
-    "https://mp.weixin.qq.com/s/wSeLOdxOBOlPPlPrXEFpnA": {
-      "title": "34岁的匹克，如何走向年轻人？｜专访匹克",
-      "date": "2023年07月23日 15:40",
-      "file": "20230723【34岁的匹克，如何走向年轻人？｜专访匹克】.md"
-    },
-    "https://mp.weixin.qq.com/s/pgdyOkpBa3vvD0tXnEbaIg": {
-      "title": "海底捞演唱会门口“捞人”？网友：活该你赚钱！",
-      "date": "2023年07月28日 13:59",
-      "file": "20230728【海底捞演唱会门口“捞人”？网友：活该你赚钱！】.md"
-    },
-    "https://mp.weixin.qq.com/s/VFDkmSd13TebbCUqKoLMDA": {
-      "title": "高燃现实感出圈 ，为什么说《我的人间烟火》是一部“有灵魂”的现实青春剧",
-      "date": "2023年07月27日 13:55",
-      "file": "20230727【高燃现实感出圈 ，为什么说《我的人间烟火》是一部“有灵魂”的现实青春剧】.md"
     }
   },
   "failed": {},
   "captcha_pending": [
     {
-      "url": "https://mp.weixin.qq.com/s/6-SRpOrpX3rqQuUhfuq5KA",
-      "title": "6月上电影备案：减少59部，《神探大战2》、万玛才旦遗作备案",
-      "seq": 254
+      "url": "https://mp.weixin.qq.com/s/MjGNFLjTJsnz8nv8BFEDtA",
+      "title": "1天吸引上万人！被迪士尼虐惨的中国乐园，终于熬出头了？",
+      "seq": 249
     },
     {
-      "url": "https://mp.weixin.qq.com/s/TcOK8SM7cwwSaKgdskjUSw",
-      "title": "投16.55亿豪赌《封神》，解决3.88亿诉讼，北京文化死而复生？",
-      "seq": 256
+      "url": "https://mp.weixin.qq.com/s/PhjGiUn_UCvJTVcEFFwsIw",
+      "title": "从德扑到掼蛋，资本圈的“东升西落”",
+      "seq": 250
     }
   ],
-  "last_update": "2026-06-09T09:53:06.721573",
-  "total_completed": 256,
+  "last_update": "2026-06-09T09:53:22.528304",
+  "total_completed": 251,
   "total_failed": 0
 }

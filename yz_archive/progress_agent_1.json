@@ -1315,35 +1315,46 @@
       "date": "2023年07月25日 14:56",
       "file": "20230725【蹭五月天热点，脑白金又来洗脑了？】.md"
     },
-    "https://mp.weixin.qq.com/s/r5_NU85NgsIRn66bi-KovQ": {
-      "title": "1000个算法工程师冲入罗永浩直播间",
-      "date": "2023年07月27日 13:55",
-      "file": "20230727【1000个算法工程师冲入罗永浩直播间】.md"
-    },
     "https://mp.weixin.qq.com/s/YcLm9tf_NXELEOw8D9iJjg": {
       "title": "《封神》的得与失：工业化标杆、IP计划流产、质子团贬值",
       "date": "2023年07月27日 13:55",
       "file": "20230727【《封神》的得与失：工业化标杆、IP计划流产、质子团贬值】.md"
     },
-    "https://mp.weixin.qq.com/s/xpFUHUHnLILRVbYewb3f1A": {
-      "title": "剧集“空降”宣推苦了谁？",
-      "date": "2023年07月30日 13:05",
-      "file": "20230730【剧集“空降”宣推苦了谁？】.md"
-    },
-    "https://mp.weixin.qq.com/s/EJnWIeHmsilI4bWq2jjxnA": {
-      "title": "专访王小卤：四年了，为啥还在做凤爪？｜品牌深壹度",
-      "date": "2023年07月30日 13:05",
-      "file": "20230730【专访王小卤：四年了，为啥还在做凤爪？｜品牌深壹度】.md"
-    },
     "https://mp.weixin.qq.com/s/5O73kYMZFEugWNON_RIg6Q": {
       "title": "游戏动漫角色占76%，Character.ai成了当代网友的“梦中情聊”",
       "date": "2023年08月01日 14:04",
       "file": "20230801【游戏动漫角色占76%，Character.ai成了当代网友的“梦中情聊”】.md"
+    },
+    "https://mp.weixin.qq.com/s/snCD5NGft296tuB5GaC5iw": {
+      "title": "你能想象马云当老师、马斯克拧钢筋、比尔盖茨卖盗版光盘吗？",
+      "date": "2023年07月31日 14:55",
+      "file": "20230731【你能想象马云当老师、马斯克拧钢筋、比尔盖茨卖盗版光盘吗？】.md"
+    },
+    "https://mp.weixin.qq.com/s/FqFVutt59pGh9SCjJuXACA": {
+      "title": "泛文娱再谈AIGC：这就是未来的水和电 | ChinaJoy 现场",
+      "date": "2023年07月29日 14:00",
+      "file": "20230729【泛文娱再谈AIGC：这就是未来的水和电 _ ChinaJoy 现场】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [],
-  "last_update": "2026-06-09T10:04:55.318429",
-  "total_completed": 268,
+  "captcha_pending": [
+    {
+      "url": "https://mp.weixin.qq.com/s/r5_NU85NgsIRn66bi-KovQ",
+      "title": "1000个算法工程师冲入罗永浩直播间",
+      "seq": 264
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/xpFUHUHnLILRVbYewb3f1A",
+      "title": "剧集“空降”宣推苦了谁？",
+      "seq": 266
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/EJnWIeHmsilI4bWq2jjxnA",
+      "title": "专访王小卤：四年了，为啥还在做凤爪？｜品牌深壹度",
+      "seq": 267
+    }
+  ],
+  "last_update": "2026-06-09T10:05:47.974827",
+  "total_completed": 267,
   "total_failed": 0
 }

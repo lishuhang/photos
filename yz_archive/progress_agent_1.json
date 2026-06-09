@@ -104,17 +104,25 @@
       "title": "渠道升级、AI赋能，营销的下半场怎么玩? | 北影节影视营销论坛实录",
       "date": "20230429",
       "file": "/home/z/my-project/download/agent1_articles/20230429-渠道升级、AI赋能，营销的下半场怎么玩_ _ 北影节影视营销论坛实录.md"
-    }
-  },
-  "failed": {
+    },
     "https://mp.weixin.qq.com/s/H4wNjdpLNkN5uGEmboRjwA": {
-      "error": "failed",
-      "title": "讲好故事，拥抱技术，华谊的电影工业化在路上|专访王中磊"
+      "title": "讲好故事，拥抱技术，华谊的电影工业化在路上|专访王中磊",
+      "date": "2023年4月28日 14:00",
+      "file": "00000000【讲好故事，拥抱技术，华谊的电影工业化在路上_专访王中磊】.md"
+    },
+    "https://mp.weixin.qq.com/s/zkx6HR7pwlClXuJFz0r4qA": {
+      "title": "暴雪“甩掉”网易100天：官司缠身、丑闻不断、接盘侠难寻",
+      "date": "2023年4月28日 14:00",
+      "file": "00000000【暴雪“甩掉”网易100天：官司缠身、丑闻不断、接盘侠难寻】.md"
+    },
+    "https://mp.weixin.qq.com/s/w5vxiJJMxOSjD1iJrU-r7Q": {
+      "title": "“跟风”开淄博烧烤，赚了还是赔了？",
+      "date": "2023年4月30日 13:51",
+      "file": "00000000【“跟风”开淄博烧烤，赚了还是赔了？】.md"
     }
   },
-  "stats": {
-    "start_time": "2026-06-09T05:40:00",
-    "last_update": "2026-06-09T06:35:04.676821",
-    "total_fetched": 21
-  }
+  "failed": {},
+  "last_update": "2026-06-09T07:27:29.134994",
+  "total_completed": 24,
+  "total_failed": 0
 }

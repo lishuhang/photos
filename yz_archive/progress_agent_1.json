@@ -2445,20 +2445,15 @@
       "date": "2023年10月20日 15:01",
       "file": "20231020【AI是如何赋能玩具和婴童行业的？】.md"
     },
-    "https://mp.weixin.qq.com/s/BI0aBmApJuol-J9jVkUJrQ": {
-      "title": "【邀请函】演讲嘉宾全阵容公开！议程公布！速来看2023 Web3.0 AIGC高峰论坛！",
-      "date": "2023年10月14日 13:00",
-      "file": "20231014【【邀请函】演讲嘉宾全阵容公开！议程公布！速来看2023 Web3.0 AIGC高峰论坛！】.md"
-    },
-    "https://mp.weixin.qq.com/s/Ri7D53sqyvFIMtolh1WHzg": {
-      "title": "印尼电商“变天了”，MCN和品牌出海，下一步怎么走？",
-      "date": "2023年10月19日 12:56",
-      "file": "20231019【印尼电商“变天了”，MCN和品牌出海，下一步怎么走？】.md"
-    },
     "https://mp.weixin.qq.com/s/_IqkvH9BsZIHBBe9xVDrRg": {
       "title": "9块9大战，拖垮了我的咖啡店",
       "date": "2023年10月19日 12:56",
       "file": "20231019【9块9大战，拖垮了我的咖啡店】.md"
+    },
+    "https://mp.weixin.qq.com/s/-aXTAPfD7CDnjxhTnzD-Iw": {
+      "title": "探秘小程序百亿市场里的隐形冠军：为什么是这三家西安公司？",
+      "date": "2023年10月18日 15:00",
+      "file": "20231018【探秘小程序百亿市场里的隐形冠军：为什么是这三家西安公司？】.md"
     },
     "https://mp.weixin.qq.com/s/mxJD817O9KiCgCRWyaQmmA": {
       "title": "爆款频出，口碑破圈，快手短剧如何成为暑期档“赢家”？",
@@ -2494,17 +2489,42 @@
       "title": "汪峰章子怡官宣离婚，共同关联公司仅剩一家",
       "date": "2023年10月23日 14:39",
       "file": "20231023【汪峰章子怡官宣离婚，共同关联公司仅剩一家】.md"
+    },
+    "https://mp.weixin.qq.com/s/PFTrd-nNVRs8Ed67To2faw": {
+      "title": "“完颜慧德”爆火：大家都在学的“楼兰语”到底是什么？",
+      "date": "2023年10月24日 15:38",
+      "file": "20231024【“完颜慧德”爆火：大家都在学的“楼兰语”到底是什么？】.md"
+    },
+    "https://mp.weixin.qq.com/s/xuPtlAUoxoBo_E25ZYAiqw": {
+      "title": "国剧出海拿奖越来越多，是美美镀金还是挖土跳坑？",
+      "date": "2023年10月25日 15:51",
+      "file": "20231025【国剧出海拿奖越来越多，是美美镀金还是挖土跳坑？】.md"
+    },
+    "https://mp.weixin.qq.com/s/nIKJhHunUVDLwgogLrgMXg": {
+      "title": "办一场花上千万，品牌为何“豪赌”音乐节营销？",
+      "date": "2023年10月21日 12:12",
+      "file": "20231021【办一场花上千万，品牌为何“豪赌”音乐节营销？】.md"
     }
   },
   "failed": {},
   "captcha_pending": [
     {
-      "url": "https://mp.weixin.qq.com/s/-aXTAPfD7CDnjxhTnzD-Iw",
-      "title": "探秘小程序百亿市场里的隐形冠军：为什么是这三家西安公司？",
-      "seq": 493
+      "url": "https://mp.weixin.qq.com/s/BI0aBmApJuol-J9jVkUJrQ",
+      "title": "【邀请函】演讲嘉宾全阵容公开！议程公布！速来看2023 Web3.0 AIGC高峰论坛！",
+      "seq": 483
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/Ri7D53sqyvFIMtolh1WHzg",
+      "title": "印尼电商“变天了”，MCN和品牌出海，下一步怎么走？",
+      "seq": 491
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/7C6EC4lvDgoPYUa4ULkXbA",
+      "title": "连续15年赞助亚运会，361°收获了什么？| 品牌深壹度",
+      "seq": 502
     }
   ],
-  "last_update": "2026-06-09T12:34:20.307431",
-  "total_completed": 499,
+  "last_update": "2026-06-09T12:34:22.859678",
+  "total_completed": 501,
   "total_failed": 0
 }

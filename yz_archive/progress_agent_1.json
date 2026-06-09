@@ -710,11 +710,6 @@
       "date": "2023年06月10日 15:13",
       "file": "20230610【AI炒股论、长剧抢电影、调票房分账：上影节又成为大佬们的真话大冒险】.md"
     },
-    "https://mp.weixin.qq.com/s/9olCJeSCEal9PfRYZ9lI8Q": {
-      "title": "在北美澳洲只卖几千元的影片，成为东欧市场宠儿",
-      "date": "2023年06月13日 15:42",
-      "file": "20230613【在北美澳洲只卖几千元的影片，成为东欧市场宠儿】.md"
-    },
     "https://mp.weixin.qq.com/s/Y_r7B8GmI8T5oDlqSdn65g": {
       "title": "陈可辛：很多年后我才看懂张曼玉在《甜蜜蜜》中的表演|上影节观察",
       "date": "2023年06月12日 14:30",
@@ -734,11 +729,42 @@
       "title": "这本AIGC独门秘笈，你值得拥有！（内含福利）",
       "date": "2023年06月19日 14:00",
       "file": "20230619【这本AIGC独门秘笈，你值得拥有！（内含福利）】.md"
+    },
+    "https://mp.weixin.qq.com/s/q068J_x1uxuQkbYTJqv4DQ": {
+      "title": "梅西真直播也救不了一地鸡毛的阿根廷中国行",
+      "date": "2023年06月16日 12:29",
+      "file": "20230616【梅西真直播也救不了一地鸡毛的阿根廷中国行】.md"
+    },
+    "https://mp.weixin.qq.com/s/fcI7GrQuNwZQ_R8FMwwvJQ": {
+      "title": "3、4月电视剧备案：甜宠、职场IP多，檀健次《爱情有烟火》杀青，钟汉良《亦舞之城》开机",
+      "date": "2023年06月15日 12:06",
+      "file": "20230615【3、4月电视剧备案：甜宠、职场IP多，檀健次《爱情有烟火》杀青，钟汉良《亦舞之城》开机】.md"
+    },
+    "https://mp.weixin.qq.com/s/P_v6f_we-1qdS0dfyQYGXA": {
+      "title": "科影融合路在何方？听电影人们华山论剑",
+      "date": "2023年06月18日 15:01",
+      "file": "20230618【科影融合路在何方？听电影人们华山论剑】.md"
+    },
+    "https://mp.weixin.qq.com/s/C-lS_vsILItOSDH6Y4uW2A": {
+      "title": "《原神》做卡牌，偷鹅不成蚀把“米”",
+      "date": "2023年06月17日 13:16",
+      "file": "20230617【《原神》做卡牌，偷鹅不成蚀把“米”】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [],
-  "last_update": "2026-06-09T08:59:20.355585",
-  "total_completed": 147,
+  "captcha_pending": [
+    {
+      "url": "https://mp.weixin.qq.com/s/9olCJeSCEal9PfRYZ9lI8Q",
+      "title": "在北美澳洲只卖几千元的影片，成为东欧市场宠儿",
+      "seq": 140
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/U84AeohUfpYSDAQ5qtiQYQ",
+      "title": "爆槽娱子酱：林志颖代言小鹏汽车但开的是特斯拉？天猫携手易烊千玺“破框”",
+      "seq": 149
+    }
+  ],
+  "last_update": "2026-06-09T09:00:12.746604",
+  "total_completed": 150,
   "total_failed": 0
 }

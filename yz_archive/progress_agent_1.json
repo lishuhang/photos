@@ -685,6 +685,21 @@
       "date": "2023年06月14日 15:18",
       "file": "20230614【当9.9元秒杀撞上699元买不了一双袜子的张雨绮】.md"
     },
+    "https://mp.weixin.qq.com/s/kDYvCfryd8PAci8JrsFYLA": {
+      "title": "上影、昆仑万维、商汤、华强…首批嘉宾确认出席上海文娱科创沙龙",
+      "date": "2023年06月04日 13:50",
+      "file": "20230604【上影、昆仑万维、商汤、华强…首批嘉宾确认出席上海文娱科创沙龙】.md"
+    },
+    "https://mp.weixin.qq.com/s/zW2OmFMy5sHjjiKUwuooUw": {
+      "title": "AI炒股论、长剧抢电影、调票房分账：上影节又成为大佬们的真话大冒险",
+      "date": "2023年06月10日 15:13",
+      "file": "20230610【AI炒股论、长剧抢电影、调票房分账：上影节又成为大佬们的真话大冒险】.md"
+    },
+    "https://mp.weixin.qq.com/s/9olCJeSCEal9PfRYZ9lI8Q": {
+      "title": "在北美澳洲只卖几千元的影片，成为东欧市场宠儿",
+      "date": "2023年06月13日 15:42",
+      "file": "20230613【在北美澳洲只卖几千元的影片，成为东欧市场宠儿】.md"
+    },
     "https://mp.weixin.qq.com/s/tvMGw3RYRPEWiDDvCdxOrA": {
       "title": "60位老年人观剧喜好调查：三大主流，央视剧年代剧靳东剧",
       "date": "2023年06月13日 15:42",
@@ -697,24 +712,8 @@
     }
   },
   "failed": {},
-  "captcha_pending": [
-    {
-      "url": "https://mp.weixin.qq.com/s/kDYvCfryd8PAci8JrsFYLA",
-      "title": "上影、昆仑万维、商汤、华强…首批嘉宾确认出席上海文娱科创沙龙",
-      "seq": 112
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/zW2OmFMy5sHjjiKUwuooUw",
-      "title": "AI炒股论、长剧抢电影、调票房分账：上影节又成为大佬们的真话大冒险",
-      "seq": 135
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/9olCJeSCEal9PfRYZ9lI8Q",
-      "title": "在北美澳洲只卖几千元的影片，成为东欧市场宠儿",
-      "seq": 140
-    }
-  ],
-  "last_update": "2026-06-09T08:51:41.486492",
-  "total_completed": 139,
+  "captcha_pending": [],
+  "last_update": "2026-06-09T08:52:35.508666",
+  "total_completed": 142,
   "total_failed": 0
 }

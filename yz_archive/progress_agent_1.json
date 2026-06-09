@@ -1815,21 +1815,6 @@
       "date": "2023年08月30日 15:07",
       "file": "20230830【东方甄选入淘“首日1.75亿”：套娃式返券功不可没？】.md"
     },
-    "https://mp.weixin.qq.com/s/Cn6HYRKdX-3w2Ey03Wc2dw": {
-      "title": "滚烫生长、打破边界，腾讯视频动漫的进击之路",
-      "date": "2023年09月01日 15:55",
-      "file": "20230901【滚烫生长、打破边界，腾讯视频动漫的进击之路】.md"
-    },
-    "https://mp.weixin.qq.com/s/vsVRPAlsRX94QQsxC34wQA": {
-      "title": "强地标性 品质先行 体验至上｜虾米音乐节开创国内地标音乐节最佳样本",
-      "date": "2023年08月30日 15:07",
-      "file": "20230830【强地标性 品质先行 体验至上｜虾米音乐节开创国内地标音乐节最佳样本】.md"
-    },
-    "https://mp.weixin.qq.com/s/FuUJbPv5_ECmIuH9zm_GSQ": {
-      "title": "8月IP衍生品：《画江湖之不良人》周边热卖，明日方舟发力",
-      "date": "2023年09月03日 13:36",
-      "file": "20230903【8月IP衍生品：《画江湖之不良人》周边热卖，明日方舟发力】.md"
-    },
     "https://mp.weixin.qq.com/s/Ap4ESgS1wKf9lScgcecFvw": {
       "title": "手机大模型也卷起来了",
       "date": "2023年09月06日 13:00",
@@ -1839,6 +1824,11 @@
       "title": "​ 抖音综N代怎么做，《全力以赴的行动派》这么做",
       "date": "2023年09月05日 14:11",
       "file": "20230905【​ 抖音综N代怎么做，《全力以赴的行动派》这么做】.md"
+    },
+    "https://mp.weixin.qq.com/s/odU58-cOd9NVIPZmAfXcbA": {
+      "title": "对话快手电商、作业帮：大品牌如何在四个月内做好销量爆发？",
+      "date": "2023年09月05日 14:11",
+      "file": "20230905【对话快手电商、作业帮：大品牌如何在四个月内做好销量爆发？】.md"
     },
     "https://mp.weixin.qq.com/s/iRftL4rLSr8z7HrCKzdseQ": {
       "title": "与“精神股东”同行 腾讯视频迈进全新成长期",
@@ -1864,17 +1854,42 @@
       "title": "沙龙报名｜与咪咕、七猫、中文在线…畅聊微短剧精品化2.0",
       "date": "2023年09月05日 14:11",
       "file": "20230905【沙龙报名｜与咪咕、七猫、中文在线…畅聊微短剧精品化2.0】.md"
+    },
+    "https://mp.weixin.qq.com/s/Cn6HYRKdX-3w2Ey03Wc2dw": {
+      "title": "滚烫生长、打破边界，腾讯视频动漫的进击之路",
+      "date": "2023年09月01日 15:55",
+      "file": "20230901【滚烫生长、打破边界，腾讯视频动漫的进击之路】.md"
+    },
+    "https://mp.weixin.qq.com/s/FuUJbPv5_ECmIuH9zm_GSQ": {
+      "title": "8月IP衍生品：《画江湖之不良人》周边热卖，明日方舟发力",
+      "date": "2023年09月03日 13:36",
+      "file": "20230903【8月IP衍生品：《画江湖之不良人》周边热卖，明日方舟发力】.md"
+    },
+    "https://mp.weixin.qq.com/s/GOVGKsjOU4mVnz3rhh1Ukg": {
+      "title": "沙龙报名｜与咪咕、七猫、中文在线…畅聊微短剧精品化2.0",
+      "date": "2023年09月04日 14:30",
+      "file": "20230904【沙龙报名｜与咪咕、七猫、中文在线…畅聊微短剧精品化2.0】.md"
+    },
+    "https://mp.weixin.qq.com/s/OFRNMHQHUCpl0ki77XaVbg": {
+      "title": "爆款IP、强强联合、AI赋能，蓝港影业的跨越式升级",
+      "date": "2023年09月06日 13:00",
+      "file": "20230906【爆款IP、强强联合、AI赋能，蓝港影业的跨越式升级】.md"
+    },
+    "https://mp.weixin.qq.com/s/HSaJUs4jnkxe1f0F6BV-xw": {
+      "title": "AIGC的数据标注订单雷声大雨点小，大模型不好用正常｜专访汇众天智",
+      "date": "2023年09月07日 14:13",
+      "file": "20230907【AIGC的数据标注订单雷声大雨点小，大模型不好用正常｜专访汇众天智】.md"
     }
   },
   "failed": {},
   "captcha_pending": [
     {
-      "url": "https://mp.weixin.qq.com/s/odU58-cOd9NVIPZmAfXcbA",
-      "title": "对话快手电商、作业帮：大品牌如何在四个月内做好销量爆发？",
-      "seq": 369
+      "url": "https://mp.weixin.qq.com/s/vsVRPAlsRX94QQsxC34wQA",
+      "title": "强地标性 品质先行 体验至上｜虾米音乐节开创国内地标音乐节最佳样本",
+      "seq": 362
     }
   ],
-  "last_update": "2026-06-09T11:14:34.043644",
-  "total_completed": 373,
+  "last_update": "2026-06-09T11:16:02.938665",
+  "total_completed": 376,
   "total_failed": 0
 }

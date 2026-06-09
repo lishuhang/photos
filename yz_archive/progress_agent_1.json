@@ -2545,11 +2545,6 @@
       "date": "2023年10月31日 14:57",
       "file": "20231031【今年双11，这些品牌看到了李佳琦的“真正价值”】.md"
     },
-    "https://mp.weixin.qq.com/s/BtAvagLH-wLlemzrP0ugNQ": {
-      "title": "锅圈即将迈入“万店”，但为什么加盟商们寻求转让？",
-      "date": "2023年10月28日 12:54",
-      "file": "20231028【锅圈即将迈入“万店”，但为什么加盟商们寻求转让？】.md"
-    },
     "https://mp.weixin.qq.com/s/hQvH2RokQVoStU9Vh9ZL6A": {
       "title": "9月上电影备案：《长安十二时辰》电影版、吴京公司新武侠电影《刀》通过备案",
       "date": "2023年10月28日 12:54",
@@ -2569,11 +2564,22 @@
       "title": "娱乐资本论招聘持续进行中",
       "date": "2023年10月31日 14:57",
       "file": "20231031【娱乐资本论招聘持续进行中】.md"
+    },
+    "https://mp.weixin.qq.com/s/OwYEsbq2wbaHfm7_608XPQ": {
+      "title": "《好事成双》：热闹与门道",
+      "date": "2023年10月30日 13:00",
+      "file": "20231030【《好事成双》：热闹与门道】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [],
-  "last_update": "2026-06-09T12:43:26.853692",
+  "captcha_pending": [
+    {
+      "url": "https://mp.weixin.qq.com/s/BtAvagLH-wLlemzrP0ugNQ",
+      "title": "锅圈即将迈入“万店”，但为什么加盟商们寻求转让？",
+      "seq": 510
+    }
+  ],
+  "last_update": "2026-06-09T12:44:48.475844",
   "total_completed": 514,
   "total_failed": 0
 }

@@ -2110,20 +2110,10 @@
       "date": "2023年09月21日 14:34",
       "file": "20230921【好莱坞大罢工到达紧要关头：能否和解，就看今明两天了】.md"
     },
-    "https://mp.weixin.qq.com/s/TxbErSZdhKJYq1pLhPDFKA": {
-      "title": "花西子危机公关，到底错在哪儿？",
-      "date": "2023年09月20日 15:19",
-      "file": "20230920【花西子危机公关，到底错在哪儿？】.md"
-    },
     "https://mp.weixin.qq.com/s/ffp7O4qVC8xlihrwqfrzKQ": {
       "title": "乙女游戏走向线下陷阱：四位数“男友”，100梦女酒吧包夜",
       "date": "2023年09月19日 14:10",
       "file": "20230919【乙女游戏走向线下陷阱：四位数“男友”，100梦女酒吧包夜】.md"
-    },
-    "https://mp.weixin.qq.com/s/67SogjFWCzwqCfqai5DXbg": {
-      "title": "新共鸣新视听，《好事成双》示范“新女性剧”与“新沪剧”两套解法",
-      "date": "2023年09月22日 14:58",
-      "file": "20230922【新共鸣新视听，《好事成双》示范“新女性剧”与“新沪剧”两套解法】.md"
     },
     "https://mp.weixin.qq.com/s/46mRTjAZmQOUrlKRDdlakQ": {
       "title": "我在用AI低成本批量赚老外美金 ｜专访团长联盟董振国",
@@ -2145,30 +2135,31 @@
       "date": "2023年09月26日 15:00",
       "file": "20230926【蔚来做手机：外界看不懂，车主抢疯了】.md"
     },
-    "https://mp.weixin.qq.com/s/OK8ZHo0tPrj_T-WNgLC9Mw": {
-      "title": "没有李佳琦，商品会更便宜吗？",
-      "date": "2023年09月24日 13:19",
-      "file": "20230924【没有李佳琦，商品会更便宜吗？】.md"
-    },
     "https://mp.weixin.qq.com/s/XJrFcQYMPvdLEWAxPR7TyA": {
       "title": "这届00后，都在发凤凰传奇的疯",
       "date": "2023年09月23日 14:53",
       "file": "20230923【这届00后，都在发凤凰传奇的疯】.md"
-    },
-    "https://mp.weixin.qq.com/s/kAP5lXEZmqGdOBOd7v_oNw": {
-      "title": "绝美的杭州亚运会开幕式，藏着哪些黑科技？",
-      "date": "2023年09月24日 13:19",
-      "file": "20230924【绝美的杭州亚运会开幕式，藏着哪些黑科技？】.md"
-    },
-    "https://mp.weixin.qq.com/s/mBSFRw1sf5fPEDMdBvOWFw": {
-      "title": "国货商战背后，二十年老牌8年“新做”在抖音｜专访满婷",
-      "date": "2023年09月25日 14:21",
-      "file": "20230925【国货商战背后，二十年老牌8年“新做”在抖音｜专访满婷】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [],
-  "last_update": "2026-06-09T11:54:37.671618",
-  "total_completed": 433,
+  "captcha_pending": [
+    {
+      "url": "https://mp.weixin.qq.com/s/TxbErSZdhKJYq1pLhPDFKA",
+      "title": "花西子危机公关，到底错在哪儿？",
+      "seq": 423
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/67SogjFWCzwqCfqai5DXbg",
+      "title": "新共鸣新视听，《好事成双》示范“新女性剧”与“新沪剧”两套解法",
+      "seq": 425
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/OK8ZHo0tPrj_T-WNgLC9Mw",
+      "title": "没有李佳琦，商品会更便宜吗？",
+      "seq": 430
+    }
+  ],
+  "last_update": "2026-06-09T11:55:21.955770",
+  "total_completed": 428,
   "total_failed": 0
 }

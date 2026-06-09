@@ -435,36 +435,41 @@
       "date": "2023年05月26日 15:17",
       "file": "20230526【音乐圈三国战：AI疑似侵权，平台隔岸观火，版权方起义】.md"
     },
+    "https://mp.weixin.qq.com/s/1QEikKyqz0Thior3lWR5fg": {
+      "title": "18个问题，90个回答，国产大模型实用性横评",
+      "date": "2023年05月23日 15:08",
+      "file": "20230523【18个问题，90个回答，国产大模型实用性横评】.md"
+    },
+    "https://mp.weixin.qq.com/s/RoXKDAe6hVM9P02OEbuzuA": {
+      "title": "平台直播大战：小红书派出香港传奇名媛",
+      "date": "2023年05月28日 14:43",
+      "file": "20230528【平台直播大战：小红书派出香港传奇名媛】.md"
+    },
     "https://mp.weixin.qq.com/s/bPymm92e152AebV7lIF3Mg": {
       "title": "24小时无休上岗，数字人要抢主播饭碗？",
       "date": "2023年05月27日 14:40",
       "file": "20230527【24小时无休上岗，数字人要抢主播饭碗？】.md"
+    },
+    "https://mp.weixin.qq.com/s/iNstkNiARX5rnbg5FJd9FA": {
+      "title": "演唱会团票正走向崩溃？五月天粉丝团票有多难",
+      "date": "2023年05月26日 15:17",
+      "file": "20230526【演唱会团票正走向崩溃？五月天粉丝团票有多难】.md"
+    },
+    "https://mp.weixin.qq.com/s/DeH6ebvxHM20AwaTR6h2jg": {
+      "title": "AIGC，内容行业的下一片蓝海",
+      "date": "2023年05月26日 15:17",
+      "file": "20230526【AIGC，内容行业的下一片蓝海】.md"
     }
   },
   "failed": {},
   "captcha_pending": [
     {
-      "url": "https://mp.weixin.qq.com/s/1QEikKyqz0Thior3lWR5fg",
-      "title": "18个问题，90个回答，国产大模型实用性横评",
-      "seq": 85
-    },
-    {
       "url": "https://mp.weixin.qq.com/s/JFqRgLo_rKZdx05FoF5-kw",
       "title": "这档主播职场综艺，在直播间很“上头”",
       "seq": 86
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/RoXKDAe6hVM9P02OEbuzuA",
-      "title": "平台直播大战：小红书派出香港传奇名媛",
-      "seq": 87
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/iNstkNiARX5rnbg5FJd9FA",
-      "title": "演唱会团票正走向崩溃？五月天粉丝团票有多难",
-      "seq": 92
     }
   ],
-  "last_update": "2026-06-09T08:31:06.701909",
-  "total_completed": 88,
+  "last_update": "2026-06-09T08:31:47.359615",
+  "total_completed": 92,
   "total_failed": 0
 }

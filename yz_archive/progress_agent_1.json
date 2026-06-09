@@ -1890,6 +1890,11 @@
       "date": "2023年09月07日 14:13",
       "file": "20230907【我们有3亿道题，至少60家大模型要买｜专访景联文】.md"
     },
+    "https://mp.weixin.qq.com/s/rOz5gNCE7KSyW7csZQyLHw": {
+      "title": "沙龙报名｜与咪咕、七猫、中文在线…畅聊微短剧精品化2.0",
+      "date": "2023年09月05日 14:11",
+      "file": "20230905【沙龙报名｜与咪咕、七猫、中文在线…畅聊微短剧精品化2.0】.md"
+    },
     "https://mp.weixin.qq.com/s/Tl8Io1Vwm6Ypw9BnV69Vcw": {
       "title": "AI标注公司生态调查：一半本科生、宝妈最好用",
       "date": "2023年09月07日 14:13",
@@ -1905,36 +1910,40 @@
       "date": "2023年09月08日 14:00",
       "file": "20230908【“折磨”顾客，捞金百亿！最“暴力”产品，彻底沦为全民公敌】.md"
     },
+    "https://mp.weixin.qq.com/s/t5B5PREacy6AvBby5nEreQ": {
+      "title": "华纳兄弟探索集团架构调整，中国区总裁赵方离任｜资讯",
+      "date": "2023年09月06日 13:00",
+      "file": "20230906【华纳兄弟探索集团架构调整，中国区总裁赵方离任｜资讯】.md"
+    },
     "https://mp.weixin.qq.com/s/7QofZYgs1nPK5XVf9o95pw": {
       "title": "专访百度宋健 | AIGC催生新“超级个体”",
       "date": "2023年09月08日 14:00",
       "file": "20230908【专访百度宋健 _ AIGC催生新“超级个体”】.md"
     },
+    "https://mp.weixin.qq.com/s/_qLyr6FX0TUISa7RVE4nAw": {
+      "title": "数据标注本质是高级搬砖，我们还不如工厂｜专访飞火",
+      "date": "2023年09月07日 14:13",
+      "file": "20230907【数据标注本质是高级搬砖，我们还不如工厂｜专访飞火】.md"
+    },
     "https://mp.weixin.qq.com/s/q_gWklmkK9Om4RdZ1ldimA": {
       "title": "盒马“移山”，大黄鱼“开道”？｜品牌深壹度",
       "date": "2023年09月09日 14:00",
       "file": "20230909【盒马“移山”，大黄鱼“开道”？｜品牌深壹度】.md"
+    },
+    "https://mp.weixin.qq.com/s/8iXXqt9R4NrpEc3EuuCLYg": {
+      "title": "大鹏、曾庆杰、程伟豪，来听听这些导演说了什么？|小娱月报",
+      "date": "2023年09月09日 14:00",
+      "file": "20230909【大鹏、曾庆杰、程伟豪，来听听这些导演说了什么？_小娱月报】.md"
+    },
+    "https://mp.weixin.qq.com/s/8d_u5nETUncRVnEE9bDWvw": {
+      "title": "从《消失的她》到《孤注一掷》，爆款为何离不开抖音？",
+      "date": "2023年09月10日 15:12",
+      "file": "20230910【从《消失的她》到《孤注一掷》，爆款为何离不开抖音？】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [
-    {
-      "url": "https://mp.weixin.qq.com/s/rOz5gNCE7KSyW7csZQyLHw",
-      "title": "沙龙报名｜与咪咕、七猫、中文在线…畅聊微短剧精品化2.0",
-      "seq": 374
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/t5B5PREacy6AvBby5nEreQ",
-      "title": "华纳兄弟探索集团架构调整，中国区总裁赵方离任｜资讯",
-      "seq": 383
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/_qLyr6FX0TUISa7RVE4nAw",
-      "title": "数据标注本质是高级搬砖，我们还不如工厂｜专访飞火",
-      "seq": 385
-    }
-  ],
-  "last_update": "2026-06-09T11:23:36.583263",
-  "total_completed": 383,
+  "captcha_pending": [],
+  "last_update": "2026-06-09T11:24:40.822006",
+  "total_completed": 388,
   "total_failed": 0
 }

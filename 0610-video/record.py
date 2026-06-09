@@ -23,8 +23,8 @@ async def record_video():
         # Click to start animation
         await page.click('#canvas')
         
-        # Wait for the full animation duration plus buffer
-        await page.wait_for_timeout(15000)
+        # Wait for the full animation duration plus buffer (153s + 5s buffer)
+        await page.wait_for_timeout(160000)
         
         await context.close()
         await browser.close()

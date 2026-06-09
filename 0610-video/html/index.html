@@ -5,10 +5,6 @@
 <meta name="viewport" content="width=450, initial-scale=1.0">
 <title>AI漫剧招聘风向标</title>
 <style>
-@import url('/usr/share/fonts/truetype/chinese/NotoSansSC[wght].ttf');
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
 @font-face {
   font-family: 'NotoSansSC';
   src: url('/usr/share/fonts/truetype/chinese/NotoSansSC[wght].ttf') format('truetype');
@@ -16,12 +12,7 @@
   font-style: normal;
 }
 
-@font-face {
-  font-family: 'NotoSerifSC';
-  src: url('/usr/share/fonts/truetype/noto-serif-sc/NotoSerifSC-VariableFont_wght.ttf') format('truetype');
-  font-weight: 100 900;
-  font-style: normal;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
   background: #0a0e27;
@@ -41,6 +32,45 @@ body {
   overflow: hidden;
 }
 
+/* ===== Background Effects ===== */
+.bg-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-glow.g1 { width:320px;height:320px;background:#6366f1;top:-120px;left:-80px;animation:glowDrift1 12s ease-in-out infinite; }
+.bg-glow.g2 { width:260px;height:260px;background:#a855f7;bottom:40px;right:-100px;animation:glowDrift2 15s ease-in-out infinite; }
+.bg-glow.g3 { width:200px;height:200px;background:#ec4899;top:300px;left:50%;transform:translateX(-50%);animation:glowDrift3 18s ease-in-out infinite; }
+
+@keyframes glowDrift1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,40px)} }
+@keyframes glowDrift2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-20px,-30px)} }
+@keyframes glowDrift3 { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(-20px)} }
+
+.bg-particles {
+  position: absolute;
+  top: 0; left: 0;
+  width: 450px; height: 800px;
+  pointer-events: none;
+  z-index: 0;
+}
+.bg-particle {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: rgba(99,102,241,0.6);
+  border-radius: 50%;
+  animation: floatUp linear infinite;
+}
+@keyframes floatUp {
+  0% { transform: translateY(0) scale(1); opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.3; }
+  100% { transform: translateY(-800px) scale(0.2); opacity: 0; }
+}
+
+/* ===== Scene Base ===== */
 .scene {
   position: absolute;
   top: 0; left: 0;
@@ -49,239 +79,313 @@ body {
   opacity: 0;
   pointer-events: none;
   z-index: 1;
+  transition: opacity 0.6s ease;
 }
-
 .scene.active {
   opacity: 1;
   pointer-events: auto;
 }
-
-/* ===== 通用动画 ===== */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(40px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-40px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes slideLeft {
-  from { opacity: 0; transform: translateX(-50px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-@keyframes slideRight {
-  from { opacity: 0; transform: translateX(50px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-@keyframes popIn {
-  0% { opacity: 0; transform: scale(0); }
-  70% { opacity: 1; transform: scale(1.15); }
-  100% { opacity: 1; transform: scale(1); }
-}
-@keyframes flashIn {
-  0% { opacity: 0; filter: brightness(3); }
-  30% { opacity: 1; filter: brightness(2); }
-  60% { opacity: 1; filter: brightness(1.3); }
-  100% { opacity: 1; filter: brightness(1); }
-}
-@keyframes zoomIn {
-  from { opacity: 0; transform: scale(0.5); }
-  to { opacity: 1; transform: scale(1); }
-}
-@keyframes barGrow {
-  from { transform: scaleX(0); }
-  to { transform: scaleX(1); }
-}
-@keyframes barGrowUp {
-  from { transform: scaleY(0); }
-  to { transform: scaleY(1); }
-}
-@keyframes radarFadeIn {
-  from { opacity: 0; transform: scale(0.3); }
-  to { opacity: 1; transform: scale(1); }
-}
-@keyframes bubblePop {
-  0% { opacity: 0; transform: scale(0); }
-  60% { opacity: 1; transform: scale(1.15); }
-  100% { opacity: 1; transform: scale(1); }
-}
-@keyframes rotateIn {
-  from { opacity: 0; transform: rotate(-90deg) scale(0.5); }
-  to { opacity: 1; transform: rotate(0deg) scale(1); }
-}
-@keyframes pulseGlow {
-  0%, 100% { filter: drop-shadow(0 0 6px rgba(99,102,241,0.4)); }
-  50% { filter: drop-shadow(0 0 18px rgba(99,102,241,0.8)); }
-}
-@keyframes countUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
-}
-@keyframes drawCircle {
-  from { stroke-dashoffset: 440; }
-  to { stroke-dashoffset: 0; }
-}
-@keyframes tagBounce {
-  0% { opacity: 0; transform: scale(0) rotate(-10deg); }
-  60% { transform: scale(1.1) rotate(2deg); }
-  100% { opacity: 1; transform: scale(1) rotate(0deg); }
-}
-
-.anim-element {
+.scene.fade-out {
   opacity: 0;
 }
-.scene.active .anim-element {
-  animation-fill-mode: forwards;
-}
 
-/* ===== 字幕 ===== */
+/* ===== Animation Keyframes ===== */
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+@keyframes slideUp { from{opacity:0;transform:translateY(50px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideDown { from{opacity:0;transform:translateY(-50px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideLeft { from{opacity:0;transform:translateX(-60px)} to{opacity:1;transform:translateX(0)} }
+@keyframes slideRight { from{opacity:0;transform:translateX(60px)} to{opacity:1;transform:translateX(0)} }
+@keyframes popIn { 0%{opacity:0;transform:scale(0)} 70%{opacity:1;transform:scale(1.12)} 100%{opacity:1;transform:scale(1)} }
+@keyframes flashIn { 0%{opacity:0;filter:brightness(3)} 30%{opacity:1;filter:brightness(2)} 60%{opacity:1;filter:brightness(1.3)} 100%{opacity:1;filter:brightness(1)} }
+@keyframes zoomIn { from{opacity:0;transform:scale(0.5)} to{opacity:1;transform:scale(1)} }
+@keyframes barGrow { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+@keyframes barGrowUp { from{transform:scaleY(0)} to{transform:scaleY(1)} }
+@keyframes radarFadeIn { from{opacity:0;transform:scale(0.3)} to{opacity:1;transform:scale(1)} }
+@keyframes bubblePop { 0%{opacity:0;transform:scale(0)} 60%{opacity:1;transform:scale(1.15)} 100%{opacity:1;transform:scale(1)} }
+@keyframes tagBounce { 0%{opacity:0;transform:scale(0) rotate(-10deg)} 60%{transform:scale(1.1) rotate(2deg)} 100%{opacity:1;transform:scale(1) rotate(0deg)} }
+@keyframes drawCircle { from{stroke-dashoffset:440} to{stroke-dashoffset:0} }
+@keyframes shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
+@keyframes pulseGlow { 0%,100%{filter:drop-shadow(0 0 6px rgba(99,102,241,0.4))} 50%{filter:drop-shadow(0 0 18px rgba(99,102,241,0.8))} }
+@keyframes rotateIn { from{opacity:0;transform:rotate(-90deg) scale(0.5)} to{opacity:1;transform:rotate(0deg) scale(1)} }
+@keyframes countPop { 0%{opacity:0;transform:translateY(10px) scale(0.8)} 60%{transform:translateY(-5px) scale(1.05)} 100%{opacity:1;transform:translateY(0) scale(1)} }
+@keyframes borderGlow { 0%,100%{border-color:rgba(99,102,241,0.3)} 50%{border-color:rgba(99,102,241,0.7)} }
+@keyframes dotPulse { 0%,100%{transform:scale(1);opacity:0.7} 50%{transform:scale(1.5);opacity:1} }
+@keyframes lineGrow { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+
+.anim-element { opacity: 0; }
+
+/* ===== Subtitle ===== */
 #subtitle {
   position: absolute;
-  bottom: 110px;
+  bottom: 90px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 100;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   color: #fff;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.95), -1px -1px 2px rgba(0,0,0,0.95), 1px -1px 2px rgba(0,0,0,0.95), -1px 1px 2px rgba(0,0,0,0.95), 0 0 8px rgba(0,0,0,0.8);
-  white-space: nowrap;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.95), -1px -1px 3px rgba(0,0,0,0.95), 1px -1px 3px rgba(0,0,0,0.95), -1px 1px 3px rgba(0,0,0,0.95), 0 0 10px rgba(0,0,0,0.9);
+  white-space: normal;
   text-align: center;
   width: 410px;
   font-family: 'NotoSansSC', sans-serif;
   letter-spacing: 1px;
+  line-height: 1.5;
   opacity: 0;
   transition: opacity 0.3s;
 }
-#subtitle.visible {
-  opacity: 1;
-}
+#subtitle.visible { opacity: 1; }
 
-/* ===== 背景装饰 ===== */
-.bg-glow {
+/* ===== Progress Bar ===== */
+#progress-bar {
   position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.3;
-  pointer-events: none;
-}
-
-.bg-particle {
-  position: absolute;
-  width: 3px;
+  bottom: 0; left: 0;
   height: 3px;
-  background: rgba(99, 102, 241, 0.5);
-  border-radius: 50%;
-  animation: floatUp 6s linear infinite;
+  background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899);
+  z-index: 101;
+  width: 0%;
+  transition: width 0.1s linear;
 }
 
-@keyframes floatUp {
-  0% { transform: translateY(0) scale(1); opacity: 0.6; }
-  50% { opacity: 1; }
-  100% { transform: translateY(-800px) scale(0.3); opacity: 0; }
-}
-
-/* ===== SCENE 1: 标题 ===== */
+/* ===== SCENE 01: Title Opening ===== */
 #s01 .title-main {
   position: absolute;
-  top: 180px;
+  top: 160px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 38px;
+  font-size: 42px;
   font-weight: 900;
   color: #fff;
   text-align: center;
   line-height: 1.3;
-  letter-spacing: 3px;
+  letter-spacing: 4px;
+  width: 380px;
 }
-#s01 .title-main .highlight {
+#s01 .title-main .hl {
   background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-#s01 .title-sub {
-  position: absolute;
-  top: 320px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 16px;
-  font-weight: 400;
-  color: rgba(255,255,255,0.7);
-  text-align: center;
-  letter-spacing: 2px;
-}
 #s01 .title-line {
   position: absolute;
-  top: 305px;
+  top: 290px;
   left: 50%;
   transform: translateX(-50%);
-  width: 200px;
+  width: 220px;
   height: 2px;
   background: linear-gradient(90deg, transparent, #6366f1, #a855f7, transparent);
+  transform-origin: center;
+}
+#s01 .title-sub {
+  position: absolute;
+  top: 310px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  letter-spacing: 2px;
+  width: 380px;
 }
 #s01 .title-badge {
   position: absolute;
-  top: 400px;
+  top: 370px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(99,102,241,0.15);
-  border: 1px solid rgba(99,102,241,0.4);
+  background: rgba(99,102,241,0.12);
+  border: 1px solid rgba(99,102,241,0.35);
   border-radius: 20px;
   padding: 8px 24px;
   color: #a5b4fc;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
+  letter-spacing: 1px;
 }
-
-/* ===== SCENE 2: AI岗位占比饼图 ===== */
-#s02 .pie-container {
+#s01 .complaint-cards {
   position: absolute;
-  top: 100px;
+  top: 440px;
   left: 50%;
   transform: translateX(-50%);
-  width: 280px;
-  height: 280px;
+  width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
-#s02 .pie-ring {
-  width: 280px;
-  height: 280px;
+#s01 .complaint {
+  background: rgba(239,68,68,0.08);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+#s01 .complaint .dot {
+  width: 6px; height: 6px;
+  background: #ef4444;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ===== SCENE 02: Overview Intro ===== */
+#s02 .overview-title {
+  position: absolute;
+  top: 60px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
+  width: 380px;
+}
+#s02 .overview-title .shimmer-text {
+  background: linear-gradient(90deg, #6366f1, #a855f7, #ec4899, #a855f7, #6366f1);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+#s02 .feature-cards {
+  position: absolute;
+  top: 120px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 390px;
+  display: flex;
+  gap: 10px;
+}
+#s02 .feat-card {
+  flex: 1;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 16px 10px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+#s02 .feat-card .feat-icon {
+  font-size: 28px;
+  margin-bottom: 6px;
+}
+#s02 .feat-card .feat-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+}
+#s02 .feat-card .feat-desc {
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 4px;
+}
+#s02 .feat-card:nth-child(1) { border-top: 3px solid #6366f1; }
+#s02 .feat-card:nth-child(2) { border-top: 3px solid #a855f7; }
+#s02 .feat-card:nth-child(3) { border-top: 3px solid #ec4899; }
+
+#s02 .mystery-box {
+  position: absolute;
+  top: 290px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 380px;
+  background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(168,85,247,0.1));
+  border: 1px solid rgba(168,85,247,0.25);
+  border-radius: 16px;
+  padding: 20px;
+  text-align: center;
+}
+#s02 .mystery-box .q-mark {
+  font-size: 48px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #6366f1, #ec4899);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+#s02 .mystery-box .q-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+  margin-top: 8px;
+}
+
+#s02 .big-hire {
+  position: absolute;
+  top: 430px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 380px;
+}
+#s02 .big-hire .hire-num {
+  font-size: 56px;
+  font-weight: 900;
+  color: #a855f7;
+  line-height: 1;
+}
+#s02 .big-hire .hire-label {
+  font-size: 14px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 4px;
+}
+
+/* ===== SCENE 03: Donut + Data Overview ===== */
+#s03 .section-title {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  text-align: center;
+  width: 380px;
+}
+#s03 .donut-container {
+  position: absolute;
+  top: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  height: 240px;
+}
+#s03 .donut-ring {
+  width: 240px;
+  height: 240px;
   border-radius: 50%;
   background: conic-gradient(
-    #6366f1 0deg 92deg,
-    #a855f7 92deg 130deg,
-    rgba(255,255,255,0.08) 130deg 360deg
+    #6366f1 0deg 25.6deg,
+    #a855f7 25.6deg 46deg,
+    #ec4899 46deg 62deg,
+    rgba(255,255,255,0.06) 62deg 360deg
   );
   position: relative;
-  animation: rotateIn 1s ease-out;
 }
-#s02 .pie-ring::after {
+#s03 .donut-ring::after {
   content: '';
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  width: 180px;
-  height: 180px;
+  width: 150px;
+  height: 150px;
   border-radius: 50%;
   background: #0a0e27;
 }
-#s02 .pie-center {
+#s03 .donut-center {
   position: absolute;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
   z-index: 2;
 }
-#s02 .pie-center .big-num {
-  font-size: 52px;
+#s03 .donut-center .big-pct {
+  font-size: 42px;
   font-weight: 900;
   background: linear-gradient(135deg, #6366f1, #a855f7);
   -webkit-background-clip: text;
@@ -289,152 +393,102 @@ body {
   background-clip: text;
   line-height: 1;
 }
-#s02 .pie-center .big-label {
-  font-size: 13px;
-  color: rgba(255,255,255,0.6);
-  margin-top: 4px;
+#s03 .donut-center .big-pct-label {
+  font-size: 12px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 2px;
 }
-#s02 .stat-row {
+
+#s03 .stat-row {
   position: absolute;
-  top: 430px;
+  top: 360px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
-  gap: 20px;
+  gap: 16px;
 }
-#s02 .stat-item {
+#s03 .stat-item {
   text-align: center;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.04);
   border-radius: 12px;
-  padding: 12px 18px;
-  border: 1px solid rgba(255,255,255,0.08);
+  padding: 10px 18px;
+  border: 1px solid rgba(255,255,255,0.06);
 }
-#s02 .stat-item .stat-val {
+#s03 .stat-val {
   font-size: 28px;
   font-weight: 900;
   color: #fff;
 }
-#s02 .stat-item .stat-lbl {
+#s03 .stat-item.purple .stat-val { color: #a855f7; }
+#s03 .stat-item.cyan .stat-val { color: #06b6d4; }
+#s03 .stat-lbl {
   font-size: 11px;
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.45);
   margin-top: 2px;
 }
-#s02 .stat-item.purple .stat-val {
-  color: #a855f7;
-}
 
-/* ===== SCENE 3: 条形图 ===== */
-#s03 .chart-title {
+#s03 .source-note {
   position: absolute;
-  top: 70px;
+  top: 450px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 11px;
+  color: rgba(255,255,255,0.3);
+  text-align: center;
+  width: 380px;
+}
+
+#s03 .pyramid-hint {
+  position: absolute;
+  top: 475px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(245,158,11,0.08);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 12px;
+  color: #fbbf24;
+  text-align: center;
+  width: 360px;
+}
+
+/* ===== SCENE 04: 人海战术 Cards ===== */
+#s04 .card-title {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  font-weight: 900;
   color: #fff;
   text-align: center;
 }
-#s03 .chart-subtitle {
+#s04 .card-title .wave-emoji { font-size: 26px; }
+#s04 .card-subtitle {
   position: absolute;
-  top: 98px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 12px;
-  color: rgba(255,255,255,0.5);
-}
-#s03 .bar-chart {
-  position: absolute;
-  top: 140px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 380px;
-}
-#s03 .bar-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 14px;
-  gap: 10px;
-}
-#s03 .bar-label {
-  width: 60px;
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.8);
-  text-align: right;
-  flex-shrink: 0;
-}
-#s03 .bar-track {
-  flex: 1;
-  height: 30px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 6px;
-  overflow: hidden;
-  position: relative;
-}
-#s03 .bar-fill {
-  height: 100%;
-  border-radius: 6px;
-  transform-origin: left center;
-  transform: scaleX(0);
-  position: relative;
-}
-#s03 .bar-fill.anim {
-  animation: barGrow 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-#s03 .bar-val {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 13px;
-  font-weight: 700;
-  color: #fff;
-  opacity: 0;
-}
-#s03 .bar-val.anim {
-  animation: fadeIn 0.4s 0.6s forwards;
-}
-#s03 .bar-fill.grad-1 { background: linear-gradient(90deg, #6366f1, #818cf8); }
-#s03 .bar-fill.grad-2 { background: linear-gradient(90deg, #a855f7, #c084fc); }
-#s03 .bar-fill.grad-3 { background: linear-gradient(90deg, #ec4899, #f472b6); }
-#s03 .bar-fill.grad-4 { background: linear-gradient(90deg, #06b6d4, #67e8f9); }
-#s03 .bar-fill.grad-5 { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
-#s03 .bottom-note {
-  position: absolute;
-  top: 460px;
+  top: 85px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 12px;
   color: rgba(255,255,255,0.4);
   text-align: center;
 }
-
-/* ===== SCENE 4: 卡片分类 ===== */
-#s04 .card-title {
+#s04 .cards-wrap {
   position: absolute;
-  top: 70px;
+  top: 115px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 20px;
-  font-weight: 700;
-  color: #fff;
-  text-align: center;
-}
-#s04 .cards-container {
-  position: absolute;
-  top: 130px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 390px;
+  width: 400px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 #s04 .info-card {
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
   border-radius: 14px;
-  padding: 16px 18px;
+  padding: 14px 16px;
   position: relative;
   overflow: hidden;
 }
@@ -442,611 +496,801 @@ body {
   content: '';
   position: absolute;
   top: 0; left: 0;
-  width: 4px;
-  height: 100%;
+  width: 4px; height: 100%;
   border-radius: 4px 0 0 4px;
 }
-#s04 .info-card.card-1::before { background: #6366f1; }
-#s04 .info-card.card-2::before { background: #a855f7; }
-#s04 .info-card.card-3::before { background: #ec4899; }
+#s04 .info-card.c1::before { background: #6366f1; }
+#s04 .info-card.c2::before { background: #a855f7; }
+#s04 .info-card.c3::before { background: #ec4899; }
 #s04 .card-head {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 6px;
+  gap: 10px;
+  margin-bottom: 4px;
 }
 #s04 .card-icon {
-  width: 28px;
-  height: 28px;
+  width: 30px; height: 30px;
   border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  color: #fff;
-  font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; color: #fff; font-weight: 800;
 }
-#s04 .card-1 .card-icon { background: rgba(99,102,241,0.3); }
-#s04 .card-2 .card-icon { background: rgba(168,85,247,0.3); }
-#s04 .card-3 .card-icon { background: rgba(236,72,153,0.3); }
-#s04 .card-name {
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
-}
-#s04 .card-desc {
-  font-size: 12px;
-  color: rgba(255,255,255,0.5);
-  line-height: 1.5;
-}
+#s04 .c1 .card-icon { background: rgba(99,102,241,0.25); }
+#s04 .c2 .card-icon { background: rgba(168,85,247,0.25); }
+#s04 .c3 .card-icon { background: rgba(236,72,153,0.25); }
+#s04 .card-name { font-size: 16px; font-weight: 700; color: #fff; }
+#s04 .card-desc { font-size: 11px; color: rgba(255,255,255,0.45); line-height: 1.5; }
 #s04 .card-tags {
-  display: flex;
-  gap: 6px;
-  margin-top: 8px;
-  flex-wrap: wrap;
+  display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;
 }
 #s04 .card-tag {
-  font-size: 11px;
-  padding: 3px 10px;
-  border-radius: 10px;
-  font-weight: 500;
-  transform: scale(0);
+  font-size: 10px; padding: 3px 10px; border-radius: 10px;
+  font-weight: 500; transform: scale(0);
 }
-#s04 .card-tag.anim { animation: tagBounce 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-#s04 .card-1 .card-tag { background: rgba(99,102,241,0.15); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.3); }
-#s04 .card-2 .card-tag { background: rgba(168,85,247,0.15); color: #c4b5fd; border: 1px solid rgba(168,85,247,0.3); }
-#s04 .card-3 .card-tag { background: rgba(236,72,153,0.15); color: #f9a8d4; border: 1px solid rgba(236,72,153,0.3); }
+#s04 .card-tag.anim { animation: tagBounce 0.4s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+#s04 .c1 .card-tag { background: rgba(99,102,241,0.12); color: #a5b4fc; border: 1px solid rgba(99,102,241,0.25); }
+#s04 .c2 .card-tag { background: rgba(168,85,247,0.12); color: #c4b5fd; border: 1px solid rgba(168,85,247,0.25); }
+#s04 .c3 .card-tag { background: rgba(236,72,153,0.12); color: #f9a8d4; border: 1px solid rgba(236,72,153,0.25); }
 
-/* ===== SCENE 5: 分组柱状图 ===== */
+/* ===== SCENE 05: Horizontal Bar Chart ===== */
 #s05 .chart-title {
-  position: absolute;
-  top: 70px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 20px;
-  font-weight: 700;
-  color: #fff;
-  text-align: center;
+  position: absolute; top: 50px; left: 50%; transform: translateX(-50%);
+  font-size: 20px; font-weight: 800; color: #fff; text-align: center;
 }
 #s05 .chart-subtitle {
-  position: absolute;
-  top: 98px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 13px;
-  color: #f472b6;
-  font-weight: 600;
+  position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
+  font-size: 12px; color: rgba(255,255,255,0.45); text-align: center;
 }
-#s05 .bar-group-chart {
-  position: absolute;
-  top: 140px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 380px;
-  height: 320px;
+#s05 .bar-chart {
+  position: absolute; top: 115px; left: 50%; transform: translateX(-50%); width: 390px;
 }
-#s05 .y-axis {
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 280px;
-  display: flex;
-  flex-direction: column-reverse;
-  justify-content: space-between;
-  font-size: 10px;
-  color: rgba(255,255,255,0.35);
+#s05 .bar-item {
+  display: flex; align-items: center; margin-bottom: 16px; gap: 10px;
 }
-#s05 .y-line {
-  position: absolute;
-  left: 40px;
-  right: 0;
-  height: 1px;
-  background: rgba(255,255,255,0.06);
+#s05 .bar-label {
+  width: 55px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.8);
+  text-align: right; flex-shrink: 0;
 }
-#s05 .group-container {
-  position: absolute;
-  left: 50px;
-  bottom: 30px;
-  display: flex;
-  align-items: flex-end;
-  gap: 16px;
-  height: 270px;
+#s05 .bar-track {
+  flex: 1; height: 32px; background: rgba(255,255,255,0.04);
+  border-radius: 6px; overflow: hidden; position: relative;
 }
-#s05 .bar-group {
-  display: flex;
-  align-items: flex-end;
-  gap: 4px;
+#s05 .bar-fill {
+  height: 100%; border-radius: 6px; transform-origin: left center;
+  transform: scaleX(0); display: flex; align-items: center;
+  justify-content: flex-end; padding-right: 8px;
 }
-#s05 .bar-col {
-  width: 28px;
-  border-radius: 4px 4px 0 0;
-  transform-origin: bottom;
-  transform: scaleY(0);
-  position: relative;
-}
-#s05 .bar-col.anim {
-  animation: barGrowUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-#s05 .bar-col .bar-label-top {
-  position: absolute;
-  top: -20px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 10px;
-  font-weight: 700;
-  color: #fff;
-  white-space: nowrap;
+#s05 .bar-fill.anim { animation: barGrow 0.8s cubic-bezier(0.22,1,0.36,1) forwards; }
+#s05 .bar-fill .bar-val {
+  font-size: 12px; font-weight: 700; color: #fff;
   opacity: 0;
 }
-#s05 .bar-col.anim .bar-label-top {
-  animation: fadeIn 0.3s 0.7s forwards;
-}
-#s05 .group-label {
-  position: absolute;
-  bottom: -22px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 11px;
-  color: rgba(255,255,255,0.6);
-  white-space: nowrap;
-}
-#s05 .gap-indicator {
-  position: absolute;
-  top: 50px;
-  right: 20px;
-  text-align: center;
-}
-#s05 .gap-num {
-  font-size: 36px;
-  font-weight: 900;
-  color: #ef4444;
-  line-height: 1;
-}
-#s05 .gap-label {
-  font-size: 11px;
-  color: rgba(255,255,255,0.5);
+#s05 .bar-fill.anim .bar-val { animation: fadeIn 0.3s 0.5s forwards; }
+#s05 .g1 { background: linear-gradient(90deg, #6366f1, #818cf8); }
+#s05 .g2 { background: linear-gradient(90deg, #a855f7, #c084fc); }
+#s05 .g3 { background: linear-gradient(90deg, #ec4899, #f472b6); }
+#s05 .g4 { background: linear-gradient(90deg, #06b6d4, #67e8f9); }
+#s05 .g5 { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+#s05 .bottom-note {
+  position: absolute; top: 460px; left: 50%; transform: translateX(-50%);
+  font-size: 11px; color: rgba(255,255,255,0.35); text-align: center; width: 380px;
 }
 
-/* ===== SCENE 6: 雷达图+气泡 ===== */
-#s06 .chart-title {
-  position: absolute;
-  top: 55px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 18px;
-  font-weight: 700;
-  color: #fff;
-  text-align: center;
+/* ===== SCENE 06: Salary Cards ===== */
+#s06 .sal-title {
+  position: absolute; top: 45px; left: 50%; transform: translateX(-50%);
+  font-size: 20px; font-weight: 800; color: #fff; text-align: center;
 }
-#s06 .radar-container {
-  position: absolute;
-  top: 95px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 260px;
-  height: 220px;
+#s06 .sal-cards {
+  position: absolute; top: 85px; left: 50%; transform: translateX(-50%);
+  width: 400px; display: flex; flex-direction: column; gap: 10px;
 }
-#s06 .radar-svg {
-  width: 260px;
-  height: 220px;
+#s06 .sal-card {
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 12px; padding: 12px 14px; display: flex; align-items: center; gap: 12px;
+  position: relative; overflow: hidden;
 }
-#s06 .bubble-section {
-  position: absolute;
-  top: 340px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 380px;
+#s06 .sal-card .sal-icon {
+  width: 36px; height: 36px; border-radius: 10px; display: flex;
+  align-items: center; justify-content: center; font-size: 16px; font-weight: 800; flex-shrink: 0;
 }
-#s06 .bubble-title {
-  font-size: 14px;
-  font-weight: 600;
-  color: #fff;
-  margin-bottom: 12px;
-  text-align: center;
+#s06 .sal-card .sal-info { flex: 1; }
+#s06 .sal-card .sal-city { font-size: 13px; font-weight: 700; color: #fff; }
+#s06 .sal-card .sal-range { font-size: 20px; font-weight: 900; line-height: 1.2; }
+#s06 .sal-card .sal-note { font-size: 10px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+#s06 .sal-card.sc1 .sal-icon { background: rgba(99,102,241,0.2); color: #a5b4fc; }
+#s06 .sal-card.sc1 .sal-range { color: #818cf8; }
+#s06 .sal-card.sc2 .sal-icon { background: rgba(168,85,247,0.2); color: #c4b5fd; }
+#s06 .sal-card.sc2 .sal-range { color: #c084fc; }
+#s06 .sal-card.sc3 .sal-icon { background: rgba(236,72,153,0.2); color: #f9a8d4; }
+#s06 .sal-card.sc3 .sal-range { color: #f472b6; }
+#s06 .sal-card.sc4 .sal-icon { background: rgba(6,182,212,0.2); color: #67e8f9; }
+#s06 .sal-card.sc4 .sal-range { color: #22d3ee; }
+#s06 .sal-card.sc5 .sal-icon { background: rgba(16,185,129,0.2); color: #6ee7b7; }
+#s06 .sal-card.sc5 .sal-range { color: #34d399; }
+
+#s06 .turnover-box {
+  position: absolute; top: 410px; left: 50%; transform: translateX(-50%);
+  width: 380px; background: rgba(239,68,68,0.06);
+  border: 1px solid rgba(239,68,68,0.2); border-radius: 12px;
+  padding: 12px 16px; text-align: center;
 }
-#s06 .bubble-row {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
+#s06 .turnover-box .to-title {
+  font-size: 13px; font-weight: 700; color: #f87171;
 }
-#s06 .bubble {
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transform: scale(0);
-  border: 2px solid;
+#s06 .turnover-box .to-desc {
+  font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 4px;
 }
-#s06 .bubble.anim {
-  animation: bubblePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-#s06 .bubble .b-num {
-  font-size: 18px;
-  font-weight: 900;
-  color: #fff;
-}
-#s06 .bubble .b-label {
-  font-size: 10px;
-  color: rgba(255,255,255,0.7);
-}
-#s06 .cross-company {
-  position: absolute;
-  top: 510px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 380px;
-}
-#s06 .cc-title {
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.7);
-  margin-bottom: 8px;
-  text-align: center;
-}
-#s06 .cc-bar-container {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-#s06 .cc-bar-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-#s06 .cc-bar-name {
-  width: 70px;
-  font-size: 11px;
-  color: rgba(255,255,255,0.6);
-  text-align: right;
-  flex-shrink: 0;
-}
-#s06 .cc-bar-track {
-  flex: 1;
-  height: 18px;
-  background: rgba(255,255,255,0.04);
-  border-radius: 4px;
-  overflow: hidden;
-}
-#s06 .cc-bar-fill {
-  height: 100%;
-  border-radius: 4px;
-  transform-origin: left;
-  transform: scaleX(0);
-}
-#s06 .cc-bar-fill.anim {
-  animation: barGrow 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-#s06 .cc-bar-val {
-  width: 45px;
-  font-size: 11px;
-  font-weight: 600;
-  color: #fff;
+#s06 .turnover-box .to-highlight {
+  font-size: 22px; font-weight: 900; color: #ef4444; margin-top: 4px;
 }
 
-/* ===== SCENE 7: 结尾CTA ===== */
-#s07 .cta-bg {
-  position: absolute;
-  top: 0; left: 0;
-  width: 450px;
-  height: 800px;
-  background: radial-gradient(ellipse at center, rgba(99,102,241,0.15) 0%, transparent 70%);
+/* ===== SCENE 07: Grouped Bar Chart ===== */
+#s07 .chart-title {
+  position: absolute; top: 45px; left: 50%; transform: translateX(-50%);
+  font-size: 20px; font-weight: 800; color: #fff; text-align: center;
 }
-#s07 .cta-main {
-  position: absolute;
-  top: 240px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 28px;
-  font-weight: 900;
-  color: #fff;
+#s07 .chart-subtitle {
+  position: absolute; top: 75px; left: 50%; transform: translateX(-50%);
+  font-size: 13px; color: #f472b6; font-weight: 600; text-align: center;
+}
+#s07 .bar-group-chart {
+  position: absolute; top: 110px; left: 50%; transform: translateX(-50%);
+  width: 390px; height: 340px;
+}
+#s07 .y-axis {
+  position: absolute; left: 0; top: 0; height: 290px;
+  display: flex; flex-direction: column-reverse; justify-content: space-between;
+  font-size: 10px; color: rgba(255,255,255,0.3); width: 38px;
+}
+#s07 .y-line {
+  position: absolute; left: 42px; right: 0; height: 1px;
+  background: rgba(255,255,255,0.05);
+}
+#s07 .group-container {
+  position: absolute; left: 50px; bottom: 30px;
+  display: flex; align-items: flex-end; gap: 20px; height: 280px;
+}
+#s07 .bar-group { display: flex; align-items: flex-end; gap: 4px; position: relative; }
+#s07 .bar-col {
+  width: 30px; border-radius: 4px 4px 0 0;
+  transform-origin: bottom; transform: scaleY(0); position: relative;
+}
+#s07 .bar-col.anim { animation: barGrowUp 0.8s cubic-bezier(0.22,1,0.36,1) forwards; }
+#s07 .bar-col .bar-label-top {
+  position: absolute; top: -18px; left: 50%; transform: translateX(-50%);
+  font-size: 9px; font-weight: 700; color: #fff; white-space: nowrap; opacity: 0;
+}
+#s07 .bar-col.anim .bar-label-top { animation: fadeIn 0.3s 0.7s forwards; }
+#s07 .group-label {
+  position: absolute; bottom: -22px; left: 50%; transform: translateX(-50%);
+  font-size: 12px; color: rgba(255,255,255,0.6); white-space: nowrap; font-weight: 600;
+}
+#s07 .gap-indicator {
+  position: absolute; top: 45px; right: 15px; text-align: center;
+}
+#s07 .gap-num {
+  font-size: 42px; font-weight: 900; color: #ef4444; line-height: 1;
+}
+#s07 .gap-label {
+  font-size: 11px; color: rgba(255,255,255,0.45);
+}
+#s07 .top-jobs {
+  position: absolute; top: 470px; left: 50%; transform: translateX(-50%);
+  width: 380px; display: flex; gap: 8px;
+}
+#s07 .top-job {
+  flex: 1; background: rgba(245,158,11,0.06);
+  border: 1px solid rgba(245,158,11,0.2); border-radius: 10px;
+  padding: 8px 10px; text-align: center;
+}
+#s07 .top-job .tj-name { font-size: 11px; font-weight: 600; color: #fbbf24; }
+#s07 .top-job .tj-sal { font-size: 15px; font-weight: 900; color: #fff; margin-top: 2px; }
+
+/* ===== SCENE 08: AI管培生 ===== */
+#s08 .trainee-title {
+  position: absolute; top: 55px; left: 50%; transform: translateX(-50%);
+  font-size: 22px; font-weight: 900; color: #fff; text-align: center;
+}
+#s08 .trainee-title .hl {
+  background: linear-gradient(135deg, #10b981, #06b6d4);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+#s08 .trainee-card {
+  position: absolute; top: 110px; left: 50%; transform: translateX(-50%);
+  width: 380px; background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(6,182,212,0.08));
+  border: 1px solid rgba(16,185,129,0.25); border-radius: 16px; padding: 20px;
+}
+#s08 .tc-company {
+  font-size: 16px; font-weight: 700; color: #6ee7b7; margin-bottom: 10px;
+}
+#s08 .tc-path {
+  display: flex; flex-direction: column; gap: 8px;
+}
+#s08 .tc-step {
+  display: flex; align-items: center; gap: 10px;
+  position: relative; padding-left: 24px;
+}
+#s08 .tc-step::before {
+  content: '';
+  position: absolute; left: 8px; top: 0; bottom: -8px;
+  width: 2px; background: rgba(16,185,129,0.3);
+}
+#s08 .tc-step:last-child::before { display: none; }
+#s08 .tc-step .step-dot {
+  position: absolute; left: 4px; top: 6px;
+  width: 10px; height: 10px; border-radius: 50%;
+  background: #10b981; border: 2px solid #0a0e27;
+}
+#s08 .tc-step .step-text {
+  font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 500;
+}
+#s08 .tc-highlight {
+  margin-top: 14px;
+  background: rgba(245,158,11,0.08);
+  border: 1px solid rgba(245,158,11,0.2);
+  border-radius: 10px;
+  padding: 10px 14px;
   text-align: center;
-  line-height: 1.5;
+}
+#s08 .tc-highlight .hl-text {
+  font-size: 18px; font-weight: 900; color: #fbbf24;
+}
+#s08 .tc-highlight .hl-sub {
+  font-size: 11px; color: rgba(255,255,255,0.4); margin-top: 2px;
+}
+
+#s08 .vs-box {
+  position: absolute; top: 420px; left: 50%; transform: translateX(-50%);
+  width: 380px; text-align: center;
+}
+#s08 .vs-text {
+  font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.6;
+}
+#s08 .vs-text .em { color: #f87171; font-weight: 700; }
+
+/* ===== SCENE 09: Radar + Content Types ===== */
+#s09 .chart-title {
+  position: absolute; top: 45px; left: 50%; transform: translateX(-50%);
+  font-size: 20px; font-weight: 800; color: #fff; text-align: center;
+}
+#s09 .radar-container {
+  position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
+  width: 280px; height: 240px;
+}
+#s09 .radar-svg { width: 280px; height: 240px; }
+
+#s09 .content-cards {
+  position: absolute; top: 340px; left: 50%; transform: translateX(-50%);
+  width: 390px; display: flex; flex-direction: column; gap: 8px;
+}
+#s09 .content-card {
+  display: flex; align-items: center; gap: 10px;
+  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px; padding: 10px 14px;
+}
+#s09 .cc-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+#s09 .cc-name { font-size: 13px; font-weight: 700; color: #fff; }
+#s09 .cc-desc { font-size: 10px; color: rgba(255,255,255,0.45); margin-left: auto; }
+
+/* ===== SCENE 10: Bubble + CTA ===== */
+#s10 .section-title {
+  position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
+  font-size: 18px; font-weight: 800; color: #fff; text-align: center; width: 380px;
+}
+#s10 .bubble-section {
+  position: absolute; top: 80px; left: 50%; transform: translateX(-50%);
   width: 380px;
 }
-#s07 .cta-main .em {
+#s10 .bubble-title {
+  font-size: 13px; font-weight: 600; color: rgba(255,255,255,0.6);
+  margin-bottom: 10px; text-align: center;
+}
+#s10 .bubble-row {
+  display: flex; gap: 12px; justify-content: center; flex-wrap: wrap;
+}
+#s10 .bubble {
+  border-radius: 50%; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transform: scale(0); border: 2px solid;
+}
+#s10 .bubble.anim { animation: bubblePop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+#s10 .bubble .b-num { font-size: 16px; font-weight: 900; color: #fff; }
+#s10 .bubble .b-label { font-size: 9px; color: rgba(255,255,255,0.6); }
+
+#s10 .cross-company {
+  position: absolute; top: 240px; left: 50%; transform: translateX(-50%); width: 380px;
+}
+#s10 .cc-title {
+  font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.5);
+  margin-bottom: 8px; text-align: center;
+}
+#s10 .cc-bar-container { display: flex; flex-direction: column; gap: 7px; }
+#s10 .cc-bar-item { display: flex; align-items: center; gap: 8px; }
+#s10 .cc-bar-name { width: 65px; font-size: 11px; color: rgba(255,255,255,0.5); text-align: right; flex-shrink: 0; }
+#s10 .cc-bar-track { flex: 1; height: 16px; background: rgba(255,255,255,0.04); border-radius: 4px; overflow: hidden; }
+#s10 .cc-bar-fill { height: 100%; border-radius: 4px; transform-origin: left; transform: scaleX(0); }
+#s10 .cc-bar-fill.anim { animation: barGrow 0.6s cubic-bezier(0.22,1,0.36,1) forwards; }
+#s10 .cc-bar-val { width: 40px; font-size: 11px; font-weight: 600; color: #fff; }
+
+#s10 .conclusion-box {
+  position: absolute; top: 380px; left: 50%; transform: translateX(-50%);
+  width: 380px; text-align: center;
+}
+#s10 .conclusion-box .concl-main {
+  font-size: 20px; font-weight: 900; color: #fff; line-height: 1.5;
+}
+#s10 .conclusion-box .concl-main .em {
   background: linear-gradient(135deg, #6366f1, #a855f7, #ec4899);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
-#s07 .cta-line {
-  position: absolute;
-  top: 360px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 160px;
-  height: 2px;
+#s10 .conclusion-box .concl-line {
+  width: 140px; height: 2px; margin: 10px auto;
   background: linear-gradient(90deg, transparent, #6366f1, #a855f7, transparent);
 }
-#s07 .cta-sub {
-  position: absolute;
-  top: 390px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 18px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.6);
-  text-align: center;
+#s10 .conclusion-box .concl-sub {
+  font-size: 13px; color: rgba(255,255,255,0.5); line-height: 1.5;
 }
-#s07 .cta-badge {
-  position: absolute;
-  top: 440px;
-  left: 50%;
-  transform: translateX(-50%);
+#s10 .cta-btn {
+  position: absolute; top: 530px; left: 50%; transform: translateX(-50%);
   background: linear-gradient(135deg, rgba(99,102,241,0.3), rgba(168,85,247,0.3));
   border: 1px solid rgba(168,85,247,0.5);
-  border-radius: 24px;
-  padding: 10px 30px;
-  font-size: 16px;
-  font-weight: 700;
-  color: #fff;
+  border-radius: 24px; padding: 10px 30px;
+  font-size: 16px; font-weight: 700; color: #fff;
+  font-family: 'NotoSansSC', sans-serif;
 }
-#s07 .source-credit {
-  position: absolute;
-  bottom: 160px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 11px;
-  color: rgba(255,255,255,0.25);
-  text-align: center;
+#s10 .source-credit {
+  position: absolute; bottom: 140px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; color: rgba(255,255,255,0.2); text-align: center;
 }
+
+/* ===== Audio hidden ===== */
+audio { display: none; }
 </style>
 </head>
 <body>
 
 <div class="canvas" id="canvas">
-  <!-- 背景装饰 -->
-  <div class="bg-glow" style="width:300px;height:300px;background:#6366f1;top:-100px;left:-50px;"></div>
-  <div class="bg-glow" style="width:250px;height:250px;background:#a855f7;bottom:50px;right:-80px;"></div>
+  <!-- Background Effects -->
+  <div class="bg-glow g1"></div>
+  <div class="bg-glow g2"></div>
+  <div class="bg-glow g3"></div>
+  <div class="bg-particles" id="bgParticles"></div>
 
-  <!-- 字幕 -->
+  <!-- Subtitle -->
   <div id="subtitle"></div>
 
-  <!-- ===== SCENE 1: 标题 ===== -->
-  <div class="scene" id="s01" data-start="0" data-dur="1.95">
-    <div class="title-main anim-element" data-anim="flashIn" data-delay="0">
-      <span class="highlight">AI漫剧</span><br>招聘风向标
+  <!-- Progress Bar -->
+  <div id="progress-bar"></div>
+
+  <!-- Audio -->
+  <audio id="bgAudio" src="../audio/voice.mp3" preload="auto"></audio>
+
+  <!-- ===== SCENE 01: Title Opening (0-12s) ===== -->
+  <div class="scene" id="s01" data-start="0" data-dur="12">
+    <div class="title-main anim-element" data-anim="flashIn" data-delay="0.2">
+      <span class="hl">AI漫剧</span><br>招聘风向标
     </div>
-    <div class="title-line anim-element" data-anim="zoomIn" data-delay="0.3"></div>
-    <div class="title-sub anim-element" data-anim="slideUp" data-delay="0.5">10家公司 · 3362岗位 · 860个AI岗</div>
-    <div class="title-badge anim-element" data-anim="popIn" data-delay="0.8">娱乐资本论 · 人才风向标</div>
+    <div class="title-line anim-element" data-anim="zoomIn" data-delay="0.6"></div>
+    <div class="title-sub anim-element" data-anim="slideUp" data-delay="0.8">10家公司 · 3362岗位 · 860个AI岗</div>
+    <div class="title-badge anim-element" data-anim="popIn" data-delay="1.2">娱乐资本论 · 深度分析</div>
+    <div class="complaint-cards">
+      <div class="complaint anim-element" data-anim="slideRight" data-delay="2.5">
+        <span class="dot"></span>入职AI漫剧公司俩月被辞退了
+      </div>
+      <div class="complaint anim-element" data-anim="slideRight" data-delay="3.2">
+        <span class="dot"></span>短剧漫剧公司避雷
+      </div>
+      <div class="complaint anim-element" data-anim="slideRight" data-delay="3.9">
+        <span class="dot"></span>做AI漫剧真不靠谱
+      </div>
+    </div>
   </div>
 
-  <!-- ===== SCENE 2: AI岗位占比饼图 ===== -->
-  <div class="scene" id="s02" data-start="1.95" data-dur="1.95">
-    <div class="pie-container anim-element" data-anim="rotateIn" data-delay="0">
-      <div class="pie-ring"></div>
-      <div class="pie-center">
-        <div class="big-num" data-count="25.6">0%</div>
-        <div class="big-label">AI岗位占比</div>
+  <!-- ===== SCENE 02: Overview Intro (12-21s) ===== -->
+  <div class="scene" id="s02" data-start="12" data-dur="9">
+    <div class="overview-title anim-element" data-anim="fadeIn" data-delay="0.2">
+      另一方面，漫剧岗位<span class="shimmer-text">显著不同</span>
+    </div>
+    <div class="feature-cards">
+      <div class="feat-card anim-element" data-anim="slideUp" data-delay="0.5">
+        <div class="feat-icon">0️⃣</div>
+        <div class="feat-label">零基础</div>
+        <div class="feat-desc">无需经验</div>
+      </div>
+      <div class="feat-card anim-element" data-anim="slideUp" data-delay="0.7">
+        <div class="feat-icon">🚪</div>
+        <div class="feat-label">低门槛</div>
+        <div class="feat-desc">入门简单</div>
+      </div>
+      <div class="feat-card anim-element" data-anim="slideUp" data-delay="0.9">
+        <div class="feat-icon">📦</div>
+        <div class="feat-label">量大管饱</div>
+        <div class="feat-desc">随刷随有</div>
+      </div>
+    </div>
+    <div class="mystery-box anim-element" data-anim="popIn" data-delay="1.3">
+      <div class="q-mark">?</div>
+      <div class="q-text">这到底有什么不为人知的门道？</div>
+    </div>
+    <div class="big-hire anim-element" data-anim="countPop" data-delay="2.0">
+      <div class="hire-num" data-count="1000">0</div>
+      <div class="hire-label">有的公司一招招上千人</div>
+    </div>
+  </div>
+
+  <!-- ===== SCENE 03: Donut + Data Overview (21-37s) ===== -->
+  <div class="scene" id="s03" data-start="21" data-dur="16">
+    <div class="section-title anim-element" data-anim="fadeIn" data-delay="0.2">
+      10家头部公司 · 3362个岗位
+    </div>
+    <div class="donut-container anim-element" data-anim="rotateIn" data-delay="0.5">
+      <div class="donut-ring"></div>
+      <div class="donut-center">
+        <div class="big-pct" data-count="25.6" data-suffix="%">0%</div>
+        <div class="big-pct-label">AI岗位占比</div>
       </div>
     </div>
     <div class="stat-row">
-      <div class="stat-item anim-element" data-anim="slideUp" data-delay="0.4">
+      <div class="stat-item anim-element" data-anim="slideUp" data-delay="1.2">
         <div class="stat-val" data-count="3362">0</div>
         <div class="stat-lbl">总岗位</div>
       </div>
-      <div class="stat-item purple anim-element" data-anim="slideUp" data-delay="0.55">
+      <div class="stat-item purple anim-element" data-anim="slideUp" data-delay="1.5">
         <div class="stat-val" data-count="860">0</div>
         <div class="stat-lbl">AI岗位</div>
       </div>
-      <div class="stat-item anim-element" data-anim="slideUp" data-delay="0.7">
-        <div class="stat-val">40%+</div>
-        <div class="stat-lbl">去九州后</div>
+      <div class="stat-item cyan anim-element" data-anim="slideUp" data-delay="1.8">
+        <div class="stat-val">1/4</div>
+        <div class="stat-lbl">整体占比</div>
       </div>
+    </div>
+    <div class="source-note anim-element" data-anim="fadeIn" data-delay="2.5">
+      数据来源：娱乐资本论分析 · Boss直聘
+    </div>
+    <div class="pyramid-hint anim-element" data-anim="slideUp" data-delay="3.0">
+      ▲ 从行业金字塔尖出发，了解这是否是你想要的工作
     </div>
   </div>
 
-  <!-- ===== SCENE 3: 条形图 ===== -->
-  <div class="scene" id="s03" data-start="3.9" data-dur="1.95">
-    <div class="chart-title anim-element" data-anim="fadeIn" data-delay="0">AI渗透率排行</div>
-    <div class="chart-subtitle anim-element" data-anim="fadeIn" data-delay="0.1">小公司All in AI</div>
-    <div class="bar-chart">
-      <div class="bar-item anim-element" data-anim="slideLeft" data-delay="0.15">
-        <div class="bar-label">丰行</div>
-        <div class="bar-track">
-          <div class="bar-fill grad-1" style="width:100%"></div>
-          <div class="bar-val">100%</div>
-        </div>
-      </div>
-      <div class="bar-item anim-element" data-anim="slideLeft" data-delay="0.3">
-        <div class="bar-label">灵漫</div>
-        <div class="bar-track">
-          <div class="bar-fill grad-2" style="width:87%"></div>
-          <div class="bar-val">87%</div>
-        </div>
-      </div>
-      <div class="bar-item anim-element" data-anim="slideLeft" data-delay="0.45">
-        <div class="bar-label">点众</div>
-        <div class="bar-track">
-          <div class="bar-fill grad-3" style="width:82%"></div>
-          <div class="bar-val">82%</div>
-        </div>
-      </div>
-      <div class="bar-item anim-element" data-anim="slideLeft" data-delay="0.6">
-        <div class="bar-label">花笙</div>
-        <div class="bar-track">
-          <div class="bar-fill grad-4" style="width:68%"></div>
-          <div class="bar-val">68%</div>
-        </div>
-      </div>
-      <div class="bar-item anim-element" data-anim="slideLeft" data-delay="0.75">
-        <div class="bar-label">九州</div>
-        <div class="bar-track">
-          <div class="bar-fill grad-5" style="width:11%"></div>
-          <div class="bar-val">11%</div>
-        </div>
-      </div>
+  <!-- ===== SCENE 04: 人海战术 Cards (37-52s) ===== -->
+  <div class="scene" id="s04" data-start="37" data-dur="15">
+    <div class="card-title anim-element" data-anim="flashIn" data-delay="0.2">
+      人海战术<span class="wave-emoji"> 🌊</span>
     </div>
-    <div class="bottom-note anim-element" data-anim="fadeIn" data-delay="0.9">*九州1994总岗仅214 AI岗，但去九州后占比飙升40%+</div>
-  </div>
-
-  <!-- ===== SCENE 4: 卡片分类 ===== -->
-  <div class="scene" id="s04" data-start="5.85" data-dur="1.95">
-    <div class="card-title anim-element" data-anim="fadeIn" data-delay="0">人海战术</div>
-    <div class="cards-container">
-      <div class="info-card card-1 anim-element" data-anim="slideUp" data-delay="0.1">
+    <div class="card-subtitle anim-element" data-anim="fadeIn" data-delay="0.5">
+      蓬勃兴起的行业正用人海战术快速起量
+    </div>
+    <div class="cards-wrap">
+      <div class="info-card c1 anim-element" data-anim="slideUp" data-delay="0.8">
         <div class="card-head">
           <div class="card-icon">岗</div>
-          <div class="card-name">岗位多</div>
+          <div class="card-name">一是岗位多</div>
         </div>
-        <div class="card-desc">中小工作室基本全员AI，走机器量产路线</div>
+        <div class="card-desc">中小工作室基本全员AI，走机器量产路线，用最低成本起号变现</div>
         <div class="card-tags">
-          <span class="card-tag" data-delay="0.5">丰行100%</span>
-          <span class="card-tag" data-delay="0.6">灵漫87%</span>
-          <span class="card-tag" data-delay="0.7">花笙68%</span>
+          <span class="card-tag" data-delay="1.5">丰行100%</span>
+          <span class="card-tag" data-delay="1.7">灵漫87%</span>
+          <span class="card-tag" data-delay="1.9">花笙68%</span>
         </div>
       </div>
-      <div class="info-card card-2 anim-element" data-anim="slideUp" data-delay="0.25">
+      <div class="info-card c2 anim-element" data-anim="slideUp" data-delay="1.2">
         <div class="card-head">
           <div class="card-icon">低</div>
-          <div class="card-name">门槛低</div>
+          <div class="card-name">二是门槛低</div>
         </div>
-        <div class="card-desc">接受实习生，培训2-3天即可上岗</div>
+        <div class="card-desc">短剧岗接受实习生，推文生成师、抽卡师可转正，培训2-3天即可上岗</div>
         <div class="card-tags">
-          <span class="card-tag" data-delay="0.6">推文生成师</span>
-          <span class="card-tag" data-delay="0.7">抽卡师</span>
-          <span class="card-tag" data-delay="0.8">可转正</span>
+          <span class="card-tag" data-delay="2.0">推文生成师</span>
+          <span class="card-tag" data-delay="2.2">抽卡师</span>
+          <span class="card-tag" data-delay="2.4">可转正</span>
         </div>
       </div>
-      <div class="info-card card-3 anim-element" data-anim="slideUp" data-delay="0.4">
+      <div class="info-card c3 anim-element" data-anim="slideUp" data-delay="1.6">
         <div class="card-head">
           <div class="card-icon">薪</div>
-          <div class="card-name">工资一般</div>
+          <div class="card-name">三是工资一般</div>
         </div>
-        <div class="card-desc">北杭4-6K · 上海6-10K · 实习3-4K</div>
+        <div class="card-desc">北杭4-6K · 上海6-10K · 实习3-4K · 贴着底线反复摩擦</div>
         <div class="card-tags">
-          <span class="card-tag" data-delay="0.7">贴底线</span>
-          <span class="card-tag" data-delay="0.8">半年换人</span>
+          <span class="card-tag" data-delay="2.5">贴底线</span>
+          <span class="card-tag" data-delay="2.7">半年换人</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- ===== SCENE 5: 分组柱状图 ===== -->
-  <div class="scene" id="s05" data-start="7.8" data-dur="1.95">
-    <div class="chart-title anim-element" data-anim="fadeIn" data-delay="0">薪资鸿沟</div>
-    <div class="chart-subtitle anim-element" data-anim="fadeIn" data-delay="0.1">基层 vs 高层差距达十倍</div>
+  <!-- ===== SCENE 05: Horizontal Bar Chart (52-65s) ===== -->
+  <div class="scene" id="s05" data-start="52" data-dur="13">
+    <div class="chart-title anim-element" data-anim="fadeIn" data-delay="0.2">AI渗透率排行</div>
+    <div class="chart-subtitle anim-element" data-anim="fadeIn" data-delay="0.4">中小公司全员AI · 大厂仍有门槛</div>
+    <div class="bar-chart">
+      <div class="bar-item anim-element" data-anim="slideLeft" data-delay="0.6">
+        <div class="bar-label">丰行</div>
+        <div class="bar-track">
+          <div class="bar-fill g1" style="width:100%"><span class="bar-val">100%</span></div>
+        </div>
+      </div>
+      <div class="bar-item anim-element" data-anim="slideLeft" data-delay="0.9">
+        <div class="bar-label">灵漫</div>
+        <div class="bar-track">
+          <div class="bar-fill g2" style="width:87%"><span class="bar-val">87%</span></div>
+        </div>
+      </div>
+      <div class="bar-item anim-element" data-anim="slideLeft" data-delay="1.2">
+        <div class="bar-label">点众</div>
+        <div class="bar-track">
+          <div class="bar-fill g3" style="width:82%"><span class="bar-val">82%</span></div>
+        </div>
+      </div>
+      <div class="bar-item anim-element" data-anim="slideLeft" data-delay="1.5">
+        <div class="bar-label">花笙</div>
+        <div class="bar-track">
+          <div class="bar-fill g4" style="width:68%"><span class="bar-val">68%</span></div>
+        </div>
+      </div>
+      <div class="bar-item anim-element" data-anim="slideLeft" data-delay="1.8">
+        <div class="bar-label">九州</div>
+        <div class="bar-track">
+          <div class="bar-fill g5" style="width:11%"><span class="bar-val">11%</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="bottom-note anim-element" data-anim="fadeIn" data-delay="2.5">
+      长视频大厂AI岗要求本科3年经验，短剧岗很多接受实习生
+    </div>
+  </div>
+
+  <!-- ===== SCENE 06: Salary Cards (65-88s) ===== -->
+  <div class="scene" id="s06" data-start="65" data-dur="23">
+    <div class="sal-title anim-element" data-anim="fadeIn" data-delay="0.2">基层薪资真相</div>
+    <div class="sal-cards">
+      <div class="sal-card sc1 anim-element" data-anim="slideLeft" data-delay="0.5">
+        <div class="sal-icon">京</div>
+        <div class="sal-info">
+          <div class="sal-city">北京 · 全职</div>
+          <div class="sal-range" data-count-sal="4-6K">4-6K</div>
+          <div class="sal-note">维持基本生活</div>
+        </div>
+      </div>
+      <div class="sal-card sc2 anim-element" data-anim="slideLeft" data-delay="0.8">
+        <div class="sal-icon">杭</div>
+        <div class="sal-info">
+          <div class="sal-city">杭州 · 全职</div>
+          <div class="sal-range">4-6K</div>
+          <div class="sal-note">与北京持平</div>
+        </div>
+      </div>
+      <div class="sal-card sc3 anim-element" data-anim="slideLeft" data-delay="1.1">
+        <div class="sal-icon">沪</div>
+        <div class="sal-info">
+          <div class="sal-city">上海 · 全职</div>
+          <div class="sal-range">6-10K</div>
+          <div class="sal-note">略高于北杭</div>
+        </div>
+      </div>
+      <div class="sal-card sc4 anim-element" data-anim="slideLeft" data-delay="1.4">
+        <div class="sal-icon">实</div>
+        <div class="sal-info">
+          <div class="sal-city">实习岗</div>
+          <div class="sal-range">3-4K</div>
+          <div class="sal-note">贴着最低工资</div>
+        </div>
+      </div>
+      <div class="sal-card sc5 anim-element" data-anim="slideLeft" data-delay="1.7">
+        <div class="sal-icon">升</div>
+        <div class="sal-info">
+          <div class="sal-city">1-3年经验 · 编剧</div>
+          <div class="sal-range">15-25K</div>
+          <div class="sal-note">分镜师 9-14K</div>
+        </div>
+      </div>
+    </div>
+    <div class="turnover-box anim-element" data-anim="popIn" data-delay="2.5">
+      <div class="to-title">⚠️ 人员迭代速度极快</div>
+      <div class="to-highlight">入职半年就换人</div>
+      <div class="to-desc">一线制作岗都是短期用工</div>
+    </div>
+  </div>
+
+  <!-- ===== SCENE 07: Grouped Bar Chart (88-110s) ===== -->
+  <div class="scene" id="s07" data-start="88" data-dur="22">
+    <div class="chart-title anim-element" data-anim="fadeIn" data-delay="0.2">薪资鸿沟</div>
+    <div class="chart-subtitle anim-element" data-anim="fadeIn" data-delay="0.4">顶层AI岗位拼技术拼认知，与基层差距达十倍</div>
     <div class="bar-group-chart">
-      <!-- Y轴刻度线 -->
       <div class="y-line" style="bottom:30px"></div>
       <div class="y-line" style="bottom:100px"></div>
       <div class="y-line" style="bottom:170px"></div>
       <div class="y-line" style="bottom:240px"></div>
       <div class="y-axis">
-        <span>0K</span>
-        <span>30K</span>
-        <span>60K</span>
-        <span>90K</span>
+        <span>0K</span><span>30K</span><span>60K</span><span>90K</span>
       </div>
       <div class="group-container">
         <div class="bar-group">
-          <div class="bar-col anim-element" data-anim="barGrowUp" data-delay="0.2"
+          <div class="bar-col anim-element" data-anim="barGrowUp" data-delay="0.8"
                style="height:18px;background:linear-gradient(to top,#6366f1,#818cf8);">
             <div class="bar-label-top">4-6K</div>
           </div>
-          <div class="bar-col anim-element" data-anim="barGrowUp" data-delay="0.3"
+          <div class="bar-col anim-element" data-anim="barGrowUp" data-delay="1.0"
                style="height:30px;background:linear-gradient(to top,#a855f7,#c084fc);">
             <div class="bar-label-top">6-10K</div>
           </div>
           <div class="group-label">基层</div>
         </div>
         <div class="bar-group">
-          <div class="bar-col anim-element" data-anim="barGrowUp" data-delay="0.4"
+          <div class="bar-col anim-element" data-anim="barGrowUp" data-delay="1.3"
                style="height:75px;background:linear-gradient(to top,#06b6d4,#67e8f9);">
             <div class="bar-label-top">9-14K</div>
           </div>
-          <div class="bar-col anim-element" data-anim="barGrowUp" data-delay="0.5"
-               style="height:90px;background:linear-gradient(to top,#10b981,#6ee7b7);">
+          <div class="bar-col anim-element" data-anim="barGrowUp" data-delay="1.5"
+               style="height:95px;background:linear-gradient(to top,#10b981,#6ee7b7);">
             <div class="bar-label-top">15-25K</div>
           </div>
           <div class="group-label">中层</div>
         </div>
         <div class="bar-group">
-          <div class="bar-col anim-element" data-anim="barGrowUp" data-delay="0.6"
-               style="height:165px;background:linear-gradient(to top,#f59e0b,#fbbf24);">
+          <div class="bar-col anim-element" data-anim="barGrowUp" data-delay="1.8"
+               style="height:170px;background:linear-gradient(to top,#f59e0b,#fbbf24);">
             <div class="bar-label-top">25-50K</div>
           </div>
-          <div class="bar-col anim-element" data-anim="barGrowUp" data-delay="0.7"
-               style="height:250px;background:linear-gradient(to top,#ef4444,#f87171);">
+          <div class="bar-col anim-element" data-anim="barGrowUp" data-delay="2.0"
+               style="height:260px;background:linear-gradient(to top,#ef4444,#f87171);">
             <div class="bar-label-top">50-90K</div>
           </div>
           <div class="group-label">高层</div>
         </div>
       </div>
     </div>
-    <div class="gap-indicator anim-element" data-anim="popIn" data-delay="0.8">
-      <div class="gap-num">10x</div>
+    <div class="gap-indicator anim-element" data-anim="popIn" data-delay="2.5">
+      <div class="gap-num">10x+</div>
       <div class="gap-label">薪资差距</div>
+    </div>
+    <div class="top-jobs">
+      <div class="top-job anim-element" data-anim="slideUp" data-delay="3.0">
+        <div class="tj-name">自动化投放</div>
+        <div class="tj-sal">25-50K</div>
+      </div>
+      <div class="top-job anim-element" data-anim="slideUp" data-delay="3.3">
+        <div class="tj-name">智能体架构</div>
+        <div class="tj-sal">25-50K</div>
+      </div>
+      <div class="top-job anim-element" data-anim="slideUp" data-delay="3.6">
+        <div class="tj-name">自研模型</div>
+        <div class="tj-sal">90K/月</div>
+      </div>
     </div>
   </div>
 
-  <!-- ===== SCENE 6: 雷达图+气泡 ===== -->
-  <div class="scene" id="s06" data-start="9.75" data-dur="1.95">
-    <div class="chart-title anim-element" data-anim="fadeIn" data-delay="0">岗位类型 & 出海需求</div>
-    <div class="radar-container anim-element" data-anim="radarFadeIn" data-delay="0.1">
-      <svg class="radar-svg" viewBox="0 0 260 220">
-        <!-- 网格 -->
-        <polygon points="130,20 230,90 200,190 60,190 30,90" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-        <polygon points="130,50 205,100 182,170 78,170 55,100" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-        <polygon points="130,80 180,110 164,150 96,150 80,110" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-        <!-- 数据 -->
-        <polygon points="130,30 225,92 190,185 65,185 35,92"
-                 fill="rgba(99,102,241,0.15)" stroke="#6366f1" stroke-width="2"/>
-        <!-- 标签 -->
-        <text x="130" y="14" fill="#a5b4fc" font-size="11" text-anchor="middle" font-weight="700">仿真人剧 7家</text>
-        <text x="248" y="94" fill="#c4b5fd" font-size="10" text-anchor="start" font-weight="600">解说漫 3家</text>
-        <text x="205" y="200" fill="#f9a8d4" font-size="10" text-anchor="middle" font-weight="600">出海密集</text>
-        <text x="55" y="200" fill="#67e8f9" font-size="10" text-anchor="middle" font-weight="600">动态漫</text>
-        <text x="12" y="94" fill="#6ee7b7" font-size="10" text-anchor="start" font-weight="600">AI管培</text>
-        <!-- 数据点 -->
-        <circle cx="130" cy="30" r="4" fill="#6366f1"/>
-        <circle cx="225" cy="92" r="3.5" fill="#a855f7"/>
-        <circle cx="190" cy="185" r="3.5" fill="#ec4899"/>
-        <circle cx="65" cy="185" r="3" fill="#06b6d4"/>
-        <circle cx="35" cy="92" r="3" fill="#10b981"/>
+  <!-- ===== SCENE 08: AI管培生 (110-120s) ===== -->
+  <div class="scene" id="s08" data-start="110" data-dur="10">
+    <div class="trainee-title anim-element" data-anim="flashIn" data-delay="0.2">
+      <span class="hl">AI管培生</span> · 另一条路
+    </div>
+    <div class="trainee-card anim-element" data-anim="slideUp" data-delay="0.5">
+      <div class="tc-company anim-element" data-anim="fadeIn" data-delay="0.8">🏢 山海星辰等企业</div>
+      <div class="tc-path">
+        <div class="tc-step anim-element" data-anim="slideLeft" data-delay="1.2">
+          <span class="step-dot"></span>
+          <span class="step-text">遴选名校应届生定向培养</span>
+        </div>
+        <div class="tc-step anim-element" data-anim="slideLeft" data-delay="1.6">
+          <span class="step-dot"></span>
+          <span class="step-text">轮岗研发、投放、运营部门</span>
+        </div>
+        <div class="tc-step anim-element" data-anim="slideLeft" data-delay="2.0">
+          <span class="step-dot"></span>
+          <span class="step-text">深度参与公司战略，直接对接高层</span>
+        </div>
+      </div>
+      <div class="tc-highlight anim-element" data-anim="popIn" data-delay="2.5">
+        <div class="hl-text">三年冲总监</div>
+        <div class="hl-sub">职业成长路径完全不同</div>
+      </div>
+    </div>
+    <div class="vs-box anim-element" data-anim="fadeIn" data-delay="3.2">
+      <div class="vs-text">
+        与抽卡师可谓<span class="em">生殖隔离</span><br>
+        <span style="color:rgba(255,255,255,0.35);font-size:11px;">月薪9万模型岗 vs 月薪4千抽卡岗</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCENE 09: Radar + Content Types (120-137s) ===== -->
+  <div class="scene" id="s09" data-start="120" data-dur="17">
+    <div class="chart-title anim-element" data-anim="fadeIn" data-delay="0.2">岗位类型分布</div>
+    <div class="radar-container anim-element" data-anim="radarFadeIn" data-delay="0.5">
+      <svg class="radar-svg" viewBox="0 0 280 240">
+        <!-- Grid polygons -->
+        <polygon points="140,20 250,90 220,200 60,200 30,90" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <polygon points="140,50 220,100 195,175 85,175 60,100" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <polygon points="140,80 190,110 170,150 110,150 90,110" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+        <!-- Data polygon -->
+        <polygon points="140,28 245,92 210,195 68,195 35,92"
+                 fill="rgba(99,102,241,0.12)" stroke="#6366f1" stroke-width="2"
+                 stroke-dasharray="600" stroke-dashoffset="600" class="radar-data-poly"/>
+        <!-- Vertex dots -->
+        <circle cx="140" cy="28" r="4" fill="#6366f1" class="radar-dot"/>
+        <circle cx="245" cy="92" r="3.5" fill="#a855f7" class="radar-dot"/>
+        <circle cx="210" cy="195" r="3.5" fill="#ec4899" class="radar-dot"/>
+        <circle cx="68" cy="195" r="3" fill="#06b6d4" class="radar-dot"/>
+        <circle cx="35" cy="92" r="3" fill="#10b981" class="radar-dot"/>
+        <!-- Labels -->
+        <text x="140" y="14" fill="#a5b4fc" font-size="11" text-anchor="middle" font-weight="700">仿真人剧 7家</text>
+        <text x="262" y="94" fill="#c4b5fd" font-size="10" text-anchor="start" font-weight="600">解说漫</text>
+        <text x="218" y="212" fill="#f9a8d4" font-size="10" text-anchor="middle" font-weight="600">出海密集</text>
+        <text x="60" y="212" fill="#67e8f9" font-size="10" text-anchor="middle" font-weight="600">动态漫 1家</text>
+        <text x="10" y="94" fill="#6ee7b7" font-size="10" text-anchor="start" font-weight="600">AI管培</text>
       </svg>
+    </div>
+    <div class="content-cards">
+      <div class="content-card anim-element" data-anim="slideUp" data-delay="1.2">
+        <div class="cc-dot" style="background:#6366f1;"></div>
+        <div class="cc-name">仿真人剧（主流）</div>
+        <div class="cc-desc">平台喜欢 · 7家主做</div>
+      </div>
+      <div class="content-card anim-element" data-anim="slideUp" data-delay="1.5">
+        <div class="cc-dot" style="background:#a855f7;"></div>
+        <div class="cc-name">解说漫</div>
+        <div class="cc-desc">女频容错高 · 男频考验阅历</div>
+      </div>
+      <div class="content-card anim-element" data-anim="slideUp" data-delay="1.8">
+        <div class="cc-dot" style="background:#06b6d4;"></div>
+        <div class="cc-name">知乎盐言 vs 飞卢</div>
+        <div class="cc-desc">女频vs男频两大阵地</div>
+      </div>
+      <div class="content-card anim-element" data-anim="slideUp" data-delay="2.1">
+        <div class="cc-dot" style="background:#10b981;"></div>
+        <div class="cc-name">动态漫</div>
+        <div class="cc-desc">仅1家公司 · 小众赛道</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCENE 10: Bubble + CTA (137-152.86s) ===== -->
+  <div class="scene" id="s10" data-start="137" data-dur="16">
+    <div class="section-title anim-element" data-anim="fadeIn" data-delay="0.2">
+      国内内卷 · <span style="color:#06b6d4;">海外需求攀升</span>
     </div>
     <div class="bubble-section">
       <div class="bubble-title anim-element" data-anim="fadeIn" data-delay="0.4">出海岗位需求</div>
       <div class="bubble-row">
-        <div class="bubble anim-element" data-anim="bubblePop" data-delay="0.5"
-             style="width:90px;height:90px;background:rgba(99,102,241,0.15);border-color:rgba(99,102,241,0.5);">
+        <div class="bubble anim-element" data-anim="bubblePop" data-delay="0.6"
+             style="width:85px;height:85px;background:rgba(99,102,241,0.12);border-color:rgba(99,102,241,0.4);">
           <div class="b-num">200+</div>
-          <div class="b-label">九州</div>
-        </div>
-        <div class="bubble anim-element" data-anim="bubblePop" data-delay="0.65"
-             style="width:70px;height:70px;background:rgba(168,85,247,0.15);border-color:rgba(168,85,247,0.5);">
-          <div class="b-num">50+</div>
-          <div class="b-label">麦芽</div>
+          <div class="b-label">九州岗位</div>
         </div>
         <div class="bubble anim-element" data-anim="bubblePop" data-delay="0.8"
-             style="width:60px;height:60px;background:rgba(236,72,153,0.15);border-color:rgba(236,72,153,0.5);">
+             style="width:68px;height:68px;background:rgba(168,85,247,0.12);border-color:rgba(168,85,247,0.4);">
+          <div class="b-num">50+</div>
+          <div class="b-label">麦芽岗位</div>
+        </div>
+        <div class="bubble anim-element" data-anim="bubblePop" data-delay="1.0"
+             style="width:72px;height:72px;background:rgba(236,72,153,0.12);border-color:rgba(236,72,153,0.4);">
           <div class="b-num">7W</div>
           <div class="b-label">主编月薪</div>
         </div>
       </div>
     </div>
     <div class="cross-company">
-      <div class="cc-title anim-element" data-anim="fadeIn" data-delay="0.85">跨界公司AI岗位占比</div>
+      <div class="cc-title anim-element" data-anim="fadeIn" data-delay="1.3">跨界公司AI岗位占比</div>
       <div class="cc-bar-container">
-        <div class="cc-bar-item anim-element" data-anim="slideLeft" data-delay="0.9">
+        <div class="cc-bar-item anim-element" data-anim="slideLeft" data-delay="1.5">
           <div class="cc-bar-name">中文在线</div>
           <div class="cc-bar-track">
             <div class="cc-bar-fill" style="width:54%;background:linear-gradient(90deg,#6366f1,#a855f7);"></div>
           </div>
           <div class="cc-bar-val">54%</div>
         </div>
-        <div class="cc-bar-item anim-element" data-anim="slideLeft" data-delay="1.0">
+        <div class="cc-bar-item anim-element" data-anim="slideLeft" data-delay="1.8">
           <div class="cc-bar-name">昆仑万维</div>
           <div class="cc-bar-track">
             <div class="cc-bar-fill" style="width:34%;background:linear-gradient(90deg,#ec4899,#f472b6);"></div>
           </div>
           <div class="cc-bar-val">34%</div>
         </div>
-        <div class="cc-bar-item anim-element" data-anim="slideLeft" data-delay="1.1">
+        <div class="cc-bar-item anim-element" data-anim="slideLeft" data-delay="2.1">
           <div class="cc-bar-name">容量互娱</div>
           <div class="cc-bar-track">
             <div class="cc-bar-fill" style="width:8.5%;background:linear-gradient(90deg,#06b6d4,#67e8f9);"></div>
@@ -1055,148 +1299,251 @@ body {
         </div>
       </div>
     </div>
-  </div>
-
-  <!-- ===== SCENE 7: 结尾CTA ===== -->
-  <div class="scene" id="s07" data-start="11.7" data-dur="1.99">
-    <div class="cta-bg"></div>
-    <div class="cta-main anim-element" data-anim="zoomIn" data-delay="0">
-      想好从哪里<br><span class="em">开始沉淀</span>了吗？
+    <div class="conclusion-box">
+      <div class="concl-main anim-element" data-anim="zoomIn" data-delay="2.8">
+        想好从哪里<br><span class="em">开始沉淀</span>了吗？
+      </div>
+      <div class="concl-line anim-element" data-anim="zoomIn" data-delay="3.2"></div>
+      <div class="concl-sub anim-element" data-anim="fadeIn" data-delay="3.5">
+        基层随时可替代<br>优秀人才不止一个选择
+      </div>
     </div>
-    <div class="cta-line anim-element" data-anim="zoomIn" data-delay="0.3"></div>
-    <div class="cta-sub anim-element" data-anim="fadeIn" data-delay="0.5">基层随时可替代 优秀人才不止一个选择</div>
-    <div class="cta-badge anim-element" data-anim="popIn" data-delay="0.7">评论区聊聊</div>
-    <div class="source-credit anim-element" data-anim="fadeIn" data-delay="1.0">数据来源：娱乐资本论 · Boss直聘</div>
+    <div class="cta-btn anim-element" data-anim="popIn" data-delay="4.0">评论区聊聊</div>
+    <div class="source-credit anim-element" data-anim="fadeIn" data-delay="4.5">
+      数据来源：娱乐资本论 · Boss直聘
+    </div>
   </div>
 
 </div>
 
 <script>
-// ===== 时间轴控制器 =====
-const TOTAL_DUR = 13.69;
+// ===== Full SRT Subtitle Data =====
+const subtitles = [
+  {s:0.000,e:2.177,t:'入职AI漫剧公司俩月被辞退了'},
+  {s:2.177,e:3.483,t:'短剧漫剧公司避雷'},
+  {s:3.483,e:4.934,t:'做AI漫剧真不靠谱'},
+  {s:4.934,e:7.110,t:'在社交网络上搜索漫剧和避雷'},
+  {s:7.110,e:9.287,t:'成群结队的血泪控诉会让你怀疑这'},
+  {s:9.287,e:10.883,t:'个行业是不是没有好人'},
+  {s:10.883,e:11.899,t:'但另一方面'},
+  {s:11.899,e:14.076,t:'漫剧岗位又确实在当下有着显著的'},
+  {s:14.076,e:14.511,t:'不同'},
+  {s:14.511,e:16.543,t:'它零基础，低门槛，量大管饱'},
+  {s:16.543,e:17.268,t:'随刷随有'},
+  {s:17.268,e:18.865,t:'有的公司一招招上千人'},
+  {s:18.865,e:21.041,t:'这其中到底有什么不为人知的门'},
+  {s:21.041,e:21.477,t:'道呢？'},
+  {s:21.477,e:23.770,t:'娱乐资本论分析了10家头部漫剧'},
+  {s:23.770,e:26.063,t:'和短剧公司共放出的3362个岗'},
+  {s:26.063,e:26.369,t:'位'},
+  {s:26.369,e:28.357,t:'其中AI相关岗位860个'},
+  {s:28.357,e:29.733,t:'整体占比四分之一'},
+  {s:29.733,e:31.415,t:'从行业金字塔尖出发'},
+  {s:31.415,e:33.708,t:'至少可以先行了解这是否确实是你'},
+  {s:33.708,e:34.931,t:'想要的一份工作'},
+  {s:34.931,e:36.766,t:'以及有没有职业上升空间'},
+  {s:36.766,e:39.059,t:'漫剧这个蓬勃兴起的行业正用人'},
+  {s:39.059,e:40.283,t:'海战术快速起量'},
+  {s:40.283,e:41.982,t:'所谓人海战术指三方面：'},
+  {s:41.982,e:42.909,t:'一是岗位多'},
+  {s:42.909,e:44.763,t:'中小工作室基本全员AI'},
+  {s:44.763,e:45.999,t:'走机器量产路线'},
+  {s:45.999,e:48.161,t:'用最低成本起号变现。丰行、'},
+  {s:48.161,e:48.625,t:'灵漫、'},
+  {s:48.625,e:50.942,t:'花笙都有70%以上岗位标注了A'},
+  {s:50.942,e:51.251,t:'I'},
+  {s:51.251,e:52.332,t:'二是门槛低'},
+  {s:52.332,e:54.650,t:'长视频大厂的AI岗位普遍要求本'},
+  {s:54.650,e:55.886,t:'科学历3年经验'},
+  {s:55.886,e:57.894,t:'而短剧岗位很多接受实习生'},
+  {s:57.894,e:59.902,t:'并且推文生成师、抽卡师等'},
+  {s:59.902,e:61.293,t:'都明确标注可转正'},
+  {s:61.293,e:63.411,t:'其工作内容被拆解到非常简单'},
+  {s:63.411,e:65.075,t:'培训2到3天即可上岗'},
+  {s:65.075,e:66.285,t:'三是工资一般'},
+  {s:66.285,e:68.554,t:'这些岗位仅承诺在当地维持基本'},
+  {s:68.554,e:69.462,t:'生活的水平'},
+  {s:69.462,e:71.882,t:'在北京或杭州全职工资四到六千'},
+  {s:71.882,e:73.546,t:'在上海全职六千到一万'},
+  {s:73.546,e:74.454,t:'实习三四千'},
+  {s:74.454,e:76.421,t:'贴着当地最低工资反复摩擦'},
+  {s:76.421,e:77.933,t:'如果沉淀一阵的话'},
+  {s:77.933,e:80.202,t:'1到3年经验的编剧岗可以给一万'},
+  {s:80.202,e:81.110,t:'五到两万五'},
+  {s:81.110,e:82.925,t:'分镜师给到九千到一万四'},
+  {s:82.925,e:85.044,t:'难怪一线制作岗都是短期用工'},
+  {s:85.044,e:86.405,t:'人员迭代速度极快'},
+  {s:86.405,e:88.069,t:'经常是入职半年就换人'},
+  {s:88.069,e:90.339,t:'顶层AI岗位拼技术、拼认知'},
+  {s:90.339,e:92.457,t:'与基层薪资差距高达十倍以上'},
+  {s:92.457,e:94.273,t:'但是职业成长路径不同'},
+  {s:94.273,e:96.542,t:'月薪两万五到五万的自动化投放、'},
+  {s:96.542,e:97.601,t:'智能体架构岗'},
+  {s:97.601,e:99.870,t:'乃至每月给九万块钱让你研发自主'},
+  {s:99.870,e:100.778,t:'模型的岗位'},
+  {s:100.778,e:102.442,t:'与抽卡师可谓生殖隔离'},
+  {s:102.442,e:104.509,t:'山海星辰等企业的AI管培生'},
+  {s:104.509,e:106.281,t:'遴选名校应届生定向培养'},
+  {s:106.281,e:108.200,t:'轮岗研发、投放、运营部门'},
+  {s:108.200,e:109.528,t:'深度参与公司战略'},
+  {s:109.528,e:110.562,t:'直接对接高层'},
+  {s:110.562,e:112.038,t:'三年就有机会冲总监'},
+  {s:112.038,e:114.252,t:'我们看到的AI漫剧职位进去以'},
+  {s:114.252,e:115.581,t:'做仿真人剧为主流'},
+  {s:115.581,e:116.614,t:'因为平台喜欢'},
+  {s:116.614,e:117.371,t:'另一方面'},
+  {s:117.371,e:119.338,t:'解说漫赛道也有清晰的门槛'},
+  {s:119.338,e:120.700,t:'女频内容容错率高'},
+  {s:120.700,e:123.121,t:'男频则考验编剧的阅历和工作经验'},
+  {s:123.121,e:125.390,t:'两边分别要熟悉知乎的盐言故事和'},
+  {s:125.390,e:126.601,t:'飞卢这两大阵地'},
+  {s:126.601,e:128.870,t:'国内严重内卷，海外需求攀升'},
+  {s:128.870,e:130.383,t:'会外语懂海外市场的'},
+  {s:130.383,e:132.350,t:'可以找加上海外二字的岗位'},
+  {s:132.350,e:133.410,t:'薪资优于国内'},
+  {s:133.410,e:135.679,t:'资深的剧本总编岗位，位高权重'},
+  {s:135.679,e:136.739,t:'月薪可达七万'},
+  {s:136.739,e:136.811,t:'由此可见'},
+  {s:136.811,e:137.027,t:'看起来工作机会贼多的短剧漫剧'},
+  {s:137.027,e:137.229,t:'称不上是普通人的就业避风港'},
+  {s:137.229,e:137.402,t:'基层岗位随时可被替代'},
+  {s:137.402,e:137.618,t:'符合高层刚需的优秀人才又不止这'},
+  {s:137.618,e:137.690,t:'一个选择'},
+  {s:137.690,e:137.878,t:'如果你想当一把歪嘴龙王'},
+  {s:137.878,e:138.080,t:'逆袭走上人生巅峰，此时此刻'},
+  {s:138.080,e:138.267,t:'你想好从哪里开始沉淀了吗？'},
+  {s:138.267,e:138.383,t:'评论区聊聊吧！'},
+];
+
+// ===== Timeline Controller =====
+const TOTAL_DUR = 152.86;
 const scenes = document.querySelectorAll('.scene');
 const subtitleEl = document.getElementById('subtitle');
-
-// SRT字幕数据
-const subtitles = [
-  { s: 0, e: 1.95, t: 'AI漫剧招聘风向标' },
-  { s: 1.95, e: 3.9, t: 'AI岗位占比25.6% 860个AI岗' },
-  { s: 3.9, e: 5.85, t: '小公司All in AI' },
-  { s: 5.85, e: 7.8, t: '人海战术：门槛工资双低' },
-  { s: 7.8, e: 9.75, t: '薪资差距高达十倍' },
-  { s: 9.75, e: 11.7, t: '仿真人剧成主流 出海最缺人' },
-  { s: 11.7, e: 13.69, t: '评论区聊聊' },
-];
+const progressBar = document.getElementById('progress-bar');
+const audioEl = document.getElementById('bgAudio');
 
 let startTime = null;
 let animFrameId = null;
+let hasStarted = false;
+const activatedScenes = new Set();
 
+// ===== Create Background Particles =====
+function createParticles() {
+  const container = document.getElementById('bgParticles');
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'bg-particle';
+    p.style.left = Math.random() * 450 + 'px';
+    p.style.top = (600 + Math.random() * 200) + 'px';
+    p.style.animationDuration = (5 + Math.random() * 8) + 's';
+    p.style.animationDelay = Math.random() * 10 + 's';
+    p.style.width = (1 + Math.random() * 2) + 'px';
+    p.style.height = p.style.width;
+    const colors = ['rgba(99,102,241,0.5)', 'rgba(168,85,247,0.4)', 'rgba(236,72,153,0.3)', 'rgba(6,182,212,0.4)'];
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    container.appendChild(p);
+  }
+}
+createParticles();
+
+// ===== Animation Map =====
+const animMap = {
+  fadeIn: 'fadeIn', slideUp: 'slideUp', slideDown: 'slideDown',
+  slideLeft: 'slideLeft', slideRight: 'slideRight',
+  popIn: 'popIn', flashIn: 'flashIn', zoomIn: 'zoomIn',
+  barGrowUp: 'barGrowUp', radarFadeIn: 'radarFadeIn',
+  bubblePop: 'bubblePop', rotateIn: 'rotateIn',
+  countPop: 'countPop',
+};
+
+// ===== Activate Scene =====
 function activateScene(scene) {
   scene.classList.add('active');
 
-  // 触发所有anim-element的动画
+  // Animate all .anim-element children
   const elements = scene.querySelectorAll('.anim-element');
   elements.forEach(el => {
     const animType = el.dataset.anim;
     const delay = parseFloat(el.dataset.delay || 0);
-    el.style.animationDelay = delay + 's';
-    el.style.animationDuration = '0.6s';
-
-    const animMap = {
-      fadeIn: 'fadeIn',
-      slideUp: 'slideUp',
-      slideDown: 'slideDown',
-      slideLeft: 'slideLeft',
-      slideRight: 'slideRight',
-      popIn: 'popIn',
-      flashIn: 'flashIn',
-      zoomIn: 'zoomIn',
-      barGrowUp: 'barGrowUp',
-      radarFadeIn: 'radarFadeIn',
-      bubblePop: 'bubblePop',
-      rotateIn: 'rotateIn',
-    };
-
     if (animMap[animType]) {
       el.style.animationName = animMap[animType];
+      el.style.animationDelay = delay + 's';
+      el.style.animationDuration = '0.65s';
       el.style.animationFillMode = 'forwards';
       el.style.animationTimingFunction = 'cubic-bezier(0.22, 1, 0.36, 1)';
     }
   });
 
-  // 条形图特殊动画
-  const barFills = scene.querySelectorAll('.bar-fill');
-  barFills.forEach(bar => {
-    const parentAnimEl = bar.closest('.anim-element');
-    const delay = parentAnimEl ? parseFloat(parentAnimEl.dataset.delay || 0) : 0;
-    bar.style.animationDelay = delay + 's';
-    bar.style.animationDuration = '0.8s';
+  // Horizontal bar fills (Scene 5)
+  scene.querySelectorAll('.bar-fill').forEach(bar => {
+    const parentDelay = bar.closest('.anim-element') ? parseFloat(bar.closest('.anim-element').dataset.delay || 0) : 0;
     bar.style.animationName = 'barGrow';
+    bar.style.animationDelay = parentDelay + 's';
+    bar.style.animationDuration = '0.8s';
     bar.style.animationFillMode = 'forwards';
     bar.style.animationTimingFunction = 'cubic-bezier(0.22, 1, 0.36, 1)';
+    bar.style.transformOrigin = 'left center';
     bar.classList.add('anim');
   });
-  const barVals = scene.querySelectorAll('.bar-val');
-  barVals.forEach(v => {
-    const parentAnimEl = v.closest('.anim-element');
-    const delay = parentAnimEl ? parseFloat(parentAnimEl.dataset.delay || 0) : 0;
-    v.style.animationDelay = (delay + 0.5) + 's';
-    v.style.animationDuration = '0.4s';
-    v.style.animationName = 'fadeIn';
-    v.style.animationFillMode = 'forwards';
-    v.classList.add('anim');
-  });
 
-  // 柱状图特殊动画
-  const barCols = scene.querySelectorAll('.bar-col');
-  barCols.forEach(col => {
+  // Grouped bar columns (Scene 7)
+  scene.querySelectorAll('.bar-col').forEach(col => {
     const delay = parseFloat(col.dataset.delay || 0);
+    col.style.animationName = 'barGrowUp';
     col.style.animationDelay = delay + 's';
     col.style.animationDuration = '0.8s';
-    col.style.animationName = 'barGrowUp';
     col.style.animationFillMode = 'forwards';
     col.style.animationTimingFunction = 'cubic-bezier(0.22, 1, 0.36, 1)';
+    col.style.transformOrigin = 'bottom';
     col.classList.add('anim');
   });
 
-  // 卡片标签动画
-  const cardTags = scene.querySelectorAll('.card-tag');
-  cardTags.forEach(tag => {
+  // Card tags bounce
+  scene.querySelectorAll('.card-tag').forEach(tag => {
     const delay = parseFloat(tag.dataset.delay || 0);
+    tag.style.animationName = 'tagBounce';
     tag.style.animationDelay = delay + 's';
     tag.style.animationDuration = '0.4s';
-    tag.style.animationName = 'tagBounce';
     tag.style.animationFillMode = 'forwards';
     tag.style.animationTimingFunction = 'cubic-bezier(0.34, 1.56, 0.64, 1)';
     tag.classList.add('anim');
   });
 
-  // 气泡动画
-  const bubbles = scene.querySelectorAll('.bubble');
-  bubbles.forEach(b => {
+  // Bubble pop (Scene 10)
+  scene.querySelectorAll('.bubble').forEach(b => {
     // Already handled by anim-element
   });
 
-  // 跨界公司条形图
-  const ccBarFills = scene.querySelectorAll('.cc-bar-fill');
-  ccBarFills.forEach(fill => {
-    const parentAnimEl = fill.closest('.anim-element');
-    const delay = parentAnimEl ? parseFloat(parentAnimEl.dataset.delay || 0) : 0;
-    fill.style.animationDelay = delay + 's';
-    fill.style.animationDuration = '0.6s';
+  // Cross-company bar fills (Scene 10)
+  scene.querySelectorAll('.cc-bar-fill').forEach(fill => {
+    const parentDelay = fill.closest('.anim-element') ? parseFloat(fill.closest('.anim-element').dataset.delay || 0) : 0;
     fill.style.animationName = 'barGrow';
+    fill.style.animationDelay = parentDelay + 's';
+    fill.style.animationDuration = '0.6s';
     fill.style.animationFillMode = 'forwards';
     fill.style.animationTimingFunction = 'cubic-bezier(0.22, 1, 0.36, 1)';
+    fill.style.transformOrigin = 'left';
     fill.classList.add('anim');
   });
 
-  // 数字计数动画
-  const countEls = scene.querySelectorAll('[data-count]');
-  countEls.forEach(el => {
+  // Radar SVG draw animation (Scene 9)
+  scene.querySelectorAll('.radar-data-poly').forEach(poly => {
+    const len = poly.getTotalLength();
+    poly.style.strokeDasharray = len;
+    poly.style.strokeDashoffset = len;
+    poly.style.animation = 'drawCircle 1.5s 0.8s ease forwards';
+  });
+  scene.querySelectorAll('.radar-dot').forEach((dot, i) => {
+    dot.style.opacity = '0';
+    dot.style.animation = `popIn 0.4s ${1.0 + i * 0.15}s forwards`;
+  });
+
+  // Count-up animation
+  scene.querySelectorAll('[data-count]').forEach(el => {
     const target = parseFloat(el.dataset.count);
-    const isPercent = el.textContent.includes('%');
-    const duration = 800;
-    const startDelay = parseFloat(el.closest('.anim-element')?.dataset.delay || 0) * 1000;
+    const suffix = el.dataset.suffix || '';
+    const duration = 900;
+    const parentDelay = el.closest('.anim-element') ? parseFloat(el.closest('.anim-element').dataset.delay || 0) : 0;
     setTimeout(() => {
       const startT = performance.now();
       function tick(now) {
@@ -1204,25 +1551,41 @@ function activateScene(scene) {
         const progress = Math.min(elapsed / duration, 1);
         const eased = 1 - Math.pow(1 - progress, 3);
         const current = target * eased;
-        if (isPercent || target < 100) {
-          el.textContent = current.toFixed(1) + '%';
+        if (target < 100 && suffix === '%') {
+          el.textContent = current.toFixed(1) + suffix;
+        } else if (suffix === '%') {
+          el.textContent = current.toFixed(1) + suffix;
         } else {
           el.textContent = Math.round(current);
         }
         if (progress < 1) requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
-    }, startDelay);
+    }, parentDelay * 1000 + 300);
   });
 }
 
 function deactivateScene(scene) {
   scene.classList.remove('active');
-  const elements = scene.querySelectorAll('.anim-element');
-  elements.forEach(el => {
-    el.style.animationName = '';
-    el.style.opacity = '0';
-  });
+  scene.classList.add('fade-out');
+  // Reset all animated elements
+  setTimeout(() => {
+    scene.classList.remove('fade-out');
+    const elements = scene.querySelectorAll('.anim-element');
+    elements.forEach(el => {
+      el.style.animationName = '';
+      el.style.opacity = '0';
+    });
+    scene.querySelectorAll('.bar-fill, .bar-col, .cc-bar-fill').forEach(el => {
+      el.style.animationName = '';
+      el.classList.remove('anim');
+    });
+    scene.querySelectorAll('.card-tag').forEach(el => {
+      el.style.animationName = '';
+      el.classList.remove('anim');
+      el.style.transform = 'scale(0)';
+    });
+  }, 600);
 }
 
 function updateSubtitles(t) {
@@ -1244,43 +1607,61 @@ function tick(timestamp) {
   if (!startTime) startTime = timestamp;
   const elapsed = (timestamp - startTime) / 1000;
 
-  if (elapsed >= TOTAL_DUR) {
-    // Keep last frame
-    updateSubtitles(TOTAL_DUR - 0.01);
+  if (elapsed >= TOTAL_DUR + 1) {
+    // Animation complete, hold last frame
+    progressBar.style.width = '100%';
     return;
   }
+
+  // Update progress bar
+  const progress = Math.min(elapsed / TOTAL_DUR, 1);
+  progressBar.style.width = (progress * 100) + '%';
 
   // Activate/deactivate scenes
   scenes.forEach(scene => {
     const start = parseFloat(scene.dataset.start);
     const dur = parseFloat(scene.dataset.dur);
-    const isActive = elapsed >= start && elapsed < start + dur;
+    const end = start + dur;
+    const isActive = elapsed >= start && elapsed < end;
 
-    if (isActive && !scene.classList.contains('active')) {
+    if (isActive && !activatedScenes.has(scene.id)) {
+      activatedScenes.add(scene.id);
       activateScene(scene);
-    } else if (!isActive && scene.classList.contains('active')) {
+    } else if (!isActive && activatedScenes.has(scene.id) && scene.classList.contains('active')) {
       deactivateScene(scene);
     }
   });
 
+  // Update subtitles
   updateSubtitles(elapsed);
+
   animFrameId = requestAnimationFrame(tick);
 }
 
-// Auto-start on click or on load
+// ===== Start Animation =====
 function startAnimation() {
-  if (startTime) return;
+  if (hasStarted) return;
+  hasStarted = true;
   startTime = null;
+
+  // Try to play audio
+  if (audioEl) {
+    audioEl.currentTime = 0;
+    audioEl.play().catch(() => {});
+  }
+
   animFrameId = requestAnimationFrame(tick);
 }
 
-// Auto start after a brief delay for page load
+// Auto-start on load
 window.addEventListener('load', () => {
-  setTimeout(startAnimation, 300);
+  setTimeout(startAnimation, 400);
 });
 
 // Also start on click (for Playwright)
-document.getElementById('canvas').addEventListener('click', startAnimation);
+document.getElementById('canvas').addEventListener('click', () => {
+  startAnimation();
+});
 </script>
 
 </body>

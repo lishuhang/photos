@@ -2115,6 +2115,11 @@
       "date": "2023年09月20日 15:19",
       "file": "20230920【花西子危机公关，到底错在哪儿？】.md"
     },
+    "https://mp.weixin.qq.com/s/ffp7O4qVC8xlihrwqfrzKQ": {
+      "title": "乙女游戏走向线下陷阱：四位数“男友”，100梦女酒吧包夜",
+      "date": "2023年09月19日 14:10",
+      "file": "20230919【乙女游戏走向线下陷阱：四位数“男友”，100梦女酒吧包夜】.md"
+    },
     "https://mp.weixin.qq.com/s/67SogjFWCzwqCfqai5DXbg": {
       "title": "新共鸣新视听，《好事成双》示范“新女性剧”与“新沪剧”两套解法",
       "date": "2023年09月22日 14:58",
@@ -2134,22 +2139,11 @@
       "title": "欢喜传媒净收入增95倍，宁浩《红毯先生》导演承制费3000万丨2023财报",
       "date": "2023年09月23日 14:53",
       "file": "20230923【欢喜传媒净收入增95倍，宁浩《红毯先生》导演承制费3000万丨2023财报】.md"
-    },
-    "https://mp.weixin.qq.com/s/arUq8Uz1AGs8tcOjaBx8dg": {
-      "title": "蔚来做手机：外界看不懂，车主抢疯了",
-      "date": "2023年09月26日 15:00",
-      "file": "20230926【蔚来做手机：外界看不懂，车主抢疯了】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [
-    {
-      "url": "https://mp.weixin.qq.com/s/ffp7O4qVC8xlihrwqfrzKQ",
-      "title": "乙女游戏走向线下陷阱：四位数“男友”，100梦女酒吧包夜",
-      "seq": 424
-    }
-  ],
-  "last_update": "2026-06-09T11:52:33.234922",
+  "captcha_pending": [],
+  "last_update": "2026-06-09T11:52:50.641990",
   "total_completed": 428,
   "total_failed": 0
 }

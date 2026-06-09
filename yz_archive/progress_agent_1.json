@@ -820,11 +820,6 @@
       "date": "2023年06月19日 14:00",
       "file": "20230619【专访于冬 _ 上市后全员涨薪7%，布局剧集与IP实景，博纳进入积淀时刻】.md"
     },
-    "https://mp.weixin.qq.com/s/hDdnn_9VvREPDz6q6b5zSw": {
-      "title": "“疯狂污染中文互联网”的，并不是AI",
-      "date": "2023年06月20日 14:47",
-      "file": "20230620【“疯狂污染中文互联网”的，并不是AI】.md"
-    },
     "https://mp.weixin.qq.com/s/aGgwdZ_CQgY-QRs2eDI9FQ": {
       "title": "美妆巨头陷入焦虑：做VC、清库存、卷向线下",
       "date": "2023年06月23日 14:00",
@@ -834,11 +829,6 @@
       "title": "蔡徐坤塌房：关联18个品牌，演唱会综艺或受影响",
       "date": "2023年06月26日 15:30",
       "file": "20230626【蔡徐坤塌房：关联18个品牌，演唱会综艺或受影响】.md"
-    },
-    "https://mp.weixin.qq.com/s/C7trSVjsMWZpt66CBAUwzg": {
-      "title": "快递小哥“失去”618",
-      "date": "2023年06月23日 14:00",
-      "file": "20230623【快递小哥“失去”618】.md"
     },
     "https://mp.weixin.qq.com/s/Ph9_untpJuvsg_609jrCjw": {
       "title": "均价40元+的贵价咖啡，靠什么“赢过”9.9元的瑞幸？",
@@ -869,11 +859,32 @@
       "title": "娱乐资本论夏季招聘全面开启",
       "date": "2023年06月25日 14:25",
       "file": "20230625【娱乐资本论夏季招聘全面开启】.md"
+    },
+    "https://mp.weixin.qq.com/s/c5zBGlXkFEIhY3OxrE1VVQ": {
+      "title": "从微博电影之夜说起，热门IP的品牌赞助方法论",
+      "date": "2023年06月25日 14:25",
+      "file": "20230625【从微博电影之夜说起，热门IP的品牌赞助方法论】.md"
+    },
+    "https://mp.weixin.qq.com/s/MTGTRNlYIffjfUaE2OLMhA": {
+      "title": "5G加持，行业生态迎来全新升级与创新",
+      "date": "2023年06月27日 15:30",
+      "file": "20230627【5G加持，行业生态迎来全新升级与创新】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [],
-  "last_update": "2026-06-09T09:09:26.998485",
+  "captcha_pending": [
+    {
+      "url": "https://mp.weixin.qq.com/s/hDdnn_9VvREPDz6q6b5zSw",
+      "title": "“疯狂污染中文互联网”的，并不是AI",
+      "seq": 161
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/C7trSVjsMWZpt66CBAUwzg",
+      "title": "快递小哥“失去”618",
+      "seq": 168
+    }
+  ],
+  "last_update": "2026-06-09T09:10:19.382506",
   "total_completed": 174,
   "total_failed": 0
 }

@@ -1365,6 +1365,11 @@
       "date": "2023年07月29日 14:00",
       "file": "20230729【抖音直播间被停3天，东方甄选终局是做自己的“山姆”？】.md"
     },
+    "https://mp.weixin.qq.com/s/FqFVutt59pGh9SCjJuXACA": {
+      "title": "泛文娱再谈AIGC：这就是未来的水和电 | ChinaJoy 现场",
+      "date": "2023年07月29日 14:00",
+      "file": "20230729【泛文娱再谈AIGC：这就是未来的水和电 _ ChinaJoy 现场】.md"
+    },
     "https://mp.weixin.qq.com/s/1THt8FBnjYm9IOt8KH8Czw": {
       "title": "Netflix的亚洲综艺战事：爱优腾看好了，我只表演一次",
       "date": "2023年07月31日 14:55",
@@ -1389,17 +1394,47 @@
       "title": "美踏控股发布虚拟人音舞社交人工智能大数据模型“心乐舞河”",
       "date": "2023年08月04日 14:25",
       "file": "20230804【美踏控股发布虚拟人音舞社交人工智能大数据模型“心乐舞河”】.md"
+    },
+    "https://mp.weixin.qq.com/s/caAlG_TZQAh7WiX_UxQIyg": {
+      "title": "7月互联网专利盘点｜爱奇艺自动识别口红色号，魅族自动呼叫代驾",
+      "date": "2023年08月02日 13:57",
+      "file": "20230802【7月互联网专利盘点｜爱奇艺自动识别口红色号，魅族自动呼叫代驾】.md"
+    },
+    "https://mp.weixin.qq.com/s/GhNb8rim5ZuyyGVGBy8RuQ": {
+      "title": "桑稚的“鸭”，孟总的“水”，现偶创带货新趋势？",
+      "date": "2023年08月03日 15:04",
+      "file": "20230803【桑稚的“鸭”，孟总的“水”，现偶创带货新趋势？】.md"
+    },
+    "https://mp.weixin.qq.com/s/3w1Ohm6Awtd6klTbjToNsg": {
+      "title": "AI浪潮下，数字文娱出海迎来新方向",
+      "date": "2023年08月02日 13:57",
+      "file": "20230802【AI浪潮下，数字文娱出海迎来新方向】.md"
+    },
+    "https://mp.weixin.qq.com/s/eTH4qVO_pZ9iP1NWSlLsjA": {
+      "title": "整理完《热烈》等101部国产运动片，我们发现了爆款公式",
+      "date": "2023年08月06日 14:00",
+      "file": "20230806【整理完《热烈》等101部国产运动片，我们发现了爆款公式】.md"
     }
   },
   "failed": {},
   "captcha_pending": [
     {
-      "url": "https://mp.weixin.qq.com/s/FqFVutt59pGh9SCjJuXACA",
-      "title": "泛文娱再谈AIGC：这就是未来的水和电 | ChinaJoy 现场",
-      "seq": 270
+      "url": "https://mp.weixin.qq.com/s/xlACIVsNikQYwkQLLmzVtA",
+      "title": "离北京500公里的县城，我发现了《蛋仔派对》火爆的秘密丨县域调研①",
+      "seq": 280
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/7i3dNns13SGbuzHndH9Eng",
+      "title": "音乐、艺术、IP衍生，泡泡岛音乐与艺术节打造行业新范式|专访创娱无界",
+      "seq": 284
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/eAacEVD_N4ofXYR2jIkBNA",
+      "title": "7月IP衍生品：大运会周边热销，《莲花楼》手办众筹",
+      "seq": 285
     }
   ],
-  "last_update": "2026-06-09T10:14:55.252221",
-  "total_completed": 278,
+  "last_update": "2026-06-09T10:17:02.351543",
+  "total_completed": 283,
   "total_failed": 0
 }

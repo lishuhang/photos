@@ -1200,11 +1200,6 @@
       "date": "2023年07月19日 15:35",
       "file": "20230719【《长安三万里》票房破追光记录，电影的“教育式营销”大有可为】.md"
     },
-    "https://mp.weixin.qq.com/s/khvf7E6b41sq18AzuzS1Eg": {
-      "title": "马斯克过万亿而不入",
-      "date": "2023年07月21日 14:49",
-      "file": "20230721【马斯克过万亿而不入】.md"
-    },
     "https://mp.weixin.qq.com/s/B8cpRIhymggPJgWLoc8aTA": {
       "title": "好利来、旺旺、特步，品牌接班人为何热衷做网红？",
       "date": "2023年07月19日 15:35",
@@ -1224,11 +1219,47 @@
       "title": "《浪姐4》未续神话，谢娜只是替罪羊",
       "date": "2023年07月18日 15:27",
       "file": "20230718【《浪姐4》未续神话，谢娜只是替罪羊】.md"
+    },
+    "https://mp.weixin.qq.com/s/dJR7ndAcOQb6A0NfhW-dOw": {
+      "title": "《欢颜》与X剧场究竟满足了观众怎样的智性审美？",
+      "date": "2023年07月23日 15:40",
+      "file": "20230723【《欢颜》与X剧场究竟满足了观众怎样的智性审美？】.md"
+    },
+    "https://mp.weixin.qq.com/s/11ZM3thJxh9dwPHlulwa1A": {
+      "title": "蹭五月天热点，脑白金又来洗脑了？",
+      "date": "2023年07月25日 14:56",
+      "file": "20230725【蹭五月天热点，脑白金又来洗脑了？】.md"
+    },
+    "https://mp.weixin.qq.com/s/N94GBhq9laHABx3OwtsdBQ": {
+      "title": "60秒看透传媒股到底谁在逢高减持！",
+      "date": "2023年07月22日 13:00",
+      "file": "20230722【60秒看透传媒股到底谁在逢高减持！】.md"
+    },
+    "https://mp.weixin.qq.com/s/MjGNFLjTJsnz8nv8BFEDtA": {
+      "title": "1天吸引上万人！被迪士尼虐惨的中国乐园，终于熬出头了？",
+      "date": "2023年07月22日 13:00",
+      "file": "20230722【1天吸引上万人！被迪士尼虐惨的中国乐园，终于熬出头了？】.md"
+    },
+    "https://mp.weixin.qq.com/s/PhjGiUn_UCvJTVcEFFwsIw": {
+      "title": "从德扑到掼蛋，资本圈的“东升西落”",
+      "date": "2023年07月23日 15:40",
+      "file": "20230723【从德扑到掼蛋，资本圈的“东升西落”】.md"
+    },
+    "https://mp.weixin.qq.com/s/RtsgMWUHxpMZMgqQUWx3BA": {
+      "title": "“秒鸭这种水平的AI项目，我也能干” | AI创业者调查②",
+      "date": "2023年07月24日 14:21",
+      "file": "20230724【“秒鸭这种水平的AI项目，我也能干” _ AI创业者调查②】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [],
-  "last_update": "2026-06-09T09:46:10.696843",
-  "total_completed": 245,
+  "captcha_pending": [
+    {
+      "url": "https://mp.weixin.qq.com/s/khvf7E6b41sq18AzuzS1Eg",
+      "title": "马斯克过万亿而不入",
+      "seq": 237
+    }
+  ],
+  "last_update": "2026-06-09T09:46:24.305116",
+  "total_completed": 250,
   "total_failed": 0
 }

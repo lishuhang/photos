@@ -1,0 +1,213 @@
+# 「非洲之王」传音控股泡沫破灭：股价跌去70%，市值蒸发1500亿
+
+> 公众号: 娱乐资本论
+> 发布时间: 
+> 原文链接: https://mp.weixin.qq.com/s/l8dBgGYg6bpq8zYRcNw19A
+
+---
+
+‍‍
+
+![图片](http://mmbiz.qpic.cn/mmbiz_png/jNZszpkibXx9fK5DxyTD7AyeFpFRtOjibtXBxHxv9ibzVMWibiaric81WOFUJLW0R1iabhKNBDSeVExetG9DF1zviaEjew/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=0)
+
+**作者 | 黄艳阳**
+
+**编辑 | 黄绎达**
+
+**来源|36氪财经**
+
+2019年9月，被誉为“非洲手机之王”的传音控股（688036.SH）在上交所上市，由于深受二级市场认可，上市两年多的时间里，传音股价一路飙涨，从51.25元/股上升至256.04元/股，期间最高涨幅超500%。然而，巅峰过后，2021年2月起，传音股价便一路掉头向下，截至2022年8月3日，传音股价报收69.37元/股，较最高点跌去了72.9%。
+
+![图片](http://mmbiz.qpic.cn/mmbiz_png/TzNsGWEFXDy2TlqrpuvJSaAXNRe75JFR36FicGdcUyCrwCspzKL73uNic6lTdZHfWmc23qtGWCWldybBoezpUwJA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=1)
+
+上市以来传音的股价走势
+
+资料来源：wind
+
+而在股价持续调整的同时，公司的业绩却仍在稳健增长。在疫情尚在的2021年，公司营收同比增长30.75%，归母净利润同比增长45.52%。
+
+本文试图通过回答以下问题来解析传音控股的投资价值：
+
+- 传音称霸非洲的原因是什么？
+- 传音找到第二成长极了吗？
+- 传音股价表现的底层逻辑是什么？
+
+## 图片**深耕非洲的手机制造商**
+
+传音主营手机的生产与销售，业务主要集中在非洲、亚洲等新兴市场国家。营收规模上，2018-2021年，受益于非洲市场市占率的不断提升以及对新兴市场的不断开拓，公司的营收也在持续增长，2021年，公司实现营收494.12亿元，同比增长30.75%。
+
+2022年，非洲市场需求不振，叠加疫情进展持续导致公司的供应链与运输物流受到了影响，2022Q1，公司实现营收110.55亿元，同比下滑1.75%。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)公司的营收情况
+
+资料来源：wind、36氪
+
+营收结构上，手机是公司的核心业务，2021年的收入占比93.5%，家电、互联网等其他主营业务的占比较小，同期仅为4.7%。从公司生产的手机类型来看，随着非洲、印度等市场智能手机需求的增加，公司智能机的份额从2016年的57.93%提升至2021年的79.5%。从趋势上来看，智能机是公司手机业务的核心，这一点也反映在收入的占比上。
+
+分地区来看，非洲一直是公司最重要的的市场。近年来，随着公司加大了对印度等新兴市场的开拓力度，营收结构也从“非洲市场为主导”转变为“两大市场平分天下”的格局。2021年，非洲市场的营收占比下降至49.1%，与此同时，亚洲及其他新兴市场的营收占比上升至49.2%，份额已经与非洲市场持平。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)公司的营收结构（分业务、分地区）
+
+资料来源：wind、36氪
+
+盈利能力上，2021年，公司的整体毛利率为21.3%，但在趋势上，毛利率整体呈下降态势，2019-2021Q1，公司的毛利率下降了5.93pct。一方面，受营收结构的影响，亚洲等新兴市场的营收占比不断增长，但该市场的毛利率普遍较低，拉低了整体的毛利率；另一方面，受手机缺芯和上游原材料涨价影响，消费电子企业成本端普遍上涨，导致利润空间被压缩。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)分地区的毛利水平变化
+
+资料来源：wind、36氪
+
+在费用端，2021年公司的期间费用率为9.3%，期间费用支出相对较低，这主要是由于公司的毛利率相对不高，利润空间有限且以盈利为导向的情况下，限制了费用的支出。
+
+从趋势上来看，得益于业务规模的持续扩大与销售渠道趋于稳定，公司的期间费用支出呈现先增长后下降的态势。而且在期间费用增速远超营收增速下，公司的期间费用率均有所收窄，费用管控能力显著提升。
+
+2021年，公司的研发费用率和销售费用率分别录得3.1%和6.6%，呈现出了研发投入低、销售投入高的特征，这主要是在于：一方面，公司的产品以低端为主，技术门槛相对不高；另一方面，拓展新市场渠道颇为困难，因此也拉高了营销投入。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)公司的期间费用率情况
+
+资料来源：wind、36氪
+
+在利润端，2021年，实现归母净利润39.09亿元，同比增长45.52%；同期净利率为7.92%，同比上涨0.83pct。趋势上，得益于公司的收入的增长，叠加成本管控能力的加强，公司的归母净利润与净利率在近年同时保持增长态势。
+
+2022Q1，受累于营收与毛利率的下滑，公司实现归母净利润7.96亿元，同比下降0.7%，净利率下滑至7.18%。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)公司净利率及归母净利润情况
+
+资料来源：wind、36氪
+
+## 图片**传音的称雄非洲路**
+
+作为公司主要市场的非洲，经济发展水平低，仍处在2G、3G时代，手机市场以功能机为主，智能手机的渗透率较低。近年来，随着基建水平的提升，手机市场开始逐渐由功能机向智能机过渡，GSMA认为，撒哈拉以南非洲地区的智能机渗透率将从2020年的48%提升至2025年的64%。
+
+非洲作为全球人口第二大洲，人口约为10亿人，占到了全球人口的15%，联合国预测，从2019年至2050年，撒哈拉以南非洲的人口预计将增长一倍。在非洲市巨大的人口基数以及极高的增速支撑下，随着智能机的不断渗透，消费者的手机迭代速度加快，非洲智能机市场的发展空间巨大。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)非洲移动通信网络渗透率预测
+
+资料来源：GSMA
+
+从成立之初，公司就扎根非洲。在产品定位上，抓住了非洲市场智能机渗透不高的特点，公司建立了TECNO、itel和Infinix三大品牌，并通过智能机+功能机的产品组合划分市场。
+
+如今，无论是从功能机还是智能机来看，公司都在非洲拥有着绝对领先的地位。2021年，公司功能机的市占率达78%，智能机的市占率超40%。
+
+传音在非洲市场的成功离不开以下三点：
+
+1、本土化策略精确定位用户需求；
+
+2、低价策略匹配当地人民消费水平；
+
+3、“遍地营销”的策略与遍布非洲市场的渠道。
+
+在产品上，为了贴合非洲用户的需求，公司对手机的功能进行了本土化创新。
+
+在通信功能上，非洲的通信运营商众多，但运营商之间的信号不稳定，通话资费高，用户通常会携带多张电话卡，普通单卡手机便难以满足用户的需求，针对这一问题，传音定制化地开发出了“四卡四待”功能，解决了非洲用户的痛点；
+
+在摄影功能上，主流的手机拍照采取面部识别，相比浅肤色的人群，深肤色用户很难被识别，针对这一问题，传音开发出了基于眼睛和牙齿定位的拍照技术，解决了非洲用户的拍照需求；
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)传音与其他手机摄影成像对比
+
+资料来源：公司官网
+
+另外，针对非洲地区经常停电、早晚温差大、天气炎热等问题，传音也针对性的开发出了低成本高压快充技术、超长待机、耐磨耐手汗陶瓷新材料、防汗液USB端口等。
+
+其次，在价格上，为了匹配非洲用户的消费能力，公司推出了定价显著低于同行的手机。
+
+非洲的经济发展水平不高，手机市场以低端产品的为主，IDC数据显示，截至2021Q4，200美元及以下的手机市场份额占比达到了81.1%。
+
+根据非洲市场的特点，传音推出的机型定价极具吸引力。2018年，传音下属的功能机均价仅在65元人民币/台，智能手机均价也仅在454元人民币/台。对比之下，三星2010年推出的的Galaxy Note II的售价高达8499南非兰特币（约为3630元人民币）；小米在2015年推出的红米2售价也为1022元人民币。
+
+通过“遍地营销”的策略和遍布全非洲的渠道网络，公司得以实现快速占领市场。
+
+非洲地域广阔，且基础设施建设不完善、互联网不发达，手机难以做到集中推广，广告上以刷墙广告、贴海报广告、FM广告等传统形式为主。公司便采取了“遍地营销”的策略，快速占领了消费者心智。
+
+在渠道建立上，通过经销商为主的销售模式，公司建立了遍布非洲各地，渗透力强、稳定性高的销售网络。一方面，通过给经销商足够的让利空间，充分调动经销商的积极性，加速公司产品的渗透；另一方面，通过驻厂指导、统一宣传等形式，助力各地经销商的销售，提高了公司与经销商合作的粘性。截至目前，公司在非洲共有360个经销商，其中，年销售额超过一亿的经销商达20个，超过千万的达150个。
+
+一位通信行业的记着曾这样描述在东非商品大市场卡里亚库看到的情景：“我看到了铺天盖地的、从近到远、密密麻麻、让我永远不会忘记的TECNO。全世界都是TECNO，每个店的海报，每个公告牌，每块玻璃，每个店门，都是TECNO 的广告。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)传音在非洲的广告
+
+资料来源：公司官网、国金证券
+
+凭借这三大营销策略，公司在非洲市场的市占率快速提升，带动业绩在过去实现高速增长。然而，近年来，公司在非洲市场的增长开始放缓，2021年，非洲市场实现营收242.28亿元，同比增长8.0%，低于过去几年的水平。这一方面是由于高基数压力，另一方面是由于疫情减速了非洲的4G网络建设进程，智能机需求疲软。
+
+由于非洲的通信运营商可以是私有企业，其投资主要受利益驱动。2020下半年疫情爆发，非洲市场的整体GDP增速持续下滑，居民消费水平受限，感受到消费端的降温，运营商对4G网络的建设也开始放缓，智能手机需求也开始呈现疲软态势。
+
+因此，公司作为非洲的手机龙头，非洲国家的基建水平普遍较低，而基建条件的完善与否，和用户数量的稳健增长，却是支撑其非洲市场业务持续高增的基础。然而，疫情影响下，非洲的基建进程与消费需求双双下滑，非洲智能机市场的成长空间受到了压制，公司的业绩增速有触顶之势。
+
+### 图片**非洲的成功难以复制：受阻印度**
+
+在非洲市场增速放缓的同时，公司开始积极开拓其他新兴市场，希望复制公司过去在非洲的成功之道，实现对新市场的突破。目前，传音全球销售网络已覆盖70多个国家和地区，亚洲及其他新兴市场逐渐成为了公司的业绩增长新动力。2021年，亚洲及其他新兴市场的营收达到了242.98亿元，占营收的比重为49.2%，同比增长67%。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)非洲市场及新兴市场的营收及增速
+
+资料来源：wind、36氪
+
+巴基斯坦和孟加拉国是公司市场开拓较为成功的案例，2021年，公司在上述两国的市占率分别为40%+、20.1%，排名第一、第二。尽管公司在两国的市占率较高，但受制于人口规模和经济水平，智能机的业务体量并不大，而印度作为仅次于非洲的公司第二大的市场，开拓之路却并没有那么顺利。截至2021年底，公司在印度市场的占有率为7.1%，排名第六。
+
+目前，印度人口已经达到了14.16亿，GDP排名全球第六，并连续20年保持5%以上增长。然而，印度的智能手机的人均保有量仅为0.27部，低于非洲市场的0.33部，2020年智能手机的渗透率仅为31.8%，巨大的市场潜力之下，来自友商和本土品牌都瞅准了这块肥肉，手机市场的竞争早已异常激烈。
+
+2016年下半年，公司进入印度市场之时，包括三星、小米等在内的前五大手机厂商早已占据超半数的市场份额，公司的市场份额虽在2017年有明显的提升，但在2018-2021年的四年里，公司智能机的市场份额仅提升了2.6%，与之形成对比的是前五大厂商的合计份额提升了约13pct。
+
+公司在印度市场的营销依然如在非洲一般：定位低端市场，采用低价销售的策略，却因此导致了印度市场的毛利率大打折扣。招股书数据显示，2016-2019年上半年，公司在印度市场的平均毛利率仅为12.51%，显著低于非洲市场的26.06%。在这期间，在印度本土厂商reliance jio低价营销策略的冲击，叠加印度大幅提高关税，2018年，公司在印度市场的毛利率低至7.57%。
+
+低毛利率叠加较高的营运成本，公司在印度市场难以实现盈利。2016年下半年、2017年、2018年，公司在印度市场的净利润分别为-3238万元、-1.68亿元、-5亿元，报告期内累积亏损超7亿，而同时期内公司累积的净利润也不到7亿。
+
+总体看来，印度手机市场集中度高，竞争十分激烈，2021年，前五大厂商的合计市场份额已达到84.2%。与其他竞争对手相比，公司渠道建设尚未完善，产品以低端机为主，仅依靠低价策略来抢夺低端市场份额，很难进入印度手机市场的主流，这也是目前公司在印度市场持续亏损的核心原因。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)2021年印度智能手机竞争格局
+
+资料来源：IDC、36氪
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)**“副业”短期难成业绩助力**
+
+在手机市场增量有限、公司手机主业增长放缓的背景下，公司加速开拓多元化战略布局，建立了数码配件品牌Oraimo、售后服务品牌Carlcare、家用电器品牌Syinix三大品牌，以期能缓解增长压力。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)公司的产品矩阵
+
+资料来源：招股书
+
+家电业务方面，在空间上，非洲电视的渗透率仅为40%，冰箱、空调、洗衣机的渗透率更低，且基本以白牌产品为主。数据显示，以非洲13亿人口的体量来计算，冰箱、空调、洗衣机、电视四类产品的市场空间就有望突破4000亿元。
+
+这看似是一片蓝海，但由于非洲经济发展水平低、电网覆盖率不高，非洲仅有1/6 的国家电网覆盖率超过30%，大部分国家低于10%，撒哈拉以南的非洲地区仍有约6亿的无电人口，所以家电渗透率要有显著的提高将会是一个很长期的过程。
+
+互联网业务方面，公司围绕传音OS开发了应用商店、游戏中心、广告分发平台 以及手机管家等一系列工具类应用程序，并同网易等多家互联网公司展开合作，开发 音乐、短视频等独立应用程序。
+
+逻辑上，智能手机业务能为互联网业务带来的天然、持续、稳定的流量，受益于手机业务在非洲市场的领先优势，2021年，传音的OS用户已达到了2.28亿人，并有多款产品月活超1000万，其中，Boomplay作为非洲最大的音乐流媒体平台，月活跃用户数约达6800万。
+
+然而，上千万月活规模的应用相比于非洲5.2亿互联网用户数，以及约13亿的人口，渗透率极低，仍处于发展的早期阶段，竞争格局的演进上具备较大的不确定性。不仅如此，非洲智能手机渗透率不高、用户的互联网付费意愿不强，公司的商业化变现也将面临较大的阻碍。
+
+目前来看，公司的家电、互联网业务体量仍然较小，非洲市场整体也仍处在发展前期，因此中短期内并不会为公司贡献过多的业绩增量，目前来看的意义也仅限于提高手机业务用户粘性。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)其他主营业务的营收情况
+
+资料来源：wind、36氪
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)**传音控股还值得投资吗？**
+
+逻辑上，非洲智能机市场具备人口增长红利和智能机持续渗透下的双重增长动能，但近年来，非洲市场消费疲软、4G建设放缓，智能机的渗透进程明显受制于经济发展与基建进程。公司作为非洲手机龙头，市占率已超50%，在市场空间释放节奏放缓的情况下，以公司目前在非洲的市占率，提升渗透率的效率在边际递减，导致业绩增长的天花板提前显现。
+
+在新市场拓展上，虽然公司在部分新兴市场实现了业绩的高增，然而，在重要性仅次于非洲的印度市场，市场竞争激烈，一方面，相比小米、OPPO等手机大厂，公司在渠道、产品性价比上均不具优势；另一方面，相比本土企业，公司还要面对印度对于外来品牌开出的巨额税款，一系列排外措施影响到了公司在印度的展业，印度市场的盈利困境已成为公司业绩增长的一大掣肘。
+
+在互联网、家电等新业务上，虽然长期的发展空间极大，但这些业务仍处在发展前期，贡献的利润较为有限，而且未来的不确定性较强，考虑到非洲市场的经济发展水平，中短期内这块业务并不具备业绩爆发的条件。
+
+二级市场来看，过去资本市场给出了公司极高的估值，是大家看到了公司在非洲以及在部分新兴市场巨大的增长潜力。
+
+但目前来看，疫情这一黑天鹅事件切断了非洲智能机市场过去的高增态势，加速暴露了非洲经济对智能机渗透的制约，同时也成为了传音实现在非洲业绩增长的桎梏。在预期中增长潜力最大的印度市场，以目前的盈利情况以及市场份额可以看出，公司在该市场的业务进展并不乐观。
+
+正是由于作为基本盘的非洲市场可能正在触及增长的天花板，在核心新兴市场的开拓也不及预期，两大市场对公司业绩估值的支撑不足，叠加市场对公司的成长性预期不及从前，由此导致股价在高点的一路下跌。
+
+展望未来，若非洲经济发展水平未出现较大突破，其智能机的市场潜力也难以释放；而在新兴市场，来自竞争对手以及政府的压力双重压力都将增加展业的风险，从而带来业绩增长的不确定性。
+
+参考22年一季报的业绩表现，除非公司在非洲、印度等核心市场能够实现较大突破，否则预计公司的中报业绩增长动能相对不强，其实这也是与公司目前的基本面相匹配。这样看来，在中短期内，公司的“高估值时代”很难再次上演。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+公司的估值情况，资料来源：wind
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+可比公司情况，资料来源：wind、36氪
+
+\*免责声明：
+
+本文内容仅代表作者看法。
+
+市场有风险，投资需谨慎。在任何情况下，本文中的信息或所表述的意见均不构成对任何人的投资建议。在决定投资前，如有需要，投资者务必向专业人士咨询并谨慎决策。我们无意为交易各方提供承销服务或任何需持有特定资质或牌照方可从事的服务。

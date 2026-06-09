@@ -1,0 +1,205 @@
+# 揭秘高维乐谱：一个乐盲的社科基金骗局
+
+> 公众号: 娱乐资本论
+> 发布时间: 
+> 原文链接: https://mp.weixin.qq.com/s/dIoy0mJwnDhzcg0uvAxCVQ
+
+---
+
+![图片](http://mmbiz.qpic.cn/mmbiz_png/jNZszpkibXx9fK5DxyTD7AyeFpFRtOjibtXBxHxv9ibzVMWibiaric81WOFUJLW0R1iabhKNBDSeVExetG9DF1zviaEjew/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=0)**作者｜邓柯**
+
+今天闲来在网上冲浪，忽然在一个之前被拉进去的奇怪的音乐爱好者群里（但除了拉我的人其他一个我都不认识）发现网友小晨老师（通过这件事认识的新朋友）在调侃一篇很雷的文章
+
+![图片](http://mmbiz.qpic.cn/mmbiz_jpg/3QnibSeZFjiciasAqYnMsXTk0RJ9cicDqUO09ewUa5KOcQbHlT1FPLel5iawNia6Yxp2ibibQdoh3S7ia4bpJ4AdZibMEEWw/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=1)
+
+![图片](http://mmbiz.qpic.cn/mmbiz_jpg/3QnibSeZFjiciasAqYnMsXTk0RJ9cicDqUO0FDA6Bbibeicemgz7PZibCAMWVIozvt8Bdu3VJXzibjA3sFg1ke4ERibwNow/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=2)
+
+八卦如我自然马上就点开一看究竟，果不其然，是我熟悉的味道——
+
+一个哥们声称他发明了一种新的记谱法：二维谱，「轴向是分立式、颗粒式、量子式的，所以整个谱面呈现了分立和局域量子化状态 blabla」，听着就特玄是吧反正我没看懂。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+但下面这张坐标图我好像看懂了，横轴是数字，纵轴也是……不对，纵轴是do re mi fa sol（简谱），然后他是怎么标记音符的呢？画一条线，线的位置的高低代表音高，线的长度代表音的长度，这样一横一纵两个维度就能清晰描述乐谱了。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+等等，这不就是钢琴卷帘窗（Piano Roll）吗？一种 DAW（数字音频工作站）中最常见的编辑界面？横轴时间纵轴音高，音符条的高度和长度决定了音的长短，这玩意都普及好几十年了，现在改头换面就成了你发明的「新记谱法」？
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+*音乐制作软件中常见的钢琴卷帘窗界面*
+
+而且最关键的是，这种记谱法压根也没法取代五线谱啊。就拿这个黄河大合唱举例，这段应该是合唱里的卡农段落（「风在风在风在吼」那里），而且音高标记还用的简谱音名（笑了）。这三个声部为啥要从高到低分列在三个八度（后面还串了）这事儿我们先不谈，这密密麻麻的网格我看着就眼睛疼啊，而且如果没了坐标轴参考，我根本认不出数值呀，那我要是在右上角的这个音（下图紫圈），我先得用手点着往左平移找到音高7，然后再回到原点继续用手划拉着往下找到拍子也就是第15小节第一拍，好像不对，重新再划拉一遍，原来是第15第一拍半。一条在五线谱上扫一眼就弹/唱出来的音列，在这谱子上我得跟刺绣似的划拉两分钟才能认出来。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+*这也太挑战视力了*
+
+更别提，这现在还只有八分音符横轴坐标线就已经密成这样了，我要万一蹦个前八后十六节奏型我需要再添条辅助线不？那我要是有个装饰音，它该画成啥样？它该占前一拍的时值还是后一拍的时值？
+
+而且，这统共不过三个声部18个小节的谱子，画成这个二维谱，占了得有多半个A4版面，一点都没比人家简谱省地方，别忘了人家简谱里还带着歌词和表情记号呢。以及您左边这1234567只标音级不标音名的，我到底唱哪个调呀？您好歹像简谱那样标个 1=C 好不好？
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+*同样段落，两行简谱标得清清楚楚还带歌词和表情记号*
+
+就这么个破玩意儿，**您好意思说它能够「将一切自然音级与变化音级进行精准的****记录**[1]**」****，「提供一个快速、准确、简便又科学的全新平****台****[2]****」 ？**
+
+**您哪来的自信？**
+
+其实钢琴卷帘谱（以及类似结构的坐标式乐谱）根本就是给机器用的——1896年美国人 Edwin S. Votey 发明了自动演奏钢琴 Pianola，同时发明了演奏所需要的钢琴卷轴（Piano Roll）。把卷轴放上去踩动踏板，钢琴就像八音盒那样开始自动演奏。这个实体的钢琴卷轴就是一个二维谱啊，一轴时间一轴音高，开孔处就是音符出现的位置。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+这种谱子就根本不是设计用来给人读的，而是给机器输入信息的（不管是实体还是数字）。人只能通过机器播放卷帘谱发出的声音来判断这个谱子记录的音乐是怎样的。人是无法直接识别这个谱子的，更没法唱和弹。当然你也可以抬杠说卷帘谱是可以认的呀，那您是掰着手指头数音吗？车尔尼849随便挑一条，钢表专业的学生可以视奏一遍过，转成卷帘谱您半个小时能弄明白吗？人家骑车上学，您怀里抱一iMac在后面边跑边喊「你那个自行车太落后了！我这个电脑先进！」您电脑速度再快也不是用来通勤的呀，先搞清楚用法啊。
+
+况且卷帘谱根本就没有比五线谱先进。五线谱本身就是横轴代表时间（时值）、纵轴代表空间（音高），**卷帘谱也好二维谱也好根本没有跳出五线谱的基本逻辑**。而且五线谱所带的调号和升降号还额外提供了调式信息：一旦出现临时升降号，不是和声小调就是有调式外音，再或者就是要转调了——从这个角度上看，五线谱除了时值和音高两个维度的信息外，还附带了调式信息，这至少是2.5维谱啊！什么卷帘谱二维谱，哪里来的勇气来碰瓷维度更高的五线谱？但凡在钢琴上照谱弹过哪怕一句小星星的人，都说不出这种话呀！
+
+但问题人家就正大光明地说了，不光发表了论文，还出了书呢。我照着作者名字一搜，嚯，3D乐谱理论已经建构应用了：
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+人家所谓的第三D，就是直接加一个音色轴……
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+咱就不说为啥要为音色单独设置一个轴了（什么作品的音色/乐器要像音高节奏那样频繁地变化？），也不深究怎样把颜色和乐器一一对应起来（128种颜色对应128种乐器那分不清口红色号的直男直接就丧失识谱能力了呗），关键是，人家1985年发布的 MIDI 1.0 里早就充分实现了这个功能了呀（MIDI文件里0号控制器就是控制音色的，还有力度、延音、触后、声相等等100多个参数的控制器），**您就增加了一个控制信息，是怎么好意思声称自己升维了的？**
+
+以及这大哥既然敢这么升维，那他肯定不会只升这么一次（毕竟还有100多个控制器那），果然……
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+我真的已经……要准备动笔给我的读者们好好讲讲一个乐盲认真起来能闹多大笑话了，但是等等，我好像看到了什么？
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+科学出版社？
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+沈阳音乐学报？
+
+国家社会科学基金后期资助重点项目？
+
+……
+
+不会吧不会吧不会吧？
+
+这人难道真的把这破玩意发表了出版了还拿到国家社科基金了？
+
+好像，
+
+是真的诶……
+
+就是这个人：
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+张辉老师！名头好大诶！
+
+但叫「张辉」的人实在太多，光搜名字搜到的绝大多数都是重名人士的信息，那就更换一下思路，搜索一下「高维乐谱」——哇！
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+「高维艺术」也顺手搜一下吧
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+*乱入了一个躺枪的冯同学*
+
+「二维图谱」也有不少
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+我按发表时间整理了一下——
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+真的是……虽然有思想准备但还是震惊了
+
+首先张辉老师可能是2017年才接触到了三体（老师您奥特啦）突然打开了思路，开始琢磨怎么利用这个降维打击的概念来指导指导科guan研shui，短暂磨合以后，两年多的时间内密集发表了三十多篇论文。而且这个科研小圈子还挺团结，大家你来我往轮流坐庄，几十篇论文的署名都是哥几个的排列组合，当然，张辉老师的名字一定会出现在作者栏里（或者是题目里）。
+
+唯一要小心这个孙洋，大家平时灌水没少带他（她？），但TA 2020年12月竟敢用独自署名在音乐生活上发了一篇3D乐谱的论文，这是翅膀硬了要单飞呀，张辉老师要小心。
+
+刊物方面，张老师团队应该是广撒网来着，看名字好多都是音乐乃至综合社科期刊。张老师学理科出身，写的这些文章明摆着就是在欺负搞音乐的不懂编程，把胡编乱造的概念用一堆高大上的名词装点得云山雾罩，审稿的老同志拿不准，半推半就地发一两篇也可以理解。
+
+但这批陆续发表在《艺术教育》上文章确实有点壮观了——18年3月试水发了一篇，9月份直接就发了篇张辉老师的专访，然后一发不可收拾，在九个月里连发24篇论文，18年四季度的三个月里就发了14篇！什么概念， 10月5篇11月4篇12月又是5篇，感觉期刊都要升维了！你说张辉老师直接控股了《艺术教育》我都信。
+
+可19年6月发完最后一篇文章后，20年2月突然给了个封面（开屏广告）后就再无交集，可谓来得快去得更快，瞬间是路人呢。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+但张辉老师的四本著作：中国社会科学出版社的《高维艺术理论与实践》，科学出版社的《高维乐谱学导论》、《音乐作品二维图谱分析法创设与运用》、《高维艺术学概论》，可是正式出版了的专著。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+而且人家正经拿到了不少国家和省级社科基金项目：
+
+此处手动感谢我的好兄弟，浙江外语学院副教授、北京师范大学教育学博士王祈然（不然我咋会知道去哪查国家社科基金项目）
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+Paper 里张辉老师的 title 是「沈阳师范大学副校长、博导」，虽然在学校官网上没查到但在其他不少相关体制内单位的报道里确实有
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+*《沈阳师范大学2012年国际交流大事记》，沈师大国际交流合作处官网（https://cie.synu.edu.cn/2013/0510/c2568a28533/page.htm）*
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+*辽宁古生物博物馆2013年10月新闻**（http://www.pmol.org.cn/newsinfo/1724372.html）*
+
+在官网上能找到的最新消息是在内蒙古民族大学任职
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+*学校官网（https://kjc.imun.edu.cn/contents/1442/487.html）*
+
+后来也有去高校里分享国家基金项目申报经验（这个领域张老师绝对专业！）
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+然后还搞点蛋白质艺术展音乐会什么的（今年找到新方向啦）
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+反正这么一圈看下来，张老师物理学造诣如何咱是不懂（title 如果是真的那确实很硬），为啥17年突然跨界开始搞音乐咱也不知道，但张辉老师搞出来的这些二维乐谱高维艺术啥，哥儿还是敢说能看懂一些的，以及我相信国家基金的那些评审委员会里，能看懂的专家肯定就更多啦。我就是好奇啊：
+
+张辉老师这些国家级省级课题，是怎样申到的呀？
+
+这些课题经费（社科艺术的虽然少但每个也有大几十万吧），是怎么花的呀？
+
+又是怎样结题的呀？
+
+嗯哼？
+
+其实我是真的希望张辉老师这些课题都是在完全合法合规的情况下进行的，让高维乐谱也成为一个亟待拓展的新兴领域，那样的话，咱也能把当年用CAL语言给硬件音源编卡拉OK的手艺捡起来，开发个7D 8D乐谱去申个课题呀![图片](https://res.wx.qq.com/t/wx_fed/we-emoji/res/v1.3.10/assets/newemoji/2_02.png)
+
+*[1].《高维乐谱学导论》P23，科学出版社，2019年*
+
+*[2].《音乐作品二维图谱分析法创设与运用》P7，科学出版社，2020年*
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+**更多文娱产业背后的经济逻辑，来关注↓↓↓**

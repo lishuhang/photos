@@ -1,0 +1,35 @@
+# 假演、造谣、励志鸡汤，明星直播带货上演“知音文学”
+
+> 公众号: 娱乐资本论
+> 发布时间: 
+> 原文链接: https://mp.weixin.qq.com/s/aQzq5689MClMrLXBLmnvHQ
+
+---
+
+![图片](http://mmbiz.qpic.cn/mmbiz_jpg/jNZszpkibXx8OXwQwZNVdygmwq6RIKtldwXfnf0nZuiatXXPUOItrxkqyhlWx7fOd3u1IEBCs3bKUiaN7TxjP6HQQ/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=0)
+
+仅用70多天，仅发布30多条视频，就涨粉800多万，一天GMV达数亿，只用这一套“知音文学”的方法论，向太实现了弯道超车，一夜之间跻身顶级带货主播。
+
+![图片](http://mmbiz.qpic.cn/mmbiz_png/jNZszpkibXx8OXwQwZNVdygmwq6RIKtldHlqb6MyUv4BKWdj0YcB7Mtx9PLPsuDBZm0eAL3VV8rgic3mkZaJKGbg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=1)
+
+今天咱们从知音文学来盘一盘明星转行直播的众生相，看看他们如何套用这套方法论。
+
+**鸡汤篇——有故事才有未来**
+
+向太作为娱乐圈的故事汇，她讲的每一个故事都天然带有流量，比如晒年轻时候的照片，一经发布收获260w+的点赞，早年和刘德华、关之琳的故事，也让她收获很大的曝光量。而没有丰富故事的二三线艺人，则发布努力视频寻求共情，比如演员的十年和爱豆的青春等，这类故事框架基本雷同，细数自己的演艺生涯，从普通人逆袭演员的故事。
+
+鸡汤除了励志故事，另外则就是成功学！
+
+张兰作为“成功人士”的代表，她既是妈妈、婆婆，也是贵妇、企业家，她丰富的身份标签说出的话天然具备传播度，以企业家的身份分享的破产励志故事收获70万的点赞，用婆婆的身份靠着床垫事件，一夜之间推火了麻六记。除此之外……
+
+为方便大家观看，视频已经放在这里啦，**想看全文**，**想看更多的评论互动**，欢迎点击【**阅****读原文】**收看。
+
+除了视频号，你也可以在b站找到我们，我们的小破站号正式更名为**【鱼子酱\_娱乐资本论】**啦！点击**【阅读原文】**即可直达，欢迎大家一键三连~ （鞠躬）
+
+**往期视频回顾**
+
+>>>[资本逃跑，球队拉垮，中国足球谁的错？](http://mp.weixin.qq.com/s?__biz=MzA5NjcxNTIyNg==&mid=2650722011&idx=2&sn=3a30111f56e554d253971ff53512af7a&chksm=88a1866ebfd60f7831b029879ac087494bc160895b48c7aa04881d3c84d14527320be23fc56e&scene=21#wechat_redirect)
+
+>>>[互联网付费会员涨](http://mp.weixin.qq.com/s?__biz=MzA5NjcxNTIyNg==&mid=2650717503&idx=2&sn=4d94885b91a100f14ffc9332debbdde8&chksm=88a1f58abfd67c9c9197159a0f80f2f7dfbc048a633f839aaaadaaa6e40a8a1f66e73f2fc6d7&scene=21#wechat_redirect)[营销费用从10亿到1000亿，互联网大厂仅用10年](http://mp.weixin.qq.com/s?__biz=MzA5NjcxNTIyNg==&mid=2650721258&idx=2&sn=89301eff99d6cb67dc81882822edc2e9&chksm=88a1835fbfd60a490003ccc0b2e6b658ac4783c4a9dd149a77eabe107a44e328c210c968681e&scene=21#wechat_redirect)
+
+>>>[腾讯用千亿发工资，网易还比2019少2万，哪家大厂最大方？](http://mp.weixin.qq.com/s?__biz=MzA5NjcxNTIyNg==&mid=2650721189&idx=2&sn=186e579a871f96f5bd232178ffa10859&chksm=88a18310bfd60a06a8dd07be881f9aceeeb9e3e9af09a7ca9aafb8a974685eb91973da108558&scene=21#wechat_redirect)

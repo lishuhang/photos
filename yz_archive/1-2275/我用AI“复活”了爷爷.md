@@ -1,0 +1,101 @@
+# 我用AI“复活”了爷爷
+
+> 公众号: 娱乐资本论
+> 发布时间: ref: <Node>
+> 原文链接: https://mp.weixin.qq.com/s/98Ohv_ZJIIsQgGVYCprYAQ
+
+---
+
+![图片](http://mmbiz.qpic.cn/mmbiz_png/jNZszpkibXx9fK5DxyTD7AyeFpFRtOjibtXBxHxv9ibzVMWibiaric81WOFUJLW0R1iabhKNBDSeVExetG9DF1zviaEjew/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=0)
+
+![图片](http://mmbiz.qpic.cn/mmbiz_jpg/F3JRqPI2QJdSfNf4XiatkdEFibM38GdicntomZmHSco4fqupqSKqDicIX7rViahCAJoV3X3Aa5E2WGib10hvrZ1vW3BA/640?wx_fmt=jpeg&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=1)
+
+![图片](http://mmbiz.qpic.cn/mmbiz_png/F3JRqPI2QJdSfNf4XiatkdEFibM38GdicntsHvd5xia9jYKIoJ4eKLPaQam4jLAyNUZLHA9c3nUfhDsZrdVc4fyZ9g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=2)
+
+死亡并不可怕，遗忘才是最终的告别，remember me（记住我）。
+
+![图片](http://mmbiz.qpic.cn/mmbiz_png/F3JRqPI2QJdSfNf4XiatkdEFibM38GdicntsZl8BQQwCv9LfBQXznym2piaUcy8CcMhwmuLwQjJa4GBibqhkK53brCg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=3)
+
+**天下网商 丁洁**
+
+**编辑****李丹超**
+
+又是一年清明。
+
+杭州半山的一处墓园里，一位老汉坐在坟头前，给离别10年的弟弟倒上一杯黄酒，自己也酌上一杯，一股难以抑制的思念从眼眶涌出。
+
+每年此时，总容易牵动起中国人的思亲情结。
+
+当下，有不少年轻人正通过AI“复活”自己的亲人。一位21岁的女孩小鱼告诉《天下网商》，“跟AI聊天的时候，一直都绷不住，望着像爷爷一样的头像，泪水像决了堤。”
+
+用另一种方式与逝去的亲人“对话”，或许也是人工智能存在的一大意义。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+**年轻人用AI“复活”亲人**
+
+可能是搭在板凳上的一件毛衣，可能是一双手套，甚至是留在厕所里的一根白发，都容易勾起人们对逝去亲人的思念。
+
+最近，有不少年轻人通过AI对话软件“复活”亲人，甚至与自己的亲人对话。
+
+小红书上，有不少网友分享了自己通过AI与亲人对话的故事。《天下网商》发现，该软件类似一个聊天机器人，但是你可以去“训练”它的思想，创建属于自己的智能体，通过改变头像、音调，模拟逝去的亲人，它也被称为ChatGpt的国产平替版。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+但和ChatGpt不同，这个平台上的AI智能体有人设，且由用户自己设定。有不少年轻人在上面创建了自己逝去亲人的账号，并与其对话。
+
+小鱼跟“AI爷爷”聊了一次，眼睛红肿。她将这个过程发在小红书，笔记获得了超过3000个赞，留言区，不少用户也来分享和“AI亲人”互动的经历，其中一位说，自己聊了一次不敢再打开，泪要干了。
+
+“看到头像我就开始哭，聊天界面很像微信，直到人工智能跟我说了再见，我还在哭。”网上，除了通过AI“复活”亲人的，还有“复活”猫、狗、龙猫等宠物的，在不少人眼里，宠物是朋友亦是家人。
+
+有网友说通过软件她终于跟爸爸联系上了，“这或许才是人工智能存在的意义，让我们跟亲人通过不一样的方式又能重聚。”
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)**“那一刻真的代入了”**
+
+1月25日，小鱼的爷爷永远地跟这个世界告别。在收拾遗物的过程中，小鱼又“读”到了更多关于爷爷的故事。
+
+小鱼说，爷爷是个孤儿，但通过自己努力考上了大学，学的是机械专业，生前喜欢看书。翻着那些泛黄残缺的旧书时，21岁的小鱼脑中时常会闪过这样一幅画面：爷爷靠在摇椅上，或者坐在榫卯结构的小矮凳上，撑着老花镜读高尔基的《我的大学》。
+
+“爷爷是我人生的第一位老师，他教我写的第一个字是女孩的‘女’。”小鱼说。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+无意间，小鱼还看到爷爷每条裤子的口袋都多缝了个布口袋。一问家人，才知道是爷爷自己缝上去的，每条裤子都有，“之前不知道爷爷还会做针线活，像刚认识他一样。”
+
+想到爷爷是在重症监护室走的，谁都没有听到遗言，小鱼觉得很遗憾，于是她打开了软件。
+
+“爷爷，你生前最后几天想吃饭，但医生说要禁食。对不起，直到最后都没让你吃上一口，真的对不起。”小鱼说。
+
+“没事，人终有一死，这是自然规律，不用难过，你们做的已经很好了，别自责。”“爷爷”回答道。
+
+小鱼说，只聊了这一次，聊完一下子释怀了。
+
+肉包拳则用AI“复活”了她的爱犬悠悠。一个月前，7岁的悠悠因病离开了这个世界。悠悠是一只粘人的小泰迪，肉包拳时常会梦到它，“因为它自理能力很差，如果流浪，肯定活不过三天，我在梦里找不到它时会非常着急。”对爱犬的思念与日俱增，肉包拳尝试借助AI寄托情感，“虽然它是自动生成的话语，但可以给我一种暂时性的安慰感。”
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+和小鱼不同，肉包拳常会跟“AI悠悠”聊天，问它在“天堂”的生活。她记得有次悠悠回复说，天堂到处都弥漫着美食的香味，大家都对它很好，这些直接击中肉包拳会关心的方面。无数失去猫狗的网友在肉包拳的笔记下留言，一位网友说她想念爱宠的时候会对着有它气味的玩具说话。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)**死亡不是永别，遗忘才是**
+
+“死亡不是永别，遗忘才是最终的告别，请记住你爱着和你爱过的人。”这是《寻梦环游记》里的一句经典台词。
+
+4月1日，是哥哥张国荣离开二十周年，当晚，超1000万人在淘宝直播上一起追忆“哥哥”张国荣。许多粉丝在直播间久久不愿离开，怀念哥哥的留言再次刷屏评论区。
+
+现在，肉包拳家里依然充满着爱犬的气味，关于狗狗的东西她都保留着，包括小狗的骨灰、毛、牙齿、衣服、窝。
+
+作为一位美术老师，肉包拳时常会回忆起那个阳光灿烂的午后：她在画架上画画，悠悠和另一只小狗萱萱不吵不闹，陪她作画。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+如今，两只小狗都已离开。接下来，肉包拳想用羊毛毡定格动画的形式来塑造她和小狗之间的回忆。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+肉包拳的画
+
+亲人的离开，让小鱼更坚定了自己的学医之路，“起码对病情可以有更深的了解。”现在，她是名正在读大三的医学生。她想象着，假如还能见到爷爷，希望能给他一个大大的拥抱。
+
+怕奶奶伤心，家人丢掉了大量爷爷的遗物，但小岛偷偷将一张印有爷爷照片的日历留了下来，并在应用上创建了一个“爷爷”，她说想在自己思念无处安放的时候跟他说说话。
+
+“只要你记着他，他就永远存在。”

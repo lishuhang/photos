@@ -1,0 +1,119 @@
+# 大厂混战AI大模型，云计算谁最行？
+
+> 公众号: 娱乐资本论
+> 发布时间: ref: <Node>
+> 原文链接: https://mp.weixin.qq.com/s/TxJSeLecqTJp0u_1W0nCAQ
+
+---
+
+![图片](http://mmbiz.qpic.cn/mmbiz_png/UgtzVuzhFd5XKRkVpVVL3eMHVjGS5HhMeg5rpc668WmmWricLTCiafUgPxWosYTxLGOfabn3UwsqrMp3JNtqXHGQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1#imgIndex=0)**作者 | 归去来**
+
+**编辑 | 唐飞**
+
+近来随着ChatGPT的关注度持续提升，微软正式推出了内置ChatGPT的搜索引擎，谷歌则发布了Bard，国内互联网厂商百度、阿里、京东、360等，也都密集宣布大模型技术进展以及类ChatGPT项目计划。
+
+近期，阿里云大模型“通义千问”启动邀测。据介绍，“通义千问”是一个专门响应人类指令的大模型，类似于百度的“文心一言”和ChatGPT。
+
+相较于ChatGPT，阿里云的“通义千问”目前仅能生成文本，暂不支持图片以及视频。不过“通义千问”却将用户日常的对话场景进行了细分，以增强可玩性。比如，效率类分为写提纲、SWOT分析、商品描述生成；生活类则分为会放飞的菜谱、小学生作文。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+图源：阿里云官网
+
+事实上，云厂商们之所以密集扎堆ChatGPT，其原因在于AI模型的不断优化对算力提出了更高的要求。
+
+以ChatGPT为例，2018年Open AI在训练GPT-1时，所用到的参数数量和数据训练量分别为1.17亿和5GB。但在2020年训练GPT-3时，以上两项数字则分别增长到1750亿和45 TB（1TB=1024GB），GPT-4的训练参数量更是高达1.6万亿。
+
+另据Open Al发布的相关数据显示，训练13亿参数的GPT-3 XL模型一次消耗的算力约为27.5 PF-days，训练1750亿参数的完整GPT-3模型则会消耗算力3640 PF-days(即每秒一千万亿次计算,要运行3640个整日)。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+图源：Open Al
+
+庞大的数据量以及算力决定了搭建AI模型为典型的重资金产业。以GPT-3模型消耗的算力3640 PF-days为例，若按照单个500P中心项目的总投资为30.2亿元来计算，若想要保证ChatGPT的正常运行，则至少需要投入7-8个数据中心，所产生的总成本超过200亿元。
+
+显然，训练ChatGPT模型对数据、算力、资金的要求极高，是大部分初创团队很难承受的。由此，这些国内外云计算大厂具备了天然的先发优势，他们有资金、有技术、有算力资源，甚至还有应用场景。
+
+随着云厂商们加速对ChatGPT的布局，未来国内云市场的竞争格局是否会被重新改写呢？
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)**阿里云：内忧外患下找寻新增量**
+
+作为国内云厂商头部企业的阿里云，在IaaS领域和IaaS+PaaS领域的市场份额分别为34.6%和33.5%，以上两项排名均为业内第一，具有绝对的领先地位。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+数据来源：《中国公有云服务市场(2022上半年)跟踪》报告
+
+而且阿里云还是当前国内唯一实现盈利的云服务商。据阿里此前发布2022财年第四财季及全年财报显示，阿里云2022财年总收入在抵销跨分部交易前和抵销后分别为1001.8亿元和745.68亿元，实现13年来首次年度盈利；阿里云EBITA利润从上年的亏损22.51亿元改善为盈利11.46亿元。
+
+不过这只是过去一年的成绩，进入2023年以来，阿里云的日子并不好过。一般来说，云厂商的收入来源=客户数量\*单笔合同金额\*客户续费率。目前阿里云的客户以新零售、教育、医疗健康、金融机构、互联网为主，但受制于消费市场复苏不及预期、出口业下滑等因素，阿里云客户本身并不轻松。
+
+张梦琳是国内某新零售企业的负责人，她告诉我们，原本以为疫情全面放开后，公司的销售额和利润能实现大幅度增长。但现实情况却是今年公司第一季度的销售额和净利润较去年同期分别下滑40%和25%。业绩承压之下，公司也不得不大幅度裁员，并且缩减在云服务上的投入。
+
+事实上，“降本增效”是很多企业今年的主旋律之一，各项对外支出也在缩减，这其中就包括云服务领域的支出。
+
+因此，后续阿里云也不得不面临客户减少采购金额或客户流失的情况，这就给阿里云的未来业绩增速蒙上一层阴影。另外，阿里云虽然在国内IaaS领域市场份额第一，但目前IaaS领域产品高度同质化问题并没有缓解，阿里云仍面临多方位的竞争。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+图源：光大证券研究所
+
+为抢占更多的客户资源，云厂商只能借助价格战来完成新客增加以及老客留存。价格战所带来的结果就是目前IaaS产业内的毛利率只有10%-15%，远低于SaaS行业内50%以上的毛利率。
+
+面对上述问题，阿里云只能借助更多方式来开发新客户，而ChatGPT就是拓展新客户的手段之一。
+
+作为参考，全球云计算巨头微软已提速自身在ChatGPT领域的布局，这些布局后续将不断反哺云业务。阿里云迅速做出反应，推出阿里云版的ChatGPT“通义千问”，并且对标GPT-4。借助大模型API接口的放开，阿里云既能完成新客增加以及老客留存，也能借助接口付费的方式带动企业业绩增长。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)**其他云厂商的动机**
+
+放大到全行业来看，目前国内不少云厂商结合自身业务优势布局“ChatGPT”，本质上也是为了能够抢占未来增量市场所产生的市场份额。
+
+比如说，以ChatGPT为代表的人工智能对计算机性能、能耗、吞吐和延迟等方面要求较高，传统通用服务器的负载能力有限，无法承受高负载的人工智能应用，需要更适合深度学习训练场景的AI服务器方可完成。
+
+随着后续算力的持续增长，自然语言处理和图像、视频等AI模型的深入发展，AI服务器将被更广泛使用，IDC此前就曾预估2023年全球AI服务器的市场规模或将达到211亿美元。
+
+比如，数据要素是AI训练与迭代的核心资源，同时未来AIGC
+
+产生的海量数据将带来爆发式的数据传输需求，并且如何保障数据在传输、训练、用户使用过程中的绝对安全也是一个新问题。
+
+基于此，三大电信运营云厂商，作为中国算力与数据要素的“卖水者”，无论是用自身优质数据进行模型自研，或是将数据提供给第三方进行训练，运营商在未来都将成为我国“数据要素+AI”商业体系下的核心参与者。而做网络安全出身的360云自然在如何构建网络安全上，更具优势。
+
+当然，有的云厂商做类“ChatGPT”模型，更多的是想丰富自身的云产品生态系统。以京东云为例，与其他技术性企业直接进入到云服务市场不同，京东云脱胎于京东电商、京东物流、京东金融的业务实战中。
+
+基于业务上的实战，确保了京东云在相关产业上具有一定的洞察能力。因此，京东云旗下言犀人工智能应用平台Chat JD，定位为产业版ChatGPT，旨在打造优势、高频、刚需的产业版通用ChatGPT。随着后续Chat JD模型的不断迭代，也能让京东云和其他云厂商形成差异化竞争。
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)
+
+图源：京东云官网
+
+![图片](data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8'%3F%3E%3Csvg width='1px' height='1px' viewBox='0 0 1 1' version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink'%3E%3Ctitle%3E%3C/title%3E%3Cg stroke='none' stroke-width='1' fill='none' fill-rule='evenodd' fill-opacity='0'%3E%3Cg transform='translate(-249.000000, -126.000000)' fill='%23FFFFFF'%3E%3Crect x='249' y='126' width='1' height='1'%3E%3C/rect%3E%3C/g%3E%3C/g%3E%3C/svg%3E)**ChatGPT能否改变云厂商竞争格局？**
+
+短期来看，ChatGPT难以改变现有云厂商们的竞争格局。
+
+其原因在于，从ChatGPT本身来看，行业仍存在一定泡沫。北京某投资机构的投资总监赵娜告诉我们，首先，相较于储能、氢能等各类新能源有着清晰的政策支撑，ChatGPT在政策端的后续走向并不明朗。尤其是一些围绕TOC端所提出AI大模型，一旦产生如数据泄露、误导用户等问题，不排除随时有可能会遭遇“封杀”的结局。
+
+其次，目前市场对ChatGPT的能力存在过分高估，在实际很多场景中均难以落地。比如说，此前曾有券商提出过以ChatGPT为代表的AI大模型能够应用到医疗领域，充当医生在临床治疗过程中的辅助性工具。
+
+但赵娜在拜访国内某家医院的赵医生后，对方直接坦言，使用人工智能给病人看病，这是在开什么玩笑啊？赵医生告诉她，不同病人因身体素质、体质、病症的不同，其适用的药物也有不同，这也是为何中医会讲究望闻问切，根据不同患者的情况开具属于患者个人药方的原因。
+
+若是使用AI大模型为患者开具医用处方，一旦产生医疗纠纷，这个责任到底如何界定也是个难题。显然，当医生对于AI医疗大模型的使用保持谨慎的态度时，这也决定了AI医疗大模型的商业化探索之路远比想象中的还要复杂。
+
+最后，在相关企业搭建各类AI大模型高投入的背后，后续到底要如何发展才能实现盈利也是个问题。即使作为AI大模型领军者的ChatGPT，目前也没有给出完整的答案。这就不免让圈子里的很多投资人觉得，现在市面上的各类AI大模型颇有“蹭热点”、“炒概念”的嫌疑。
+
+从ChatGPT和云服务的场景结合来看，ChatGPT很难在部分细分云市场中得以渗透。以财务云市场为例，杭州某公司的负责人张航告诉我们，目前企业财务人员使用现有的财务云软件已相当成熟，这也能保证公司业务的顺利进行。若使用所谓的AI大模型云软件，是否会因企业财务人员难以使用或学习周期过长影响公司业务，是他最担心的问题。
+
+当然，若是后续ChatGPT在国内得以顺利推广的话，这或能改变云厂商的竞争格局。
+
+因为从整个国内的云服务市场来看，此前云厂商们往往借助IaaS+PaaS，IaaS+SaaS为客户提供服务并增加利润，但随着PaaS层面Docker、K8S等容器技术的支持，目前PaaS和SaaS已能脱离IaaS层单独使用。
+
+当捆绑服务无法为云厂商带来利润时，行业又重新回归到IaaS的竞争。而IaaS层的产品高度同质化又决定了云厂商们谁能获取更多的客户，谁就能获取更大的市场份额。
+
+而各家云厂商的AI大模型，实则是在帮助他们形成新的生态应用闭环。借助这些AI大模型，打破了开发层和应用层的壁垒，用户只需向作为中间层的AI提出需求即可自动生产代码，而无需理解其中含义。借助这种难以抗拒的“魅力”，其可以轻易触达更多用户，用户在免费使用过程中就会不自觉成为潜在的云厂商客户。
+
+腾讯集团高级执行副总裁、云与智慧产业事业群CEO汤道生认为，ChatGPT等技术对互联网行业领域来说很有挑战，可能未来很多应用都会依赖这样基础模型构建，谁能够打造一个特别强大的云，可能会自然吸引很多应用开发商在这样一个环境去搭建，这对于云厂商来说绝对是一个很大的拉动，其他后来的应用计算需求可能会被这样一个能力而吸引过去。
+
+就像汤道生说的，ChatGPT对于形成这种应用闭环极为重要。或许这正是以阿里、百度、腾讯、京东、360为代表的国内云服务参与者纷纷将ChatGPT视为打破行业格局“利器”的原因。
+
+\*本文基于公开资料撰写，仅作为信息交流之用，不构成任何投资建议

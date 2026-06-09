@@ -1,0 +1,147 @@
+# 谁能最早看见AIGC的未来？专访昆仑万维董事长兼CEO方汉丨文娱行业AI巡礼
+> 公众号: 娱乐资本论
+> 发布时间: 2023年10月11日 13:00
+> 原文链接: https://mp.weixin.qq.com/s/P6XNGpFfeRuQ2UZqj5-ayw
+---
+
+![](https://mmbiz.qpic.cn/mmbiz_png/UgtzVuzhFd6FQWdEVpLuxHPtXorhpMSiaAgGIA6SljibiaVjmmT1sNL1qb5U5SyXPZ0YKEmsVr6B6agb9Ebqe9iaNQ/640?wx_fmt=png)
+
+**文/James**
+
+手机让相机被颠覆、移动支付让钱包被取代……很多时候，给一个现有行业带来冲击，乃至将其连根拔起的，并不是来自这个行业本身的竞争者，而是跨行业带来的“降维打击”。
+
+搜索引擎或许就是如此。
+
+今年初，微软的必应搜索最早结合了大语言模型，提供了基于GPT-4的聊天界面，份额占比和影响力从“其它”里面一跃而出，成为谷歌不可忽视的竞争者。尽管谷歌在AI研发方面其实也走在行业前列，但它本身的搜索业务是谷歌的“摇钱树”，对于其自我革命的态度相对保守。
+
+在国内，以游戏开发和运营为大众熟知的昆仑万维，在行业内率先推出了AI搜索引擎，其完成度还相当高，足以让国内现有的搜索产品感受到一种“跨界”的压力。
+
+基于自研的天工大模型，昆仑万维已经推出了3款主要的C端产品，即AI对话、AI搜索和AI创作。这家公司还因对全球化和内容创作的前瞻性思考而引人关注。9月初，计算机视觉和机器学习领域的国际顶级专家颜水成教授加盟，而公司自主研发的一款AI UGC游戏平台Club Koala 也即将上市。
+
+近日，娱乐资本论·视智未来专访昆仑万维董事长兼CEO方汉，深入探讨了公司在AI方面的最新动向及未来愿景。
+
+![](https://mmbiz.qpic.cn/mmbiz_png/jNZszpkibXx8r0eeusveAtyj98pKeBEz7tMuAmiadsyvAk4l30TZvmgP03RGX0iaosuL5yVawsdblYqeWUcOTHYoQ/640?wx_fmt=png)
+
+**天工AI工具：AIGC不是都要做成聊天**
+
+短时间试用天工AI搜索，就可以给人留下深刻的印象。
+
+在首批8款国产大模型通过备案之际，娱乐资本论·视智未来刚刚进行了[第二次国产大模型横向评测](http://mp.weixin.qq.com/s?__biz=MzkyODM5MzMxMA==&mid=2247489633&idx=1&sn=887b916ab8909244de828776916f7ef3&chksm=c2182950f56fa04601684e11105261708f0dea34764b3b010c76fa7d0b26422772dc1716f418&scene=21#wechat_redirect)，在其中可以看到天工AI搜索在特定内容生成任务方面有出色的表现。
+
+![](https://mmbiz.qpic.cn/sz_mmbiz_png/D5Zgib0agBaAlIsWasl8Ek8hACWVyTFC0GB6uBFqK2AaVBibfZZB7TVBEk9sbaJUE0ndD49ydjuhmMTHUeZmlGRQ/640?wx_fmt=png)
+
+方汉解释说，昆仑万维的团队在搜索领域的经验积累比表面上看起来要长。团队花了六年的时间在搜索领域积累，然后逐渐将其整合成一个产品。
+
+6年前，昆仑万维旗下一款名为"Opera News"的新闻推荐产品上线运营。这是一款主要面向海外市场的信息流产品，它汇集了几十个国家的几十万个网站上的信息处理与推送。这个过程实质上就是一个小型的搜索引擎。目前对重点网站的抓取频率已经提升到每分钟一次。
+
+6年的时间里，昆仑万维的技术团队积累了丰富的预训练数据收集、清洗、深度加工等能力。他们也在研究如何确保信息的真实性，比如对各种信息源网站进行打分。对于如何进行信息推送、如何调整内容以适应国内用户、如何避免信息茧房等问题，团队也已经有了经验和对策。
+
+再加上两个千亿模型—— 千亿预训练基座模型和千亿 RLHF（Reinforcement Learning from Human Feedback）模型底座，昆仑天工AI搜索应运而生。
+
+方汉提到一些有趣的用户案例，包括一个公务员写工作总结，以及使用AI搜索来学习怎么给老师写检讨。这些案例让他意外地发现产品的使用场景更宽广了。
+
+天工AI搜索后续也将提供图片搜索、图片理解等功能。这些AI工具不排除用广告创收，但方汉认为，广告并不是最大的盈利模式。
+
+除了AI搜索，天工还包括AI对话、AI创作产品。娱乐资本论·视智未来测试了同一个写作任务“西湖有哪些美食”，在天工三款不同产品中提问后各自的表现。
+
+天工AI对话的结果相对简明，而天工AI创作的内容会更丰富，天工AI搜索则可能会加入一些其他平台如知乎专栏的内容，引用的内容均有明确来源。
+
+![](https://mmbiz.qpic.cn/sz_mmbiz_png/D5Zgib0agBaAlIsWasl8Ek8hACWVyTFC0bVLfMH7zgmexTibvl1A6ZPG45hWrtrXxRRtGUuK62e4YjBHpaicvYDRg/640?wx_fmt=png)（天工AI对话）
+
+![](https://mmbiz.qpic.cn/sz_mmbiz_png/D5Zgib0agBaAlIsWasl8Ek8hACWVyTFC0jdaPSZteukJ141MDSbskczXm3lWCfHxzKf62BWgTDLiakgTYgh8SbIA/640?wx_fmt=png)（天工AI创作）
+
+![](https://mmbiz.qpic.cn/sz_mmbiz_png/D5Zgib0agBaAlIsWasl8Ek8hACWVyTFC0DJDicqk3SicicDbqW5SKLu1R6JVQ8jIn25vvZFiavB0EZIDQDeubPmQTkQ/640?wx_fmt=png)（天工AI搜索）
+
+天工AI搜索、天工AI对话、天工AI创作分属于三个独立的界面，而不是像其它同类产品集成一个统一的聊天窗口。这是因为方汉观察到，大多数用户并不会编写prompt，需要适当引导。很多用户容易在对话界面中沉迷于“调戏AI”。换成搜索框以后，用户输入的指令实用了很多。
+
+方汉得出的一个结论是，普通用户更需要的是“生成端到端的内容”，直接得到的就是成品，而不是提供给他们一个工具，先做出半成品再调整。这中间的转化过程，需要“包装起来”。
+
+因此，天工团队准备的“下一个大招”是研发出一键生成漫画、动画或短视频的工具。他们投入了大量的精力，研究如何将剧本转化为分镜，然后再转化为漫画。这样一来，再转换为AI动画就会自然得多。
+
+这类产品将首先在海外市场推出。方汉认为，海外的游戏玩家对内容不够准确问题的包容度较高，也比较期待具有创意和惊喜的输出结果。它们一开始就支持英、日、韩文，计划未来支持泰语、印地语等。
+
+![](https://mmbiz.qpic.cn/mmbiz_png/jNZszpkibXx8r0eeusveAtyj98pKeBEz7ejDSZf97dAE3mMYqSpwDp0blV0YsOONibSOjLz8EycRV8uxj7xc8QIg/640?wx_fmt=png)
+
+**AI游戏：自由世界和数字陪伴**
+
+不过，接下来要说的AI应用，会比上面几种更突破人们对AIGC的常规印象。
+
+8月25日，昆仑万维旗下游戏工作室Play for Fun 自研的AI UGC游戏平台Club Koala在德国科隆展亮相，这是国内首款出海AI游戏。
+
+昆仑万维在海外市场运营近20年，因此对于国内游戏出海是相当有发言权的。方汉认为，其中一个经验是做“平台”优于做“剧情”。中国公司在工具和平台的开发上比较擅长，也可以规避第一方内容开发带来的潜在的文化冲突。
+
+Club Koala是一个轻剧情的，自由世界方向的游戏，这实质上是一个UGC平台，提供工具，让用户自由创作，也符合他们对海外市场一贯的主要策略。
+
+这款游戏从NPC对话，到衣服、家具、小游戏以及剧本等，几乎都可以用AI驱动来随机生成，或是由玩家自行创作。在捏道具的过程中，玩家甚至“动动嘴”就能创作内容，而不是像以往那样要手动调节乃至编写代码。
+
+Club Koala的目标是把AI渗透到内容创作的全流程中，让用户更容易地创作内容，形成社区文化。方汉认为，虽然大部分用户创作的内容可能质量不高，但如果有一定比例的内容具备贩售价值，那就能形成市场。
+
+AI NPC角色是Club Koala的另一个大胆创新。每个玩家都可以创建一个专属的陪伴角色，这个角色有自己的记忆、生涯，并且拥有海量的问题库，可以解答玩家的开放性问题。
+
+在多轮对话方面，目前在部分测试中的效果已经接近Character.ai和Replika。实现多轮对话记忆依靠大模型能力和工程能力，创造了一个类似于人类长时记忆和短时记忆的数据库。
+
+这个数据库通过大量的标签来组织向量数据。在对话中，会先定位标签，再细致分析解答，以提升响应速度。他们还会根据角色的性格等因素，对重要或不重要的记忆打权重和排序。最后，针对闲聊等场合还有一些专用的小模型。综合运用这些方法，它们规避了多次使用大模型的算力消耗。
+
+花这么大力气设计一个游戏内的NPC，绝不是为了炫技这么简单。在方汉的规划中，这个AI驱动的数字陪伴项目，具有游戏之外的社会价值。
+
+在Club Koala上市之初，首要任务是让用户愿意与NPC聊天；在测试顺利后，同一个角色将有希望登陆昆仑万维的其他游戏，甚至在其它非游戏产品和界面上也可以继续存在，成为一个全时陪伴的角色。从这个角度上讲，AI NPC是一个可以在所有游戏中使用的底座，而他们正在这个底座上进行实验。
+
+方汉提到，AI游戏是一个全新的项目，对原有组织结构产生了影响。他们将整个工作室全面转向平台和产品，这个转型过程相对比较顺利，而员工们也对做AI游戏万分期待。
+
+![](https://mmbiz.qpic.cn/mmbiz_png/jNZszpkibXx8r0eeusveAtyj98pKeBEz7gMbSIRF8ujdpJibC3CLgiaEEY6kJq4YuKUC4cv1ZG4kjEVEHhs35Zn3Q/640?wx_fmt=png)
+
+**大模型B端应用与芯片版图相结合**
+
+昆仑万维早前官宣与蜜莱坞科技（映客的母公司）达成千万以上级别的合作。他们的AI技术可以帮助主播们对其“前几万个用户”提供更有针对性的聊天服务。方汉表示，映客选择使用昆仑天工，是因为在多轮对话、情感对话方面效果更好。
+
+在这个项目中，天工会筛选优质主播的语料，帮助客户训练有代表性的主播角色，再结合主播形象、口头禅等信息加入提示词，让模型进行“角色扮演”。其中的挑战在于语料清洗和小样本学习。产品的最终形态则留待客户自己开发。
+
+那么，天工在其它领域是否也找到了大客户？方汉表示，天工B端主要聚焦人力资源、金融和医药领域等。海外移动支付项目OPay、科亚医疗等昆仑万维的关联企业都有植入AI的潜力。目前，天工已经和一些人力资源公司谈成合作，待后续公布详情。
+
+他认为天工相对其它模型开发商，在大模型训练和微调方面有3年的经验，每2周迭代一次，使其具有独特性，底层也更可控。产品能力和长线思维有助于做成可复用的SaaS产品，而不是来一单做一单的“施工队”。
+
+昆仑万维拥有跨国游戏、应用开发商的C端基因，使得它们更熟悉C端的发展路径，同时也会通过投资布局一些C端公司。此外，投资的领域还包括新材料、芯片等。
+
+9月20日，昆仑万维官宣投资并控股AI算力芯片企业艾捷科芯，完成AGI与AIGC全产业链布局。艾捷科芯主要从事AI大算力及配套芯片的研发生产，特别聚焦于生成式AI的智能计算。核心团队由芯片研发、集成电路、人工智能、大语言模型等领域的知名专家学者组成。
+
+全球化策略是昆仑万维的醒目标签。公司的海外收入长久以来稳定占比50%以上，最新财报数据显示占比更是高达83%。除了游戏，Opera浏览器是公司全球化的另一个经典案例，它的总部在挪威，但大部分研发在波兰进行。在Opera News等成熟业务基础上，适配AI的全新浏览器Opera One，人工智能服务Aria等创新不断涌现，目前Opera的全球平均月活用户近4亿。
+
+近期，计算机视觉和机器学习领域的国际顶级专家颜水成教授加入昆仑万维，引发广泛关注。他曾提到，昆仑万维的务实态度、长期主义视角，以及建立国际化大模型团队的愿景，都对他产生了吸引力。
+
+![](https://mmbiz.qpic.cn/sz_mmbiz_png/D5Zgib0agBaAlIsWasl8Ek8hACWVyTFC0cD3Y7j2nicCDCDeM57xv4QOK7mMmafWZM1EiaWU7QZ4DGtyMdAnyIEZw/640?wx_fmt=png)
+
+随着颜教授的加入，昆仑万维“2050全球研究院”投入运作，将在新加坡、伦敦、硅谷三地建立研究中心，以吸引更多的海外人才。这意味着公司在基础大模型领域将投入更多精力，也会积极贡献开源社区。
+
+这些前瞻性的思考和布局，会使得昆仑万维比大多数人更早地看见未来吗？
+
+方汉从多年前开始就一直关注AI技术进展，最近一年多以来，他几乎每天都在阅读AI方向的论文。他认为，当前的AI趋势是由技术驱动，甚至是由论文驱动，而非产品驱动，这是因为技术还在剧烈变化。
+
+提及大模型后下一个“大事件”，方汉把票投给了多模态，尤其是视频生成，“这是内容工业皇冠上的明珠”。一旦视频生成的一致性、画风等问题得到解决，整个影视行业将会被彻底重塑，“甚至怀疑未来是否还有摄像机存在的必要”。
+
+**话题互动：**
+
+****你会对拥有一个长期陪伴你的AI角色感兴趣吗？****
+
+**作者**
+
+![](https://mmbiz.qpic.cn/mmbiz_jpg/UgtzVuzhFd7dicmXtX1ibncyeMRsqFP6PnUZZ5pUdYnDDy8oXeDjA0viaRZz9uEh3BHib25xsZYxLuHDbXwLics7nVQ/640?wx_fmt=jpeg)
+
+**推荐阅读**
+
+[**![](https://mmbiz.qpic.cn/mmbiz_jpg/UgtzVuzhFd7r6Eh8wgVicn5KjpnaSqc0FBDztQeoFSL30icb5gIUqHZCiaOywVYjTWvJk7S8Z2V1Sibv775RfR6Aaw/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1)**](http://mp.weixin.qq.com/s?__biz=Mzg5ODkwOTM2NA==&mid=2247603950&idx=1&sn=e94e5ac5c28d4bb5b477eb57acb3afbe&chksm=c0584335f72fca238b8638250d04bfca4c3fd1c11e43eedc8b1474c92c64c11daff97fbb6903&scene=21#wechat_redirect)
+
+[**![](https://mmbiz.qpic.cn/mmbiz_jpg/UgtzVuzhFd7r6Eh8wgVicn5KjpnaSqc0FpOOrXhY0hBEwgAS11NtsawVPA6licrWzn98w01hcUL9wlXUAEHPqogw/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1)**](http://mp.weixin.qq.com/s?__biz=Mzg5ODkwOTM2NA==&mid=2247603926&idx=1&sn=0c3628f97d841361643ccb50c87cb3f3&chksm=c058430df72fca1b12d78a0fa1380813afb95975a006f9386dd2f81411c165ebea4cd03fddcd&scene=21#wechat_redirect)
+
+******发县城老年人，宠物市场有多大？******
+
+****点击观看****
+
+**↓↓↓**
+
+****如需商务合作后台回复【商务】****
+
+**如有转载需求后台回复【转载】**
+
+**更多文娱产业背后的经济逻辑，来关注↓↓↓**
+
+**![](https://mmbiz.qpic.cn/mmbiz_jpg/UgtzVuzhFd6RbduWQ1AIryUvalfYznTBHJZwVW6G1gosXoTsfeSLolMHPIiasAATwylyPf9tSLBqM6lliaVkwukQ/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1)**

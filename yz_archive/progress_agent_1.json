@@ -1230,6 +1230,11 @@
       "date": "2023年07月23日 15:40",
       "file": "20230723【《欢颜》与X剧场究竟满足了观众怎样的智性审美？】.md"
     },
+    "https://mp.weixin.qq.com/s/11ZM3thJxh9dwPHlulwa1A": {
+      "title": "蹭五月天热点，脑白金又来洗脑了？",
+      "date": "2023年07月25日 14:56",
+      "file": "20230725【蹭五月天热点，脑白金又来洗脑了？】.md"
+    },
     "https://mp.weixin.qq.com/s/N94GBhq9laHABx3OwtsdBQ": {
       "title": "60秒看透传媒股到底谁在逢高减持！",
       "date": "2023年07月22日 13:00",
@@ -1260,36 +1265,36 @@
       "date": "2023年07月24日 14:21",
       "file": "20230724【《封神第一部》封神背后：腾讯视频加码院线？】.md"
     },
-    "https://mp.weixin.qq.com/s/6-SRpOrpX3rqQuUhfuq5KA": {
-      "title": "6月上电影备案：减少59部，《神探大战2》、万玛才旦遗作备案",
-      "date": "2023年07月22日 13:00",
-      "file": "20230722【6月上电影备案：减少59部，《神探大战2》、万玛才旦遗作备案】.md"
-    },
     "https://mp.weixin.qq.com/s/wSeLOdxOBOlPPlPrXEFpnA": {
       "title": "34岁的匹克，如何走向年轻人？｜专访匹克",
       "date": "2023年07月23日 15:40",
       "file": "20230723【34岁的匹克，如何走向年轻人？｜专访匹克】.md"
     },
-    "https://mp.weixin.qq.com/s/TcOK8SM7cwwSaKgdskjUSw": {
-      "title": "投16.55亿豪赌《封神》，解决3.88亿诉讼，北京文化死而复生？",
-      "date": "2023年07月26日 14:49",
-      "file": "20230726【投16.55亿豪赌《封神》，解决3.88亿诉讼，北京文化死而复生？】.md"
-    },
     "https://mp.weixin.qq.com/s/pgdyOkpBa3vvD0tXnEbaIg": {
       "title": "海底捞演唱会门口“捞人”？网友：活该你赚钱！",
       "date": "2023年07月28日 13:59",
       "file": "20230728【海底捞演唱会门口“捞人”？网友：活该你赚钱！】.md"
+    },
+    "https://mp.weixin.qq.com/s/VFDkmSd13TebbCUqKoLMDA": {
+      "title": "高燃现实感出圈 ，为什么说《我的人间烟火》是一部“有灵魂”的现实青春剧",
+      "date": "2023年07月27日 13:55",
+      "file": "20230727【高燃现实感出圈 ，为什么说《我的人间烟火》是一部“有灵魂”的现实青春剧】.md"
     }
   },
   "failed": {},
   "captcha_pending": [
     {
-      "url": "https://mp.weixin.qq.com/s/11ZM3thJxh9dwPHlulwa1A",
-      "title": "蹭五月天热点，脑白金又来洗脑了？",
-      "seq": 247
+      "url": "https://mp.weixin.qq.com/s/6-SRpOrpX3rqQuUhfuq5KA",
+      "title": "6月上电影备案：减少59部，《神探大战2》、万玛才旦遗作备案",
+      "seq": 254
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/TcOK8SM7cwwSaKgdskjUSw",
+      "title": "投16.55亿豪赌《封神》，解决3.88亿诉讼，北京文化死而复生？",
+      "seq": 256
     }
   ],
-  "last_update": "2026-06-09T09:51:57.481898",
+  "last_update": "2026-06-09T09:53:06.721573",
   "total_completed": 256,
   "total_failed": 0
 }

@@ -1805,6 +1805,11 @@
       "date": "2023年08月31日 14:01",
       "file": "20230831【Q2互联网大厂广告收入PK：为何拼多多、美团异军突起？】.md"
     },
+    "https://mp.weixin.qq.com/s/vsVRPAlsRX94QQsxC34wQA": {
+      "title": "强地标性 品质先行 体验至上｜虾米音乐节开创国内地标音乐节最佳样本",
+      "date": "2023年08月30日 15:07",
+      "file": "20230830【强地标性 品质先行 体验至上｜虾米音乐节开创国内地标音乐节最佳样本】.md"
+    },
     "https://mp.weixin.qq.com/s/flAhHRFx4D6XEXvJ_rpG4Q": {
       "title": "网易伏羲研究AI游戏，野心不止于《逆水寒》",
       "date": "2023年09月02日 13:00",
@@ -1814,6 +1819,11 @@
       "title": "东方甄选入淘“首日1.75亿”：套娃式返券功不可没？",
       "date": "2023年08月30日 15:07",
       "file": "20230830【东方甄选入淘“首日1.75亿”：套娃式返券功不可没？】.md"
+    },
+    "https://mp.weixin.qq.com/s/FuUJbPv5_ECmIuH9zm_GSQ": {
+      "title": "8月IP衍生品：《画江湖之不良人》周边热卖，明日方舟发力",
+      "date": "2023年09月03日 13:36",
+      "file": "20230903【8月IP衍生品：《画江湖之不良人》周边热卖，明日方舟发力】.md"
     },
     "https://mp.weixin.qq.com/s/Ap4ESgS1wKf9lScgcecFvw": {
       "title": "手机大模型也卷起来了",
@@ -1844,16 +1854,6 @@
       "title": "携手迪士尼、王者荣耀打造IP专场，天猫超品日图什么？| 对话",
       "date": "2023年09月03日 13:36",
       "file": "20230903【携手迪士尼、王者荣耀打造IP专场，天猫超品日图什么？_ 对话】.md"
-    },
-    "https://mp.weixin.qq.com/s/6bJI9ZCuDGllVuWMB2RuKg": {
-      "title": "喜茶加盟费低于蜜雪？县城茶饮战超出你的想象丨县城调研③",
-      "date": "2023年09月04日 14:30",
-      "file": "20230904【喜茶加盟费低于蜜雪？县城茶饮战超出你的想象丨县城调研③】.md"
-    },
-    "https://mp.weixin.qq.com/s/rOz5gNCE7KSyW7csZQyLHw": {
-      "title": "沙龙报名｜与咪咕、七猫、中文在线…畅聊微短剧精品化2.0",
-      "date": "2023年09月05日 14:11",
-      "file": "20230905【沙龙报名｜与咪咕、七猫、中文在线…畅聊微短剧精品化2.0】.md"
     }
   },
   "failed": {},
@@ -1862,19 +1862,9 @@
       "url": "https://mp.weixin.qq.com/s/Cn6HYRKdX-3w2Ey03Wc2dw",
       "title": "滚烫生长、打破边界，腾讯视频动漫的进击之路",
       "seq": 357
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/vsVRPAlsRX94QQsxC34wQA",
-      "title": "强地标性 品质先行 体验至上｜虾米音乐节开创国内地标音乐节最佳样本",
-      "seq": 362
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/FuUJbPv5_ECmIuH9zm_GSQ",
-      "title": "8月IP衍生品：《画江湖之不良人》周边热卖，明日方舟发力",
-      "seq": 366
     }
   ],
-  "last_update": "2026-06-09T11:12:52.962191",
+  "last_update": "2026-06-09T11:13:52.533949",
   "total_completed": 371,
   "total_failed": 0
 }

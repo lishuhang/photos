@@ -1110,16 +1110,6 @@
       "date": "2023年07月12日 14:48",
       "file": "20230712【重塑组织让生意增长，飞书如何成为电商行业标配？】.md"
     },
-    "https://mp.weixin.qq.com/s/jcKgoEc4nKu8NJuDJknWWQ": {
-      "title": "逆水寒“碰瓷营销”的背后，暴露了大厂的中年危机",
-      "date": "2023年07月11日 14:34",
-      "file": "20230711【逆水寒“碰瓷营销”的背后，暴露了大厂的中年危机】.md"
-    },
-    "https://mp.weixin.qq.com/s/wENiNtf920chJaWlM37s9g": {
-      "title": "探店变「打黑」，达人们找对新财路了？",
-      "date": "2023年07月11日 14:34",
-      "file": "20230711【探店变「打黑」，达人们找对新财路了？】.md"
-    },
     "https://mp.weixin.qq.com/s/q6z1Bp8l-bcKCriNpBfNRw": {
       "title": "2023，消失的超级网红",
       "date": "2023年07月14日 14:30",
@@ -1160,6 +1150,16 @@
       "date": "2023年07月18日 15:27",
       "file": "20230718【6月网剧备案：行业回暖，备案数量增长133%，《黑莲花攻略手册》《似锦》等大古装启动】.md"
     },
+    "https://mp.weixin.qq.com/s/jcKgoEc4nKu8NJuDJknWWQ": {
+      "title": "逆水寒“碰瓷营销”的背后，暴露了大厂的中年危机",
+      "date": "2023年07月11日 14:34",
+      "file": "20230711【逆水寒“碰瓷营销”的背后，暴露了大厂的中年危机】.md"
+    },
+    "https://mp.weixin.qq.com/s/wENiNtf920chJaWlM37s9g": {
+      "title": "探店变「打黑」，达人们找对新财路了？",
+      "date": "2023年07月11日 14:34",
+      "file": "20230711【探店变「打黑」，达人们找对新财路了？】.md"
+    },
     "https://mp.weixin.qq.com/s/OXLL7kU4it9ya7cAeVp-9A": {
       "title": "《剧院魅影》用阿云嘎开盲盒，为什么会被骂？",
       "date": "2023年07月16日 14:34",
@@ -1180,11 +1180,6 @@
       "date": "2023年07月20日 14:59",
       "file": "20230720【茶饮届爱上联名，但联名款都很难喝？】.md"
     },
-    "https://mp.weixin.qq.com/s/khvf7E6b41sq18AzuzS1Eg": {
-      "title": "马斯克过万亿而不入",
-      "date": "2023年07月21日 14:49",
-      "file": "20230721【马斯克过万亿而不入】.md"
-    },
     "https://mp.weixin.qq.com/s/gORGTXnGUafUja7ztSQLXg": {
       "title": "抖音卖得最火的咖啡，是一个你没听过的品牌 ｜ 专访四只猫",
       "date": "2023年07月21日 14:49",
@@ -1204,27 +1199,17 @@
       "title": "《长安三万里》票房破追光记录，电影的“教育式营销”大有可为",
       "date": "2023年07月19日 15:35",
       "file": "20230719【《长安三万里》票房破追光记录，电影的“教育式营销”大有可为】.md"
-    },
-    "https://mp.weixin.qq.com/s/B8cpRIhymggPJgWLoc8aTA": {
-      "title": "好利来、旺旺、特步，品牌接班人为何热衷做网红？",
-      "date": "2023年07月19日 15:35",
-      "file": "20230719【好利来、旺旺、特步，品牌接班人为何热衷做网红？】.md"
     }
   },
   "failed": {},
   "captcha_pending": [
     {
-      "url": "https://mp.weixin.qq.com/s/jcKgoEc4nKu8NJuDJknWWQ",
-      "title": "逆水寒“碰瓷营销”的背后，暴露了大厂的中年危机",
-      "seq": 221
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/wENiNtf920chJaWlM37s9g",
-      "title": "探店变「打黑」，达人们找对新财路了？",
-      "seq": 224
+      "url": "https://mp.weixin.qq.com/s/khvf7E6b41sq18AzuzS1Eg",
+      "title": "马斯克过万亿而不入",
+      "seq": 237
     }
   ],
-  "last_update": "2026-06-09T09:41:34.567673",
-  "total_completed": 242,
+  "last_update": "2026-06-09T09:41:50.386416",
+  "total_completed": 240,
   "total_failed": 0
 }

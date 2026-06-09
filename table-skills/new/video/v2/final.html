@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文娱人才大洗牌</title>
+<style>
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('assets/AlibabaPuHuiTi-3-35-Thin.woff') format('woff'); font-weight:100; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('assets/AlibabaPuHuiTi-3-55-Regular.woff') format('woff'); font-weight:400; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('assets/AlibabaPuHuiTi-3-65-Medium.woff') format('woff'); font-weight:500; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('assets/AlibabaPuHuiTi-3-85-Bold.woff') format('woff'); font-weight:700; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('assets/AlibabaPuHuiTi-3-115-Black.woff') format('woff'); font-weight:900; }
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  background: #050816;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: 'AlibabaPuHuiTi', sans-serif;
+  overflow: hidden;
+}
+
+.canvas {
+  position: relative;
+  width: 450px;
+  height: 800px;
+  background: #0a0e27;
+  overflow: hidden;
+}
+
+/* Scene container */
+.scene {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  opacity: 0;
+  pointer-events: none;
+}
+.scene.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Animation classes */
+.anim-fadeIn { animation: aFadeIn 0.6s ease forwards; }
+.anim-fadeOut { animation: aFadeOut 0.6s ease forwards; }
+.anim-slideUp { animation: aSlideUp 0.5s ease forwards; }
+.anim-slideLeft { animation: aSlideLeft 0.5s ease forwards; }
+.anim-slideRight { animation: aSlideRight 0.5s ease forwards; }
+.anim-popIn { animation: aPopIn 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+.anim-flashIn { animation: aFlashIn 0.4s ease forwards; }
+.anim-zoomIn { animation: aZoomIn 0.5s ease forwards; }
+.anim-shrinkOut { animation: aShrinkOut 0.6s ease forwards; }
+.anim-typewriter { overflow: hidden; }
+
+@keyframes aFadeIn { from { opacity:0 } to { opacity:1 } }
+@keyframes aFadeOut { from { opacity:1 } to { opacity:0 } }
+@keyframes aSlideUp { from { opacity:0; transform:translateY(40px) } to { opacity:1; transform:translateY(0) } }
+@keyframes aSlideLeft { from { opacity:0; transform:translateX(-40px) } to { opacity:1; transform:translateX(0) } }
+@keyframes aSlideRight { from { opacity:0; transform:translateX(40px) } to { opacity:1; transform:translateX(0) } }
+@keyframes aPopIn { 0% { opacity:0; transform:scale(0.5) } 60% { transform:scale(1.05) } 100% { opacity:1; transform:scale(1) } }
+@keyframes aFlashIn { 0% { opacity:0; filter:brightness(3) } 30% { filter:brightness(1.5) } 100% { opacity:1; filter:brightness(1) } }
+@keyframes aZoomIn { from { opacity:0; transform:scale(1.3) } to { opacity:1; transform:scale(1) } }
+@keyframes aShrinkOut { from { opacity:1; transform:scale(1) } to { opacity:0; transform:scale(0.5) } }
+
+/* Element positioning helper */
+.el {
+  position: absolute;
+  opacity: 0;
+}
+.el.visible {
+  opacity: 1;
+}
+
+/* Text scene */
+.text-scene {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40px;
+  white-space: pre-line;
+}
+
+/* Image elements */
+.img-el {
+  position: absolute;
+  object-fit: contain;
+}
+
+/* Text overlay elements */
+.txt-el {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Subtitle bar */
+#subtitle {
+  position: absolute;
+  bottom: 40px;
+  left: 20px;
+  right: 20px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: #fff;
+  font-family: 'AlibabaPuHuiTi', sans-serif;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.8), -1px -1px 2px rgba(0,0,0,0.8), 1px -1px 2px rgba(0,0,0,0.8), -1px 1px 2px rgba(0,0,0,0.8);
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+#subtitle.visible { opacity: 1; }
+
+/* ============ CHART STYLES ============ */
+
+/* Table 1: Horizontal bars */
+.chart-title { font-size:20px; font-weight:700; color:#fff; text-align:center; margin-bottom:4px; letter-spacing:1px; }
+.chart-subtitle { font-size:12px; font-weight:400; color:rgba(255,255,255,0.5); text-align:center; margin-bottom:16px; }
+
+.bar-group { display:flex; align-items:center; margin-bottom:8px; }
+.bar-label { width:64px; font-size:11px; font-weight:500; color:rgba(255,255,255,0.85); text-align:right; padding-right:10px; flex-shrink:0; white-space:nowrap; }
+.bar-track { flex:1; height:22px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden; position:relative; }
+.bar-fill { height:100%; border-radius:4px; transform-origin:left; animation:barGrow 1s ease-out forwards; transform:scaleX(0); }
+.bar-info { display:flex; flex-direction:column; align-items:flex-start; padding-left:8px; flex-shrink:0; width:70px; opacity:0; animation:fadeIn 0.5s ease forwards; }
+.bar-pct { font-size:13px; font-weight:700; color:#fff; line-height:1.2; }
+.bar-frac { font-size:9px; font-weight:400; color:rgba(255,255,255,0.5); line-height:1.2; }
+
+.c1 { background:linear-gradient(90deg,#FF6B6B,#FF8E8E); }
+.c2 { background:linear-gradient(90deg,#FF8C5A,#FFA97A); }
+.c3 { background:linear-gradient(90deg,#FFB347,#FFCC73); }
+.c4 { background:linear-gradient(90deg,#4ECDC4,#6EDDD6); }
+.c5 { background:linear-gradient(90deg,#45B7D1,#6CC8E0); }
+.c6 { background:linear-gradient(90deg,#96ADED,#B3C5F5); }
+.c7 { background:linear-gradient(90deg,#7B68EE,#9B8AFF); }
+
+@keyframes barGrow { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+
+/* Table 2: Category cards */
+.t2-card { display:flex; background:rgba(255,255,255,0.04); border-radius:8px; overflow:hidden; opacity:0; animation:aSlideUp 0.5s ease-out forwards; margin-bottom:6px; border:1px solid rgba(255,255,255,0.06); }
+.t2-border { width:3px; flex-shrink:0; border-radius:3px 0 0 3px; }
+.t2-text { flex:1; padding:8px 10px; min-width:0; }
+.t2-type { font-size:13px; font-weight:700; margin-bottom:2px; }
+.t2-detail { font-size:9px; color:rgba(255,255,255,0.55); line-height:1.4; }
+.t2-tags { flex-shrink:0; margin-left:6px; padding:8px 8px 8px 0; display:flex; flex-direction:column; justify-content:center; gap:3px; }
+.t2-tag { font-size:9px; padding:2px 6px; border-radius:4px; white-space:nowrap; opacity:0; animation:aPopIn 0.35s ease forwards; text-align:center; }
+
+.t2-c1 .t2-border { background:#FF6B6B; } .t2-c1 .t2-type { color:#FF6B6B; } .t2-c1 .t2-tag { background:rgba(255,107,107,0.15); color:#FF8E8E; border:1px solid rgba(255,107,107,0.25); }
+.t2-c2 .t2-border { background:#FFA940; } .t2-c2 .t2-type { color:#FFA940; } .t2-c2 .t2-tag { background:rgba(255,169,64,0.15); color:#FFCC73; border:1px solid rgba(255,169,64,0.25); }
+.t2-c3 .t2-border { background:#00D4AA; } .t2-c3 .t2-type { color:#00D4AA; } .t2-c3 .t2-tag { background:rgba(0,212,170,0.15); color:#4ECDC4; border:1px solid rgba(0,212,170,0.25); }
+.t2-c4 .t2-border { background:#7B68EE; } .t2-c4 .t2-type { color:#7B68EE; } .t2-c4 .t2-tag { background:rgba(123,104,238,0.15); color:#9B8AFF; border:1px solid rgba(123,104,238,0.25); }
+.t2-c5 .t2-border { background:#E040FB; } .t2-c5 .t2-type { color:#E040FB; } .t2-c5 .t2-tag { background:rgba(224,64,251,0.15); color:#F06AFF; border:1px solid rgba(224,64,251,0.25); }
+
+/* Table 3: Grouped bars */
+.t3-legend { display:flex; justify-content:center; gap:14px; margin-bottom:10px; }
+.t3-legend-item { display:flex; align-items:center; gap:4px; font-size:10px; color:rgba(255,255,255,0.7); }
+.t3-dot { width:8px; height:8px; border-radius:2px; }
+.t3-chart { display:flex; align-items:flex-end; justify-content:space-around; height:340px; border-bottom:1px solid rgba(255,255,255,0.1); }
+.t3-group { display:flex; flex-direction:column; align-items:center; flex:1; }
+.t3-bars { display:flex; align-items:flex-end; gap:3px; height:300px; }
+.t3-bar-col { display:flex; flex-direction:column; align-items:center; }
+.t3-val { font-size:8px; color:rgba(255,255,255,0.5); margin-bottom:3px; opacity:0; animation:aFadeIn 0.4s ease forwards; }
+.t3-bar { width:18px; border-radius:3px 3px 0 0; transform-origin:bottom; animation:barGrowUp 0.8s ease-out forwards; transform:scaleY(0); }
+.t3-label { height:28px; display:flex; align-items:center; font-size:9px; color:rgba(255,255,255,0.6); white-space:nowrap; margin-top:6px; }
+.t3-red { background:linear-gradient(180deg,#FF6B6B,#CC4444); }
+.t3-ora { background:linear-gradient(180deg,#FFA940,#CC7700); }
+.t3-grn { background:linear-gradient(180deg,#00D4AA,#009977); }
+@keyframes barGrowUp { from{transform:scaleY(0)} to{transform:scaleY(1)} }
+
+/* Table 4: Radar */
+.radar-wrap { width:320px; height:320px; margin:0 auto; }
+.radar-wrap svg { width:100%; height:100%; }
+.rgrid { fill:none; stroke:rgba(255,255,255,0.08); stroke-width:1; }
+.raxis { stroke:rgba(255,255,255,0.1); stroke-width:1; }
+.rdata { animation:radarReveal 1.2s ease-out forwards; transform-origin:center; }
+.rd1 { fill:rgba(255,107,107,0.15); stroke:#FF6B6B; stroke-width:2; opacity:0; animation:radarIn 1s ease-out 0.3s forwards; }
+.rd2 { fill:rgba(78,205,196,0.12); stroke:#4ECDC4; stroke-width:2; opacity:0; animation:radarIn 1s ease-out 0.8s forwards; }
+.rd3 { fill:rgba(123,104,238,0.10); stroke:#7B68EE; stroke-width:2; opacity:0; animation:radarIn 1s ease-out 1.3s forwards; }
+.rd4 { fill:rgba(69,183,209,0.10); stroke:#45B7D1; stroke-width:2; opacity:0; animation:radarIn 1s ease-out 1.8s forwards; }
+@keyframes radarIn { from{opacity:0;transform:scale(0.3)} to{opacity:1;transform:scale(1)} }
+.rlabel { font-size:10px; fill:rgba(255,255,255,0.7); font-family:'AlibabaPuHuiTi',sans-serif; font-weight:500; text-anchor:middle; dominant-baseline:middle; }
+.radar-legend { display:flex; justify-content:center; gap:14px; margin-top:8px; }
+.rl-item { display:flex; align-items:center; gap:4px; font-size:10px; color:rgba(255,255,255,0.7); }
+.rl-dot { width:8px; height:8px; border-radius:50%; }
+
+/* Table 5: Bubbles */
+.bub-chart { position:relative; width:380px; height:260px; margin:0 auto; }
+.bub-track { position:absolute; left:30px; right:10px; top:30px; bottom:30px; }
+.bub { position:absolute; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-direction:column; transform:translate(-50%,-50%); opacity:0; animation:bubPop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+.bub-name { font-size:9px; font-weight:700; color:#fff; text-align:center; }
+.bub-val { font-size:7px; color:rgba(255,255,255,0.7); }
+.bub-high { background:radial-gradient(circle at 35% 35%,rgba(78,205,196,0.35),rgba(78,205,196,0.12)); border:1.5px solid rgba(78,205,196,0.5); }
+.bub-mid { background:radial-gradient(circle at 35% 35%,rgba(255,179,71,0.35),rgba(255,179,71,0.12)); border:1.5px solid rgba(255,179,71,0.5); }
+.bub-low { background:radial-gradient(circle at 35% 35%,rgba(255,107,107,0.35),rgba(255,107,107,0.12)); border:1.5px solid rgba(255,107,107,0.5); }
+@keyframes bubPop { 0%{opacity:0;transform:translate(-50%,-50%) scale(0)} 60%{opacity:1;transform:translate(-50%,-50%) scale(1.1)} 100%{opacity:1;transform:translate(-50%,-50%) scale(1)} }
+.bub-axis { display:flex; justify-content:space-between; font-size:9px; color:rgba(255,255,255,0.4); position:absolute; bottom:-20px; left:30px; right:10px; }
+.bub-l { color:#FF6B6B; font-weight:500; }
+.bub-r { color:#4ECDC4; font-weight:500; }
+
+/* Table 6: Carousel */
+.carousel { position:relative; width:360px; height:280px; margin:0 auto; overflow:hidden; }
+.ins-card { position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; transform:translateX(60px); transition:all 0.5s cubic-bezier(0.25,0.46,0.45,0.94); pointer-events:none; }
+.ins-card.active { opacity:1; transform:translateX(0); }
+.ins-card.prev { opacity:0; transform:translateX(-60px); }
+.ic-inner { background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:20px; height:100%; display:flex; flex-direction:column; }
+.ic-num { font-size:42px; font-weight:900; opacity:0.1; position:absolute; top:10px; right:16px; }
+.ic-head { font-size:15px; font-weight:700; margin-bottom:8px; line-height:1.3; }
+.ic-body { font-size:12px; font-weight:400; color:rgba(255,255,255,0.65); line-height:1.6; flex:1; }
+.ic-body b { font-weight:700; }
+.ic1 .ic-inner { border-left:3px solid #FF6B6B; } .ic1 .ic-head { color:#FF6B6B; }
+.ic2 .ic-inner { border-left:3px solid #FFB347; } .ic2 .ic-head { color:#FFB347; }
+.ic3 .ic-inner { border-left:3px solid #4ECDC4; } .ic3 .ic-head { color:#4ECDC4; }
+.ic4 .ic-inner { border-left:3px solid #45B7D1; } .ic4 .ic-head { color:#45B7D1; }
+.ic5 .ic-inner { border-left:3px solid #96ADED; } .ic5 .ic-head { color:#96ADED; }
+.ic6 .ic-inner { border-left:3px solid #7B68EE; } .ic6 .ic-head { color:#7B68EE; }
+.dots { display:flex; justify-content:center; gap:6px; margin-top:10px; }
+.dot { width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,0.2); transition:all 0.3s; }
+.dot.active { background:#4ECDC4; width:16px; border-radius:3px; }
+
+/* Footer */
+.footer { position:absolute; bottom:14px; left:0; right:0; text-align:center; font-size:10px; color:rgba(255,255,255,0.3); font-weight:400; }
+
+/* Chart content wrapper */
+.chart-content {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+}
+</style>
+</head>
+<body>
+<div class="canvas" id="canvas">
+<div id="subtitle"></div>
+<div class="scene" id="s01" data-start="0.0" data-dur="2.8">
+  <div class="text-scene" style="color:#fff;">
+    <div style="font-size:36px;font-weight:900;letter-spacing:2px;margin-bottom:12px;">文娱人才大洗牌</div>
+    <div style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.6);">传统影视 vs 经纪MCN · AI岗位谁更猛？</div>
+    <div style="width:60px;height:3px;background:#4ECDC4;margin:20px auto 0;border-radius:2px;"></div>
+  </div>
+</div>
+<div class="scene" id="s02" data-start="2.8" data-dur="2.3">
+  <div class="text-scene" style="color:#FF4444;font-size:64px;font-weight:900;line-height:1.4;">反 常 识</div>
+</div>
+<div class="scene" id="s03" data-start="5.1" data-dur="4.0">
+<img class="el img-el" id="s03_e0" src="assets/logos/boss_zhipin.png" style="left:20px;top:100px;width:80px;height:80px;opacity:1;" data-anim="popIn" data-delay="0">
+<img class="el img-el" id="s03_e1" src="assets/word_images/img_02.png" style="left:30px;top:200px;width:390px;height:500px;opacity:1;" data-anim="slideUp" data-delay="0">
+<div class="el txt-el" id="s03_e2" style="left:300px;top:180px;font-size:24px;color:#00D4AA;font-weight:700;" data-anim="popIn" data-delay="0.8">专科 ✓</div>
+</div>
+<div class="scene" id="s04" data-start="9.1" data-dur="3.5">
+<img class="el img-el" id="s04_e0" src="assets/logos/hengxing_yinli.png" style="left:30px;top:80px;width:200px;height:50px;opacity:1;" data-anim="slideLeft" data-delay="0">
+<img class="el img-el" id="s04_e1" src="assets/logos/canglanjue.jpg" style="left:30px;top:180px;width:170px;height:240px;opacity:1;" data-anim="slideUp" data-delay="0.3">
+<img class="el img-el" id="s04_e2" src="assets/logos/yongyexinghe.jpg" style="left:230px;top:180px;width:170px;height:240px;opacity:1;" data-anim="slideUp" data-delay="0.5">
+</div>
+<div class="scene" id="s05a" data-start="12.6" data-dur="3.1">
+<img class="el img-el" id="s05a_e0" src="assets/word_images/img_02.png" style="left:25px;top:100px;width:400px;height:500px;opacity:1;" data-anim="slideUp" data-delay="0">
+<div class="el txt-el" id="s05a_e1" style="left:50px;top:650px;font-size:32px;color:#FF4444;font-weight:900;background:rgba(255,68,68,0.15);border:2px solid rgba(255,68,68,0.4);padding:8px 16px;border-radius:8px;" data-anim="flashIn" data-delay="0.6">985 / 211 / QS100</div>
+</div>
+<div class="scene" id="s05b" data-start="15.7" data-dur="1.9">
+  <div class="text-scene" style="color:#FF8E8E;font-size:28px;font-weight:700;line-height:1.4;">AI漫剧实习生
+也一样要求985</div>
+</div>
+<div class="scene" id="s06a" data-start="17.6" data-dur="2.6">
+<img class="el img-el" id="s06a_e0" src="assets/short_drama.png" style="left:0px;top:0px;width:450px;height:800px;opacity:0.3;" data-anim="fadeIn" data-delay="0">
+<div class="el txt-el" id="s06a_e1" style="left:100px;top:350px;font-size:48px;color:#FF6B6B;font-weight:900;" data-anim="flashIn" data-delay="0.3">短剧冲击</div>
+</div>
+<div class="scene" id="s06b" data-start="20.2" data-dur="2.4">
+  <div class="text-scene" style="color:#FF4444;font-size:42px;font-weight:900;line-height:1.4;">不转型
+就没饭吃</div>
+</div>
+<div class="scene" id="s07" data-start="22.6" data-dur="4.5">
+  <div class="chart-content">
+        <div class="chart-title">传统影视公司AI岗位占比</div>
+        <div class="chart-subtitle">AI相关岗位 / 全部招聘岗位</div>
+        <div class="bar-group" style="animation-delay:0.2s"><div class="bar-label">博纳影业</div><div class="bar-track"><div class="bar-fill c1" style="width:71.43%"></div></div><div class="bar-info"><span class="bar-pct">71.43%</span><span class="bar-frac">5/7</span></div></div>
+        <div class="bar-group" style="animation-delay:0.35s"><div class="bar-label">恒星引力</div><div class="bar-track"><div class="bar-fill c2" style="width:57.14%"></div></div><div class="bar-info"><span class="bar-pct">57.14%</span><span class="bar-frac">4/7</span></div></div>
+        <div class="bar-group" style="animation-delay:0.5s"><div class="bar-label">欢娱影视</div><div class="bar-track"><div class="bar-fill c3" style="width:37.50%"></div></div><div class="bar-info"><span class="bar-pct">37.50%</span><span class="bar-frac">3/8</span></div></div>
+        <div class="bar-group" style="animation-delay:0.65s"><div class="bar-label">正午阳光</div><div class="bar-track"><div class="bar-fill c4" style="width:28.57%"></div></div><div class="bar-info"><span class="bar-pct">28.57%</span><span class="bar-frac">4/14</span></div></div>
+        <div class="bar-group" style="animation-delay:0.8s"><div class="bar-label">耀客文化</div><div class="bar-track"><div class="bar-fill c5" style="width:21.05%"></div></div><div class="bar-info"><span class="bar-pct">21.05%</span><span class="bar-frac">4/19</span></div></div>
+        <div class="bar-group" style="animation-delay:0.95s"><div class="bar-label">柠萌影视</div><div class="bar-track"><div class="bar-fill c6" style="width:16.67%"></div></div><div class="bar-info"><span class="bar-pct">16.67%</span><span class="bar-frac">1/6</span></div></div>
+        <div class="bar-group" style="animation-delay:1.1s"><div class="bar-label">华策影视</div><div class="bar-track"><div class="bar-fill c7" style="width:12.82%"></div></div><div class="bar-info"><span class="bar-pct">12.82%</span><span class="bar-frac">5/39</span></div></div>
+        </div>
+</div>
+<div class="scene" id="s08a" data-start="27.1" data-dur="1.4">
+  <div class="text-scene" style="color:#4ECDC4;font-size:32px;font-weight:700;line-height:1.4;">娱乐资本论
+分析发现</div>
+</div>
+<div class="scene" id="s08b" data-start="28.5" data-dur="13.9">
+  <div class="chart-content">
+        <div class="chart-title">AI招聘动机分类</div>
+        <div class="chart-subtitle">影视公司引入AI人才的核心驱动因素</div>
+        <div class="t2-card t2-c1" style="animation-delay:0.3s"><div class="t2-border"></div><div class="t2-text"><div class="t2-type">降本型</div><div class="t2-detail">压力：制作周期长、成本高<br>重点：分镜/概念设计/AIGC物料</div></div><div class="t2-tags"><div class="t2-tag" style="animation-delay:1.0s">华策</div><div class="t2-tag" style="animation-delay:1.1s">正午阳光</div><div class="t2-tag" style="animation-delay:1.2s">启蒙影业</div></div></div>
+        <div class="t2-card t2-c2" style="animation-delay:0.6s"><div class="t2-border"></div><div class="t2-text"><div class="t2-type">增效型</div><div class="t2-detail">压力：需要寻找新内容增量<br>重点：AI漫剧/虚拟偶像</div></div><div class="t2-tags"><div class="t2-tag" style="animation-delay:1.3s">博纳</div><div class="t2-tag" style="animation-delay:1.4s">恒星引力</div><div class="t2-tag" style="animation-delay:1.5s">欢娱</div><div class="t2-tag" style="animation-delay:1.6s">耀客</div></div></div>
+        <div class="t2-card t2-c3" style="animation-delay:0.9s"><div class="t2-border"></div><div class="t2-text"><div class="t2-type">出海型</div><div class="t2-detail">压力：海外本地化成本高<br>重点：多语种物料/海外AIGC运营</div></div><div class="t2-tags"><div class="t2-tag" style="animation-delay:1.7s">柠萌</div></div></div>
+        <div class="t2-card t2-c4" style="animation-delay:1.2s"><div class="t2-border"></div><div class="t2-text"><div class="t2-type">经纪公司</div><div class="t2-detail">压力：真人艺人成本和风险高<br>重点：AI艺人/虚拟偶像/粉丝运营</div></div><div class="t2-tags"><div class="t2-tag" style="animation-delay:1.8s">乐华</div><div class="t2-tag" style="animation-delay:1.9s">哇唧唧哇</div></div></div>
+        <div class="t2-card t2-c5" style="animation-delay:1.5s"><div class="t2-border"></div><div class="t2-text"><div class="t2-type">MCN</div><div class="t2-detail">压力：人力密集、ROI压力强<br>重点：场控/客服/审核/运营</div></div><div class="t2-tags"><div class="t2-tag" style="animation-delay:2.0s">无忧</div><div class="t2-tag" style="animation-delay:2.1s">遥望</div></div></div>
+        </div>
+</div>
+<div class="scene" id="s11a" data-start="42.4" data-dur="2.8">
+<img class="el img-el" id="s11a_e0" src="assets/logos/wuyou.png" style="left:30px;top:200px;width:180px;height:46px;opacity:1;" data-anim="slideLeft" data-delay="0">
+<img class="el img-el" id="s11a_e1" src="assets/logos/yaowang.png" style="left:240px;top:200px;width:180px;height:20px;opacity:1;" data-anim="slideRight" data-delay="0.2">
+<div class="el txt-el" id="s11a_e2" style="left:60px;top:350px;font-size:22px;color:#96ADED;font-weight:500;" data-anim="cascadeIn" data-delay="0.5">场控 · 客服 · 审核</div>
+</div>
+<div class="scene" id="s11b" data-start="45.2" data-dur="1.8">
+  <div class="text-scene" style="color:#45B7D1;font-size:52px;font-weight:900;line-height:1.4;">AI 替 代</div>
+</div>
+<div class="scene" id="s12" data-start="47.0" data-dur="5.1">
+  <div class="chart-content">
+        <div class="chart-title">传统影视公司AI路径对比</div>
+        <div class="t3-legend"><div class="t3-legend-item"><div class="t3-dot" style="background:#FF6B6B"></div>降本型</div><div class="t3-legend-item"><div class="t3-dot" style="background:#FFA940"></div>增效型</div><div class="t3-legend-item"><div class="t3-dot" style="background:#00D4AA"></div>出海型</div></div>
+        <div class="t3-chart">
+          <div class="t3-group"><div class="t3-bars"><div class="t3-bar-col"><div class="t3-val">9</div><div class="t3-bar t3-red" style="height:135px;animation-delay:0.2s"></div></div><div class="t3-bar-col"><div class="t3-val">5</div><div class="t3-bar t3-ora" style="height:75px;animation-delay:0.35s"></div></div><div class="t3-bar-col"><div class="t3-val">2</div><div class="t3-bar t3-grn" style="height:30px;animation-delay:0.5s"></div></div></div><div class="t3-label">分镜/概念</div></div>
+          <div class="t3-group"><div class="t3-bars"><div class="t3-bar-col"><div class="t3-val">5</div><div class="t3-bar t3-red" style="height:75px;animation-delay:0.65s"></div></div><div class="t3-bar-col"><div class="t3-val">9</div><div class="t3-bar t3-ora" style="height:135px;animation-delay:0.8s"></div></div><div class="t3-bar-col"><div class="t3-val">2</div><div class="t3-bar t3-grn" style="height:30px;animation-delay:0.95s"></div></div></div><div class="t3-label">漫剧/偶像</div></div>
+          <div class="t3-group"><div class="t3-bars"><div class="t3-bar-col"><div class="t3-val">2</div><div class="t3-bar t3-red" style="height:30px;animation-delay:1.1s"></div></div><div class="t3-bar-col"><div class="t3-val">3</div><div class="t3-bar t3-ora" style="height:45px;animation-delay:1.25s"></div></div><div class="t3-bar-col"><div class="t3-val">9</div><div class="t3-bar t3-grn" style="height:135px;animation-delay:1.4s"></div></div></div><div class="t3-label">海外运营</div></div>
+          <div class="t3-group"><div class="t3-bars"><div class="t3-bar-col"><div class="t3-val">3</div><div class="t3-bar t3-red" style="height:45px;animation-delay:1.55s"></div></div><div class="t3-bar-col"><div class="t3-val">8</div><div class="t3-bar t3-ora" style="height:120px;animation-delay:1.7s"></div></div><div class="t3-bar-col"><div class="t3-val">2</div><div class="t3-bar t3-grn" style="height:30px;animation-delay:1.85s"></div></div></div><div class="t3-label">技术研发</div></div>
+          <div class="t3-group"><div class="t3-bars"><div class="t3-bar-col"><div class="t3-val">8</div><div class="t3-bar t3-red" style="height:120px;animation-delay:2.0s"></div></div><div class="t3-bar-col"><div class="t3-val">5</div><div class="t3-bar t3-ora" style="height:75px;animation-delay:2.15s"></div></div><div class="t3-bar-col"><div class="t3-val">4</div><div class="t3-bar t3-grn" style="height:60px;animation-delay:2.3s"></div></div></div><div class="t3-label">创作工具</div></div>
+        </div>
+        </div>
+</div>
+<div class="scene" id="s13" data-start="52.1" data-dur="3.7">
+<img class="el img-el" id="s13_e0" src="assets/logos/huace.png" style="left:30px;top:80px;width:120px;height:120px;opacity:1;" data-anim="slideLeft" data-delay="0">
+<img class="el img-el" id="s13_e1" src="assets/word_images/img_03.png" style="left:30px;top:240px;width:390px;height:480px;opacity:1;" data-anim="slideUp" data-delay="0.3">
+</div>
+<div class="scene" id="s14a" data-start="55.8" data-dur="3.7">
+<img class="el img-el" id="s14a_e0" src="assets/logos/zhengwu_yangguang.png" style="left:130px;top:150px;width:190px;height:190px;opacity:1;" data-anim="popIn" data-delay="0">
+<div class="el txt-el" id="s14a_e1" style="left:155px;top:400px;font-size:40px;color:#FFA940;font-weight:900;" data-anim="flashIn" data-delay="0.5">试 水</div>
+</div>
+<div class="scene" id="s14b" data-start="59.5" data-dur="9.1">
+  <div class="chart-content">
+        <div class="chart-title">试水还是All in？</div>
+        <div class="chart-subtitle">影视公司AI投入程度 vs 岗位数量</div>
+        <div class="bub-chart"><div class="bub-track">
+          <div class="bub bub-high" style="left:85%;top:25%;width:50px;height:50px;animation-delay:0.3s"><span class="bub-name">博纳</span><span class="bub-val">5岗</span></div>
+          <div class="bub bub-high" style="left:70%;top:55%;width:46px;height:46px;animation-delay:0.5s"><span class="bub-name">恒星引力</span><span class="bub-val">4岗</span></div>
+          <div class="bub bub-mid" style="left:50%;top:35%;width:42px;height:42px;animation-delay:0.7s"><span class="bub-name">欢娱</span><span class="bub-val">3岗</span></div>
+          <div class="bub bub-mid" style="left:45%;top:65%;width:46px;height:46px;animation-delay:0.9s"><span class="bub-name">正午阳光</span><span class="bub-val">4岗</span></div>
+          <div class="bub bub-mid" style="left:35%;top:40%;width:46px;height:46px;animation-delay:1.1s"><span class="bub-name">耀客</span><span class="bub-val">4岗</span></div>
+          <div class="bub bub-low" style="left:20%;top:60%;width:34px;height:34px;animation-delay:1.3s"><span class="bub-name">柠萌</span><span class="bub-val">1岗</span></div>
+          <div class="bub bub-low" style="left:25%;top:28%;width:56px;height:56px;animation-delay:1.5s"><span class="bub-name">华策</span><span class="bub-val">5岗</span></div>
+        </div>
+        <div class="bub-axis"><span class="bub-l">← 试水</span><span class="bub-r">All in →</span></div></div>
+        </div>
+</div>
+<div class="scene" id="s16a" data-start="68.6" data-dur="1.8">
+  <div class="text-scene" style="color:#4ECDC4;font-size:36px;font-weight:700;line-height:1.4;">影视自动化
+生产线</div>
+</div>
+<div class="scene" id="s16b" data-start="70.4" data-dur="3.6">
+<img class="el img-el" id="s16b_e0" src="assets/logos/yaoke.png" style="left:130px;top:100px;width:190px;height:140px;opacity:1;" data-anim="slideLeft" data-delay="0">
+<div class="el txt-el" id="s16b_e1" style="left:100px;top:320px;font-size:32px;color:#FFA940;font-weight:700;" data-anim="flashIn" data-delay="0.4">AI仿真人剧</div>
+<div class="el txt-el" id="s16b_e2" style="left:120px;top:380px;font-size:20px;color:rgba(255,255,255,0.7);font-weight:400;" data-anim="slideUp" data-delay="0.7">导演 · 抽卡师</div>
+</div>
+<div class="scene" id="s17a" data-start="74.0" data-dur="3.2">
+<img class="el img-el" id="s17a_e0" src="assets/word_images/img_00.png" style="left:25px;top:100px;width:400px;height:550px;opacity:1;" data-anim="slideUp" data-delay="0">
+</div>
+<div class="scene" id="s17b" data-start="77.2" data-dur="1.4">
+  <div class="text-scene" style="color:#FFD93D;font-size:36px;font-weight:900;line-height:1.4;">兵马未动
+粮草先行</div>
+</div>
+<div class="scene" id="s18" data-start="78.6" data-dur="5.3">
+<img class="el img-el" id="s18_e0" src="assets/logos/linmon.jpeg" style="left:155px;top:100px;width:140px;height:140px;opacity:1;" data-anim="popIn" data-delay="0">
+<img class="el img-el" id="s18_e1" src="assets/word_images/img_12.png" style="left:30px;top:280px;width:390px;height:440px;opacity:1;" data-anim="slideUp" data-delay="0.4">
+<div class="el txt-el" id="s18_e2" style="left:60px;top:250px;font-size:16px;color:#4ECDC4;font-weight:500;" data-anim="cascadeIn" data-delay="0.6">YouTube · Meta · TikTok</div>
+</div>
+<div class="scene" id="s19a" data-start="83.9" data-dur="2.0">
+  <div class="text-scene" style="color:#7B68EE;font-size:40px;font-weight:900;line-height:1.4;">经纪 & MCN</div>
+</div>
+<div class="scene" id="s19b" data-start="85.9" data-dur="10.5">
+  <div class="chart-content">
+        <div class="chart-title">经纪/MCN公司AI应用方向</div>
+        <div class="chart-subtitle">虚拟偶像 · 数字人 · AIGC内容</div>
+        <div class="radar-wrap"><svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg"><g transform="translate(160,160)">
+          <polygon class="rgrid" points="0,-30 28.5,-9.3 17.6,24.3 -17.6,24.3 -28.5,-9.3"/>
+          <polygon class="rgrid" points="0,-60 57,-18.5 35.3,48.5 -35.3,48.5 -57,-18.5"/>
+          <polygon class="rgrid" points="0,-90 85.5,-27.8 52.9,72.8 -52.9,72.8 -85.5,-27.8"/>
+          <polygon class="rgrid" points="0,-120 114,-37.1 70.5,97.1 -70.5,97.1 -114,-37.1"/>
+          <polygon class="rgrid" points="0,-150 142.5,-46.4 88.2,121.4 -88.2,121.4 -142.5,-46.4"/>
+          <line class="raxis" x1="0" y1="0" x2="0" y2="-150"/><line class="raxis" x1="0" y1="0" x2="142.5" y2="-46.4"/><line class="raxis" x1="0" y1="0" x2="88.2" y2="121.4"/><line class="raxis" x1="0" y1="0" x2="-88.2" y2="121.4"/><line class="raxis" x1="0" y1="0" x2="-142.5" y2="-46.4"/>
+          <polygon class="rdata rd1" points="0,-135 85.5,-27.8 44.1,60.7 -61.7,84.9 -61.9,-20.1"/>
+          <polygon class="rdata rd2" points="0,-60 128.3,-41.8 79.3,109.1 -44.1,60.7 -92.9,-30.2" style="animation-delay:0.5s"/>
+          <polygon class="rdata rd3" points="0,-97.5 113.9,-37.1 61.7,84.9 -88.2,121.4 -49.9,-16.2" style="animation-delay:1.0s"/>
+          <polygon class="rdata rd4" points="0,-90 99.8,-32.5 70.5,97.1 -70.5,97.1 -78.4,-25.5" style="animation-delay:1.5s"/>
+          <text class="rlabel" x="0" y="-165">AI内容生产</text><text class="rlabel" x="160" y="-50">虚拟偶像</text><text class="rlabel" x="100" y="142">粉丝运营</text><text class="rlabel" x="-100" y="142">直播替代</text><text class="rlabel" x="-160" y="-50">AI短剧</text>
+        </g></svg></div>
+        <div class="radar-legend"><div class="rl-item"><div class="rl-dot" style="background:#FF6B6B"></div>乐华</div><div class="rl-item"><div class="rl-dot" style="background:#4ECDC4"></div>哇唧唧哇</div><div class="rl-item"><div class="rl-dot" style="background:#7B68EE"></div>无忧</div><div class="rl-item"><div class="rl-dot" style="background:#45B7D1"></div>遥望</div></div>
+        </div>
+</div>
+<div class="scene" id="s21a1" data-start="96.4" data-dur="2.8">
+<img class="el img-el" id="s21a1_e0" src="assets/logos/yuehua.png" style="left:130px;top:100px;width:190px;height:160px;opacity:1;" data-anim="slideLeft" data-delay="0">
+</div>
+<div class="scene" id="s21a2" data-start="99.2" data-dur="2.0">
+  <div class="text-scene" style="color:#FF4444;font-size:36px;font-weight:900;line-height:1.4;">纯AI生成
+无真人演员</div>
+</div>
+<div class="scene" id="s21b" data-start="101.2" data-dur="2.4">
+<img class="el img-el" id="s21b_e0" src="assets/logos/asoul.png" style="left:130px;top:200px;width:190px;height:190px;opacity:1;" data-anim="zoomIn" data-delay="0">
+<div class="el txt-el" id="s21b_e1" style="left:145px;top:420px;font-size:32px;color:#96ADED;font-weight:700;" data-anim="fadeIn" data-delay="0.3">A-SOUL</div>
+</div>
+<div class="scene" id="s22a" data-start="103.6" data-dur="3.5">
+<img class="el img-el" id="s22a_e0" src="assets/logos/asoul.png" style="left:60px;top:150px;width:150px;height:150px;opacity:1;" data-anim="fadeIn" data-delay="0">
+<img class="el img-el" id="s22a_e1" src="assets/logos/heydream.jpg" style="left:240px;top:150px;width:150px;height:266px;opacity:1;" data-anim="fadeIn" data-delay="0.3">
+<div class="el txt-el" id="s22a_e2" style="left:140px;top:470px;font-size:28px;color:#4ECDC4;font-weight:700;" data-anim="flashIn" data-delay="0.5">降本增效</div>
+</div>
+<div class="scene" id="s22b" data-start="107.1" data-dur="4.0">
+<img class="el img-el" id="s22b_e0" src="assets/logos/heydream.jpg" style="left:100px;top:100px;width:250px;height:443px;opacity:1;" data-anim="zoomIn" data-delay="0">
+<div class="el txt-el" id="s22b_e1" style="left:90px;top:580px;font-size:24px;color:#FFA940;font-weight:700;" data-anim="slideUp" data-delay="0.4">真人脸 + AI制作</div>
+</div>
+<div class="scene" id="s22c" data-start="111.1" data-dur="1.8">
+  <div class="text-scene" style="color:#7B68EE;font-size:36px;font-weight:900;line-height:1.4;">元宇宙
+一路狂奔</div>
+</div>
+<div class="scene" id="s23a1" data-start="112.9" data-dur="2.4">
+  <div class="text-scene" style="color:#FF6B6B;font-size:42px;font-weight:900;line-height:1.4;">共同痛点</div>
+</div>
+<div class="scene" id="s23b" data-start="115.3" data-dur="4.7">
+<div class="el txt-el" id="s23b_e0" style="left:120px;top:220px;font-size:28px;color:#FF6B6B;font-weight:700;" data-anim="flashIn" data-delay="0">成本高 ↑</div>
+<div class="el txt-el" id="s23b_e1" style="left:120px;top:290px;font-size:28px;color:#FF6B6B;font-weight:700;" data-anim="flashIn" data-delay="0.5">风险高 ⚠</div>
+<div class="el txt-el" id="s23b_e2" style="left:120px;top:360px;font-size:28px;color:#FFA940;font-weight:700;" data-anim="flashIn" data-delay="1.0">供给压力大</div>
+<div class="el txt-el" id="s23b_e3" style="left:160px;top:460px;font-size:48px;color:#4ECDC4;font-weight:900;" data-anim="popIn" data-delay="1.8">→ AI</div>
+</div>
+<div class="scene" id="s24a" data-start="120.0" data-dur="2.8">
+<img class="el img-el" id="s24a_e0" src="assets/logos/wuyou.png" style="left:100px;top:200px;width:250px;height:65px;opacity:1;" data-anim="slideLeft" data-delay="0">
+<div class="el txt-el" id="s24a_e1" style="left:140px;top:320px;font-size:28px;color:#4ECDC4;font-weight:700;" data-anim="slideUp" data-delay="0.3">AI研究员</div>
+</div>
+<div class="scene" id="s24b" data-start="122.8" data-dur="3.8">
+<div class="el txt-el" id="s24b_e0" style="left:60px;top:200px;font-size:24px;color:#fff;font-weight:700;background:rgba(78,205,196,0.2);border:1px solid rgba(78,205,196,0.4);padding:8px 20px;border-radius:20px;" data-anim="popIn" data-delay="0">场控</div>
+<div class="el txt-el" id="s24b_e1" style="left:240px;top:200px;font-size:24px;color:#fff;font-weight:700;background:rgba(78,205,196,0.2);border:1px solid rgba(78,205,196,0.4);padding:8px 20px;border-radius:20px;" data-anim="popIn" data-delay="0.3">客服</div>
+<div class="el txt-el" id="s24b_e2" style="left:60px;top:300px;font-size:24px;color:#fff;font-weight:700;background:rgba(78,205,196,0.2);border:1px solid rgba(78,205,196,0.4);padding:8px 20px;border-radius:20px;" data-anim="popIn" data-delay="0.6">审核</div>
+<div class="el txt-el" id="s24b_e3" style="left:240px;top:300px;font-size:24px;color:#fff;font-weight:700;background:rgba(78,205,196,0.2);border:1px solid rgba(78,205,196,0.4);padding:8px 20px;border-radius:20px;" data-anim="popIn" data-delay="0.9">运营</div>
+<div class="el txt-el" id="s24b_e4" style="left:120px;top:400px;font-size:24px;color:#fff;font-weight:700;background:rgba(255,107,107,0.2);border:1px solid rgba(255,107,107,0.4);padding:8px 20px;border-radius:20px;" data-anim="popIn" data-delay="1.2">主播孵化</div>
+</div>
+<div class="scene" id="s24c" data-start="126.6" data-dur="2.0">
+  <div class="text-scene" style="color:#4ECDC4;font-size:32px;font-weight:700;line-height:1.4;">AI替代方案
+→ 落地</div>
+</div>
+<div class="scene" id="s25" data-start="128.6" data-dur="3.4">
+  <div class="text-scene" style="color:#FFD93D;font-size:36px;font-weight:900;line-height:1.4;">多少真人岗位
+被释放？</div>
+</div>
+<div class="scene" id="s26" data-start="132.0" data-dur="6.4">
+  <div class="chart-content">
+        <div class="chart-title">核心洞察</div>
+        <div class="carousel" id="carousel">
+          <div class="ins-card ic1 active" data-i="0"><div class="ic-inner"><div class="ic-num">01</div><div class="ic-head">中小公司AI浓度反超巨头</div><div class="ic-body">博纳AI岗位占比<b>71.43%</b>，远超华策的12.82%</div></div></div>
+          <div class="ins-card ic2" data-i="1"><div class="ic-inner"><div class="ic-num">02</div><div class="ic-head">降本增效是第一驱动力</div><div class="ic-body">超过<b>60%</b>公司将降本增效列为AI招聘首要动机</div></div></div>
+          <div class="ins-card ic3" data-i="2"><div class="ic-inner"><div class="ic-num">03</div><div class="ic-head">三条路径分化明显</div><div class="ic-body">降本聚焦分镜，增效深耕漫剧，出海重仓运营</div></div></div>
+          <div class="ins-card ic4" data-i="3"><div class="ic-inner"><div class="ic-num">04</div><div class="ic-head">经纪/MCN全面拥抱数字人</div><div class="ic-body">MCN在数字人维度评分最高，虚拟偶像成核心壁垒</div></div></div>
+          <div class="ins-card ic5" data-i="4"><div class="ic-inner"><div class="ic-num">05</div><div class="ic-head">试水与All in并存</div><div class="ic-body">博纳All in技术，华策虽5岗但占比仅12.82%</div></div></div>
+          <div class="ins-card ic6" data-i="5"><div class="ic-inner"><div class="ic-num">06</div><div class="ic-head">AI岗位≠AI产出</div><div class="ic-body">决定转型成败的是组织适配度：流程重构+数据基建</div></div></div>
+        </div>
+        <div class="dots" id="dots"><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+        </div>
+</div>
+<div class="scene" id="s27a" data-start="138.4" data-dur="2.2">
+  <div class="text-scene" style="color:#FF4444;font-size:40px;font-weight:900;line-height:1.4;">你被AI清退？</div>
+</div>
+<div class="scene" id="s27b" data-start="140.6" data-dur="3.0">
+<div class="el txt-el" id="s27b_e0" style="left:75px;top:280px;font-size:32px;color:#4ECDC4;font-weight:700;" data-anim="fadeIn" data-delay="0">你是哪一种人？</div>
+<div class="el txt-el" id="s27b_e1" style="left:110px;top:380px;font-size:24px;color:rgba(255,255,255,0.7);font-weight:400;" data-anim="fadeIn" data-delay="0.5">评论区聊聊！</div>
+<div class="el txt-el" id="s27b_e2" style="left:70px;top:680px;font-size:16px;color:rgba(255,255,255,0.4);font-weight:400;" data-anim="fadeIn" data-delay="0.8">娱乐资本论 · 人才风向标</div>
+</div>
+<audio id="audio" src="assets/audio.wav" preload="auto"></audio>
+</div>
+
+<script>
+const SRT = [{"s": 0.0, "e": 1.541, "t": "\u4f20\u7edf\u5f71\u89c6\u516c\u53f8\u505a\u6f2b\u5267"}, {"s": 1.541, "e": 2.773, "t": "\u8981\u6c42\u5b66\u5386985"}, {"s": 2.773, "e": 3.698, "t": "\u8fd9\u91cc\u9762\u6bcf\u4e2a\u5b57"}, {"s": 3.698, "e": 5.084, "t": "\u90fd\u900f\u7740\u4e00\u79cd\u53cd\u5e38\u8bc6"}, {"s": 5.084, "e": 6.471, "t": "\u5728\u7edd\u5927\u591a\u6570\u6f2b\u5267\u516c\u53f8"}, {"s": 6.471, "e": 7.704, "t": "\u628a\u62db\u8058\u9700\u6c42\u653e\u5bbd\u5230"}, {"s": 7.704, "e": 9.09, "t": "\u4e13\u79d1\u5b66\u5386\u7684\u60c5\u51b5\u4e0b"}, {"s": 9.09, "e": 10.939, "t": "\u4ee5\u82cd\u5170\u8bc0\u3001\u6c38\u591c\u661f\u6cb3\u95fb\u540d\u7684"}, {"s": 10.939, "e": 12.634, "t": "\u6052\u661f\u5f15\u529b\uff0c\u5bf9AI\u5c97\u8981\u6c42"}, {"s": 12.634, "e": 14.175, "t": "985\u3001211\u5b66\u5386"}, {"s": 14.175, "e": 15.715, "t": "QS100\u672c\u79d1\u4ee5\u4e0a"}, {"s": 15.715, "e": 17.564, "t": "\u8fdeAI\u6f2b\u5267\u5b9e\u4e60\u751f\u4e5f\u4e00\u6837"}, {"s": 17.564, "e": 19.047, "t": "\u53d7\u5230\u77ed\u5267\u7b49\u6fc0\u70c8\u51b2\u51fb"}, {"s": 19.047, "e": 20.233, "t": "\u4f20\u7edf\u5f71\u89c6\u516c\u53f8\u4ee5\u53ca"}, {"s": 20.233, "e": 21.419, "t": "\u7ecf\u7eaa\u6216MCN\u673a\u6784"}, {"s": 21.419, "e": 22.605, "t": "\u4e0d\u8f6c\u578b\u5c31\u6ca1\u996d\u5403"}, {"s": 22.605, "e": 23.94, "t": "\u4ece13\u5bb6\u516c\u53f8\u653e\u51fa\u7684"}, {"s": 23.94, "e": 25.422, "t": "AI\u76f8\u5173\u62db\u8058\u804c\u4f4d\u4e2d"}, {"s": 25.422, "e": 27.053, "t": "\u6211\u4eec\u80fd\u770b\u51fa\u4ec0\u4e48\u7aef\u502a\u5462\uff1f"}, {"s": 27.053, "e": 28.536, "t": "\u5a31\u4e50\u8d44\u672c\u8bba\u5206\u6790\u53d1\u73b0"}, {"s": 28.536, "e": 30.463, "t": "\u534e\u7b56\u3001\u6b63\u5348\u9633\u5149\u3001\u542f\u8499\u5f71\u4e1a\u7b49"}, {"s": 30.463, "e": 31.649, "t": "\u5c5e\u4e8e\u201c\u964d\u672c\u578b\u201d"}, {"s": 31.649, "e": 33.28, "t": "\u535a\u7eb3\u3001\u6052\u661f\u5f15\u529b\u3001\u6b22\u5a31\u3001"}, {"s": 33.28, "e": 34.911, "t": "\u8000\u5ba2\u7b49\u5c5e\u4e8e\u201c\u589e\u6548\u578b\u201d"}, {"s": 34.911, "e": 36.542, "t": "\u67e0\u840c\u7b49\u5c5e\u4e8e\u201c\u51fa\u6d77\u578b\u201d"}, {"s": 36.542, "e": 37.753, "t": "\u4e50\u534e\u3001\u54c7\u5527\u5527\u54c7\u7b49"}, {"s": 37.753, "e": 39.419, "t": "\u7ecf\u7eaa\u516c\u53f8\u8f6c\u5411AI\u827a\u4eba\u3001"}, {"s": 39.419, "e": 41.236, "t": "\u865a\u62df\u5076\u50cf\u53caAI\u7c89\u4e1d\u8fd0\u8425\uff1b"}, {"s": 41.236, "e": 42.447, "t": "MCN\u3001\u76f4\u64ad\u7535\u5546"}, {"s": 42.447, "e": 43.507, "t": "\u5982\u65e0\u5fe7\u548c\u9065\u671b"}, {"s": 43.507, "e": 45.173, "t": "\u5219\u5728\u573a\u63a7\u3001\u5ba2\u670d\u3001\u5ba1\u6838\u3001"}, {"s": 45.173, "e": 46.99, "t": "\u8fd0\u8425\u7b49\u73af\u8282\u5f15\u5165AI\u66ff\u4ee3"}, {"s": 46.99, "e": 48.655, "t": "\u5148\u770b\u534e\u7b56\uff0c\u5b83\u4eec\u5927\u6982\u60f3\u628a"}, {"s": 48.655, "e": 50.321, "t": "\u540c\u4e8b\u70bc\u5316\u4e3aSkill"}, {"s": 50.321, "e": 52.138, "t": "\u8981\u6c42\u5458\u5de5\u6c89\u6dc0\u63d0\u793a\u8bcd\u6a21\u677f"}, {"s": 52.138, "e": 53.955, "t": "\u5de5\u4f5c\u6d41\u8d44\u4ea7\uff0c\u5efa\u7acb\u7d20\u6750\u5e93"}, {"s": 53.955, "e": 55.772, "t": "\u542f\u8499\u5f71\u4e1a\u7684AI\u5bfc\u6f14\u7b49\u5c97\u4f4d"}, {"s": 55.772, "e": 56.983, "t": "\u4ee5\u521b\u4f5c\u6267\u884c\u4e3a\u4e3b"}, {"s": 56.983, "e": 58.189, "t": "\u6b63\u5348\u9633\u5149\u8fd8\u5728\u8bd5\u6c34"}, {"s": 58.189, "e": 59.546, "t": "\u8c03\u7814AI\u6280\u672f\u52a8\u6001"}, {"s": 59.546, "e": 61.354, "t": "\u63d0\u5230\u7684\u5de5\u5177\u8fd8\u662f\u4e24\u5e74\u524d\u7684"}, {"s": 61.354, "e": 62.108, "t": "\u4e0e\u6b64\u540c\u65f6"}, {"s": 62.108, "e": 63.465, "t": "\u535a\u7eb3\u5df2\u7ecf\u7528AI\u505a\u5b8c"}, {"s": 63.465, "e": 65.123, "t": "\u300a\u4e09\u661f\u5806\u300b\u52a8\u753b\u5927\u7535\u5f71"}, {"s": 65.123, "e": 66.932, "t": "\u4ed6\u4eec\u62db\u7684\u5168\u662f\u786c\u6838\u6280\u672f\u5c97"}, {"s": 66.932, "e": 68.59, "t": "\u4ea7\u54c1\u7ecf\u7406\u3001\u540e\u7aef\u5f00\u53d1\u7b49"}, {"s": 68.59, "e": 70.399, "t": "\u642d\u5efa\u8d77\u5f71\u89c6\u81ea\u52a8\u5316\u751f\u4ea7\u7ebf"}, {"s": 70.399, "e": 72.358, "t": "\u8000\u5ba2\u5219\u505a\u8d77\u4e86AI\u4eff\u771f\u4eba\u5267"}, {"s": 72.358, "e": 74.016, "t": "\u62db\u8058\u5bfc\u6f14\u3001\u62bd\u5361\u5e08\u5c97\u4f4d"}, {"s": 74.016, "e": 75.674, "t": "\u5b83\u548c\u9065\u671b\u79d1\u6280\u90fd\u9700\u8981\u4e13\u95e8"}, {"s": 75.674, "e": 77.182, "t": "\u7ed9AI\u4e1a\u52a1\u914d\u5907HR"}, {"s": 77.182, "e": 78.613, "t": "\u67e0\u840c\u5f71\u89c6AI\u5c97\u91cd\u5fc3"}, {"s": 78.613, "e": 80.045, "t": "\u5728\u6d77\u5916\u6cb9\u7ba1\u3001\u6d0b\u6296\u7684"}, {"s": 80.045, "e": 81.954, "t": "AIGC\u5185\u5bb9\u5236\u4f5c\u548c\u8fd0\u8425"}, {"s": 81.954, "e": 83.863, "t": "\u6d77\u5916\u53d1\u884c\u5c97\u6708\u85aa1-2\u4e07"}, {"s": 83.863, "e": 85.931, "t": "\u518d\u6765\u770b\u4e0b\u7ecf\u7eaa\u548cMCN\u516c\u53f8"}, {"s": 85.931, "e": 87.68, "t": "\u54c7\u5527\u5527\u54c7\u628aAIGC\u5199\u8fdb"}, {"s": 87.68, "e": 89.271, "t": "\u7ba1\u57f9\u751f\u8981\u6c42\uff0c\u56e0\u4e3a\u4ed6\u4eec"}, {"s": 89.271, "e": 91.021, "t": "\u8ba9\u827a\u4eba\u8ddf\u81ea\u5df1\u7684AI\u5f62\u8c61"}, {"s": 91.021, "e": 92.612, "t": "\u4e00\u8d77\u8d70\u7ea2\u6bef\u3001\u51fa\u5355\u66f2"}, {"s": 92.612, "e": 94.361, "t": "\u662fIP\u5f00\u53d1\u7684\u91cd\u8981\u4e00\u73af"}, {"s": 94.361, "e": 95.493, "t": "\u4e50\u534e\u5a31\u4e50\u5219\u62db5\u540d"}, {"s": 95.493, "e": 97.189, "t": "AI\u77ed\u89c6\u9891\u7f16\u5bfc\uff0c\u76f4\u63a5\u8981\u6c42"}, {"s": 97.189, "e": 99.169, "t": "\u201c\u7eafAI\u751f\u6210\u3001\u65e0\u771f\u4eba\u6f14\u5458\u201d"}, {"s": 99.169, "e": 100.583, "t": "\u4e50\u534e\u4e94\u5e74\u524d\u5c31\u5df2\u7ecf\u5f15\u5165"}, {"s": 100.583, "e": 101.572, "t": "\u539f\u751f\u865a\u62df\u5076\u50cf"}, {"s": 101.572, "e": 103.693, "t": "\u63a8\u51fa\u4e86\u5927\u540d\u9f0e\u9f0e\u7684A-SOUL"}, {"s": 103.693, "e": 105.107, "t": "AI\u5927\u5e45\u5ea6\u964d\u672c\u589e\u6548"}, {"s": 105.107, "e": 107.086, "t": "3\u6708\u4e0a\u65b0\u7684HeyDream"}, {"s": 107.086, "e": 109.066, "t": "\u91c7\u7528\u771f\u4eba\u8138+AI\u5236\u4f5c\u7684\u6a21\u5f0f"}, {"s": 109.066, "e": 110.904, "t": "\u53ef\u4ee5\u8bf4\u5728\u5143\u5b87\u5b99\u91cc\u4e00\u8def\u72c2\u5954"}, {"s": 110.904, "e": 112.12, "t": "\u827a\u4eba\u7ecf\u7eaa\u548cMCN"}, {"s": 112.12, "e": 113.337, "t": "\u62e5\u6709\u5171\u540c\u7684\u75db\u70b9"}, {"s": 113.337, "e": 115.01, "t": "\u771f\u4eba\u827a\u4eba\u6210\u672c\u548c\u98ce\u9669\u9ad8"}, {"s": 115.01, "e": 116.531, "t": "\u7c89\u4e1d\u5185\u5bb9\u4f9b\u7ed9\u538b\u529b\u5927"}, {"s": 116.531, "e": 118.356, "t": "\u56e0\u6b64\u4e0d\u7ea6\u800c\u540c\u6c42\u52a9\u4e8eAI"}, {"s": 118.356, "e": 119.876, "t": "\u76f4\u64ad\u754c\u5de8\u5934\u65e0\u5fe7\u4f20\u5a92"}, {"s": 119.876, "e": 121.245, "t": "\u62dbAI\u7814\u7a76\u5458\u5c97\u4f4d"}, {"s": 121.245, "e": 122.614, "t": "\u8981\u6c42\u5bf9\u573a\u63a7\u3001\u5ba2\u670d\u3001"}, {"s": 122.614, "e": 123.83, "t": "\u5185\u5bb9\u5ba1\u6838\u3001\u8fd0\u8425\u3001"}, {"s": 123.83, "e": 125.047, "t": "\u4e3b\u64ad\u5b75\u5316\u7b49\u73af\u8282"}, {"s": 125.047, "e": 127.024, "t": "\u8f93\u51fa\u53ef\u843d\u5730\u7684AI\u66ff\u4ee3\u65b9\u6848"}, {"s": 127.024, "e": 128.545, "t": "\u4e0d\u77e5\u8fd9\u4e00\u66ff\u4ee3\uff0c\u53c8\u5f97\u6709"}, {"s": 128.545, "e": 130.369, "t": "\u591a\u5c11\u771f\u4eba\u5c97\u4f4d\u88ab\u91ca\u653e\u51fa\u6765\uff1f"}, {"s": 130.369, "e": 131.704, "t": "\u6b63\u5982\u5c0f\u5a31\u524d\u9635\u5b50\u5206\u6790"}, {"s": 131.704, "e": 133.484, "t": "\u7231\u4f18\u817e\u548cB\u7ad9AI\u5c97\u4f4d\u65f6\u5019"}, {"s": 133.484, "e": 134.077, "t": "\u63d0\u5230\u7684"}, {"s": 134.077, "e": 135.115, "t": "\u6587\u5a31\u884c\u4e1a\u8981\u4e48\u662f"}, {"s": 135.115, "e": 136.45, "t": "\u4f60\u8ba9AI\u66ff\u4f60\u5e72\u6d3b"}, {"s": 136.45, "e": 138.378, "t": "\u8981\u4e48\u4f60\u88abAI\u4ece\u5de5\u4f4d\u4e0a\u6e05\u9000"}, {"s": 138.378, "e": 139.564, "t": "\u90a3\u4e48\u5c4f\u5e55\u524d\u7684\u4f60"}, {"s": 139.564, "e": 140.602, "t": "\u53c8\u662f\u54ea\u4e00\u79cd\u4eba\uff1f"}, {"s": 140.602, "e": 142.53, "t": "\u4f60\u5bf9\u4e0a\u8ff0\u54ea\u4e2a\u5c97\u4f4d\u6700\u611f\u5174\u8da3"}, {"s": 142.53, "e": 143.568, "t": "\u8bc4\u8bba\u533a\u804a\u804a\u5427\uff01"}];
+const SCENES = [{"id": "s01", "start": 0.0, "dur": 2.8, "type": "title"}, {"id": "s02", "start": 2.8, "dur": 2.3, "type": "text"}, {"id": "s03", "start": 5.1, "dur": 4.0, "type": "compound"}, {"id": "s04", "start": 9.1, "dur": 3.5, "type": "compound"}, {"id": "s05a", "start": 12.6, "dur": 3.1, "type": "compound"}, {"id": "s05b", "start": 15.7, "dur": 1.9, "type": "text"}, {"id": "s06a", "start": 17.6, "dur": 2.6, "type": "compound"}, {"id": "s06b", "start": 20.2, "dur": 2.4, "type": "text"}, {"id": "s07", "start": 22.6, "dur": 4.5, "type": "chart"}, {"id": "s08a", "start": 27.1, "dur": 1.4, "type": "text"}, {"id": "s08b", "start": 28.5, "dur": 13.9, "type": "chart"}, {"id": "s11a", "start": 42.4, "dur": 2.8, "type": "compound"}, {"id": "s11b", "start": 45.2, "dur": 1.8, "type": "text"}, {"id": "s12", "start": 47.0, "dur": 5.1, "type": "chart"}, {"id": "s13", "start": 52.1, "dur": 3.7, "type": "compound"}, {"id": "s14a", "start": 55.8, "dur": 3.7, "type": "compound"}, {"id": "s14b", "start": 59.5, "dur": 9.1, "type": "chart"}, {"id": "s16a", "start": 68.6, "dur": 1.8, "type": "text"}, {"id": "s16b", "start": 70.4, "dur": 3.6, "type": "compound"}, {"id": "s17a", "start": 74.0, "dur": 3.2, "type": "compound"}, {"id": "s17b", "start": 77.2, "dur": 1.4, "type": "text"}, {"id": "s18", "start": 78.6, "dur": 5.3, "type": "compound"}, {"id": "s19a", "start": 83.9, "dur": 2.0, "type": "text"}, {"id": "s19b", "start": 85.9, "dur": 10.5, "type": "chart"}, {"id": "s21a1", "start": 96.4, "dur": 2.8, "type": "compound"}, {"id": "s21a2", "start": 99.2, "dur": 2.0, "type": "text"}, {"id": "s21b", "start": 101.2, "dur": 2.4, "type": "compound"}, {"id": "s22a", "start": 103.6, "dur": 3.5, "type": "compound"}, {"id": "s22b", "start": 107.1, "dur": 4.0, "type": "compound"}, {"id": "s22c", "start": 111.1, "dur": 1.8, "type": "text"}, {"id": "s23a1", "start": 112.9, "dur": 2.4, "type": "text"}, {"id": "s23b", "start": 115.3, "dur": 4.7, "type": "compound"}, {"id": "s24a", "start": 120.0, "dur": 2.8, "type": "compound"}, {"id": "s24b", "start": 122.8, "dur": 3.8, "type": "compound"}, {"id": "s24c", "start": 126.6, "dur": 2.0, "type": "text"}, {"id": "s25", "start": 128.6, "dur": 3.4, "type": "text"}, {"id": "s26", "start": 132.0, "dur": 6.4, "type": "chart"}, {"id": "s27a", "start": 138.4, "dur": 2.2, "type": "text"}, {"id": "s27b", "start": 140.6, "dur": 3.0, "type": "compound"}];
+const TOTAL_DUR = 143.6;
+
+let startTime = null;
+let audioStarted = false;
+let currentSceneId = null;
+let lastSrtIdx = -1;
+
+function startPlayback() {
+  if (audioStarted) return;
+  audioStarted = true;
+  const audio = document.getElementById('audio');
+  audio.currentTime = 0;
+  audio.play().catch(e => console.log('Audio play failed:', e));
+  startTime = performance.now();
+  requestAnimationFrame(tick);
+}
+
+function tick(now) {
+  if (!startTime) return;
+  const elapsed = (now - startTime) / 1000;
+  if (elapsed > TOTAL_DUR + 1) return;
+  
+  // Update scenes
+  let activeScene = null;
+  for (const sc of SCENES) {
+    const el = document.getElementById(sc.id);
+    if (elapsed >= sc.start && elapsed < sc.start + sc.dur) {
+      if (!el.classList.contains('active')) {
+        el.classList.add('active');
+        activateScene(sc, elapsed - sc.start);
+      }
+      activeScene = sc;
+    } else {
+      if (el.classList.contains('active')) {
+        el.classList.remove('active');
+        deactivateScene(sc);
+      }
+    }
+  }
+  
+  // Update subtitles
+  let subEl = document.getElementById('subtitle');
+  let foundSub = false;
+  for (let i = 0; i < SRT.length; i++) {
+    if (elapsed >= SRT[i].s && elapsed < SRT[i].e) {
+      if (i !== lastSrtIdx) {
+        subEl.textContent = SRT[i].t;
+        subEl.classList.add('visible');
+        lastSrtIdx = i;
+      }
+      foundSub = true;
+      break;
+    }
+  }
+  if (!foundSub) {
+    subEl.classList.remove('visible');
+    lastSrtIdx = -1;
+  }
+  
+  requestAnimationFrame(tick);
+}
+
+function activateScene(sc, offset) {
+  const el = document.getElementById(sc.id);
+  
+  if (sc.type === 'chart' && sc.id === 's26') {
+    // Table 6 carousel - auto-advance
+    startCarousel(el, offset);
+  }
+  
+  // Animate compound elements
+  const els = el.querySelectorAll('.el');
+  els.forEach(e => {
+    const delay = parseFloat(e.dataset.delay || 0);
+    const anim = e.dataset.anim || 'fadeIn';
+    setTimeout(() => {
+      e.classList.add('visible');
+      e.classList.add('anim-' + anim);
+    }, delay * 1000);
+  });
+}
+
+function deactivateScene(sc) {
+  const el = document.getElementById(sc.id);
+  const els = el.querySelectorAll('.el');
+  els.forEach(e => {
+    e.classList.remove('visible');
+    e.classList.remove('anim-fadeIn', 'anim-slideUp', 'anim-slideLeft', 'anim-slideRight', 'anim-popIn', 'anim-flashIn', 'anim-zoomIn');
+  });
+}
+
+let carouselTimer = null;
+function startCarousel(container, offset) {
+  let idx = 0;
+  const cards = container.querySelectorAll('.ins-card');
+  const dots = container.querySelectorAll('.dot');
+  if (cards.length === 0) return;
+  
+  // Show first card
+  cards[0].classList.add('active');
+  if (dots[0]) dots[0].classList.add('active');
+  
+  carouselTimer = setInterval(() => {
+    cards[idx].classList.remove('active');
+    cards[idx].classList.add('prev');
+    if (dots[idx]) dots[idx].classList.remove('active');
+    idx = (idx + 1) % cards.length;
+    cards[idx].classList.add('active');
+    if (dots[idx]) dots[idx].classList.add('active');
+    
+    // Remove prev from old card after transition
+    setTimeout(() => {
+      cards.forEach((c, i) => { if (i !== idx) c.classList.remove('prev'); });
+    }, 500);
+    
+    if (idx === 0) clearInterval(carouselTimer);
+  }, 1200);
+}
+
+// Auto-start on page load
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.addEventListener('click', startPlayback, { once: true });
+  // Also try auto-start
+  setTimeout(startPlayback, 500);
+});
+</script>
+</body>
+</html>

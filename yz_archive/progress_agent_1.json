@@ -2460,11 +2460,6 @@
       "date": "2023年10月19日 12:56",
       "file": "20231019【9块9大战，拖垮了我的咖啡店】.md"
     },
-    "https://mp.weixin.qq.com/s/-aXTAPfD7CDnjxhTnzD-Iw": {
-      "title": "探秘小程序百亿市场里的隐形冠军：为什么是这三家西安公司？",
-      "date": "2023年10月18日 15:00",
-      "file": "20231018【探秘小程序百亿市场里的隐形冠军：为什么是这三家西安公司？】.md"
-    },
     "https://mp.weixin.qq.com/s/mxJD817O9KiCgCRWyaQmmA": {
       "title": "爆款频出，口碑破圈，快手短剧如何成为暑期档“赢家”？",
       "date": "2023年10月17日 13:29",
@@ -2484,11 +2479,32 @@
       "title": "潮玩未死：卷向IP、国风和线下店",
       "date": "2023年10月24日 15:38",
       "file": "20231024【潮玩未死：卷向IP、国风和线下店】.md"
+    },
+    "https://mp.weixin.qq.com/s/GIyMq3wtj0X6Y2_EK1KrZA": {
+      "title": "2240个IP，5212个品牌，我们和现场的100家参展商聊出了这些干货",
+      "date": "2023年10月26日 15:41",
+      "file": "20231026【2240个IP，5212个品牌，我们和现场的100家参展商聊出了这些干货】.md"
+    },
+    "https://mp.weixin.qq.com/s/oAoj7s-BjC5CKNdBr2YEnQ": {
+      "title": "“看天吃饭”的纪录片，正在突破商业化困局",
+      "date": "2023年10月22日 13:00",
+      "file": "20231022【“看天吃饭”的纪录片，正在突破商业化困局】.md"
+    },
+    "https://mp.weixin.qq.com/s/XbDlFX_lKatUCV6SHKWxew": {
+      "title": "汪峰章子怡官宣离婚，共同关联公司仅剩一家",
+      "date": "2023年10月23日 14:39",
+      "file": "20231023【汪峰章子怡官宣离婚，共同关联公司仅剩一家】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [],
-  "last_update": "2026-06-09T12:33:10.875167",
-  "total_completed": 497,
+  "captcha_pending": [
+    {
+      "url": "https://mp.weixin.qq.com/s/-aXTAPfD7CDnjxhTnzD-Iw",
+      "title": "探秘小程序百亿市场里的隐形冠军：为什么是这三家西安公司？",
+      "seq": 493
+    }
+  ],
+  "last_update": "2026-06-09T12:34:20.307431",
+  "total_completed": 499,
   "total_failed": 0
 }

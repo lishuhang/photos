@@ -945,16 +945,6 @@
       "date": "2023年07月03日 14:29",
       "file": "20230703【中文在线从融创文化手中，共1.38亿收购头部动漫IP罗小黑】.md"
     },
-    "https://mp.weixin.qq.com/s/MTGTRNlYIffjfUaE2OLMhA": {
-      "title": "5G加持，行业生态迎来全新升级与创新",
-      "date": "2023年06月27日 15:30",
-      "file": "20230627【5G加持，行业生态迎来全新升级与创新】.md"
-    },
-    "https://mp.weixin.qq.com/s/u3nn8iZdi8do0EYTODAgtw": {
-      "title": "低欲望的日本人，正在走出“失去的30年”",
-      "date": "2023年06月28日 13:45",
-      "file": "20230628【低欲望的日本人，正在走出“失去的30年”】.md"
-    },
     "https://mp.weixin.qq.com/s/louaUpOKMTO050W9pzx22w": {
       "title": "拼多多是怎么抢下00后的？",
       "date": "2023年07月02日 14:37",
@@ -969,11 +959,32 @@
       "title": "观夏瑞幸掰头？乐乐茶“发疯”！｜爆槽娱子酱",
       "date": "2023年06月30日 13:28",
       "file": "20230630【观夏瑞幸掰头？乐乐茶“发疯”！｜爆槽娱子酱】.md"
+    },
+    "https://mp.weixin.qq.com/s/GaUjGi5BBLZheAZ4J3i0xQ": {
+      "title": "B站组织架构调整：发力电商，为商业化破局？",
+      "date": "2023年07月01日 13:37",
+      "file": "20230701【B站组织架构调整：发力电商，为商业化破局？】.md"
+    },
+    "https://mp.weixin.qq.com/s/F7vB-qRU1cjCVRtx46rMMw": {
+      "title": "重启增长新蓝图，2023第十一届TopDigital创新营销盛典圆满落幕！",
+      "date": "2023年07月05日 14:00",
+      "file": "20230705【重启增长新蓝图，2023第十一届TopDigital创新营销盛典圆满落幕！】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [],
-  "last_update": "2026-06-09T09:17:23.450815",
+  "captcha_pending": [
+    {
+      "url": "https://mp.weixin.qq.com/s/MTGTRNlYIffjfUaE2OLMhA",
+      "title": "5G加持，行业生态迎来全新升级与创新",
+      "seq": 176
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/u3nn8iZdi8do0EYTODAgtw",
+      "title": "低欲望的日本人，正在走出“失去的30年”",
+      "seq": 181
+    }
+  ],
+  "last_update": "2026-06-09T09:18:06.624196",
   "total_completed": 194,
   "total_failed": 0
 }

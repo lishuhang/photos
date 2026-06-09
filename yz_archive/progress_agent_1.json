@@ -1695,6 +1695,11 @@
       "date": "2023年08月23日 13:02",
       "file": "20230823【这届七夕营销，为什么都打“安全牌”？】.md"
     },
+    "https://mp.weixin.qq.com/s/VMsQ6ebA3vqZMTxD2xjPMw": {
+      "title": "“村超”启示录：成为淄博，再造榕江",
+      "date": "2023年08月25日 15:36",
+      "file": "20230825【“村超”启示录：成为淄博，再造榕江】.md"
+    },
     "https://mp.weixin.qq.com/s/3uedxbgUFOfw3Lw6aZHoCQ": {
       "title": "索奈斯科技：我是怎么用AI做流量生意的？丨AI创业人03",
       "date": "2023年08月24日 15:22",
@@ -1714,17 +1719,31 @@
       "title": "7月上电影备案：程耳王一博《人·鱼》备案 追光《白蛇：浮生》新篇章",
       "date": "2023年08月25日 15:36",
       "file": "20230825【7月上电影备案：程耳王一博《人·鱼》备案 追光《白蛇：浮生》新篇章】.md"
+    },
+    "https://mp.weixin.qq.com/s/8kQ5TrPox6ggZL1Spb_uew": {
+      "title": "遥望亏1.8亿，东方甄选GMV超百亿，直播电商喜忧参半",
+      "date": "2023年08月24日 15:22",
+      "file": "20230824【遥望亏1.8亿，东方甄选GMV超百亿，直播电商喜忧参半】.md"
+    },
+    "https://mp.weixin.qq.com/s/gg3o3uq7QDH8d8v2FLGs1g": {
+      "title": "匹克、阿里鱼、悲伤蛙、《武林外传》......共探IP联名的困境与趋势｜主题沙龙实录",
+      "date": "2023年08月27日 15:08",
+      "file": "20230827【匹克、阿里鱼、悲伤蛙、《武林外传》......共探IP联名的困境与趋势｜主题沙龙实录】.md"
+    },
+    "https://mp.weixin.qq.com/s/qLKQKwCfo1tSzimLdzsf5g": {
+      "title": "综艺的“厨子手段、匠人心思 ”| 对话马东",
+      "date": "2023年08月29日 14:05",
+      "file": "20230829【综艺的“厨子手段、匠人心思 ”_ 对话马东】.md"
+    },
+    "https://mp.weixin.qq.com/s/eZGdK_QiVi-qTULwhX5ltQ": {
+      "title": "真诚是现实题材的必杀技 | 对话《一路朝阳》主创",
+      "date": "2023年08月27日 15:08",
+      "file": "20230827【真诚是现实题材的必杀技 _ 对话《一路朝阳》主创】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [
-    {
-      "url": "https://mp.weixin.qq.com/s/VMsQ6ebA3vqZMTxD2xjPMw",
-      "title": "“村超”启示录：成为淄博，再造榕江",
-      "seq": 340
-    }
-  ],
-  "last_update": "2026-06-09T10:56:44.123050",
-  "total_completed": 343,
+  "captcha_pending": [],
+  "last_update": "2026-06-09T10:56:57.620412",
+  "total_completed": 348,
   "total_failed": 0
 }

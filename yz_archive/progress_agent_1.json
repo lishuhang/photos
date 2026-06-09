@@ -1465,6 +1465,11 @@
       "date": "2023年08月02日 13:57",
       "file": "20230802【7月IP衍生品：大运会周边热销，《莲花楼》手办众筹】.md"
     },
+    "https://mp.weixin.qq.com/s/E9gi6fKeFe8znOX5kJcx3A": {
+      "title": "从酷爽单曲到闪耀之夜，TME×雪碧打造最受年轻人追捧音乐营销爆款",
+      "date": "2023年08月06日 14:00",
+      "file": "20230806【从酷爽单曲到闪耀之夜，TME×雪碧打造最受年轻人追捧音乐营销爆款】.md"
+    },
     "https://mp.weixin.qq.com/s/Qfz1o0YrBVr5dm7hYo1SMQ": {
       "title": "TFBOYS十年：既是空前，也是绝后",
       "date": "2023年08月07日 14:00",
@@ -1475,10 +1480,10 @@
       "date": "2023年08月11日 14:58",
       "file": "20230811【《雾山五行》：3年4集，观众为什么愿意等他们】.md"
     },
-    "https://mp.weixin.qq.com/s/TDO3oy8_ya-Rk_Cwx3Fijw": {
-      "title": "娱资·中影华龙教育联合举办 | 《AIGC新媒体运营》训练营",
-      "date": "2023年08月09日 14:22",
-      "file": "20230809【娱资·中影华龙教育联合举办 _ 《AIGC新媒体运营》训练营】.md"
+    "https://mp.weixin.qq.com/s/DoOiBhYci9ezD1q9Iut2kw": {
+      "title": "暑期档点映争议背后：口碑贬值和饭圈崛起",
+      "date": "2023年08月08日 15:31",
+      "file": "20230808【暑期档点映争议背后：口碑贬值和饭圈崛起】.md"
     },
     "https://mp.weixin.qq.com/s/3AGcC6S7ANpMbqdMA_5Qqg": {
       "title": "霸王茶姬北京首店爆单，茶饮“中生代”没有新花样",
@@ -1509,22 +1514,36 @@
       "title": "自有品牌破一千万单后，小杨哥瞄准了“美瞳”",
       "date": "2023年08月10日 15:23",
       "file": "20230810【自有品牌破一千万单后，小杨哥瞄准了“美瞳”】.md"
+    },
+    "https://mp.weixin.qq.com/s/TDO3oy8_ya-Rk_Cwx3Fijw": {
+      "title": "娱资·中影华龙教育联合举办 | 《AIGC新媒体运营》训练营",
+      "date": "2023年08月09日 14:22",
+      "file": "20230809【娱资·中影华龙教育联合举办 _ 《AIGC新媒体运营》训练营】.md"
+    },
+    "https://mp.weixin.qq.com/s/mEZZACp4LEiH_teShoD3IQ": {
+      "title": "TFBOYS演唱会，让西安赚了多少钱",
+      "date": "2023年08月10日 15:23",
+      "file": "20230810【TFBOYS演唱会，让西安赚了多少钱】.md"
+    },
+    "https://mp.weixin.qq.com/s/OB0LY7zD_lRE1DKCU9bNfQ": {
+      "title": "单机版《仙剑奇侠传》虽好，“原神”版《仙剑世界》才香",
+      "date": "2023年08月14日 15:45",
+      "file": "20230814【单机版《仙剑奇侠传》虽好，“原神”版《仙剑世界》才香】.md"
+    },
+    "https://mp.weixin.qq.com/s/tNRc4CkMI3mMz3kuqbNPPA": {
+      "title": "从9块9到1149，谁在为AIGC买单？",
+      "date": "2023年08月13日 13:00",
+      "file": "20230813【从9块9到1149，谁在为AIGC买单？】.md"
+    },
+    "https://mp.weixin.qq.com/s/XMCSDFBFcMjCJI4eg09-Eg": {
+      "title": "本周四，与匹克、阿里鱼、悲伤蛙、武林外传操盘手畅聊IP联名",
+      "date": "2023年08月14日 15:45",
+      "file": "20230814【本周四，与匹克、阿里鱼、悲伤蛙、武林外传操盘手畅聊IP联名】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [
-    {
-      "url": "https://mp.weixin.qq.com/s/E9gi6fKeFe8znOX5kJcx3A",
-      "title": "从酷爽单曲到闪耀之夜，TME×雪碧打造最受年轻人追捧音乐营销爆款",
-      "seq": 294
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/DoOiBhYci9ezD1q9Iut2kw",
-      "title": "暑期档点映争议背后：口碑贬值和饭圈崛起",
-      "seq": 297
-    }
-  ],
-  "last_update": "2026-06-09T10:31:53.140309",
-  "total_completed": 302,
+  "captcha_pending": [],
+  "last_update": "2026-06-09T10:33:54.972177",
+  "total_completed": 308,
   "total_failed": 0
 }

@@ -1340,6 +1340,11 @@
       "date": "2023年08月01日 14:04",
       "file": "20230801【游戏动漫角色占76%，Character.ai成了当代网友的“梦中情聊”】.md"
     },
+    "https://mp.weixin.qq.com/s/snCD5NGft296tuB5GaC5iw": {
+      "title": "你能想象马云当老师、马斯克拧钢筋、比尔盖茨卖盗版光盘吗？",
+      "date": "2023年07月31日 14:55",
+      "file": "20230731【你能想象马云当老师、马斯克拧钢筋、比尔盖茨卖盗版光盘吗？】.md"
+    },
     "https://mp.weixin.qq.com/s/FqFVutt59pGh9SCjJuXACA": {
       "title": "泛文娱再谈AIGC：这就是未来的水和电 | ChinaJoy 现场",
       "date": "2023年07月29日 14:00",
@@ -1370,6 +1375,11 @@
       "date": "2023年07月31日 14:55",
       "file": "20230731【Netflix的亚洲综艺战事：爱优腾看好了，我只表演一次】.md"
     },
+    "https://mp.weixin.qq.com/s/bHYHG_L951OlB1DNrEYMjg": {
+      "title": "为什么亚运会是电竞营销的分水岭？",
+      "date": "2023年08月01日 14:04",
+      "file": "20230801【为什么亚运会是电竞营销的分水岭？】.md"
+    },
     "https://mp.weixin.qq.com/s/cozNBYRO6iBf0qq5I2hcCg": {
       "title": "6月下电影备案：同比增长50%，刘德华谢霆锋再度合作，王晶新作备案",
       "date": "2023年08月03日 15:04",
@@ -1389,22 +1399,26 @@
       "title": "离北京500公里的县城，我发现了《蛋仔派对》火爆的秘密丨县域调研①",
       "date": "2023年08月03日 15:04",
       "file": "20230803【离北京500公里的县城，我发现了《蛋仔派对》火爆的秘密丨县域调研①】.md"
+    },
+    "https://mp.weixin.qq.com/s/caAlG_TZQAh7WiX_UxQIyg": {
+      "title": "7月互联网专利盘点｜爱奇艺自动识别口红色号，魅族自动呼叫代驾",
+      "date": "2023年08月02日 13:57",
+      "file": "20230802【7月互联网专利盘点｜爱奇艺自动识别口红色号，魅族自动呼叫代驾】.md"
+    },
+    "https://mp.weixin.qq.com/s/GhNb8rim5ZuyyGVGBy8RuQ": {
+      "title": "桑稚的“鸭”，孟总的“水”，现偶创带货新趋势？",
+      "date": "2023年08月03日 15:04",
+      "file": "20230803【桑稚的“鸭”，孟总的“水”，现偶创带货新趋势？】.md"
+    },
+    "https://mp.weixin.qq.com/s/3w1Ohm6Awtd6klTbjToNsg": {
+      "title": "AI浪潮下，数字文娱出海迎来新方向",
+      "date": "2023年08月02日 13:57",
+      "file": "20230802【AI浪潮下，数字文娱出海迎来新方向】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [
-    {
-      "url": "https://mp.weixin.qq.com/s/snCD5NGft296tuB5GaC5iw",
-      "title": "你能想象马云当老师、马斯克拧钢筋、比尔盖茨卖盗版光盘吗？",
-      "seq": 269
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/bHYHG_L951OlB1DNrEYMjg",
-      "title": "为什么亚运会是电竞营销的分水岭？",
-      "seq": 276
-    }
-  ],
-  "last_update": "2026-06-09T10:09:48.837221",
-  "total_completed": 278,
+  "captcha_pending": [],
+  "last_update": "2026-06-09T10:10:44.074155",
+  "total_completed": 283,
   "total_failed": 0
 }

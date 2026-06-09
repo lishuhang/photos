@@ -2495,11 +2495,6 @@
       "date": "2023年10月23日 14:39",
       "file": "20231023【汪峰章子怡官宣离婚，共同关联公司仅剩一家】.md"
     },
-    "https://mp.weixin.qq.com/s/-aXTAPfD7CDnjxhTnzD-Iw": {
-      "title": "探秘小程序百亿市场里的隐形冠军：为什么是这三家西安公司？",
-      "date": "2023年10月18日 15:00",
-      "file": "20231018【探秘小程序百亿市场里的隐形冠军：为什么是这三家西安公司？】.md"
-    },
     "https://mp.weixin.qq.com/s/PFTrd-nNVRs8Ed67To2faw": {
       "title": "“完颜慧德”爆火：大家都在学的“楼兰语”到底是什么？",
       "date": "2023年10月24日 15:38",
@@ -2515,20 +2510,31 @@
       "date": "2023年10月25日 15:51",
       "file": "20231025【国剧出海拿奖越来越多，是美美镀金还是挖土跳坑？】.md"
     },
-    "https://mp.weixin.qq.com/s/nIKJhHunUVDLwgogLrgMXg": {
-      "title": "办一场花上千万，品牌为何“豪赌”音乐节营销？",
-      "date": "2023年10月21日 12:12",
-      "file": "20231021【办一场花上千万，品牌为何“豪赌”音乐节营销？】.md"
-    },
     "https://mp.weixin.qq.com/s/vTv-qyWhX4VQEabCNeQQuQ": {
       "title": "“前台实名制”引发讨论，一场关于隐私边界的博弈",
       "date": "2023年10月25日 15:51",
       "file": "20231025【“前台实名制”引发讨论，一场关于隐私边界的博弈】.md"
+    },
+    "https://mp.weixin.qq.com/s/7MSrznsesFib0zEBL4aT2g": {
+      "title": "新老玩家争食复苏红利，携程靠什么穿越周期？",
+      "date": "2023年10月29日 14:03",
+      "file": "20231029【新老玩家争食复苏红利，携程靠什么穿越周期？】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [],
-  "last_update": "2026-06-09T12:37:32.416311",
-  "total_completed": 505,
+  "captcha_pending": [
+    {
+      "url": "https://mp.weixin.qq.com/s/-aXTAPfD7CDnjxhTnzD-Iw",
+      "title": "探秘小程序百亿市场里的隐形冠军：为什么是这三家西安公司？",
+      "seq": 493
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/nIKJhHunUVDLwgogLrgMXg",
+      "title": "办一场花上千万，品牌为何“豪赌”音乐节营销？",
+      "seq": 504
+    }
+  ],
+  "last_update": "2026-06-09T12:38:00.058436",
+  "total_completed": 504,
   "total_failed": 0
 }

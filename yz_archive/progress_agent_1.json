@@ -935,6 +935,16 @@
       "date": "2023年07月01日 13:37",
       "file": "20230701【演唱会IN2023：不卖唱功卖仪式】.md"
     },
+    "https://mp.weixin.qq.com/s/AMvD6V5vjFo3Zv4N4G2xGg": {
+      "title": "《中国好声音》入淘背后：灿星迈出电商直播第一步",
+      "date": "2023年06月27日 15:30",
+      "file": "20230627【《中国好声音》入淘背后：灿星迈出电商直播第一步】.md"
+    },
+    "https://mp.weixin.qq.com/s/ghniIUF0Umz9ei6692Wbow": {
+      "title": "左手短剧，右手明星，快手如何打赢娱乐内容消费暑期战？",
+      "date": "2023年07月03日 14:29",
+      "file": "20230703【左手短剧，右手明星，快手如何打赢娱乐内容消费暑期战？】.md"
+    },
     "https://mp.weixin.qq.com/s/99qVah28I2lGbY4nt9I_fg": {
       "title": "雪藏20年，最强豪门大女主杀出来了",
       "date": "2023年06月30日 13:28",
@@ -949,32 +959,11 @@
       "title": "拼多多是怎么抢下00后的？",
       "date": "2023年07月02日 14:37",
       "file": "20230702【拼多多是怎么抢下00后的？】.md"
-    },
-    "https://mp.weixin.qq.com/s/P8r8fxCbndmXGGB1z0CzKQ": {
-      "title": "“生孩子发5万”之后，梁建章还有一部谈人口问题的舞台剧",
-      "date": "2023年07月02日 14:37",
-      "file": "20230702【“生孩子发5万”之后，梁建章还有一部谈人口问题的舞台剧】.md"
-    },
-    "https://mp.weixin.qq.com/s/37GL2KGiEVNslgvXEPEFvg": {
-      "title": "观夏瑞幸掰头？乐乐茶“发疯”！｜爆槽娱子酱",
-      "date": "2023年06月30日 13:28",
-      "file": "20230630【观夏瑞幸掰头？乐乐茶“发疯”！｜爆槽娱子酱】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [
-    {
-      "url": "https://mp.weixin.qq.com/s/AMvD6V5vjFo3Zv4N4G2xGg",
-      "title": "《中国好声音》入淘背后：灿星迈出电商直播第一步",
-      "seq": 182
-    },
-    {
-      "url": "https://mp.weixin.qq.com/s/ghniIUF0Umz9ei6692Wbow",
-      "title": "左手短剧，右手明星，快手如何打赢娱乐内容消费暑期战？",
-      "seq": 187
-    }
-  ],
-  "last_update": "2026-06-09T09:25:03.579107",
+  "captcha_pending": [],
+  "last_update": "2026-06-09T09:25:26.273861",
   "total_completed": 192,
   "total_failed": 0
 }

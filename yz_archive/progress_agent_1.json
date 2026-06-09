@@ -1550,11 +1550,6 @@
       "date": "2023年08月14日 15:45",
       "file": "20230814【单机版《仙剑奇侠传》虽好，“原神”版《仙剑世界》才香】.md"
     },
-    "https://mp.weixin.qq.com/s/tNRc4CkMI3mMz3kuqbNPPA": {
-      "title": "从9块9到1149，谁在为AIGC买单？",
-      "date": "2023年08月13日 13:00",
-      "file": "20230813【从9块9到1149，谁在为AIGC买单？】.md"
-    },
     "https://mp.weixin.qq.com/s/EAlCiAvhA_SEaww0fxmf_g": {
       "title": "专访爱玛：绑定周杰伦的电动车，玩起了多巴胺｜品牌深壹度",
       "date": "2023年08月11日 14:58",
@@ -1574,11 +1569,37 @@
       "title": "达芙妮们，都想成为南极电商",
       "date": "2023年08月13日 13:00",
       "file": "20230813【达芙妮们，都想成为南极电商】.md"
+    },
+    "https://mp.weixin.qq.com/s/LFrjccrEXKWatVLumNGByg": {
+      "title": "详细议程｜「新消费时代 解锁IP联名无限可能」主题沙龙报名进行中",
+      "date": "2023年08月15日 14:38",
+      "file": "20230815【详细议程｜「新消费时代 解锁IP联名无限可能」主题沙龙报名进行中】.md"
+    },
+    "https://mp.weixin.qq.com/s/nqxGjnjlqf0m44WijLHC2w": {
+      "title": "字幕组之谜：用爱发电，还是趁机诈骗？",
+      "date": "2023年08月17日 15:16",
+      "file": "20230817【字幕组之谜：用爱发电，还是趁机诈骗？】.md"
+    },
+    "https://mp.weixin.qq.com/s/RbzC5XISaM_483V-0xUb2w": {
+      "title": "​《孤注一掷》背后的坏猴子影业：现实题材的先行者与生力军",
+      "date": "2023年08月15日 14:38",
+      "file": "20230815【​《孤注一掷》背后的坏猴子影业：现实题材的先行者与生力军】.md"
+    },
+    "https://mp.weixin.qq.com/s/rxinVEpYaij3FnhjS92pCA": {
+      "title": "宠物经济：情感的尽头是生意",
+      "date": "2023年08月16日 14:00",
+      "file": "20230816【宠物经济：情感的尽头是生意】.md"
     }
   },
   "failed": {},
-  "captcha_pending": [],
-  "last_update": "2026-06-09T10:39:51.065034",
-  "total_completed": 315,
+  "captcha_pending": [
+    {
+      "url": "https://mp.weixin.qq.com/s/tNRc4CkMI3mMz3kuqbNPPA",
+      "title": "从9块9到1149，谁在为AIGC买单？",
+      "seq": 307
+    }
+  ],
+  "last_update": "2026-06-09T10:40:33.052476",
+  "total_completed": 318,
   "total_failed": 0
 }

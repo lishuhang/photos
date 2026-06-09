@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>文娱人才大洗牌 v3</title>
+<style>
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('assets/AlibabaPuHuiTi-3-35-Thin.woff') format('woff'); font-weight:100; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('assets/AlibabaPuHuiTi-3-55-Regular.woff') format('woff'); font-weight:400; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('assets/AlibabaPuHuiTi-3-65-Medium.woff') format('woff'); font-weight:500; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('assets/AlibabaPuHuiTi-3-85-Bold.woff') format('woff'); font-weight:700; }
+@font-face { font-family:'AlibabaPuHuiTi'; src:url('assets/AlibabaPuHuiTi-3-115-Black.woff') format('woff'); font-weight:900; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#050816; display:flex; justify-content:center; align-items:center; min-height:100vh; font-family:'AlibabaPuHuiTi',sans-serif; overflow:hidden; }
+.canvas { position:relative; width:450px; height:800px; background:#0a0e27; overflow:hidden; }
+.scene { position:absolute; top:0; left:0; width:100%; height:100%; opacity:0; pointer-events:none; }
+.scene.active { opacity:1; pointer-events:auto; }
+@keyframes aFadeIn { from{opacity:0} to{opacity:1} }
+@keyframes aSlideUp { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
+@keyframes aSlideLeft { from{opacity:0;transform:translateX(-40px)} to{opacity:1;transform:translateX(0)} }
+@keyframes aSlideRight { from{opacity:0;transform:translateX(40px)} to{opacity:1;transform:translateX(0)} }
+@keyframes aPopIn { 0%{opacity:0;transform:scale(0.5)} 60%{transform:scale(1.05)} 100%{opacity:1;transform:scale(1)} }
+@keyframes aFlashIn { 0%{opacity:0;filter:brightness(3)} 30%{filter:brightness(1.5)} 100%{opacity:1;filter:brightness(1)} }
+@keyframes aZoomIn { from{opacity:0;transform:scale(1.3)} to{opacity:1;transform:scale(1)} }
+@keyframes barGrow { from{transform:scaleX(0)} to{transform:scaleX(1)} }
+@keyframes barGrowUp { from{transform:scaleY(0)} to{transform:scaleY(1)} }
+@keyframes radarFadeIn { from{opacity:0;transform:scale(0.3)} to{opacity:1;transform:scale(1)} }
+@keyframes bubblePop { 0%{opacity:0;transform:translate(-50%,-50%) scale(0)} 60%{opacity:1;transform:translate(-50%,-50%) scale(1.1)} 100%{opacity:1;transform:translate(-50%,-50%) scale(1)} }
+@keyframes fadeIn { from{opacity:0;transform:translateX(-4px)} to{opacity:1;transform:translateX(0)} }
+.el { position:absolute; opacity:0; }
+.text-scene { position:absolute; top:0; left:0; width:100%; height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:40px; white-space:pre-line; }
+.img-el { position:absolute; object-fit:contain; }
+.vid-el { position:absolute; object-fit:cover; }
+.txt-el { position:absolute; display:flex; align-items:center; justify-content:center; }
+#subtitle { position:absolute; bottom:40px; left:20px; right:20px; text-align:center; font-size:18px; font-weight:500; color:#fff; font-family:'AlibabaPuHuiTi',sans-serif; text-shadow:2px 2px 4px rgba(0,0,0,0.9),-1px -1px 2px rgba(0,0,0,0.9),1px -1px 2px rgba(0,0,0,0.9),-1px 1px 2px rgba(0,0,0,0.9),0 0 8px rgba(0,0,0,0.7); z-index:1000; pointer-events:none; opacity:0; transition:opacity 0.2s; }
+#subtitle.visible { opacity:1; }
+.chart-title { font-size:20px; font-weight:700; color:#fff; text-align:center; margin-bottom:4px; letter-spacing:1px; }
+.chart-subtitle { font-size:12px; font-weight:400; color:rgba(255,255,255,0.5); text-align:center; margin-bottom:16px; }
+.chart-content { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:400px; }
+.bar-group { display:flex; align-items:center; margin-bottom:8px; }
+.bar-label { width:64px; font-size:11px; font-weight:500; color:rgba(255,255,255,0.85); text-align:right; padding-right:10px; flex-shrink:0; white-space:nowrap; }
+.bar-track { flex:1; height:22px; background:rgba(255,255,255,0.06); border-radius:4px; overflow:hidden; position:relative; }
+.bar-fill { height:100%; border-radius:4px; transform-origin:left; animation:barGrow 1s ease-out forwards; transform:scaleX(0); }
+.bar-info { display:flex; flex-direction:column; align-items:flex-start; padding-left:8px; flex-shrink:0; width:70px; opacity:0; animation:fadeIn 0.5s ease forwards; }
+.bar-pct { font-size:13px; font-weight:700; color:#fff; line-height:1.2; }
+.bar-frac { font-size:9px; font-weight:400; color:rgba(255,255,255,0.5); line-height:1.2; }
+.c1{background:linear-gradient(90deg,#FF6B6B,#FF8E8E)} .c2{background:linear-gradient(90deg,#FF8C5A,#FFA97A)} .c3{background:linear-gradient(90deg,#FFB347,#FFCC73)} .c4{background:linear-gradient(90deg,#4ECDC4,#6EDDD6)} .c5{background:linear-gradient(90deg,#45B7D1,#6CC8E0)} .c6{background:linear-gradient(90deg,#96ADED,#B3C5F5)} .c7{background:linear-gradient(90deg,#7B68EE,#9B8AFF)}
+.t2-card{display:flex;background:rgba(255,255,255,0.04);border-radius:8px;overflow:hidden;opacity:0;animation:aSlideUp 0.5s ease-out forwards;margin-bottom:6px;border:1px solid rgba(255,255,255,0.06)}
+.t2-border{width:3px;flex-shrink:0;border-radius:3px 0 0 3px} .t2-text{flex:1;padding:8px 10px;min-width:0} .t2-type{font-size:13px;font-weight:700;margin-bottom:2px} .t2-detail{font-size:9px;color:rgba(255,255,255,0.55);line-height:1.4}
+.t2-tags{flex-shrink:0;margin-left:6px;padding:8px 8px 8px 0;display:flex;flex-direction:column;justify-content:center;gap:3px}
+.t2-tag{font-size:9px;padding:2px 6px;border-radius:4px;white-space:nowrap;opacity:0;animation:aPopIn 0.35s ease forwards;text-align:center}
+.t2-c1 .t2-border{background:#FF6B6B} .t2-c1 .t2-type{color:#FF6B6B} .t2-c1 .t2-tag{background:rgba(255,107,107,0.15);color:#FF8E8E;border:1px solid rgba(255,107,107,0.25)}
+.t2-c2 .t2-border{background:#FFA940} .t2-c2 .t2-type{color:#FFA940} .t2-c2 .t2-tag{background:rgba(255,169,64,0.15);color:#FFCC73;border:1px solid rgba(255,169,64,0.25)}
+.t2-c3 .t2-border{background:#00D4AA} .t2-c3 .t2-type{color:#00D4AA} .t2-c3 .t2-tag{background:rgba(0,212,170,0.15);color:#4ECDC4;border:1px solid rgba(0,212,170,0.25)}
+.t2-c4 .t2-border{background:#7B68EE} .t2-c4 .t2-type{color:#7B68EE} .t2-c4 .t2-tag{background:rgba(123,104,238,0.15);color:#9B8AFF;border:1px solid rgba(123,104,238,0.25)}
+.t2-c5 .t2-border{background:#E040FB} .t2-c5 .t2-type{color:#E040FB} .t2-c5 .t2-tag{background:rgba(224,64,251,0.15);color:#F06AFF;border:1px solid rgba(224,64,251,0.25)}
+.bub-chart{position:relative;width:380px;height:260px;margin:0 auto} .bub-track{position:absolute;left:30px;right:10px;top:30px;bottom:30px}
+.bub{position:absolute;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;transform:translate(-50%,-50%);opacity:0;animation:bubblePop 0.6s cubic-bezier(0.34,1.56,0.64,1) forwards}
+.bub-name{font-size:9px;font-weight:700;color:#fff;text-align:center} .bub-val{font-size:7px;color:rgba(255,255,255,0.7)}
+.bub-high{background:radial-gradient(circle at 35% 35%,rgba(78,205,196,0.35),rgba(78,205,196,0.12));border:1.5px solid rgba(78,205,196,0.5)}
+.bub-mid{background:radial-gradient(circle at 35% 35%,rgba(255,179,71,0.35),rgba(255,179,71,0.12));border:1.5px solid rgba(255,179,71,0.5)}
+.bub-low{background:radial-gradient(circle at 35% 35%,rgba(255,107,107,0.35),rgba(255,107,107,0.12));border:1.5px solid rgba(255,107,107,0.5)}
+.bub-axis{display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,0.4);position:absolute;bottom:-20px;left:30px;right:10px} .bub-l{color:#FF6B6B;font-weight:500} .bub-r{color:#4ECDC4;font-weight:500}
+.radar-wrap{width:320px;height:320px;margin:0 auto} .radar-wrap svg{width:100%;height:100%}
+.rgrid{fill:none;stroke:rgba(255,255,255,0.08);stroke-width:1} .raxis{stroke:rgba(255,255,255,0.1);stroke-width:1}
+.rd1{fill:rgba(255,107,107,0.15);stroke:#FF6B6B;stroke-width:2;opacity:0;animation:radarFadeIn 1s ease-out 0.3s forwards}
+.rd2{fill:rgba(78,205,196,0.12);stroke:#4ECDC4;stroke-width:2;opacity:0;animation:radarFadeIn 1s ease-out 0.8s forwards}
+.rd3{fill:rgba(123,104,238,0.10);stroke:#7B68EE;stroke-width:2;opacity:0;animation:radarFadeIn 1s ease-out 1.3s forwards}
+.rd4{fill:rgba(69,183,209,0.10);stroke:#45B7D1;stroke-width:2;opacity:0;animation:radarFadeIn 1s ease-out 1.8s forwards}
+.rlabel{font-size:10px;fill:rgba(255,255,255,0.7);font-family:'AlibabaPuHuiTi',sans-serif;font-weight:500;text-anchor:middle;dominant-baseline:middle}
+.radar-legend{display:flex;justify-content:center;gap:14px;margin-top:8px} .rl-item{display:flex;align-items:center;gap:4px;font-size:10px;color:rgba(255,255,255,0.7)} .rl-dot{width:8px;height:8px;border-radius:50%}
+.carousel{position:relative;width:360px;height:280px;margin:0 auto;overflow:hidden}
+.ins-card{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;transform:translateX(60px);transition:all 0.5s cubic-bezier(0.25,0.46,0.45,0.94);pointer-events:none}
+.ins-card.active{opacity:1;transform:translateX(0)} .ins-card.prev{opacity:0;transform:translateX(-60px)}
+.ic-inner{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:20px;height:100%;display:flex;flex-direction:column}
+.ic-num{font-size:42px;font-weight:900;opacity:0.1;position:absolute;top:10px;right:16px} .ic-head{font-size:15px;font-weight:700;margin-bottom:8px;line-height:1.3} .ic-body{font-size:12px;font-weight:400;color:rgba(255,255,255,0.65);line-height:1.6;flex:1} .ic-body b{font-weight:700}
+.ic1 .ic-inner{border-left:3px solid #FF6B6B} .ic1 .ic-head{color:#FF6B6B}
+.ic2 .ic-inner{border-left:3px solid #FFB347} .ic2 .ic-head{color:#FFB347}
+.ic3 .ic-inner{border-left:3px solid #4ECDC4} .ic3 .ic-head{color:#4ECDC4}
+.ic4 .ic-inner{border-left:3px solid #45B7D1} .ic4 .ic-head{color:#45B7D1}
+.ic5 .ic-inner{border-left:3px solid #96ADED} .ic5 .ic-head{color:#96ADED}
+.ic6 .ic-inner{border-left:3px solid #7B68EE} .ic6 .ic-head{color:#7B68EE}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:10px} .dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.2);transition:all 0.3s} .dot.active{background:#4ECDC4;width:16px;border-radius:3px}
+.vid-bg{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;z-index:0} .vid-overlay{position:absolute;top:0;left:0;width:100%;height:100%;background:rgba(10,14,39,0.5);z-index:1}
+</style>
+</head>
+<body>
+<div class="canvas" id="canvas">
+<div id="subtitle"></div>
+
+<div class="scene" id="s01" data-start="0.0" data-dur="2.8">
+  <div class="text-scene" style="color:#fff;"><div style="font-size:36px;font-weight:900;letter-spacing:2px;margin-bottom:12px;animation:aPopIn 0.6s ease forwards;">文娱人才大洗牌</div><div style="font-size:16px;font-weight:400;color:rgba(255,255,255,0.6);animation:aFadeIn 0.8s ease 0.3s forwards;opacity:0;">传统影视 vs 经纪MCN · AI岗位谁更猛？</div><div style="width:60px;height:3px;background:#4ECDC4;margin:20px auto 0;border-radius:2px;animation:aSlideUp 0.5s ease 0.6s forwards;opacity:0;"></div></div>
+</div>
+
+<div class="scene" id="s02" data-start="2.8" data-dur="2.3">
+  <div class="text-scene" style="color:#FF4444;font-size:64px;font-weight:900;line-height:1.4;animation:aFlashIn 0.4s ease forwards;">反 常 识</div>
+</div>
+
+<div class="scene" id="s03" data-start="5.1" data-dur="4.0">
+<img class="el img-el" src="assets/logos/kekedou.png" style="left:20px;top:80px;width:80px;height:80px;" data-anim="popIn" data-delay="0">
+<div class="el txt-el" style="left:110px;top:95px;font-size:14px;color:rgba(255,255,255,0.7);font-weight:500;" data-anim="fadeIn" data-delay="0.3">可可豆动画</div>
+<img class="el img-el" src="assets/word_images/img_02.png" style="left:30px;top:200px;width:390px;height:500px;" data-anim="slideUp" data-delay="0.5">
+<div class="el txt-el" style="left:280px;top:180px;font-size:24px;color:#00D4AA;font-weight:700;background:rgba(0,212,170,0.15);padding:4px 12px;border-radius:6px;" data-anim="popIn" data-delay="1.2">专科 ✓</div>
+</div>
+
+<div class="scene" id="s04" data-start="9.1" data-dur="3.5">
+<img class="el img-el" src="assets/logos/hengxing.png" style="left:30px;top:60px;width:160px;height:40px;" data-anim="slideLeft" data-delay="0">
+<img class="el img-el" src="assets/posters/canglanjue.jpg" style="left:20px;top:150px;width:190px;height:270px;border-radius:8px;" data-anim="slideUp" data-delay="0.3">
+<img class="el img-el" src="assets/posters/yongyexinghe.jpg" style="left:230px;top:150px;width:190px;height:270px;border-radius:8px;" data-anim="slideUp" data-delay="0.5">
+<div class="el txt-el" style="left:40px;top:440px;font-size:16px;color:rgba(255,255,255,0.6);" data-anim="fadeIn" data-delay="0.8">苍兰诀</div>
+<div class="el txt-el" style="left:250px;top:440px;font-size:16px;color:rgba(255,255,255,0.6);" data-anim="fadeIn" data-delay="1.0">永夜星河</div>
+</div>
+
+<div class="scene" id="s05a" data-start="12.6" data-dur="3.1">
+<img class="el img-el" src="assets/word_images/img_02.png" style="left:25px;top:100px;width:400px;height:500px;" data-anim="slideUp" data-delay="0">
+<div class="el txt-el" style="left:50px;top:640px;font-size:32px;color:#FF4444;font-weight:900;background:rgba(255,68,68,0.15);border:2px solid rgba(255,68,68,0.4);padding:8px 16px;border-radius:8px;" data-anim="flashIn" data-delay="0.6">985 / 211 / QS100</div>
+</div>
+
+<div class="scene" id="s05b" data-start="15.7" data-dur="1.9">
+  <div class="text-scene" style="color:#FF8E8E;font-size:28px;font-weight:700;line-height:1.4;">AI漫剧实习生也一样要求985</div>
+</div>
+
+<div class="scene" id="s06a" data-start="17.6" data-dur="2.6">
+<video class="vid-bg" src="assets/videos/ai_drama.mp4" muted playsinline preload="auto" style="opacity:0.4;"></video>
+<div class="vid-overlay" style="opacity:0.3;"></div>
+<div class="el txt-el" style="left:80px;top:300px;font-size:48px;color:#FF6B6B;font-weight:900;z-index:2;text-shadow:0 0 20px rgba(255,107,107,0.5);" data-anim="flashIn" data-delay="0.3">短剧冲击</div>
+</div>
+
+<div class="scene" id="s06b" data-start="20.2" data-dur="2.4">
+  <div class="text-scene" style="color:#FF4444;font-size:42px;font-weight:900;line-height:1.4;">不转型就没饭吃</div>
+</div>
+
+<div class="scene" id="s07" data-start="22.6" data-dur="4.5">
+  <div class="chart-content"><div class="chart-title">传统影视公司AI岗位占比</div><div class="chart-subtitle">AI相关岗位 / 全部招聘岗位</div>
+    <div class="bar-group"><div class="bar-label">博纳影业</div><div class="bar-track"><div class="bar-fill c1" style="width:71.43%;animation-delay:0.2s"></div></div><div class="bar-info" style="animation-delay:1.2s"><span class="bar-pct">71.43%</span><span class="bar-frac">5/7</span></div></div>
+    <div class="bar-group"><div class="bar-label">恒星引力</div><div class="bar-track"><div class="bar-fill c2" style="width:57.14%;animation-delay:0.35s"></div></div><div class="bar-info" style="animation-delay:1.35s"><span class="bar-pct">57.14%</span><span class="bar-frac">4/7</span></div></div>
+    <div class="bar-group"><div class="bar-label">欢娱影视</div><div class="bar-track"><div class="bar-fill c3" style="width:37.50%;animation-delay:0.5s"></div></div><div class="bar-info" style="animation-delay:1.5s"><span class="bar-pct">37.50%</span><span class="bar-frac">3/8</span></div></div>
+    <div class="bar-group"><div class="bar-label">正午阳光</div><div class="bar-track"><div class="bar-fill c4" style="width:28.57%;animation-delay:0.65s"></div></div><div class="bar-info" style="animation-delay:1.65s"><span class="bar-pct">28.57%</span><span class="bar-frac">4/14</span></div></div>
+    <div class="bar-group"><div class="bar-label">耀客文化</div><div class="bar-track"><div class="bar-fill c5" style="width:21.05%;animation-delay:0.8s"></div></div><div class="bar-info" style="animation-delay:1.8s"><span class="bar-pct">21.05%</span><span class="bar-frac">4/19</span></div></div>
+    <div class="bar-group"><div class="bar-label">柠萌影视</div><div class="bar-track"><div class="bar-fill c6" style="width:16.67%;animation-delay:0.95s"></div></div><div class="bar-info" style="animation-delay:1.95s"><span class="bar-pct">16.67%</span><span class="bar-frac">1/6</span></div></div>
+    <div class="bar-group"><div class="bar-label">华策影视</div><div class="bar-track"><div class="bar-fill c7" style="width:12.82%;animation-delay:1.1s"></div></div><div class="bar-info" style="animation-delay:2.1s"><span class="bar-pct">12.82%</span><span class="bar-frac">5/39</span></div></div>
+  </div>
+</div>
+
+<div class="scene" id="s08a" data-start="27.1" data-dur="1.4">
+  <div class="text-scene" style="color:#4ECDC4;font-size:32px;font-weight:700;line-height:1.4;">娱乐资本论分析发现</div>
+</div>
+
+<div class="scene" id="s08b" data-start="28.5" data-dur="13.9">
+  <div class="chart-content"><div class="chart-title">AI招聘动机分类</div><div class="chart-subtitle">影视公司引入AI人才的核心驱动因素</div>
+    <div class="t2-card t2-c1" style="animation-delay:0.3s"><div class="t2-border"></div><div class="t2-text"><div class="t2-type">降本型</div><div class="t2-detail">压力：制作周期长、成本高<br>重点：分镜/概念设计/AIGC物料</div></div><div class="t2-tags"><div class="t2-tag" style="animation-delay:1.0s">华策</div><div class="t2-tag" style="animation-delay:1.1s">正午阳光</div><div class="t2-tag" style="animation-delay:1.2s">启蒙影业</div></div></div>
+    <div class="t2-card t2-c2" style="animation-delay:0.6s"><div class="t2-border"></div><div class="t2-text"><div class="t2-type">增效型</div><div class="t2-detail">压力：需要寻找新内容增量<br>重点：AI漫剧/虚拟偶像</div></div><div class="t2-tags"><div class="t2-tag" style="animation-delay:1.3s">博纳</div><div class="t2-tag" style="animation-delay:1.4s">恒星引力</div><div class="t2-tag" style="animation-delay:1.5s">欢娱</div><div class="t2-tag" style="animation-delay:1.6s">耀客</div></div></div>
+    <div class="t2-card t2-c3" style="animation-delay:0.9s"><div class="t2-border"></div><div class="t2-text"><div class="t2-type">出海型</div><div class="t2-detail">压力：海外本地化成本高<br>重点：多语种物料/海外AIGC运营</div></div><div class="t2-tags"><div class="t2-tag" style="animation-delay:1.7s">柠萌</div></div></div>
+    <div class="t2-card t2-c4" style="animation-delay:1.2s"><div class="t2-border"></div><div class="t2-text"><div class="t2-type">经纪公司</div><div class="t2-detail">压力：真人艺人成本和风险高<br>重点：AI艺人/虚拟偶像/粉丝运营</div></div><div class="t2-tags"><div class="t2-tag" style="animation-delay:1.8s">乐华</div><div class="t2-tag" style="animation-delay:1.9s">哇唧唧哇</div></div></div>
+    <div class="t2-card t2-c5" style="animation-delay:1.5s"><div class="t2-border"></div><div class="t2-text"><div class="t2-type">MCN</div><div class="t2-detail">压力：人力密集、ROI压力强<br>重点：场控/客服/审核/运营</div></div><div class="t2-tags"><div class="t2-tag" style="animation-delay:2.0s">无忧</div><div class="t2-tag" style="animation-delay:2.1s">遥望</div></div></div>
+  </div>
+</div>
+
+<div class="scene" id="s09" data-start="42.4" data-dur="3.6">
+<img class="el img-el" src="assets/logos/huace.png" style="left:30px;top:80px;width:120px;height:55px;" data-anim="slideLeft" data-delay="0">
+<div class="el txt-el" style="left:30px;top:160px;font-size:22px;color:#FF6B6B;font-weight:700;" data-anim="flashIn" data-delay="0.3">同事.Skill</div>
+<div class="el txt-el" style="left:30px;top:210px;font-size:14px;color:rgba(255,255,255,0.6);line-height:1.6;" data-anim="slideUp" data-delay="0.6">沉淀提示词模板<br>工作流资产<br>建立素材库</div>
+<img class="el img-el" src="assets/word_images/img_03.png" style="left:30px;top:320px;width:390px;height:400px;opacity:0.8;" data-anim="slideUp" data-delay="0.8">
+</div>
+
+<div class="scene" id="s10" data-start="46.0" data-dur="6.1">
+<img class="el img-el" src="assets/logos/qimeng.png" style="left:30px;top:80px;width:100px;height:70px;" data-anim="slideLeft" data-delay="0">
+<div class="el txt-el" style="left:140px;top:90px;font-size:16px;color:rgba(255,255,255,0.8);font-weight:500;" data-anim="fadeIn" data-delay="0.3">启蒙影业 · AI导演/艺术家</div>
+<img class="el img-el" src="assets/logos/zhengwu.png" style="left:30px;top:200px;width:100px;height:100px;" data-anim="popIn" data-delay="1.5">
+<div class="el txt-el" style="left:140px;top:230px;font-size:20px;color:#FFA940;font-weight:900;" data-anim="flashIn" data-delay="1.8">试 水</div>
+<div class="el txt-el" style="left:140px;top:270px;font-size:12px;color:rgba(255,255,255,0.5);" data-anim="fadeIn" data-delay="2.1">Runway · Pika · MJ<br>还是2023-24年的工具</div>
+</div>
+
+<div class="scene" id="s11" data-start="52.1" data-dur="7.4">
+<img class="el img-el" src="assets/logos/bona.png" style="left:30px;top:60px;width:120px;height:50px;" data-anim="slideLeft" data-delay="0">
+<div class="el txt-el" style="left:160px;top:65px;font-size:14px;color:#4ECDC4;font-weight:700;" data-anim="fadeIn" data-delay="0.3">博纳影业</div>
+<video class="el vid-el" src="assets/videos/sanxingdui.mp4" muted playsinline preload="auto" style="left:25px;top:140px;width:400px;height:225px;border-radius:8px;" data-anim="slideUp" data-delay="0.5"></video>
+<div class="el txt-el" style="left:25px;top:380px;font-size:16px;color:#FFB347;font-weight:700;" data-anim="flashIn" data-delay="0.8">《三星堆》动画大电影</div>
+<div class="el txt-el" style="left:25px;top:410px;font-size:12px;color:rgba(255,255,255,0.6);" data-anim="fadeIn" data-delay="1.1">已拿到动画龙标 · AIGMS制作中心</div>
+<div class="el txt-el" style="left:25px;top:450px;font-size:14px;color:#4ECDC4;font-weight:500;" data-anim="slideUp" data-delay="1.5">硬核技术岗：产品经理 · 后端开发</div>
+<div class="el txt-el" style="left:25px;top:490px;font-size:22px;color:#4ECDC4;font-weight:900;" data-anim="flashIn" data-delay="2.0">影视自动化生产线</div>
+</div>
+
+<div class="scene" id="s12" data-start="59.5" data-dur="4.2">
+<img class="el img-el" src="assets/logos/yaoke.png" style="left:30px;top:80px;width:140px;height:100px;" data-anim="slideLeft" data-delay="0">
+<div class="el txt-el" style="left:30px;top:220px;font-size:32px;color:#FFA940;font-weight:700;" data-anim="flashIn" data-delay="0.4">AI仿真人剧</div>
+<div class="el txt-el" style="left:30px;top:270px;font-size:18px;color:rgba(255,255,255,0.7);" data-anim="slideUp" data-delay="0.7">导演 · 抽卡师</div>
+<div class="el txt-el" style="left:30px;top:310px;font-size:12px;color:rgba(255,255,255,0.5);" data-anim="fadeIn" data-delay="1.0">红果分成系数最高60 · 秦凌岳/林汐颜</div>
+</div>
+
+<div class="scene" id="s13" data-start="63.7" data-dur="4.9">
+<img class="el img-el" src="assets/word_images/img_00.png" style="left:25px;top:100px;width:400px;height:550px;opacity:0.8;" data-anim="slideUp" data-delay="0">
+<div class="el txt-el" style="left:100px;top:670px;font-size:16px;color:#FFD93D;font-weight:700;background:rgba(255,217,61,0.15);border:1px solid rgba(255,217,61,0.3);padding:6px 16px;border-radius:8px;" data-anim="popIn" data-delay="0.8">兵马未动 粮草先行</div>
+</div>
+
+<div class="scene" id="s14" data-start="68.6" data-dur="10.0">
+  <div class="chart-content"><div class="chart-title">试水还是All in？</div><div class="chart-subtitle">影视公司AI投入程度 vs 岗位数量</div>
+    <div class="bub-chart"><div class="bub-track">
+      <div class="bub bub-high" style="left:85%;top:25%;width:50px;height:50px;animation-delay:0.3s"><span class="bub-name">博纳</span><span class="bub-val">5岗</span></div>
+      <div class="bub bub-high" style="left:70%;top:55%;width:46px;height:46px;animation-delay:0.5s"><span class="bub-name">恒星引力</span><span class="bub-val">4岗</span></div>
+      <div class="bub bub-mid" style="left:50%;top:35%;width:42px;height:42px;animation-delay:0.7s"><span class="bub-name">欢娱</span><span class="bub-val">3岗</span></div>
+      <div class="bub bub-mid" style="left:45%;top:65%;width:46px;height:46px;animation-delay:0.9s"><span class="bub-name">正午阳光</span><span class="bub-val">4岗</span></div>
+      <div class="bub bub-mid" style="left:35%;top:40%;width:46px;height:46px;animation-delay:1.1s"><span class="bub-name">耀客</span><span class="bub-val">4岗</span></div>
+      <div class="bub bub-low" style="left:20%;top:60%;width:34px;height:34px;animation-delay:1.3s"><span class="bub-name">柠萌</span><span class="bub-val">1岗</span></div>
+      <div class="bub bub-low" style="left:25%;top:28%;width:56px;height:56px;animation-delay:1.5s"><span class="bub-name">华策</span><span class="bub-val">5岗</span></div>
+    </div><div class="bub-axis"><span class="bub-l">← 试水</span><span class="bub-r">All in →</span></div></div>
+  </div>
+</div>
+
+<div class="scene" id="s15" data-start="78.6" data-dur="5.3">
+<img class="el img-el" src="assets/logos/linmon.png" style="left:155px;top:80px;width:140px;height:140px;" data-anim="popIn" data-delay="0">
+<div class="el txt-el" style="left:60px;top:240px;font-size:16px;color:#4ECDC4;font-weight:500;" data-anim="slideUp" data-delay="0.3">YouTube · Meta · TikTok</div>
+<video class="el vid-el" src="assets/videos/linmon_overseas.mp4" muted playsinline preload="auto" style="left:25px;top:290px;width:400px;height:225px;border-radius:8px;" data-anim="slideUp" data-delay="0.5"></video>
+<div class="el txt-el" style="left:30px;top:530px;font-size:14px;color:rgba(255,255,255,0.7);line-height:1.6;" data-anim="fadeIn" data-delay="0.8">《三十而已》曼谷篇 Disney+前五<br>海外发行岗 月薪11-20K</div>
+</div>
+
+<div class="scene" id="s16a" data-start="83.9" data-dur="2.0">
+  <div class="text-scene" style="color:#7B68EE;font-size:40px;font-weight:900;line-height:1.4;">经纪 & MCN</div>
+</div>
+
+<div class="scene" id="s16b" data-start="85.9" data-dur="10.5">
+  <div class="chart-content"><div class="chart-title">经纪/MCN公司AI应用方向</div><div class="chart-subtitle">虚拟偶像 · 数字人 · AIGC内容</div>
+    <div class="radar-wrap"><svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg"><g transform="translate(160,160)">
+      <polygon class="rgrid" points="0,-30 28.5,-9.3 17.6,24.3 -17.6,24.3 -28.5,-9.3"/><polygon class="rgrid" points="0,-60 57,-18.5 35.3,48.5 -35.3,48.5 -57,-18.5"/><polygon class="rgrid" points="0,-90 85.5,-27.8 52.9,72.8 -52.9,72.8 -85.5,-27.8"/><polygon class="rgrid" points="0,-120 114,-37.1 70.5,97.1 -70.5,97.1 -114,-37.1"/><polygon class="rgrid" points="0,-150 142.5,-46.4 88.2,121.4 -88.2,121.4 -142.5,-46.4"/>
+      <line class="raxis" x1="0" y1="0" x2="0" y2="-150"/><line class="raxis" x1="0" y1="0" x2="142.5" y2="-46.4"/><line class="raxis" x1="0" y1="0" x2="88.2" y2="121.4"/><line class="raxis" x1="0" y1="0" x2="-88.2" y2="121.4"/><line class="raxis" x1="0" y1="0" x2="-142.5" y2="-46.4"/>
+      <polygon class="rdata rd1" points="0,-135 85.5,-27.8 44.1,60.7 -61.7,84.9 -61.9,-20.1"/>
+      <polygon class="rdata rd2" points="0,-60 128.3,-41.8 79.3,109.1 -44.1,60.7 -92.9,-30.2" style="animation-delay:0.5s"/>
+      <polygon class="rdata rd3" points="0,-97.5 113.9,-37.1 61.7,84.9 -88.2,121.4 -49.9,-16.2" style="animation-delay:1.0s"/>
+      <polygon class="rdata rd4" points="0,-90 99.8,-32.5 70.5,97.1 -70.5,97.1 -78.4,-25.5" style="animation-delay:1.5s"/>
+      <text class="rlabel" x="0" y="-165">AI内容生产</text><text class="rlabel" x="160" y="-50">虚拟偶像</text><text class="rlabel" x="100" y="142">粉丝运营</text><text class="rlabel" x="-100" y="142">直播替代</text><text class="rlabel" x="-160" y="-50">AI短剧</text>
+    </g></svg></div>
+    <div class="radar-legend"><div class="rl-item"><div class="rl-dot" style="background:#FF6B6B"></div>乐华</div><div class="rl-item"><div class="rl-dot" style="background:#4ECDC4"></div>哇唧唧哇</div><div class="rl-item"><div class="rl-dot" style="background:#7B68EE"></div>无忧</div><div class="rl-item"><div class="rl-dot" style="background:#45B7D1"></div>遥望</div></div>
+  </div>
+</div>
+
+<div class="scene" id="s17a" data-start="96.4" data-dur="2.8">
+<img class="el img-el" src="assets/logos/wajijiwa.png" style="left:100px;top:80px;width:250px;height:100px;" data-anim="slideLeft" data-delay="0">
+<div class="el txt-el" style="left:60px;top:200px;font-size:16px;color:#4ECDC4;font-weight:500;line-height:1.8;" data-anim="slideUp" data-delay="0.5">AIGC写进管培生要求<br>艺人+AI形象走红毯<br>AI家族曲《āi ái ǎi ài》</div>
+</div>
+
+<div class="scene" id="s17b" data-start="99.2" data-dur="2.0">
+<img class="el img-el" src="assets/logos/yuehua.png" style="left:130px;top:80px;width:190px;height:160px;" data-anim="slideLeft" data-delay="0">
+<div class="el txt-el" style="left:80px;top:280px;font-size:28px;color:#FF4444;font-weight:900;" data-anim="flashIn" data-delay="0.3">纯AI生成 无真人演员</div>
+</div>
+
+<div class="scene" id="s18" data-start="101.2" data-dur="4.1">
+<video class="el vid-el" src="assets/videos/asoul.mp4" muted playsinline preload="auto" style="left:25px;top:60px;width:400px;height:225px;border-radius:8px;" data-anim="slideUp" data-delay="0"></video>
+<div class="el txt-el" style="left:130px;top:300px;font-size:36px;color:#96ADED;font-weight:900;" data-anim="popIn" data-delay="0.5">A-SOUL</div>
+<div class="el txt-el" style="left:80px;top:350px;font-size:14px;color:rgba(255,255,255,0.6);" data-anim="fadeIn" data-delay="0.8">2020年推出 · 原生虚拟偶像<br>音乐引入AIGC · 大幅降本增效</div>
+</div>
+
+<div class="scene" id="s19" data-start="105.3" data-dur="4.7">
+<video class="el vid-el" src="assets/videos/heydream.mp4" muted playsinline preload="auto" style="left:50px;top:60px;width:350px;height:350px;border-radius:12px;" data-anim="zoomIn" data-delay="0"></video>
+<div class="el txt-el" style="left:70px;top:430px;font-size:28px;color:#4ECDC4;font-weight:700;" data-anim="flashIn" data-delay="0.5">HeyDream</div>
+<div class="el txt-el" style="left:70px;top:470px;font-size:16px;color:#FFA940;font-weight:700;" data-anim="slideUp" data-delay="0.8">真人脸 + AI全流程制作</div>
+<div class="el txt-el" style="left:70px;top:510px;font-size:12px;color:rgba(255,255,255,0.5);" data-anim="fadeIn" data-delay="1.1">3月上新 · AI驱动真人女团</div>
+</div>
+
+<div class="scene" id="s19b" data-start="110.0" data-dur="1.1">
+  <div class="text-scene" style="color:#7B68EE;font-size:36px;font-weight:900;line-height:1.4;">元宇宙一路狂奔</div>
+</div>
+
+<div class="scene" id="s20" data-start="111.1" data-dur="4.2">
+  <div class="text-scene" style="color:#FF6B6B;font-size:42px;font-weight:900;line-height:1.4;">共同痛点</div>
+</div>
+
+<div class="scene" id="s20b" data-start="115.3" data-dur="4.7">
+<div class="el txt-el" style="left:80px;top:220px;font-size:28px;color:#FF6B6B;font-weight:700;" data-anim="flashIn" data-delay="0">成本高 ↑</div>
+<div class="el txt-el" style="left:80px;top:290px;font-size:28px;color:#FF6B6B;font-weight:700;" data-anim="flashIn" data-delay="0.5">风险高 ⚠</div>
+<div class="el txt-el" style="left:80px;top:360px;font-size:28px;color:#FFA940;font-weight:700;" data-anim="flashIn" data-delay="1.0">供给压力大</div>
+<div class="el txt-el" style="left:120px;top:460px;font-size:48px;color:#4ECDC4;font-weight:900;" data-anim="popIn" data-delay="1.8">→ AI</div>
+</div>
+
+<div class="scene" id="s21" data-start="120.0" data-dur="5.9">
+<img class="el img-el" src="assets/logos/wuyou.png" style="left:30px;top:120px;width:180px;height:46px;" data-anim="slideLeft" data-delay="0">
+<img class="el img-el" src="assets/logos/yaowang.png" style="left:240px;top:125px;width:180px;height:20px;" data-anim="slideRight" data-delay="0.2">
+<div class="el txt-el" style="left:100px;top:200px;font-size:28px;color:#4ECDC4;font-weight:700;" data-anim="slideUp" data-delay="0.5">AI研究员</div>
+<div class="el txt-el" style="left:60px;top:280px;font-size:24px;color:#fff;font-weight:700;background:rgba(78,205,196,0.2);border:1px solid rgba(78,205,196,0.4);padding:8px 20px;border-radius:20px;" data-anim="popIn" data-delay="1.0">场控</div>
+<div class="el txt-el" style="left:240px;top:280px;font-size:24px;color:#fff;font-weight:700;background:rgba(78,205,196,0.2);border:1px solid rgba(78,205,196,0.4);padding:8px 20px;border-radius:20px;" data-anim="popIn" data-delay="1.3">客服</div>
+<div class="el txt-el" style="left:60px;top:360px;font-size:24px;color:#fff;font-weight:700;background:rgba(78,205,196,0.2);border:1px solid rgba(78,205,196,0.4);padding:8px 20px;border-radius:20px;" data-anim="popIn" data-delay="1.6">审核</div>
+<div class="el txt-el" style="left:240px;top:360px;font-size:24px;color:#fff;font-weight:700;background:rgba(78,205,196,0.2);border:1px solid rgba(78,205,196,0.4);padding:8px 20px;border-radius:20px;" data-anim="popIn" data-delay="1.9">运营</div>
+<div class="el txt-el" style="left:100px;top:450px;font-size:24px;color:#fff;font-weight:700;background:rgba(255,107,107,0.2);border:1px solid rgba(255,107,107,0.4);padding:8px 20px;border-radius:20px;" data-anim="popIn" data-delay="2.2">主播孵化</div>
+<div class="el txt-el" style="left:80px;top:550px;font-size:22px;color:#4ECDC4;font-weight:700;" data-anim="flashIn" data-delay="2.8">AI替代方案 → 落地</div>
+</div>
+
+<div class="scene" id="s22" data-start="125.9" data-dur="2.7">
+  <div class="text-scene" style="color:#FFD93D;font-size:36px;font-weight:900;line-height:1.4;">多少真人岗位被释放？</div>
+</div>
+
+<div class="scene" id="s23" data-start="128.6" data-dur="3.4">
+  <div class="text-scene" style="color:rgba(255,255,255,0.8);font-size:20px;font-weight:500;line-height:1.6;">正如小娱前阵子分析<br>爱优腾和B站AI岗位时候<br>提到的</div>
+</div>
+
+<div class="scene" id="s24" data-start="132.0" data-dur="6.4">
+  <div class="chart-content"><div class="chart-title">核心洞察</div>
+    <div class="carousel" id="carousel">
+      <div class="ins-card ic1 active" data-i="0"><div class="ic-inner"><div class="ic-num">01</div><div class="ic-head">中小公司AI浓度反超巨头</div><div class="ic-body">博纳AI岗位占比<b>71.43%</b>，远超华策的12.82%</div></div></div>
+      <div class="ins-card ic2" data-i="1"><div class="ic-inner"><div class="ic-num">02</div><div class="ic-head">降本增效是第一驱动力</div><div class="ic-body">超过<b>60%</b>公司将降本增效列为AI招聘首要动机</div></div></div>
+      <div class="ins-card ic3" data-i="2"><div class="ic-inner"><div class="ic-num">03</div><div class="ic-head">三条路径分化明显</div><div class="ic-body">降本聚焦分镜，增效深耕漫剧，出海重仓运营</div></div></div>
+      <div class="ins-card ic4" data-i="3"><div class="ic-inner"><div class="ic-num">04</div><div class="ic-head">经纪/MCN全面拥抱数字人</div><div class="ic-body">MCN在数字人维度评分最高，虚拟偶像成核心壁垒</div></div></div>
+      <div class="ins-card ic5" data-i="4"><div class="ic-inner"><div class="ic-num">05</div><div class="ic-head">试水与All in并存</div><div class="ic-body">博纳All in技术，华策虽5岗但占比仅12.82%</div></div></div>
+      <div class="ins-card ic6" data-i="5"><div class="ic-inner"><div class="ic-num">06</div><div class="ic-head">AI岗位≠AI产出</div><div class="ic-body">决定转型成败的是组织适配度：流程重构+数据基建</div></div></div>
+    </div>
+    <div class="dots" id="dots"><div class="dot active"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+  </div>
+</div>
+
+<div class="scene" id="s25" data-start="138.4" data-dur="5.2">
+  <div class="text-scene">
+    <div style="font-size:40px;font-weight:900;color:#FF4444;line-height:1.4;margin-bottom:30px;animation:aFlashIn 0.4s ease forwards;">你让AI替你干活还是被AI清退？</div>
+    <div style="font-size:32px;color:#4ECDC4;font-weight:700;margin-bottom:20px;animation:aFadeIn 0.6s ease 0.8s forwards;opacity:0;">你是哪一种人？</div>
+    <div style="font-size:24px;color:rgba(255,255,255,0.7);margin-bottom:40px;animation:aFadeIn 0.6s ease 1.2s forwards;opacity:0;">评论区聊聊！</div>
+    <div style="font-size:16px;color:rgba(255,255,255,0.4);animation:aFadeIn 0.6s ease 1.6s forwards;opacity:0;">娱乐资本论 · 人才风向标</div>
+  </div>
+</div>
+
+<audio id="audio" src="assets/audio.wav" preload="auto"></audio>
+</div>
+
+<script>
+const SRT=[{"s":0,"e":1.541,"t":"传统影视公司做漫剧"},{"s":1.541,"e":2.773,"t":"要求学历985"},{"s":2.773,"e":3.698,"t":"这里面每个字"},{"s":3.698,"e":5.084,"t":"都透着一种反常识"},{"s":5.084,"e":6.471,"t":"在绝大多数漫剧公司"},{"s":6.471,"e":7.704,"t":"把招聘需求放宽到"},{"s":7.704,"e":9.09,"t":"专科学历的情况下"},{"s":9.09,"e":10.939,"t":"以苍兰诀、永夜星河闻名的"},{"s":10.939,"e":12.634,"t":"恒星引力，对AI岗要求"},{"s":12.634,"e":14.175,"t":"985、211学历"},{"s":14.175,"e":15.715,"t":"QS100本科以上"},{"s":15.715,"e":17.564,"t":"连AI漫剧实习生也一样"},{"s":17.564,"e":19.047,"t":"受到短剧等激烈冲击"},{"s":19.047,"e":20.233,"t":"传统影视公司以及"},{"s":20.233,"e":21.419,"t":"经纪或MCN机构"},{"s":21.419,"e":22.605,"t":"不转型就没饭吃"},{"s":22.605,"e":23.94,"t":"从13家公司放出的"},{"s":23.94,"e":25.422,"t":"AI相关招聘职位中"},{"s":25.422,"e":27.053,"t":"我们能看出什么端倪呢？"},{"s":27.053,"e":28.536,"t":"娱乐资本论分析发现"},{"s":28.536,"e":30.463,"t":"华策、正午阳光、启蒙影业等"},{"s":30.463,"e":31.649,"t":"属于降本型"},{"s":31.649,"e":33.28,"t":"博纳、恒星引力、欢娱、"},{"s":33.28,"e":34.911,"t":"耀客等属于增效型"},{"s":34.911,"e":36.542,"t":"柠萌等属于出海型"},{"s":36.542,"e":37.753,"t":"乐华、哇唧唧哇等"},{"s":37.753,"e":39.419,"t":"经纪公司转向AI艺人、"},{"s":39.419,"e":41.236,"t":"虚拟偶像及AI粉丝运营；"},{"s":41.236,"e":42.447,"t":"MCN、直播电商"},{"s":42.447,"e":43.507,"t":"如无忧和遥望"},{"s":43.507,"e":45.173,"t":"则在场控、客服、审核、"},{"s":45.173,"e":46.99,"t":"运营等环节引入AI替代"},{"s":46.99,"e":48.655,"t":"先看华策，它们大概想把"},{"s":48.655,"e":50.321,"t":"同事炼化为Skill"},{"s":50.321,"e":52.138,"t":"要求员工沉淀提示词模板"},{"s":52.138,"e":53.955,"t":"工作流资产，建立素材库"},{"s":53.955,"e":55.772,"t":"启蒙影业的AI导演等岗位"},{"s":55.772,"e":56.983,"t":"以创作执行为主"},{"s":56.983,"e":58.189,"t":"正午阳光还在试水"},{"s":58.189,"e":59.546,"t":"调研AI技术动态"},{"s":59.546,"e":61.354,"t":"提到的工具还是两年前的"},{"s":61.354,"e":62.108,"t":"与此同时"},{"s":62.108,"e":63.465,"t":"博纳已经用AI做完"},{"s":63.465,"e":65.123,"t":"《三星堆》动画大电影"},{"s":65.123,"e":66.932,"t":"他们招的全是硬核技术岗"},{"s":66.932,"e":68.59,"t":"产品经理、后端开发等"},{"s":68.59,"e":70.399,"t":"搭建起影视自动化生产线"},{"s":70.399,"e":72.358,"t":"耀客则做起了AI仿真人剧"},{"s":72.358,"e":74.016,"t":"招聘导演、抽卡师岗位"},{"s":74.016,"e":75.674,"t":"它和遥望科技都需要专门"},{"s":75.674,"e":77.182,"t":"给AI业务配备HR"},{"s":77.182,"e":78.613,"t":"柠萌影视AI岗重心"},{"s":78.613,"e":80.045,"t":"在海外油管、洋抖的"},{"s":80.045,"e":81.954,"t":"AIGC内容制作和运营"},{"s":81.954,"e":83.9,"t":"海外发行岗月薪1-2万"},{"s":83.9,"e":85.9,"t":"再来看下经纪和MCN公司"},{"s":85.9,"e":87.6,"t":"哇唧唧哇把AIGC写进"},{"s":87.6,"e":89.271,"t":"管培生要求，因为他们"},{"s":89.271,"e":91.021,"t":"让艺人跟自己的AI形象"},{"s":91.021,"e":92.612,"t":"一起走红毯、出单曲"},{"s":92.612,"e":94.361,"t":"是IP开发的重要一环"},{"s":94.361,"e":95.493,"t":"乐华娱乐则招5名"},{"s":95.493,"e":97.189,"t":"AI短视频编导，直接要求"},{"s":97.189,"e":99.169,"t":"纯AI生成、无真人演员"},{"s":99.169,"e":100.583,"t":"乐华五年前就已经引入"},{"s":100.583,"e":101.572,"t":"原生虚拟偶像"},{"s":101.572,"e":103.693,"t":"推出了大名鼎鼎的A-SOUL"},{"s":103.693,"e":105.107,"t":"AI大幅度降本增效"},{"s":105.107,"e":107.086,"t":"3月上新的HeyDream"},{"s":107.086,"e":109.066,"t":"采用真人脸+AI制作的模式"},{"s":109.066,"e":110.904,"t":"可以说在元宇宙里一路狂奔"},{"s":110.904,"e":112.12,"t":"艺人经纪和MCN"},{"s":112.12,"e":113.337,"t":"拥有共同的痛点"},{"s":113.337,"e":115.01,"t":"真人艺人成本和风险高"},{"s":115.01,"e":116.531,"t":"粉丝内容供给压力大"},{"s":116.531,"e":118.356,"t":"因此不约而同求助于AI"},{"s":118.356,"e":119.876,"t":"直播界巨头无忧传媒"},{"s":119.876,"e":121.245,"t":"招AI研究员岗位"},{"s":121.245,"e":122.614,"t":"要求对场控、客服、"},{"s":122.614,"e":123.83,"t":"内容审核、运营、"},{"s":123.83,"e":125.047,"t":"主播孵化等环节"},{"s":125.047,"e":127.024,"t":"输出可落地的AI替代方案"},{"s":127.024,"e":128.545,"t":"不知这一替代，又得有"},{"s":128.545,"e":130.369,"t":"多少真人岗位被释放出来？"},{"s":130.369,"e":131.704,"t":"正如小娱前阵子分析"},{"s":131.704,"e":133.484,"t":"爱优腾和B站AI岗位时候"},{"s":133.484,"e":134.077,"t":"提到的"},{"s":134.077,"e":135.115,"t":"文娱行业要么是"},{"s":135.115,"e":136.45,"t":"你让AI替你干活"},{"s":136.45,"e":138.378,"t":"要么你被AI从工位上清退"},{"s":138.378,"e":139.564,"t":"那么屏幕前的你"},{"s":139.564,"e":140.602,"t":"又是哪一种人？"},{"s":140.602,"e":142.53,"t":"你对上述哪个岗位最感兴趣"},{"s":142.53,"e":143.568,"t":"评论区聊聊吧！"}];
+
+const scenes=document.querySelectorAll('.scene');
+let startTime=null, currentScene=null, carouselTimer=null, carouselIndex=0;
+const animMap={'fadeIn':'aFadeIn','slideUp':'aSlideUp','slideLeft':'aSlideLeft','slideRight':'aSlideRight','popIn':'aPopIn','flashIn':'aFlashIn','zoomIn':'aZoomIn'};
+
+function triggerElAnimations(scene){scene.querySelectorAll('.el').forEach(el=>{const a=el.dataset.anim,d=parseFloat(el.dataset.delay||0);if(a&&animMap[a]){el.style.animation=animMap[a]+' 0.5s ease '+d+'s forwards';el.style.opacity='0';}});}
+function resetElAnimations(scene){scene.querySelectorAll('.el').forEach(el=>{el.style.animation='';el.style.opacity='0';});}
+
+function activateScene(scene){
+  if(currentScene===scene) return;
+  if(currentScene){currentScene.classList.remove('active');resetElAnimations(currentScene);currentScene.querySelectorAll('video').forEach(v=>{v.pause();v.currentTime=0;});}
+  currentScene=scene;scene.classList.add('active');triggerElAnimations(scene);
+  scene.querySelectorAll('video').forEach(v=>{v.currentTime=0;v.play().catch(()=>{});});
+  const car=scene.querySelector('.carousel');if(car){carouselIndex=0;startCarousel();}
+}
+
+function startCarousel(){
+  clearInterval(carouselTimer);
+  const cards=document.querySelectorAll('#carousel .ins-card'),dots=document.querySelectorAll('#dots .dot');
+  function show(i){cards.forEach((c,j)=>{c.classList.remove('active','prev');if(j===i)c.classList.add('active');else if(j<i)c.classList.add('prev');});dots.forEach((d,j)=>d.classList.toggle('active',j===i));}
+  show(0);carouselTimer=setInterval(()=>{carouselIndex++;if(carouselIndex>=6)carouselIndex=0;show(carouselIndex);},1000);
+}
+
+function tick(){
+  if(!startTime) return;
+  const elapsed=(Date.now()-startTime)/1000;
+  let found=null;
+  for(const scene of scenes){const s=parseFloat(scene.dataset.start),d=parseFloat(scene.dataset.dur);if(elapsed>=s&&elapsed<s+d){found=scene;break;}}
+  if(found) activateScene(found);
+  let sub=null;for(const s of SRT){if(elapsed>=s.s&&elapsed<s.e){sub=s.t;break;}}
+  if(sub){document.getElementById('subtitle').textContent=sub;document.getElementById('subtitle').classList.add('visible');}
+  else document.getElementById('subtitle').classList.remove('visible');
+  requestAnimationFrame(tick);
+}
+
+function startPlayback(){if(startTime)return;startTime=Date.now();const a=document.getElementById('audio');a.currentTime=0;a.play().catch(()=>{});requestAnimationFrame(tick);}
+setTimeout(startPlayback,500);
+</script>
+</body>
+</html>

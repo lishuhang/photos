@@ -1395,30 +1395,20 @@
       "date": "2023年08月04日 14:25",
       "file": "20230804【美踏控股发布虚拟人音舞社交人工智能大数据模型“心乐舞河”】.md"
     },
-    "https://mp.weixin.qq.com/s/xlACIVsNikQYwkQLLmzVtA": {
-      "title": "离北京500公里的县城，我发现了《蛋仔派对》火爆的秘密丨县域调研①",
-      "date": "2023年08月03日 15:04",
-      "file": "20230803【离北京500公里的县城，我发现了《蛋仔派对》火爆的秘密丨县域调研①】.md"
-    },
     "https://mp.weixin.qq.com/s/caAlG_TZQAh7WiX_UxQIyg": {
       "title": "7月互联网专利盘点｜爱奇艺自动识别口红色号，魅族自动呼叫代驾",
       "date": "2023年08月02日 13:57",
       "file": "20230802【7月互联网专利盘点｜爱奇艺自动识别口红色号，魅族自动呼叫代驾】.md"
     },
+    "https://mp.weixin.qq.com/s/GhNb8rim5ZuyyGVGBy8RuQ": {
+      "title": "桑稚的“鸭”，孟总的“水”，现偶创带货新趋势？",
+      "date": "2023年08月03日 15:04",
+      "file": "20230803【桑稚的“鸭”，孟总的“水”，现偶创带货新趋势？】.md"
+    },
     "https://mp.weixin.qq.com/s/3w1Ohm6Awtd6klTbjToNsg": {
       "title": "AI浪潮下，数字文娱出海迎来新方向",
       "date": "2023年08月02日 13:57",
       "file": "20230802【AI浪潮下，数字文娱出海迎来新方向】.md"
-    },
-    "https://mp.weixin.qq.com/s/7i3dNns13SGbuzHndH9Eng": {
-      "title": "音乐、艺术、IP衍生，泡泡岛音乐与艺术节打造行业新范式|专访创娱无界",
-      "date": "2023年08月04日 14:25",
-      "file": "20230804【音乐、艺术、IP衍生，泡泡岛音乐与艺术节打造行业新范式_专访创娱无界】.md"
-    },
-    "https://mp.weixin.qq.com/s/eAacEVD_N4ofXYR2jIkBNA": {
-      "title": "7月IP衍生品：大运会周边热销，《莲花楼》手办众筹",
-      "date": "2023年08月02日 13:57",
-      "file": "20230802【7月IP衍生品：大运会周边热销，《莲花楼》手办众筹】.md"
     },
     "https://mp.weixin.qq.com/s/eTH4qVO_pZ9iP1NWSlLsjA": {
       "title": "整理完《热烈》等101部国产运动片，我们发现了爆款公式",
@@ -1444,17 +1434,37 @@
       "title": "丝芭十年，在偶像经济的“迷宫”中寻找新出口",
       "date": "2023年08月07日 14:00",
       "file": "20230807【丝芭十年，在偶像经济的“迷宫”中寻找新出口】.md"
+    },
+    "https://mp.weixin.qq.com/s/4juEWUqCkmNm6flVVgl9JQ": {
+      "title": "00后养宠，宠物保健品已是必备？",
+      "date": "2023年08月05日 15:13",
+      "file": "20230805【00后养宠，宠物保健品已是必备？】.md"
     }
   },
   "failed": {},
   "captcha_pending": [
     {
-      "url": "https://mp.weixin.qq.com/s/GhNb8rim5ZuyyGVGBy8RuQ",
-      "title": "桑稚的“鸭”，孟总的“水”，现偶创带货新趋势？",
-      "seq": 282
+      "url": "https://mp.weixin.qq.com/s/xlACIVsNikQYwkQLLmzVtA",
+      "title": "离北京500公里的县城，我发现了《蛋仔派对》火爆的秘密丨县域调研①",
+      "seq": 280
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/7i3dNns13SGbuzHndH9Eng",
+      "title": "音乐、艺术、IP衍生，泡泡岛音乐与艺术节打造行业新范式|专访创娱无界",
+      "seq": 284
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/eAacEVD_N4ofXYR2jIkBNA",
+      "title": "7月IP衍生品：大运会周边热销，《莲花楼》手办众筹",
+      "seq": 285
+    },
+    {
+      "url": "https://mp.weixin.qq.com/s/YjvJjEJJhniyRXTq9TiR1w",
+      "title": "直播卖20万张票，不如跑100场路演丨暑期档路演调查",
+      "seq": 291
     }
   ],
-  "last_update": "2026-06-09T10:19:22.159222",
-  "total_completed": 289,
+  "last_update": "2026-06-09T10:20:29.513348",
+  "total_completed": 288,
   "total_failed": 0
 }

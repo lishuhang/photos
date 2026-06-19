@@ -1,0 +1,57 @@
+name: Agent-1 Crawl WeChat Articles
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_seconds:
+        description: 'Max runtime in seconds (default 21000 = ~5.8h)'
+        required: false
+        default: '21000'
+
+jobs:
+  crawl:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    timeout-minutes: 360  # 6 hours max
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install patchright beautifulsoup4 markdownify
+          python3 -m patchright install chromium
+
+      - name: Download task CSV
+        run: |
+          mkdir -p /tmp/agent1_work
+          curl -sL -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github.raw" \
+            "https://api.github.com/repos/${{ github.repository }}/contents/yz_archive/agent_1_tasks_0619.csv" \
+            -o /tmp/agent1_work/agent_1_tasks_0619.csv
+          echo "Task count: $(wc -l < /tmp/agent1_work/agent_1_tasks_0619.csv)"
+
+      - name: Run crawler
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          BRANCH: main
+          WORK_DIR: /tmp/agent1_work
+          CSV_PATH: /tmp/agent1_work/agent_1_tasks_0619.csv
+          MAX_SECONDS: ${{ github.event.inputs.max_seconds || '21000' }}
+        run: |
+          python3 _tools/agent1_crawl_gh.py
+
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: agent1-logs
+          path: /tmp/agent1_work/
+          retention-days: 7

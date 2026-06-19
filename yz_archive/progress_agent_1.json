@@ -2471,24 +2471,7 @@
       "file": "20240811-坐上行业头把交椅后，珀莱雅下一步怎么走？｜对话侯军呈.md"
     }
   },
-  "failed": {
-    "https://mp.weixin.qq.com/s/Zp0I9Y6Fn7EetGRTZHzHHg": {
-      "error": "max retries exceeded",
-      "title": "歌手的梦想“进阶”：如何实现关键跃升？"
-    },
-    "https://mp.weixin.qq.com/s/RXPMUdDHwF9EjJSe7WqXdA": {
-      "error": "max retries exceeded",
-      "title": "消费降级时代，年轻人把闲鱼玩成了小红书丨Z时代观察①"
-    },
-    "https://mp.weixin.qq.com/s/F8MxM3iiEJgec694KSjMVQ": {
-      "error": "CAPTCHA persistent - skipping to test if URL-specific",
-      "title": "“李一舟何许人也” ｜ 底片"
-    },
-    "https://mp.weixin.qq.com/s/HM1Dkg3MAHEE62keg3ww_g": {
-      "error": "max retries exceeded",
-      "title": "被内卷、很焦虑、在亏钱，短剧人的“新抓手”在哪里？"
-    }
-  },
+  "failed": {},
   "stats": {
     "start_time": "2026-06-19T06:20:36",
     "last_update": "2026-06-19T12:46:01",

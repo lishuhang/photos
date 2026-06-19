@@ -2224,6 +2224,31 @@
       "title": "无一有总冠，近半零招商，恋综置死地后生",
       "date": "2024-07-16",
       "file": "20240716-无一有总冠，近半零招商，恋综置死地后生.md"
+    },
+    "https://mp.weixin.qq.com/s/LUE8O0qOLK68riJEwTVLAg": {
+      "title": "黄子韬恋综资本局遥望控盘+严敏“还债”+优酷贵州播出",
+      "date": "2024-07-16",
+      "file": "20240716-黄子韬恋综资本局遥望控盘+严敏“还债”+优酷贵州播出.md"
+    },
+    "https://mp.weixin.qq.com/s/ZivIzFmjZ4JRZbi_8cxaVw": {
+      "title": "“做文旅短剧一定要从上往下推”丨专访",
+      "date": "2024-07-20",
+      "file": "20240720-“做文旅短剧一定要从上往下推”丨专访.md"
+    },
+    "https://mp.weixin.qq.com/s/DGqNFGBQqZ7_mNMKThdHHg": {
+      "title": "两年三亿的TF新生，也救不了内娱养成系",
+      "date": "2024-07-21",
+      "file": "20240721-两年三亿的TF新生，也救不了内娱养成系.md"
+    },
+    "https://mp.weixin.qq.com/s/rFgxLgHWZTdH-8_QlRdbPg": {
+      "title": "连开与取消：上半年演唱会市场的冰火两重天",
+      "date": "2024-07-19",
+      "file": "20240719-连开与取消：上半年演唱会市场的冰火两重天.md"
+    },
+    "https://mp.weixin.qq.com/s/9KrEnb1FOInpq3VTUaSB9Q": {
+      "title": "“远嫁中东当富婆”引争议，跨国情侣博主正在被流量反噬",
+      "date": "2024-07-21",
+      "file": "20240721-“远嫁中东当富婆”引争议，跨国情侣博主正在被流量反噬.md"
     }
   },
   "failed": {
@@ -2238,12 +2263,16 @@
     "https://mp.weixin.qq.com/s/F8MxM3iiEJgec694KSjMVQ": {
       "error": "CAPTCHA persistent - skipping to test if URL-specific",
       "title": "“李一舟何许人也” ｜ 底片"
+    },
+    "https://mp.weixin.qq.com/s/HM1Dkg3MAHEE62keg3ww_g": {
+      "error": "max retries exceeded",
+      "title": "被内卷、很焦虑、在亏钱，短剧人的“新抓手”在哪里？"
     }
   },
   "stats": {
     "start_time": "2026-06-19T06:20:36",
-    "last_update": "2026-06-19T12:35:39",
-    "total_fetched": 445,
+    "last_update": "2026-06-19T12:36:58",
+    "total_fetched": 450,
     "last_batch_uploaded": 4
   }
 }

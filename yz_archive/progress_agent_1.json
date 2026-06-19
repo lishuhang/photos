@@ -1024,6 +1024,31 @@
       "title": "舆论风暴中的“中国马斯克”之争：李想VS雷军",
       "date": "2024-04-07",
       "file": "20240407-舆论风暴中的“中国马斯克”之争：李想VS雷军.md"
+    },
+    "https://mp.weixin.qq.com/s/mqPJrWmLWMB4mcEs6r8zZw": {
+      "title": "引进片抗大头，国产片聚小力，清明档8亿上岸",
+      "date": "2024-04-06",
+      "file": "20240406-引进片抗大头，国产片聚小力，清明档8亿上岸.md"
+    },
+    "https://mp.weixin.qq.com/s/JwzayY7Y0N6u4n5RSlSSHw": {
+      "title": "《与凤行》刷新《繁花》纪录，三月剧集又迎招商热？",
+      "date": "2024-04-10",
+      "file": "20240410-《与凤行》刷新《繁花》纪录，三月剧集又迎招商热？.md"
+    },
+    "https://mp.weixin.qq.com/s/nnA9XhWvLYKnGDl7_oEXZQ": {
+      "title": "《令人心动的offer》综改剧，坂元裕二日剧被翻拍丨3月电视剧备案",
+      "date": "2024-04-12",
+      "file": "20240412-《令人心动的offer》综改剧，坂元裕二日剧被翻拍丨3月电视剧备案.md"
+    },
+    "https://mp.weixin.qq.com/s/huXeKLta84ouG63EQQVRTw": {
+      "title": "从「率先入局」到「持续领跑」，快手短剧做对了什么？",
+      "date": "2024-04-11",
+      "file": "20240411-从「率先入局」到「持续领跑」，快手短剧做对了什么？.md"
+    },
+    "https://mp.weixin.qq.com/s/ZDexxGvJwIBcZpR9KB0Ltw": {
+      "title": "我在小红书当了两个月汽车博主，看到今年车市的三个秘密",
+      "date": "2024-04-09",
+      "file": "20240409-我在小红书当了两个月汽车博主，看到今年车市的三个秘密.md"
     }
   },
   "failed": {
@@ -1042,8 +1067,8 @@
   },
   "stats": {
     "start_time": "2026-06-19T06:20:36",
-    "last_update": "2026-06-19T11:47:14",
-    "total_fetched": 205,
+    "last_update": "2026-06-19T11:48:13",
+    "total_fetched": 210,
     "last_batch_uploaded": 4
   }
 }

@@ -1949,6 +1949,31 @@
       "title": "腾讯视频收获季，播种好内容的新种子",
       "date": "2024-06-24",
       "file": "20240624-腾讯视频收获季，播种好内容的新种子.md"
+    },
+    "https://mp.weixin.qq.com/s/ImB9nyUMJbLfzN4cPpqlIQ": {
+      "title": "上海电视节开幕论坛：中国影视+无限可能",
+      "date": "2024-06-25",
+      "file": "20240625-上海电视节开幕论坛：中国影视+无限可能.md"
+    },
+    "https://mp.weixin.qq.com/s/wCMp-NWFYLYIIKsH8dgfWw": {
+      "title": "陆川《西野》上影首映，联想AI PC开启创作者经济新时代",
+      "date": "2024-06-24",
+      "file": "20240624-陆川《西野》上影首映，联想AI PC开启创作者经济新时代.md"
+    },
+    "https://mp.weixin.qq.com/s/Ic-Oou3jkCZ2qdHq82IPcQ": {
+      "title": "角色贴脸、打戏过瘾，内容出海的金庸武侠世界还做对了什么？",
+      "date": "2024-06-24",
+      "file": "20240624-角色贴脸、打戏过瘾，内容出海的金庸武侠世界还做对了什么？.md"
+    },
+    "https://mp.weixin.qq.com/s/Ce-Xx1tJhNl7EWrI7_17VQ": {
+      "title": "中产萎靡，标榜“调性”的高价品牌集体坍塌",
+      "date": "2024-06-23",
+      "file": "20240623-中产萎靡，标榜“调性”的高价品牌集体坍塌.md"
+    },
+    "https://mp.weixin.qq.com/s/ligBhs1n4QAg2mc1p0PEdQ": {
+      "title": "拼视野、拼审美、拼深度，2024剧集市场进入“高品质2.0”阶段",
+      "date": "2024-06-21",
+      "file": "20240621-拼视野、拼审美、拼深度，2024剧集市场进入“高品质2.0”阶段.md"
     }
   },
   "failed": {
@@ -1967,8 +1992,8 @@
   },
   "stats": {
     "start_time": "2026-06-19T06:20:36",
-    "last_update": "2026-06-19T12:24:32",
-    "total_fetched": 390,
+    "last_update": "2026-06-19T12:25:30",
+    "total_fetched": 395,
     "last_batch_uploaded": 4
   }
 }

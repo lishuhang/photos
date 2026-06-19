@@ -1599,6 +1599,31 @@
       "title": "取消播放时长改革，B站为什么“怂”了？",
       "date": "2024-05-25",
       "file": "20240525-取消播放时长改革，B站为什么“怂”了？.md"
+    },
+    "https://mp.weixin.qq.com/s/DoAWaIVSkBp1OeaGoGaIfQ": {
+      "title": "长视频“剧场”暗战：类型突破、长线产能、内部竞争",
+      "date": "2024-05-23",
+      "file": "20240523-长视频“剧场”暗战：类型突破、长线产能、内部竞争.md"
+    },
+    "https://mp.weixin.qq.com/s/tvBS4PuOVhwXNb1ponouEw": {
+      "title": "“只管生不管养”的奇瑞，如何让仅诞生四个月的iCar火出圈？",
+      "date": "2024-05-26",
+      "file": "20240526-“只管生不管养”的奇瑞，如何让仅诞生四个月的iCar火出圈？.md"
+    },
+    "https://mp.weixin.qq.com/s/Mw0cKxejNpou6UiPXKJXaw": {
+      "title": "OpenAI硬蹭寡姐声音？《Her》走进现实却是以侵权的方式",
+      "date": "2024-05-23",
+      "file": "20240523-OpenAI硬蹭寡姐声音？《Her》走进现实却是以侵权的方式.md"
+    },
+    "https://mp.weixin.qq.com/s/5rY0n2ASPdFakAxK8J0C4w": {
+      "title": "叠纸祖龙上公堂，《暖暖》《以闪》有一战",
+      "date": "2024-05-24",
+      "file": "20240524-叠纸祖龙上公堂，《暖暖》《以闪》有一战.md"
+    },
+    "https://mp.weixin.qq.com/s/xmpawHSf-d3GRhdlzlxfYg": {
+      "title": "中国零售大洗牌：商超巨头们一年共亏损49亿，为什么？",
+      "date": "2024-05-25",
+      "file": "20240525-中国零售大洗牌：商超巨头们一年共亏损49亿，为什么？.md"
     }
   },
   "failed": {
@@ -1617,8 +1642,8 @@
   },
   "stats": {
     "start_time": "2026-06-19T06:20:36",
-    "last_update": "2026-06-19T12:10:18",
-    "total_fetched": 320,
+    "last_update": "2026-06-19T12:11:18",
+    "total_fetched": 325,
     "last_batch_uploaded": 4
   }
 }

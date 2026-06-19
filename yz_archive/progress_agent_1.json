@@ -694,6 +694,11 @@
       "title": "《南来北往》刷新爱奇艺记录，《猎冰》被“骂赢”丨二月剧集商务总结",
       "date": "2024-03-13",
       "file": "20240313-《南来北往》刷新爱奇艺记录，《猎冰》被“骂赢”丨二月剧集商务总结.md"
+    },
+    "https://mp.weixin.qq.com/s/VkXh4D4tkErqHLKK1goZ1g": {
+      "title": "Taylor Swift全球巡演：行走的GDP",
+      "date": "2024-03-13",
+      "file": "20240313-Taylor Swift全球巡演：行走的GDP.md"
     }
   },
   "failed": {
@@ -712,8 +717,8 @@
   },
   "stats": {
     "start_time": "2026-06-19T06:20:36",
-    "last_update": "2026-06-19T11:34:22",
-    "total_fetched": 139,
+    "last_update": "2026-06-19T11:34:32",
+    "total_fetched": 140,
     "last_batch_uploaded": 4
   }
 }

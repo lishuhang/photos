@@ -1194,6 +1194,11 @@
       "title": "许美静演唱会“退票”风波：一场有预谋的情怀收割",
       "date": "2024-04-23",
       "file": "20240423-许美静演唱会“退票”风波：一场有预谋的情怀收割.md"
+    },
+    "https://mp.weixin.qq.com/s/Q6OZ5r0iq1HfVA1gJ6RKzg": {
+      "title": "喜剧综艺的开场嘉宾，场子热起来才重要",
+      "date": "2024-04-22",
+      "file": "20240422-喜剧综艺的开场嘉宾，场子热起来才重要.md"
     }
   },
   "failed": {
@@ -1212,8 +1217,8 @@
   },
   "stats": {
     "start_time": "2026-06-19T06:20:36",
-    "last_update": "2026-06-19T11:53:55",
-    "total_fetched": 239,
+    "last_update": "2026-06-19T11:54:13",
+    "total_fetched": 240,
     "last_batch_uploaded": 4
   }
 }

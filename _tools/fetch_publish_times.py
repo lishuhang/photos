@@ -34,9 +34,29 @@ PUBLISH_TIME_PATTERNS = [
     re.compile(r'<em[^>]*id="publish_time"[^>]*>([^<]+)</em>'),
     # Fallback: var ct = "1687156011"
     re.compile(r'var\s+ct\s*=\s*["\'](\d+)["\']'),
+    # Fallback: window.ct = "1687156011"
+    re.compile(r'window\.ct\s*=\s*["\'](\d+)["\']'),
+    # Fallback: ct = "1687156011"
+    re.compile(r'\bct\s*=\s*["\'](\d{9,11})["\']'),
     # Fallback: "publish_time":"2023-03-30 23:41"
     re.compile(r'"publish_time"\s*:\s*"([^"]+)"'),
+    # Fallback: <meta property="og:article:published_time" content="2023-03-30T23:41:00+08:00">
+    re.compile(r'<meta[^>]*property="og:article:published_time"[^>]*content="([^"]+)"'),
+    # Fallback: <meta name="publish_time" content="2023-03-30 23:41">
+    re.compile(r'<meta[^>]*name="publish_time"[^>]*content="([^"]+)"'),
+    # Fallback: createTime = '1687156011'
+    re.compile(r'createTime\s*=\s*["\'](\d{9,11})["\']'),
+    # Fallback: <time datetime="2023-03-30T23:41:00+08:00">
+    re.compile(r'<time[^>]*datetime="([^"]+)"'),
+    # Fallback: 'create_time'=1687156011
+    re.compile(r"create_time['\"]?\s*[:=]\s*['\"]?(\d{9,11})['\"]?"),
+    # Fallback: 'update_time'=1687156011
+    re.compile(r"update_time['\"]?\s*[:=]\s*['\"]?(\d{9,11})['\"]?"),
 ]
+
+# Additional regex for finding any date-like pattern in script tags as last resort
+DATE_IN_SCRIPT_PATTERN = re.compile(r'"(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})')
+CT_IN_ANY_CONTEXT = re.compile(r'\bct\s*=\s*["\'](\d{9,11})["\']')
 
 
 def fetch_url(url, timeout=30):
@@ -69,6 +89,10 @@ def parse_publish_time(html):
     if '环境异常' in html or 'wappoc_appmsgcaptcha' in html:
         return None, 'CAPTCHA_BLOCKED', 'captcha'
 
+    # Check for deleted/removed article pages
+    if len(html) < 5000 and ('已删除' in html or '该内容已被发布者删除' in html or 'temporarily unavailable' in html.lower()):
+        return None, 'ARTICLE_DELETED', 'deleted'
+
     for i, pattern in enumerate(PUBLISH_TIME_PATTERNS):
         m = pattern.search(html)
         if not m:
@@ -80,21 +104,34 @@ def parse_publish_time(html):
             if m2:
                 y, mo, d = m2.group(1), int(m2.group(2)), int(m2.group(3))
                 return f"{y}-{mo:02d}-{d:02d}", raw, 'em_publish_time'
-        elif i == 1:
-            # Unix timestamp
+        elif i in (1, 2, 3, 7, 9, 10):
+            # Unix timestamp patterns
             try:
                 ts = int(raw)
-                # WeChat ct is in Beijing time
-                dt = datetime.fromtimestamp(ts, tz=timezone(timedelta(hours=8)))
-                return dt.strftime('%Y-%m-%d'), raw, 'var_ct'
+                if 1000000000 < ts < 2000000000:  # sanity check
+                    # WeChat ct is in Beijing time
+                    dt = datetime.fromtimestamp(ts, tz=timezone(timedelta(hours=8)))
+                    return dt.strftime('%Y-%m-%d'), raw, f'ts_pattern_{i}'
             except ValueError:
                 pass
-        elif i == 2:
-            # ISO format
+        elif i == 4:
+            # JSON ISO format
             m2 = re.match(r'(\d{4})-(\d{1,2})-(\d{1,2})', raw)
             if m2:
                 y, mo, d = m2.group(1), int(m2.group(2)), int(m2.group(3))
                 return f"{y}-{mo:02d}-{d:02d}", raw, 'json_publish_time'
+        elif i in (5, 6):
+            # Meta tag with ISO date
+            m2 = re.match(r'(\d{4})-(\d{1,2})-(\d{1,2})', raw)
+            if m2:
+                y, mo, d = m2.group(1), int(m2.group(2)), int(m2.group(3))
+                return f"{y}-{mo:02d}-{d:02d}", raw, 'meta_publish_time'
+        elif i == 8:
+            # <time datetime="...">
+            m2 = re.match(r'(\d{4})-(\d{1,2})-(\d{1,2})', raw)
+            if m2:
+                y, mo, d = m2.group(1), int(m2.group(2)), int(m2.group(3))
+                return f"{y}-{mo:02d}-{d:02d}", raw, 'time_tag'
 
     return None, '', 'not_found'
 
@@ -211,8 +248,15 @@ def main():
             print(f"[{idx+1}/{len(items)}] SKIP (no URL): {old_name[:60]}")
             continue
 
-        # Fetch WeChat article
-        html, status = fetch_url(wechat_url)
+        # Fetch WeChat article (retry up to 3 times on transient failures)
+        html, status = '', 0
+        for attempt in range(3):
+            html, status = fetch_url(wechat_url, timeout=45)
+            if html and status == 200:
+                break
+            print(f"  retry {attempt+1}/3 (status={status}, len={len(html)})")
+            time.sleep(2 * (attempt + 1))
+        
         if not html:
             result['status'] = 'fetch_failed'
             result['http_status'] = status
@@ -224,12 +268,15 @@ def main():
         date_iso, raw_text, source = parse_publish_time(html)
         result['raw_publish_time'] = raw_text
         result['source'] = source
+        result['html_length'] = len(html)
 
         if not date_iso:
             result['status'] = 'parse_failed'
+            # Save first 3000 chars of HTML for debugging
+            result['html_snippet'] = html[:3000]
             results.append(result)
             fail_count += 1
-            print(f"[{idx+1}/{len(items)}] FAIL (parse): {old_name[:60]} | source={source}")
+            print(f"[{idx+1}/{len(items)}] FAIL (parse): {old_name[:60]} | source={source} | html_len={len(html)}")
             continue
 
         result['date_iso'] = date_iso

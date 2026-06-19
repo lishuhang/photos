@@ -824,6 +824,31 @@
       "title": "TME在线音乐强劲增长背后：内容生态加速释放音乐消费潜能",
       "date": "2024-03-19",
       "file": "20240319-TME在线音乐强劲增长背后：内容生态加速释放音乐消费潜能.md"
+    },
+    "https://mp.weixin.qq.com/s/6TfVasQcvj_BShbCWksudA": {
+      "title": "网易脚踩腾讯破千亿，“小学生”撑起半边天",
+      "date": "2024-03-20",
+      "file": "20240320-网易脚踩腾讯破千亿，“小学生”撑起半边天.md"
+    },
+    "https://mp.weixin.qq.com/s/TQ6KjKQH9ElrQEEvyHPuGQ": {
+      "title": "传统影视人该怎么做短剧？｜对话抖音、完美、北京精彩、登峰",
+      "date": "2024-03-18",
+      "file": "20240318-传统影视人该怎么做短剧？｜对话抖音、完美、北京精彩、登峰.md"
+    },
+    "https://mp.weixin.qq.com/s/GyMLvyTR5DkdFzsg2FGkiQ": {
+      "title": "2024的香港电影，到了触底反弹的时刻",
+      "date": "2024-03-23",
+      "file": "20240323-2024的香港电影，到了触底反弹的时刻.md"
+    },
+    "https://mp.weixin.qq.com/s/zL9CjXioQBRXI4zlEuPXIA": {
+      "title": "电视剧《追风者》黄金段收视第一：儒意风起，万达提速",
+      "date": "2024-03-25",
+      "file": "20240325-电视剧《追风者》黄金段收视第一：儒意风起，万达提速.md"
+    },
+    "https://mp.weixin.qq.com/s/u9Gh40en6Oo5usOzNo-0Cw": {
+      "title": "“医美印钞机”失速，年轻人不爱玻尿酸了",
+      "date": "2024-03-23",
+      "file": "20240323-“医美印钞机”失速，年轻人不爱玻尿酸了.md"
     }
   },
   "failed": {
@@ -842,8 +867,8 @@
   },
   "stats": {
     "start_time": "2026-06-19T06:20:36",
-    "last_update": "2026-06-19T11:39:18",
-    "total_fetched": 165,
+    "last_update": "2026-06-19T11:40:15",
+    "total_fetched": 170,
     "last_batch_uploaded": 4
   }
 }

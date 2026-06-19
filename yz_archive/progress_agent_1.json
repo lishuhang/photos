@@ -1944,6 +1944,11 @@
       "title": "综艺怎么用好“下乡”这块新地图？",
       "date": "2024-06-22",
       "file": "20240622-综艺怎么用好“下乡”这块新地图？.md"
+    },
+    "https://mp.weixin.qq.com/s/ulXDuylKYAceuhbGk5oXXw": {
+      "title": "腾讯视频收获季，播种好内容的新种子",
+      "date": "2024-06-24",
+      "file": "20240624-腾讯视频收获季，播种好内容的新种子.md"
     }
   },
   "failed": {
@@ -1962,8 +1967,8 @@
   },
   "stats": {
     "start_time": "2026-06-19T06:20:36",
-    "last_update": "2026-06-19T12:24:21",
-    "total_fetched": 389,
+    "last_update": "2026-06-19T12:24:32",
+    "total_fetched": 390,
     "last_batch_uploaded": 4
   }
 }

@@ -699,6 +699,31 @@
       "title": "Taylor Swift全球巡演：行走的GDP",
       "date": "2024-03-13",
       "file": "20240313-Taylor Swift全球巡演：行走的GDP.md"
+    },
+    "https://mp.weixin.qq.com/s/y6qvcQ2pMDA1Sbyh5eh0nw": {
+      "title": "影视行业回暖的风，终于吹到了香港",
+      "date": "2024-03-13",
+      "file": "20240313-影视行业回暖的风，终于吹到了香港.md"
+    },
+    "https://mp.weixin.qq.com/s/7YqDr7qqk6FaVWEpxt0Kjg": {
+      "title": "短剧闯入海外：高举高打、本地化、AI和长期主义｜深度",
+      "date": "2024-03-08",
+      "file": "20240308-短剧闯入海外：高举高打、本地化、AI和长期主义｜深度.md"
+    },
+    "https://mp.weixin.qq.com/s/rnQSkmZL18O0LRq9LiRqYA": {
+      "title": "“海外短剧是蓝海有机会，但更需要长期主义”｜专访点众科技",
+      "date": "2024-03-08",
+      "file": "20240308-“海外短剧是蓝海有机会，但更需要长期主义”｜专访点众科技.md"
+    },
+    "https://mp.weixin.qq.com/s/sKBUFZ1gvCC1w061MKLaGw": {
+      "title": "名人的抖音创作法则：新中式审美，反焦虑心态，综艺化编排",
+      "date": "2024-03-11",
+      "file": "20240311-名人的抖音创作法则：新中式审美，反焦虑心态，综艺化编排.md"
+    },
+    "https://mp.weixin.qq.com/s/wNRmk9s1Ba03skH0RqovMw": {
+      "title": "2月网络动画规划备案：《时光代理人》开新篇章，《眷思量》出第二季",
+      "date": "2024-03-14",
+      "file": "20240314-2月网络动画规划备案：《时光代理人》开新篇章，《眷思量》出第二季.md"
     }
   },
   "failed": {
@@ -717,8 +742,8 @@
   },
   "stats": {
     "start_time": "2026-06-19T06:20:36",
-    "last_update": "2026-06-19T11:34:32",
-    "total_fetched": 140,
+    "last_update": "2026-06-19T11:35:28",
+    "total_fetched": 145,
     "last_batch_uploaded": 4
   }
 }

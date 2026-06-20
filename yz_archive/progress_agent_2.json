@@ -2985,10 +2985,11 @@
   },
   "failed": {
     "https://mp.weixin.qq.com/s/44B2DDsrTbtrXuSvHs7b8w": {
-      "error": "article_unavailable_permanent",
+      "error": "article_removed_by_wechat",
       "title": "《以闪》被骂辱女，我在女权群收集了祖龙“十大罪证”",
       "seq": 100,
-      "note": "Article returns CAPTCHA + NO_CONTENT consistently across multiple runs over 1+ hours. Likely deleted or restricted by WeChat."
+      "note": "Article confirmed unavailable. Page shows: \"此内容因违规无法查看 - 由用户投诉并经平台审核，涉及低俗、性暗示或色情信息\". Article was removed by WeChat for policy violation (vulgar/sexual content). Confirmed via Patchright with stealth mode - HTML returned with violation notice instead of CAPTCHA.",
+      "verified_at": "2026-06-20T04:42:00"
     }
   },
   "stats": {
@@ -3020,6 +3021,13 @@
         "zip": "batch_2_4.zip",
         "uploaded_at": "2026-06-19T10:51:32",
         "count": 100
+      },
+      {
+        "batch": 5,
+        "zip": "batch_2_5.zip",
+        "uploaded_at": "2026-06-19T11:32:00",
+        "count": 97,
+        "final": true
       }
     ]
   },

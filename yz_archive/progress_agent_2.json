@@ -1,9 +1,35 @@
 {
-  "completed": {},
+  "completed": {
+    "https://mp.weixin.qq.com/s/4W9kTivotuN0oUzaBw5kmA": {
+      "title": "平台战争主导“秋一杯”：第六年，狂欢与混乱并存",
+      "date": "2025-08-10",
+      "file": "20250810-平台战争主导“秋一杯”：第六年，狂欢与混乱并存.md"
+    },
+    "https://mp.weixin.qq.com/s/ZygR2Z7vW5tIxUtir4X0Cg": {
+      "title": "点外卖送周杰伦演唱会门票？美团会员这波“氪金打榜”杀疯了",
+      "date": "2025-08-12",
+      "file": "20250812-点外卖送周杰伦演唱会门票？美团会员这波“氪金打榜”杀疯了.md"
+    },
+    "https://mp.weixin.qq.com/s/YcjaQ_x0Ht2_bBV1q2YCkw": {
+      "title": "茶百道北美首店；喜茶入驻饿了么；蜜雪冰城再现食安风波|茶饮食品圈一周大事件",
+      "date": "2025-08-20",
+      "file": "20250820-茶百道北美首店；喜茶入驻饿了么；蜜雪冰城再现食安风波_茶饮食品圈一周大事件.md"
+    },
+    "https://mp.weixin.qq.com/s/7fHr7uR8T5xsv9JlZJIvWA": {
+      "title": "得力“超级文具节”引爆IP联名，国民品牌如何“哪吒式”破圈年轻化",
+      "date": "2025-08-19",
+      "file": "20250819-得力“超级文具节”引爆IP联名，国民品牌如何“哪吒式”破圈年轻化.md"
+    },
+    "https://mp.weixin.qq.com/s/N7vjgi0mxA3cZRwQAxpGfA": {
+      "title": "毛戈平或将跨入\"50亿俱乐部\"；屈臣氏中国门店数跌至7年最低；胡润首发中国彩妆品牌Top50丨美妆圈一周大事件",
+      "date": "2025-08-19",
+      "file": "20250819-毛戈平或将跨入_50亿俱乐部_；屈臣氏中国门店数跌至7年最低；胡润首发中国彩妆品牌Top50丨美妆圈一周大事件.md"
+    }
+  },
   "failed": {},
   "stats": {
     "start_time": "2026-06-21T15:18:42",
-    "last_update": "2026-06-21T15:18:42",
-    "total_fetched": 0
+    "last_update": "2026-06-21T15:19:37",
+    "total_fetched": 5
   }
 }

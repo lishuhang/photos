@@ -2449,17 +2449,36 @@
       "title": "如何用一场手机发布会，让浪漫落入年轻人掌心？",
       "date": "2026-06-01",
       "file": "20260601-如何用一场手机发布会，让浪漫落入年轻人掌心？.md"
+    },
+    "https://mp.weixin.qq.com/s/iWy9uFBsVe_Y6U8TQX-fkQ": {
+      "title": "哈根达斯的中国门店交给了一家网红柠檬茶",
+      "date": "2026-06-02",
+      "file": "20260602-哈根达斯的中国门店交给了一家网红柠檬茶.md"
+    },
+    "https://mp.weixin.qq.com/s?__biz=MzkxNjczMzUzNQ==&mid=2247578209&idx=1&sn=e9e82f04d042e96c001710da8d516439&chksm=c1489951f63f1047e59eaf0f1db64614de6ee46285717936b8ef846a9a38be4a337569007896#rd": {
+      "title": "如何用一场手机发布会，让浪漫落入年轻人掌心？",
+      "date": "2026-06-01",
+      "file": "20260601-如何用一场手机发布会，让浪漫落入年轻人掌心？.md"
+    },
+    "https://mp.weixin.qq.com/s/_2kC-fXw7UjneZSrsC9CVQ": {
+      "title": "名誉保护投诉指引",
+      "date": "2020-11-27",
+      "file": "20201127-名誉保护投诉指引.md"
     }
   },
   "failed": {
     "https://mp.weixin.qq.com/s/K7qgUfXeTcEUsGPdQeNjBQ": {
       "error": "max retries exceeded",
       "title": "200万代言费撬动1700万转化，环大陆男演员成美妆品牌救星？"
+    },
+    "https://mp.weixin.qq.com/s/44B2DDsrTbtrXuSvHs7b8w": {
+      "error": "max retries exceeded",
+      "title": "《以闪》被骂辱女，我在女权群收集了祖龙“十大罪证”"
     }
   },
   "stats": {
     "start_time": "2026-06-21T15:18:42",
-    "last_update": "2026-06-21T16:59:03",
-    "total_fetched": 490
+    "last_update": "2026-06-21T17:01:32",
+    "total_fetched": 493
   }
 }

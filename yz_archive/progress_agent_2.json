@@ -1374,12 +1374,42 @@
       "title": "华伦天奴美妆撤出韩国；半亩花田赴港IPO；联合利华一周内连投两印度品牌｜一周美妆圈大事件",
       "date": "2026-01-23",
       "file": "20260123-华伦天奴美妆撤出韩国；半亩花田赴港IPO；联合利华一周内连投两印度品牌｜一周美妆圈大事件.md"
+    },
+    "https://mp.weixin.qq.com/s/511j61N3_wLYma35IclIwA": {
+      "title": "丁禹兮代言老凤祥；赵丽颖代言纪梵希；张凌赫代言宝格丽｜一周代言人盘点",
+      "date": "2026-01-19",
+      "file": "20260119-丁禹兮代言老凤祥；赵丽颖代言纪梵希；张凌赫代言宝格丽｜一周代言人盘点.md"
+    },
+    "https://mp.weixin.qq.com/s/i6u2V9YvDNCBlbf39emjjQ": {
+      "title": "这酒吧要上市？别被热火朝天的一面给“骗”了",
+      "date": "2026-01-19",
+      "file": "20260119-这酒吧要上市？别被热火朝天的一面给“骗”了.md"
+    },
+    "https://mp.weixin.qq.com/s/iHLBlNqmEcdHNb5mJNd6cg": {
+      "title": "CEIS2026金河豚获选名单重磅发布",
+      "date": "2026-01-20",
+      "file": "20260120-CEIS2026金河豚获选名单重磅发布.md"
+    },
+    "https://mp.weixin.qq.com/s/VARF6O_VsE-ntneVUqccKg": {
+      "title": "预判2026：谷子经济主流化，娱乐营销圈层化 | CEIS2026现场实录①",
+      "date": "2026-01-22",
+      "file": "20260122-预判2026：谷子经济主流化，娱乐营销圈层化 _ CEIS2026现场实录①.md"
+    },
+    "https://mp.weixin.qq.com/s/IlURiHICzrrxXz5fNN4pIA": {
+      "title": "倒计时2天，为什么你要来CEIS 2026？｜直击文娱产业4大“新风口”",
+      "date": "2026-01-18",
+      "file": "20260118-倒计时2天，为什么你要来CEIS 2026？｜直击文娱产业4大“新风口”.md"
     }
   },
-  "failed": {},
+  "failed": {
+    "https://mp.weixin.qq.com/s/K7qgUfXeTcEUsGPdQeNjBQ": {
+      "error": "max retries exceeded",
+      "title": "200万代言费撬动1700万转化，环大陆男演员成美妆品牌救星？"
+    }
+  },
   "stats": {
     "start_time": "2026-06-21T15:18:42",
-    "last_update": "2026-06-21T16:13:12",
-    "total_fetched": 275
+    "last_update": "2026-06-21T16:16:04",
+    "total_fetched": 280
   }
 }

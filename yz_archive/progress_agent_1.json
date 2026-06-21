@@ -1,9 +1,35 @@
 {
-  "completed": {},
+  "completed": {
+    "https://mp.weixin.qq.com/s/j5DWeDwDcZw7vbm895yRvw": {
+      "title": "小米新车售价81万，10分钟小定3680台，凭什么？",
+      "date": "2024-10-30",
+      "file": "20241030-小米新车售价81万，10分钟小定3680台，凭什么？.md"
+    },
+    "https://mp.weixin.qq.com/s/JkZgsTrTqn1YlZIFaLzZzA": {
+      "title": "双11过半，谁最吸金？",
+      "date": "2024-10-31",
+      "file": "20241031-双11过半，谁最吸金？.md"
+    },
+    "https://mp.weixin.qq.com/s/3j2b9lJ7_yS_hrvlBvbCgg": {
+      "title": "草莓熊后力捧史迪奇，尼克朱迪正当红|2025迪士尼IP授权观察",
+      "date": "2024-10-29",
+      "file": "20241029-草莓熊后力捧史迪奇，尼克朱迪正当红_2025迪士尼IP授权观察.md"
+    },
+    "https://mp.weixin.qq.com/s/9xKeAG3kM3C2UDtIP-09ag": {
+      "title": "入坑四个月花三万，Labubu狠狠拿捏年轻人",
+      "date": "2024-11-01",
+      "file": "20241101-入坑四个月花三万，Labubu狠狠拿捏年轻人.md"
+    },
+    "https://mp.weixin.qq.com/s/zh_eUdLiHqMRU9AdQIdwug": {
+      "title": "Songmont双十一热卖背后，国货包袋的崛起与隐忧",
+      "date": "2024-11-02",
+      "file": "20241102-Songmont双十一热卖背后，国货包袋的崛起与隐忧.md"
+    }
+  },
   "failed": {},
   "stats": {
     "start_time": "2026-06-21T15:18:41",
-    "last_update": "2026-06-21T15:18:41",
-    "total_fetched": 0
+    "last_update": "2026-06-21T15:19:30",
+    "total_fetched": 5
   }
 }

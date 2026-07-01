@@ -1,2 +1,0 @@
-Loading file:///tmp/photos/table-skills/new/video/v2/final.html
-DOM loaded

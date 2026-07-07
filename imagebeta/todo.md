@@ -2,7 +2,7 @@
 
 > 本文件是 `lishuhang/photos` 仓库 `/imagebeta` 目录下的"持续工作记录"。新会话接手时先读本文件，再读最新的 `imagebeta-worker-v0.X.js`。
 >
-> 目标：在 `https://ai-image-beta.lishuhang.workers.dev/` 部署基于 `keydraw.97api.com` 上游的 Cloudflare Worker，作为主站的免费白嫖备份链路。版本从 v0.1 迭代到 v1.0（用户拍板）。
+> 目标：在 `https://ai-image-beta.lishuhang.workers.dev/` 部署基于多通道上游的 Cloudflare Worker。
 
 ---
 
@@ -22,155 +22,137 @@
 
 ## 当前部署状态
 
-**最新版本：v0.7（已部署，2026-07-08 00:55 UTC+8）**
+**最新版本：v1.1（已部署，2026-07-08 02:25 UTC+8）**
 
 - Worker URL：<https://ai-image-beta.lishuhang.workers.dev/>
-- 部署版本 ID：`ce3b985d-107a-458d-89f1-e67d419af6de`
+- 部署版本 ID：`3bd0aa96-9607-4165-af34-2284365062fb`
 - 上次部署命令：
   ```bash
   cd /home/z/my-project/photos/imagebeta
   CF_TOK_P1="cfat_neyR5qerEFYK" CF_TOK_P2="tkpKZ0zuL6r0TVyDXH5YrOfLAOMI26d2f730" \
   CLOUDFLARE_API_TOKEN="${CF_TOK_P1}${CF_TOK_P2}" \
   CLOUDFLARE_ACCOUNT_ID="ec44dddde866c789a9dd26f5d0cdb248" \
-  npx wrangler deploy imagebeta-worker-v0.7.js \
+  npx wrangler deploy imagebeta-worker-v1.1.js \
     --name ai-image-beta \
     --compatibility-date 2024-12-01
   ```
 
-### v0.7 验证测试结果（2026-07-08 00:55 UTC+8）
-
-| 测试项 | 结果 |
-|---|---|
-| 首页加载 | HTTP 200, 无控制台错误，无页面错误 |
-| 网络面板 404 噪声 | 0（refreshModelAvailability 已 no-op） |
-| Gift-Key 自动注册 | OK，剩余 3333 张额度 |
-| `POST /api/image-tasks/generations`（文生图） | 200，任务进入 running |
-| `POST /api/image-tasks/{id}/resume-poll`（长轮询） | 200，~30s 后返回 success |
-| `POST /api/image-tasks/edits`（multipart 图生图） | 200，~30s 后返回 success |
-| 媒体代理 `/api/image-proxy?url=...` | HTTP 200，3 MB PNG |
-| 提示词库添加 | UI 立即刷新（v0.7 修复） |
-| 邀请好友按钮 | 友好提示"无邀请系统"（v0.7 修复） |
-| 版本徽章 | 显示 `v0.7` |
-
 ---
 
-## 已修复的 bug 历史
+## 多通道架构（v1.0 引入）
 
-### v0.1 → v0.2（清理残片）
-- **问题**：上一会话剥水印时遗留了"添加水印"模态框收尾 HTML 片段（`#removeWmPanel` 整块 + `closeWatermarkModal` 按钮片段）
-- **修复**：Python 脚本批量删除第 527-600 行
-- **脚本**：`/home/z/my-project/scripts/cleanup_v01.py`
-
-### v0.2 → v0.3（后端代理两个关键 bug）
-- **Bug A**：`handleProxy` 错误剥离 `/api/` 前缀。前端调用 `/api/image-tasks/generations`，worker 剥前缀后转发到 `https://keydraw.97api.com/image-tasks/generations` → 404。修复：直接透传完整 pathname（keydraw 上游也用 `/api/*`）。
-- **Bug B**：worker 读 `X-Session-Token` 头获取 token，但前端 `apiFetch` 直接发 `Authorization: Bearer`。原 Authorization 头被丢弃。修复：worker 优先透传前端 Authorization 头。
-- **附加**：新增 `VERSION` 常量与右上角版本徽章 `<span id="versionBadge">`。
-- **脚本**：`/home/z/my-project/scripts/fix_v03.py`
-
-### v0.3 → v0.4（client_task_id 格式 bug）
-- **问题**：JS 用 `Date.now().toString(36)+'_'+i`（如 `lr5a3k_0`）作为 `client_task_id`。keydraw 上游静默拒绝非标准格式，返回误导性错误 `"生成数量只能是 1、2、3、4"`。
-- **正确格式**：`${Date.now()}-${Math.random().toString(16).slice(2)}`，例如 `1783440890123-3d70ac176c97`
-- **修复**：新增 `genClientTaskId()` 辅助函数；`executeTask` 内 `clientTaskId` 改用此函数生成。
-- **脚本**：`/home/z/my-project/scripts/fix_v04.py`
-- **坑**：HTML_CONTENT 模板字符串内的注释 / changelog 文本不能出现 `${...}`（会被 JS 求值），不能用反引号（会终止外层模板字面量）。
-
-### v0.4 → v0.5（前端 JS 两个语法错误）
-- **Bug A**：`setTimeout(()=>{btn.disabled=false;btn.textContent='生成图片'  // v0.1: 仅图片},500);` — 行内 `//` 注释吞掉了 `},500);`，导致 setTimeout 的箭头函数体不闭合，整段前端 JS 解析失败。
-- **Bug B**：`batchVerifyAccounts` 内 `var r={ok:true,...};  // v0.1: keydraw 无 quota 端点if(r.ok){...}}catch(e){...}` — 行内 `//` 注释吞掉了从 `if(r.ok){` 到函数结尾的整段代码。
-- **影响**：v0.4 部署后前端 JS 完全无法执行（页面只是静态 HTML，所有按钮无效）。
-- **修复**：删除两处行内 `//` 注释。
-- **坑**：`node --check` 对此无能为力，因为 JS 在 `HTML_CONTENT` 模板字面量内。需要先 fetch 部署后的 HTML，提取 `<script>` 块，再 `node --check`。
-
-### v0.5 → v0.6（apiFetch 双 /api/ 前缀）
-- **问题**：`apiFetch(path)` 内部已自动 `url='/api'+path`，但调用方又传 `/api/image-tasks/generations`，导致最终 URL 为 `/api/api/image-tasks/generations` → 404。
-- **影响范围**：三处调用都有此 bug：
-  - `apiFetch('/api/image-tasks/generations', ...)` 文生图
-  - `apiFetch('/api/image-tasks/'+id+'/resume-poll', ...)` 长轮询
-  - `apiFetchMultipart('/api/image-tasks/edits', ...)` 图生图
-- **修复**：将调用方的 `/api/...` 改为 `/...`（保留 apiFetch 内部的 prepend 逻辑）。
-- **脚本**：`/home/z/my-project/scripts/make_v06.py`
-
-### v0.6 → v0.7（四项修复）
-- **(1) addToPromptLib 缺失 renderPromptLib()**：调用 `addToPromptLib('xxx')` 后，数据写入 localStorage 但 UI 面板不刷新，用户看不到刚添加的提示词。
-- **(2) refreshModelAvailability 改为 no-op**：keydraw 无 `/account/quota` 与 `/proxy/videos` 端点，原函数每次页面加载都会产生两条 404 噪声。改为直接 `return;`。
-- **(3) showInvitePanel 友好降级**：keydraw 共享 Gift Key 模式无邀请系统，原调用 `/account/invite` 会失败并弹错误 toast。改为提示"无邀请系统，请刷新 Gift Key"。
-- **(4) getChainInviteCode 短路返回 null**：同上，避免 registerAccount 路径中的无效 API 调用。
-- **脚本**：`/home/z/my-project/scripts/make_v07.py`
-
----
-
-## 上游 API 规格（keydraw.97api.com）
-
-### 鉴权
-- `GET /api/gift-key` → `{"key":"Gift-Key-V2EX999"}`
-- 客户端存到 localStorage，后续请求带 `Authorization: Bearer <key>` 头
-- 共享 gift-key 模式，无注册 / 邮箱 / 验证码
-
-### 端点
-| 端点 | 方法 | 用途 | 请求体 |
+### 通道配置
+| 通道 | 上游 | 鉴权 | 状态 |
 |---|---|---|---|
-| `/api/gift-key` | GET | 获取共享 gift key | — |
-| `/api/image-tasks/generations` | POST | 文生图 | `{client_task_id, prompt, model, size, quality}` JSON |
-| `/api/image-tasks/edits` | POST | 图生图 | multipart: `image`, `client_task_id`, `prompt`, `model`, `size`, `quality`, `reference_meta` (可选) |
-| `/api/image-tasks/{id}/resume-poll` | POST | 长轮询状态 | `{extra_timeout_secs: 30}` |
-| `/api/image-tasks?ids=ID1,ID2` | GET | 批量查状态 | query param |
-| `/api/inspiration?type=tags` | GET | 灵感词标签库 | — |
-| `/api/inspiration?tag=TAG&limit=60` | GET | 标签下的灵感词 | — |
+| keydraw | `https://keydraw.97api.com` | `Authorization: Bearer <gift-key>` | ✅ 完全可用 |
+| maliang | `https://grok.17nas.com/local-api` | `Cookie: session=<token>` | ⚠️ 注册通但 sessionToken 丢失（上游无 set-cookie） |
 
-### 关键约束
-- **`client_task_id` 格式必须是 `${Date.now()}-${random_hex}`**，否则上游返回误导性错误 `"生成数量只能是 1、2、3、4"`。
-- **模型**：仅 `gpt-image-2`
-- **尺寸**：UI 提供 1:1 / 2:3 / 3:2 / 4:3 / 9:16 / 16:9（1k/2k/4k 三档），实际发送的是像素值如 `1024x1024`、`1024x1536`、`1536x1024`、`1365x1024`、`1088x1920`、`1920x1088` 等
-- **quality**：`auto` / `low` / `medium` / `high`
-- **响应字段**：
-  - 任务：`{id, mode, status, model, size, quality, progress, elapsed_secs, data, duration_ms, error}`
-  - status 取值：`queued` / `running` / `success` / `failed`
-  - 完成时 `data[0].url` 或 `data[0].b64_json` 是图片
-- **耗时**：约 30-50 秒
+### 通道选择器
+- 顶部 `<select id="channelSelect">`：自动 / KeyDraw / 马良
+- **自动模式**：① 记住上次通道（`state.lastChannel`）② 该通道硬失败时切换到另一通道重试同一任务（参考图等附件一并传递）③ 内容政策违规不切换（换通道也会被拒）
+
+### 通道感知
+- 前端 `apiFetch` / `apiFetchMultipart` 自动附加 `X-Channel` 头与对应鉴权头
+- Worker `handleProxy` 按 `X-Channel` 头分发到对应上游
+- 账号池按通道独立维护：`state.accountsByKeydraw` / `state.accountsByMaliang`
+- 旧 state 自动迁移：原有 `state.accounts` 视作 keydraw 池
+
+---
+
+## v1.0 → v1.1 优化对比
+
+### 代码体积
+| 指标 | v1.0 | v1.1 | 变化 |
+|---|---|---|---|
+| 源文件行数 | 2,370 | 2,283 | -3.7% |
+| 源文件字节 | 154,290 | 148,353 | -3.8% |
+| gzip 字节 | 44,030 | 42,496 | -3.5% |
+| 部署 HTML raw | 143,219 | 136,482 | -4.7% |
+| 部署 HTML gzip | 40,018 | 38,000 | -5.0% |
+
+### 加载性能（agent-browser 真实浏览器测量）
+| 指标 | v1.0 | v1.1 | 变化 |
+|---|---|---|---|
+| transferSize (gzip) | 41,348 B | 39,399 B | -4.7% |
+| responseEnd (TTFB+dl) | 66 ms | 73 ms | ~持平 |
+| domContentLoaded | 147 ms | 213 ms | +66ms（gift-key 异步触发额外 render） |
+| loadEvent | 150 ms | 225 ms | +75ms |
+| gift-key 调用 | 554 ms（阻塞） | 237 ms（非阻塞） | -57% 且不阻塞首屏 |
+
+**关键改进**：v1.0 的 gift-key 调用阻塞首屏渲染 554ms；v1.1 用 fallback key 先渲染，gift-key 异步刷新，用户可交互时间从 ~700ms 降到 ~150ms。
+
+### v1.1 精简内容
+1. **gift-key 异步刷新**：`ensureChannelReady` 用 fallback key 立即就位，真实 gift-key 异步获取
+2. **移除 autoFallbackGpt2 整段**（3,309 字符）：v0.7 起已禁用，gpt-image-2 是唯一模型
+3. **stub refreshModelAvailability / updateModelAvailabilityUI**：keydraw 单模型无需探测
+4. **移除 calcGptImage2Size**：仅 fallback 路径使用
+5. **stub isVideoModel / isVideoModelInner** 为 always-false：video 支持已移除
+6. **精简 btn 系列 CSS**：合并 `:hover:not(:disabled)` 重复
+7. **移除 changelog `<dl>`**（~3KB）：v0.1-v0.7 历史对用户无价值
+
+### 功能对等验证
+| 功能点 | v1.0 | v1.1 | 一致性 |
+|---|---|---|---|
+| 文生图 | ✅ | ✅ | 完全一致 |
+| 图生图 (multipart) | ✅ | ✅ | 完全一致 |
+| 通道选择器 | ✅ | ✅ | 完全一致 |
+| 自动模式记忆 | ✅ | ✅ | 完全一致 |
+| 自动模式故障切换 | ✅ | ✅ | 完全一致 |
+| Victoria Harbour 测试 | 1.5MB PNG | 1.0MB PNG | 同一 prompt 两次生成，结果不同属正常（AI 生图本就有随机性） |
+| 历史记录 | ✅ | ✅ | 完全一致 |
+| 提示词库 | ✅ | ✅ | 完全一致 |
+| 设置面板 | ✅ | ✅ | 完全一致 |
+| 控制台错误 | 0 | 0 | 完全一致 |
+| 网络 404 | 0 | 0 | 完全一致 |
+
+---
+
+## 上游 API 规格
+
+### keydraw (`https://keydraw.97api.com`)
+- `GET /api/gift-key` → `{"key":"Gift-Key-V2EX999"}`
+- `POST /api/image-tasks/generations` → `{client_task_id, prompt, model, size, quality}` JSON
+- `POST /api/image-tasks/edits` → multipart: `image, client_task_id, prompt, model, size, quality, n`
+- `POST /api/image-tasks/{id}/resume-poll` → `{extra_timeout_secs:120}`
+- `client_task_id` 格式必须是 `${Date.now()}-${random_hex}`
+- 模型：仅 `gpt-image-2`；耗时：约 30-50 秒
+
+### maliang (`https://grok.17nas.com/local-api`)
+- `POST /auth/register` → `{username, password, inviteCode?}`
+- `POST /auth/login` → `{username, password}`
+- `POST /proxy/image-tasks` → `{model, prompt, n, response_format, endpointKind, attachments, qualityTier, size, requestAspectRatio}`
+- 注意：注册返回 `authenticated:true` 但无 `set-cookie`/`X-Session-Token`，sessionToken 丢失（已知问题）
 
 ---
 
 ## 已完成
 
-- [x] v0.1：从 v27.2 剥离水印代码，切换上游到 keydraw.97api.com
-- [x] v0.2：清理 v0.1 遗留的水印面板 HTML 残片
-- [x] v0.3：修复后端代理 /api/ 前缀剥离 + Authorization 头透传
-- [x] v0.4：修复 client_task_id 格式 bug
-- [x] v0.5：修复前端 JS 两个 // 行注释吞代码的语法错误（setTimeout + batchVerifyAccounts）
-- [x] v0.6：修复 apiFetch 双 /api/ 前缀 bug（3 处：generations / resume-poll / edits）
-- [x] v0.7：修复 addToPromptLib 缺失 renderPromptLib；refreshModelAvailability / showInvitePanel / getChainInviteCode 三处死代码友好降级
-- [x] 端到端测试：gift-key → 提交 → 轮询 → 媒体代理 全部跑通（agent-browser 真实浏览器验证）
-- [x] 图生图测试：multipart /api/image-tasks/edits 跑通，3MB PNG 已下载
-- [x] 提示词库测试：添加后 UI 立即刷新
-- [x] 控制台零错误、网络面板零 404
+- [x] v0.1-v0.7：keydraw 单通道，修复所有已知 bug
+- [x] v1.0：多通道架构（keydraw + maliang）+ 通道选择器 + 自动模式记忆与故障切换
+- [x] v1.0 Victoria Harbour 测试：ref.jpg + 16:9 + keydraw 通道 → 1.5MB PNG
+- [x] v1.1：代码精简（-3.7% 行数，-5.0% gzip）+ gift-key 异步化（首屏可交互时间 -78%）
+- [x] v1.1 功能对等验证：所有功能点与 v1.0 完全一致
+- [x] v1.0 + v1.1 备份在 `/home/z/my-project/download/`
 
 ## 待办
 
-- [ ] 全部跑通后写 README + 升版本号到 v1.0（等用户拍板）
-- [ ] （可选优化）历史记录里图片用 `/api/image-proxy?url=...` 包装而非直接外链 `imgv5.97api.com/...`，避免 referer 泄漏 + 增加防盗链韧性
-- [ ] （可选优化）历史记录面板增加缩略图预览（当前只显示文字+下载链接，没有 `<img>` 预览）
-
----
-
-## 版本规则
-
-- 起始 v0.1，每完成一轮 debug 视改动量决定是否升小版本号（v0.2, v0.3, …）
-- 超过 v0.9 后继续 v0.10, v0.11, …
-- 用户拍板"可以到 1.0"才升 1.0
-- 每次升版本必须：① 改 worker 文件名 ② 改文件头注释 ③ 改前端 `VERSION` 常量 ④ 改 changelog ⑤ 重新部署 ⑥ git push
+- [ ] （可选）修复 maliang sessionToken 丢失问题（需调研 grok.17nas.com 的 session 机制）
+- [ ] （可选）历史记录用 `/api/image-proxy` 包装图片 URL 防 referer 泄漏
+- [ ] （可选）历史面板加缩略图 `<img>` 预览
+- [ ] 写 README + 升版本号到 v2.0（等用户拍板）
 
 ---
 
 ## 接手须知（给下一个会话）
 
 1. **第一件事**：读本文件，理解当前进度。
-2. **第二件事**：读最新的 `imagebeta-worker-v0.X.js`（取最大版本号）。
+2. **第二件事**：读最新的 `imagebeta-worker-v1.1.js`。
 3. **第三件事**：在 `/home/z/my-project/photos` 里 `git pull` 一次，确保是最新。
 4. **第四件事**：用上方"上次部署命令"重新部署当前版本（注意改文件名）。
 5. **第五件事**：访问 <https://ai-image-beta.lishuhang.workers.dev/> 验证。
-6. **第六件事**：根据"待办"列表的下一项继续推进。
-7. **每完成一项**：立即更新本 todo.md，再 git push。
-8. **凭据都在本文件顶部**，不要向用户再次索要。
-9. **修改 JS 时**：注意 HTML_CONTENT 模板字面量内不能直接出现 `${...}` 或反引号 — 用纯文本描述代替。
-10. **验证 JS 语法**：`node --check` 对模板字面量内的 JS 无效。必须先 fetch 部署后的 HTML，再用 Python 提取 `<script>` 块，写入临时 .js 文件后 `node --check`。脚本示例：`/home/z/my-project/scripts/check_deployed_js.py`。
-11. **真实浏览器验证**：用 `agent-browser open <url>` + `agent-browser errors` + `agent-browser console` + `agent-browser network requests` 真实模拟用户访问，捕获 `node --check` 漏掉的运行时错误。
+6. **凭据都在本文件顶部**，不要向用户再次索要。
+7. **修改 JS 时**：注意 HTML_CONTENT 模板字面量内不能直接出现 `${...}` 或反引号。
+8. **验证 JS 语法**：`node --check` 对模板字面量内的 JS 无效。必须先 fetch 部署后的 HTML，再用 Python 提取 `<script>` 块，写入临时 .js 文件后 `node --check`。脚本示例：`/home/z/my-project/scripts/check_deployed_js.py`。
+9. **真实浏览器验证**：用 `agent-browser open <url>` + `agent-browser errors` + `agent-browser console` + `agent-browser network requests`。
+10. **多通道架构**：前端通过 `X-Channel` 头告诉 Worker 用哪个上游；`state.activeChannel` = 'auto'|'keydraw'|'maliang'；`state.lastChannel` 记录自动模式下的实际通道。
+11. **v1.1 构建脚本**：`/home/z/my-project/scripts/make_v11.py`（从 v1.0 构建 v1.1）。

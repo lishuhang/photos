@@ -1,0 +1,26 @@
+# ============================================================
+# Photos image storage routing
+# ============================================================
+# 此文件是 photos 展示数据与 keepitrun 同步脚本共同使用的图床路由来源。
+# range 使用半开区间 [start_YYYY-MM, end_YYYY-MM)：
+# - null start 表示无限早；null end 表示无限晚。
+# - prefix 用于生成 data/YYYYMM.json 的公开图片 URL。
+# - upload 用于让 keepitrun 在同步/上传前确定 GitHub 写入目标。
+#
+# 图片仓库内的相对路径固定为：YYYY/MM/DD/文件名。
+image_prefixes:
+  # 2026-07-31 及此前的图片。
+  - range: [null, "2026-08"]
+    prefix: "https://raw.githubusercontent.com/modem-56k/img/main/"
+    upload:
+      repository: "modem-56k/img"
+      branch: "main"
+      path_prefix: ""
+
+  # 2026-08-01 及以后的图片。
+  - range: ["2026-08", null]
+    prefix: "https://raw.githubusercontent.com/modem-56k/img2/main/"
+    upload:
+      repository: "modem-56k/img2"
+      branch: "main"
+      path_prefix: ""

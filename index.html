@@ -345,12 +345,13 @@
 
         .photos-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: var(--space-4);
         }
 
         .photo-item {
             position: relative;
+            aspect-ratio: 1 / 1;
             border-radius: var(--radius-lg);
             overflow: hidden;
             box-shadow: var(--shadow-sm);
@@ -366,7 +367,7 @@
 
         .photo-item img {
             width: 100%;
-            height: 150px;
+            height: 100%;
             object-fit: cover;
             display: block;
         }
@@ -410,12 +411,21 @@
         @media (max-width: 768px) {
             .gallery-container { flex-direction: column; }
             
-            /* 移动端侧边栏默认隐藏 */
+            /* 移动端抽屉从顶部栏下方开始，避免顶部导航遮挡原图预览开关。 */
             .gallery-sidebar {
-                left: -100%;
-                transition: left 0.3s ease; /* 侧边栏滑出动画保留，否则太生硬 */
+                width: min(320px, calc(100vw - 44px));
+                height: calc(100vh - 64px);
+                height: calc(100dvh - 64px);
+                top: 64px;
+                left: -340px;
+                z-index: 1000;
+                transition: left 0.3s ease;
             }
             .gallery-sidebar.active { left: 0; }
+
+            .gallery-sidebar-body {
+                padding-top: var(--space-4);
+            }
             
             .gallery-main {
                 width: 100%;
@@ -428,7 +438,7 @@
                 display: flex;
                 position: fixed;
                 top: 0; left: 0; right: 0;
-                z-index: 999;
+                z-index: 1001;
                 background-color: var(--bg-white);
                 border-bottom: 1px solid var(--border-light);
                 height: 64px;
@@ -454,13 +464,21 @@
             .sidebar-overlay {
                 display: none;
                 position: fixed;
-                top: 0; left: 0; right: 0; bottom: 0;
+                top: 64px; left: 0; right: 0; bottom: 0;
                 background-color: rgba(0,0,0,0.5);
-                z-index: 99;
+                z-index: 999;
             }
             .sidebar-overlay.active { display: block; }
 
             .gallery-sidebar-header { display: none; } /* 移动端侧边栏不显示Logo头 */
+
+            /* 竖屏默认两列正方形缩略图；空间允许时自动扩展为更多列。 */
+            .photos-container {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: var(--space-3);
+            }
+
+            .photos-grid { padding: var(--space-4); }
         }
         
         @media (min-width: 769px) {
@@ -504,7 +522,7 @@
                         <label class="toggle-label">
                             <span class="toggle-text">原图预览</span>
                             <div class="toggle-switch">
-                                <input type="checkbox" id="originalImageToggle" checked>
+                                <input type="checkbox" id="originalImageToggle">
                                 <span class="toggle-slider"></span>
                             </div>
                         </label>
@@ -806,8 +824,9 @@
                     .replace('{user_id}', photosData.user_id) + file;
                 
                 // 缩略图服务 (Images.weserv.nl)
-                const thumb = `https://images.weserv.nl/?url=${encodeURIComponent(url)}&w=300&h=300&output=jpg&q=80&t=square`;
-                const view = useOriginal ? url : `https://images.weserv.nl/?url=${encodeURIComponent(url)}&output=jpg&q=80`;
+                // 默认使用固定边长、cover 裁切的 weserv 缩略图；勾选后才打开原图链接。
+                const thumb = `https://images.weserv.nl/?url=${encodeURIComponent(url)}&w=480&h=480&fit=cover&output=jpg&q=80`;
+                const view = useOriginal ? url : thumb;
 
                 html += `
                     <div class="photo-item">

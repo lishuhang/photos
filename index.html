@@ -826,7 +826,7 @@
                 // 缩略图服务 (Images.weserv.nl)
                 // 默认使用固定边长、cover 裁切的 weserv 缩略图；勾选后才打开原图链接。
                 const thumb = `https://images.weserv.nl/?url=${encodeURIComponent(url)}&w=480&h=480&fit=cover&output=jpg&q=80`;
-                const view = useOriginal ? url : thumb;
+                const view = useOriginal ? url : `https://images.weserv.nl/?url=${encodeURIComponent(url)}`;
 
                 html += `
                     <div class="photo-item">
